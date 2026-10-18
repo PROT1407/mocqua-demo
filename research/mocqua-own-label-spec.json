@@ -15,7 +15,9 @@
    "their_price": 135000,
    "price": 125000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 7.4
   },
   {
    "idx": 1,
@@ -30,9 +32,11 @@
    "short": "Hai vị xí muội kinh điển: đỏ cay ngọt và trắng chua mặn thanh — túi zip 250g tiện nhâm nhi.",
    "their_name": "Xí Muội Đỏ Đặc Biệt (250g)",
    "their_price": 195000,
-   "price": 185000,
+   "price": 179000,
    "g": 250,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 8.2
   },
   {
    "idx": 2,
@@ -47,9 +51,11 @@
    "short": null,
    "their_name": "Xí Muội Trắng Đặc Biệt (250g)",
    "their_price": 195000,
-   "price": 185000,
+   "price": 179000,
    "g": 250,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 8.2
   },
   {
    "idx": 3,
@@ -64,9 +70,11 @@
    "short": "Mận sấy dẻo áo đường ớt, chua ngọt cay the — túi lớn 1kg cho cả nhà và văn phòng.",
    "their_name": "Mận Sấy Dẻo Đường Ớt (1kg)",
    "their_price": 190000,
-   "price": 180000,
+   "price": 175000,
    "g": 1000,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 7.9
   },
   {
    "idx": 4,
@@ -81,9 +89,11 @@
    "short": "Me nguyên trái ngào đường lớp áo mỏng, chua ngọt dịu dàng — món quà vặt tuổi thơ.",
    "their_name": "Me Trái Ngào Đường (500g)",
    "their_price": 120000,
-   "price": 110000,
+   "price": 109000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 9.2
   },
   {
    "idx": 5,
@@ -98,9 +108,11 @@
    "short": "Me nguyên trái tẩm xí muội chua mặn, ăn tới đâu thấm tới đó.",
    "their_name": "Me Trái Xí Muội (500g)",
    "their_price": 120000,
-   "price": 110000,
+   "price": 109000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 9.2
   },
   {
    "idx": 6,
@@ -115,9 +127,11 @@
    "short": "Me dẻo hoà vị gừng ấm và tắc thơm — ô mai kiểu Hà thành cho ngày se lạnh.",
    "their_name": "Ô Mai Me Gừng Tắc (500g)",
    "their_price": 120000,
-   "price": 110000,
+   "price": 109000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 9.2
   },
   {
    "idx": 7,
@@ -134,7 +148,9 @@
    "their_price": 115000,
    "price": 105000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 8.7
   },
   {
    "idx": 8,
@@ -151,7 +167,9 @@
    "their_price": 115000,
    "price": 105000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 8.7
   },
   {
    "idx": 9,
@@ -166,9 +184,11 @@
    "short": "Chùm ruột muối ớt chua giòn, cay mặn — đặc sản ăn vặt khó cưỡng, túi lớn 1kg.",
    "their_name": "Chùm Ruột Muối Ớt (1kg)",
    "their_price": 185000,
-   "price": 175000,
+   "price": 169000,
    "g": 1000,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 8.6
   },
   {
    "idx": 10,
@@ -183,9 +203,11 @@
    "short": "Me ngào đường thêm chút ớt cay, ngọt trước cay sau, càng ăn càng cuốn.",
    "their_name": "Me Ngào Đường & Vị Cay (500g)",
    "their_price": 105000,
-   "price": 95000,
+   "price": 99000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 5.7
   },
   {
    "idx": 11,
@@ -202,7 +224,9 @@
    "their_price": 175000,
    "price": 165000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 5.7
   },
   {
    "idx": 12,
@@ -217,9 +241,11 @@
    "short": "Xí muội tách hạt thịt dày, dẻo, chua mặn hậu ngọt — tiện ăn, không vướng hạt.",
    "their_name": "Xí Muội Thịt Không Hạt (500g)",
    "their_price": 170000,
-   "price": 160000,
+   "price": 159000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.5
   },
   {
    "idx": 13,
@@ -236,7 +262,9 @@
    "their_price": 155000,
    "price": 145000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.5
   },
   {
    "idx": 14,
@@ -253,7 +281,11 @@
    "their_price": 155000,
    "price": 145000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 140000,
+   "pct": 6.5,
+   "pct_zip": 9.7
   },
   {
    "idx": 15,
@@ -270,7 +302,11 @@
    "their_price": 220000,
    "price": 205000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 199000,
+   "pct": 6.8,
+   "pct_zip": 9.5
   },
   {
    "idx": 16,
@@ -287,7 +323,11 @@
    "their_price": 195000,
    "price": 185000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "price_zip": 179000,
+   "pct": 5.1,
+   "pct_zip": 8.2
   },
   {
    "idx": 17,
@@ -302,9 +342,13 @@
    "short": "Dâu tây Đà Lạt chọn trái, sấy dẻo giữ vị chua ngọt và màu đỏ tươi.",
    "their_name": "Dâu Tây Sấy Dẻo Đà Lạt (0.5kg)",
    "their_price": 225000,
-   "price": 210000,
+   "price": 209000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "price_zip": 205000,
+   "pct": 7.1,
+   "pct_zip": 8.9
   },
   {
    "idx": 18,
@@ -319,9 +363,13 @@
    "short": "Mãng cầu xiêm sấy dẻo chua thanh, thơm dịu, thớ mềm — vị quà miền Tây.",
    "their_name": "Mãng Cầu Xiêm Sấy Dẻo (0.5kg)",
    "their_price": 245000,
-   "price": 230000,
+   "price": 229000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 225000,
+   "pct": 6.5,
+   "pct_zip": 8.2
   },
   {
    "idx": 19,
@@ -336,9 +384,13 @@
    "short": "Gừng Huế lát mỏng sấy dẻo cay ấm, ngọt nhẹ — ấm bụng ngày lạnh, hợp trà gừng.",
    "their_name": "Gừng Huế Sấy Dẻo (0.5g)",
    "their_price": 145000,
-   "price": 135000,
+   "price": 139000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 135000,
+   "pct": 4.1,
+   "pct_zip": 6.9
   },
   {
    "idx": 20,
@@ -353,9 +405,13 @@
    "short": "Xoài cát chín cây thái lát dày, sấy dẻo vàng óng, chua ngọt hài hoà.",
    "their_name": "Xoài Sấy Dẻo Đặc Biệt (0.5kg)",
    "their_price": 170000,
-   "price": 160000,
+   "price": 159000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "price_zip": 155000,
+   "pct": 6.5,
+   "pct_zip": 8.8
   },
   {
    "idx": 23,
@@ -370,9 +426,13 @@
    "short": "Cơm dừa non sấy dẻo sợi mềm, béo thơm, ngọt vừa — mứt dừa kiểu mới ít ngọt.",
    "their_name": "Dừa Non Sấy Dẻo Đặc Biệt (0.5kg)",
    "their_price": 145000,
-   "price": 135000,
+   "price": 139000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "price_zip": 135000,
+   "pct": 4.1,
+   "pct_zip": 6.9
   },
   {
    "idx": 24,
@@ -389,7 +449,11 @@
    "their_price": 185000,
    "price": 175000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 169000,
+   "pct": 5.4,
+   "pct_zip": 8.6
   },
   {
    "idx": 27,
@@ -404,9 +468,13 @@
    "short": "Đu đủ chín sấy dẻo màu cam tươi, ngọt dịu, dễ ăn cho cả trẻ nhỏ.",
    "their_name": "Đu Đủ Sấy Dẻo Đặc Biệt (0.5kg)",
    "their_price": 190000,
-   "price": 180000,
+   "price": 179000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 175000,
+   "pct": 5.8,
+   "pct_zip": 7.9
   },
   {
    "idx": 28,
@@ -421,9 +489,13 @@
    "short": "Cam thái lát cả vỏ sấy dẻo, thơm tinh dầu cam, chua ngọt nhẹ — đẹp cho khay trà.",
    "their_name": "Cam Lát Sấy Dẻo Đặc Biệt (0.5kg)",
    "their_price": 255000,
-   "price": 240000,
+   "price": 239000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 235000,
+   "pct": 6.3,
+   "pct_zip": 7.8
   },
   {
    "idx": 29,
@@ -438,9 +510,13 @@
    "short": "Hồng Đà Lạt sấy dẻo quánh, ngọt sâu tự nhiên — có loại hồng chẻ và hồng nguyên trái ép.",
    "their_name": "Hồng Chẻ Sấy Dẻo Đà Lạt (1kg)",
    "their_price": 275000,
-   "price": 260000,
+   "price": 255000,
    "g": 1000,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "price_zip": 249000,
+   "pct": 7.3,
+   "pct_zip": 9.5
   },
   {
    "idx": 31,
@@ -457,7 +533,11 @@
    "their_price": 220000,
    "price": 205000,
    "g": 1000,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 199000,
+   "pct": 6.8,
+   "pct_zip": 9.5
   },
   {
    "idx": 32,
@@ -474,7 +554,11 @@
    "their_price": 185000,
    "price": 175000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "price_zip": 169000,
+   "pct": 5.4,
+   "pct_zip": 8.6
   },
   {
    "idx": 33,
@@ -489,9 +573,13 @@
    "short": "Ổi sấy dẻo giòn dai, chua ngọt, thơm mùi ổi chín.",
    "their_name": "Ổi Sấy Dẻo Đặc Biệt (0.5kg)",
    "their_price": 200000,
-   "price": 190000,
+   "price": 189000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 185000,
+   "pct": 5.5,
+   "pct_zip": 7.5
   },
   {
    "idx": 34,
@@ -508,7 +596,11 @@
    "their_price": 230000,
    "price": 215000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 209000,
+   "pct": 6.5,
+   "pct_zip": 9.1
   },
   {
    "idx": 35,
@@ -523,9 +615,13 @@
    "short": "Nhãn lồng Hưng Yên bóc cùi sấy dẻo, ngọt lịm, thơm mùi nhãn — pha chè, ăn vặt đều ngon.",
    "their_name": "Nhãn Sấy Dẻo Hưng Yên (0.5kg)",
    "their_price": 225000,
-   "price": 210000,
+   "price": 209000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "price_zip": 205000,
+   "pct": 7.1,
+   "pct_zip": 8.9
   },
   {
    "idx": 37,
@@ -540,9 +636,11 @@
    "short": "Sung sấy thăng hoa giòn xốp, ngọt nhẹ, giữ vân hạt đẹp mắt.",
    "their_name": "Sung Úc Sấy Giòn (100g)",
    "their_price": 180000,
-   "price": 170000,
+   "price": 169000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.1
   },
   {
    "idx": 38,
@@ -559,7 +657,9 @@
    "their_price": 220000,
    "price": 205000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.8
   },
   {
    "idx": 39,
@@ -576,7 +676,9 @@
    "their_price": 240000,
    "price": 225000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.2
   },
   {
    "idx": 40,
@@ -591,9 +693,11 @@
    "short": "Thanh long sấy thăng hoa giòn xốp, giữ nguyên hạt đen — chọn ruột trắng thanh mát hoặc ruột đỏ đậm màu.",
    "their_name": "Thanh Long Trắng Sấy Giòn (100g)",
    "their_price": 180000,
-   "price": 170000,
+   "price": 165000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 8.3
   },
   {
    "idx": 41,
@@ -608,9 +712,11 @@
    "short": null,
    "their_name": "Thanh Long Đỏ Sấy Giòn (100g)",
    "their_price": 200000,
-   "price": 190000,
+   "price": 185000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 7.5
   },
   {
    "idx": 42,
@@ -625,9 +731,11 @@
    "short": "Thơm Queen sấy thăng hoa giòn xốp, chua ngọt tươi — vị nhiệt đới trong túi nhỏ.",
    "their_name": "Thơm Queen Sấy Giòn (100g)",
    "their_price": 195000,
-   "price": 185000,
+   "price": 179000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 8.2
   },
   {
    "idx": 43,
@@ -642,9 +750,11 @@
    "short": "Xoài cát sấy thăng hoa vàng tươi, giòn xốp, tan trong miệng.",
    "their_name": "Xoài Cát Sấy Giòn (100g)",
    "their_price": 200000,
-   "price": 190000,
+   "price": 185000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 7.5
   },
   {
    "idx": 44,
@@ -659,9 +769,11 @@
    "short": "Sầu riêng Ri6 cơm vàng hạt lép sấy thăng hoa, giòn xốp, béo thơm — chọn múi cắt hoặc nguyên múi.",
    "their_name": "Sầu Riêng Ri6 Múi Cắt Sấy Giòn (100g)",
    "their_price": 240000,
-   "price": 225000,
+   "price": 229000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "premium",
+   "pct": 4.6
   },
   {
    "idx": 45,
@@ -676,9 +788,11 @@
    "short": null,
    "their_name": "Sầu Riêng Ri6 Nguyên Múi Sấy Giòn (100g)",
    "their_price": 275000,
-   "price": 260000,
+   "price": 259000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "premium",
+   "pct": 5.8
   },
   {
    "idx": 46,
@@ -695,7 +809,9 @@
    "their_price": 145000,
    "price": 135000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 6.9
   },
   {
    "idx": 47,
@@ -712,7 +828,9 @@
    "their_price": 145000,
    "price": 135000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.9
   },
   {
    "idx": 48,
@@ -729,7 +847,9 @@
    "their_price": 99000,
    "price": 90000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 9.1
   },
   {
    "idx": 49,
@@ -746,7 +866,9 @@
    "their_price": 105000,
    "price": 95000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 9.5
   },
   {
    "idx": 50,
@@ -763,7 +885,9 @@
    "their_price": 105000,
    "price": 95000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "traffic",
+   "pct": 9.5
   },
   {
    "idx": 51,
@@ -778,9 +902,11 @@
    "short": "Sầu riêng sấy thăng hoa giòn xốp, béo thơm — túi lớn 200g tiết kiệm cho cả nhà cùng ăn.",
    "their_name": "Sầu Riêng Sấy Đặc Biệt (200g)",
    "their_price": 220000,
-   "price": 205000,
+   "price": 209000,
    "g": 200,
-   "set": null
+   "set": null,
+   "tier": "premium",
+   "pct": 5.0
   },
   {
    "idx": 52,
@@ -795,9 +921,11 @@
    "short": "Nhãn sấy khô nguyên vỏ kiểu truyền thống, cùi dẻo ngọt đậm — bóc ăn hoặc nấu chè.",
    "their_name": "Nhãn Sấy Khô Nguyên Vỏ (1kg)",
    "their_price": 170000,
-   "price": 160000,
+   "price": 159000,
    "g": 1000,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.5
   },
   {
    "idx": 53,
@@ -812,9 +940,11 @@
    "short": "Vải thiều sấy khô nguyên trái, cùi dẻo ngọt sâu — quà quê Bắc Giang.",
    "their_name": "Vải Thiều Sấy Khô Đặc Biệt (1kg)",
    "their_price": 190000,
-   "price": 180000,
+   "price": 175000,
    "g": 1000,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 7.9
   },
   {
    "idx": 54,
@@ -829,9 +959,11 @@
    "short": "Chuối chín thái lát sấy giòn, ngọt tự nhiên — món ăn vặt giá mềm cho cả nhà.",
    "their_name": "Chuối Sấy Giòn Đặc Biệt (500g)",
    "their_price": 95000,
-   "price": 90000,
+   "price": 89000,
    "g": 500,
-   "set": null
+   "set": null,
+   "tier": "standard",
+   "pct": 6.3
   },
   {
    "idx": 55,
@@ -848,7 +980,9 @@
    "their_price": 300000,
    "price": 285000,
    "g": 100,
-   "set": null
+   "set": null,
+   "tier": "premium",
+   "pct": 5.0
   },
   {
    "idx": 58,
@@ -863,13 +997,15 @@
    "short": "Hộp 9 ngăn gồm các vị me ngào, dâu tằm, táo đỏ, kiwi, thập cẩm dẻo, kẹo trái cây… — món quà nhiều màu sắc.",
    "their_name": "Hộp Set 9 Món Đặc Sản Ngon (980g)",
    "their_price": 275000,
-   "price": 260000,
+   "price": 259000,
    "g": 980,
    "set": [
     "me",
     "dautam",
     "taodo"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 5.8
   },
   {
    "idx": 59,
@@ -884,13 +1020,15 @@
    "short": "Hai hũ lớn trộn 12 loại trái cây sấy dẻo — đủ vị cho khay trà ngày Tết.",
    "their_name": "Combo 12 loại mứt sấy dẻo (1.7kg)",
    "their_price": 750000,
-   "price": 710000,
+   "price": 715000,
    "g": 1700,
    "set": [
     "xoai",
     "thanhlong",
     "cam"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 4.7
   },
   {
    "idx": 60,
@@ -905,12 +1043,14 @@
    "short": "Cặp thơm sấy mộc và thơm muối ớt không thêm đường — một vị thanh, một vị đậm.",
    "their_name": "Combo Thơm Sấy Mộc & Muối Ớt (1kg)",
    "their_price": 470000,
-   "price": 445000,
+   "price": 449000,
    "g": 1000,
    "set": [
     "thom",
     "thom"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 4.5
   },
   {
    "idx": 61,
@@ -925,13 +1065,15 @@
    "short": "Mứt dừa non dạng viên 4 vị màu tự nhiên — đẹp mắt, béo thơm, hợp đãi khách.",
    "their_name": "Combo Mứt Dừa Non Dạng Viên (1.2kg)",
    "their_price": 340000,
-   "price": 320000,
+   "price": 325000,
    "g": 1200,
    "set": [
     "duanon",
     "duanon",
     "duanon"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 4.4
   },
   {
    "idx": 63,
@@ -946,12 +1088,14 @@
    "short": "Thơm và mãng cầu sấy dẻo áo muối ớt — chua cay ngọt mặn hoà quyện.",
    "their_name": "Combo 2 Loại Mứt Mix (1kg)",
    "their_price": 410000,
-   "price": 385000,
+   "price": 389000,
    "g": 1000,
    "set": [
     "thom",
     "mangcau"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 5.1
   },
   {
    "idx": 64,
@@ -972,7 +1116,9 @@
     "xoai",
     "vobuoi",
     "dudu"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 5.0
   },
   {
    "idx": 67,
@@ -987,13 +1133,15 @@
    "short": "Khay 5 ngăn: chanh dây, gừng, dừa non, xoài, dâu sấy dẻo — tinh gọn mà sang.",
    "their_name": "Khay Mứt Cao Cấp (500g)",
    "their_price": 275000,
-   "price": 260000,
+   "price": 259000,
    "g": 500,
    "set": [
     "chanhday",
     "gung",
     "dautay"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 5.8
   },
   {
    "idx": 68,
@@ -1008,14 +1156,16 @@
    "short": "Hộp quà cứng gồm hạt điều, hạt sen, xoài và dâu tây sấy — chọn 600g (3 vị) hoặc 1kg (4 vị).",
    "their_name": "Hộp Mứt Cao Cấp 02 (1kg)",
    "their_price": 590000,
-   "price": 560000,
+   "price": 565000,
    "g": 1000,
    "set": [
     "hatsen",
     "xoai",
     "dautay",
     "hatsen"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 4.2
   },
   {
    "idx": 69,
@@ -1030,13 +1180,15 @@
    "short": null,
    "their_name": "Hộp Mứt Cao Cấp 01 (600g)",
    "their_price": 390000,
-   "price": 370000,
+   "price": 369000,
    "g": 600,
    "set": [
     "hatsen",
     "xoai",
     "dautay"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 5.4
   },
   {
    "idx": 70,
@@ -1051,14 +1203,16 @@
    "short": "Giỏ quà 4 loại trái cây sấy tuyển chọn (xoài, chanh dây, thơm, dâu tây) — quà biếu Tết trọn vẹn.",
    "their_name": "Giỏ Quà Đặc Sản VN (2.5kg)",
    "their_price": 790000,
-   "price": 750000,
+   "price": 755000,
    "g": 2500,
    "set": [
     "xoai",
     "chanhday",
     "thom",
     "dautay"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 4.4
   },
   {
    "idx": 71,
@@ -1073,13 +1227,15 @@
    "short": "Giỏ mứt 6 vị dẻo truyền thống — xoài, thơm, dâu, vỏ bưởi, hạt dưa — xinh xắn cho quà thăm hỏi.",
    "their_name": "Giỏ Mứt Dẻo Ngon (650g)",
    "their_price": 240000,
-   "price": 225000,
+   "price": 229000,
    "g": 650,
    "set": [
     "xoai",
     "thom",
     "vobuoi"
-   ]
+   ],
+   "tier": "premium",
+   "pct": 4.6
   }
  ],
  "setnames": {

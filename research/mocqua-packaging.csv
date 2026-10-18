@@ -1,79 +1,79 @@
 sku,product,variant,packaging,price_vnd,their_price_vnd,image,render
 MQZ-OMMO-500,Ô mai mơ mặn,500g,Túi zip đứng có cửa sổ,125000,135000,assets/products/mqz/mqz-ommo-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMXD-250,Xí muội đặc biệt,Đỏ · 250g,Túi zip đứng có cửa sổ,185000,195000,assets/products/mqz/mqz-omxd-250.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMXT-250,Xí muội đặc biệt,Trắng · 250g,Túi zip đứng có cửa sổ,185000,195000,assets/products/mqz/mqz-omxt-250.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMMA-1000,Mận sấy dẻo đường ớt,1kg,Túi zip đứng có cửa sổ,180000,190000,assets/products/mqz/mqz-omma-1000.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMMN-500,Me trái ngào đường,500g,Túi zip đứng có cửa sổ,110000,120000,assets/products/mqz/mqz-ommn-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMMX-500,Me trái xí muội,500g,Túi zip đứng có cửa sổ,110000,120000,assets/products/mqz/mqz-ommx-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMMG-500,Ô mai me gừng tắc,500g,Túi zip đứng có cửa sổ,110000,120000,assets/products/mqz/mqz-ommg-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMXD-250,Xí muội đặc biệt,Đỏ · 250g,Túi zip đứng có cửa sổ,179000,195000,assets/products/mqz/mqz-omxd-250.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMXT-250,Xí muội đặc biệt,Trắng · 250g,Túi zip đứng có cửa sổ,179000,195000,assets/products/mqz/mqz-omxt-250.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMMA-1000,Mận sấy dẻo đường ớt,1kg,Túi zip đứng có cửa sổ,175000,190000,assets/products/mqz/mqz-omma-1000.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMMN-500,Me trái ngào đường,500g,Túi zip đứng có cửa sổ,109000,120000,assets/products/mqz/mqz-ommn-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMMX-500,Me trái xí muội,500g,Túi zip đứng có cửa sổ,109000,120000,assets/products/mqz/mqz-ommx-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMMG-500,Ô mai me gừng tắc,500g,Túi zip đứng có cửa sổ,109000,120000,assets/products/mqz/mqz-ommg-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-OMDT-500,Dâu tằm ngào đường,500g,Túi zip đứng có cửa sổ,105000,115000,assets/products/mqz/mqz-omdt-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-OMDY-500,Dâu tây ngào đường,500g,Túi zip đứng có cửa sổ,105000,115000,assets/products/mqz/mqz-omdy-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMCR-1000,Chùm ruột muối ớt,1kg,Túi zip đứng có cửa sổ,175000,185000,assets/products/mqz/mqz-omcr-1000.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMMC-500,Me ngào đường vị cay,500g,Túi zip đứng có cửa sổ,95000,105000,assets/products/mqz/mqz-ommc-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMCR-1000,Chùm ruột muối ớt,1kg,Túi zip đứng có cửa sổ,169000,185000,assets/products/mqz/mqz-omcr-1000.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMMC-500,Me ngào đường vị cay,500g,Túi zip đứng có cửa sổ,99000,105000,assets/products/mqz/mqz-ommc-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-OMMR-500,Me xí muội chùm ruột,500g,Túi zip đứng có cửa sổ,165000,175000,assets/products/mqz/mqz-ommr-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-OMXK-500,Xí muội không hạt,500g,Túi zip đứng có cửa sổ,160000,170000,assets/products/mqz/mqz-omxk-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-OMXK-500,Xí muội không hạt,500g,Túi zip đứng có cửa sổ,159000,170000,assets/products/mqz/mqz-omxk-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-OMDA-500,Xí muội đào hồng,500g,Túi zip đứng có cửa sổ,145000,155000,assets/products/mqz/mqz-omda-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DHS-500-HU,Hạt sen sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",145000,155000,assets/products/mqz/mqz-dhs-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DHS-500,Hạt sen sấy dẻo,500g,Túi zip đứng (refill),130000,,assets/products/mqz/mqz-dhs-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DHS-500,Hạt sen sấy dẻo,500g,Túi zip đứng (refill),140000,155000,assets/products/mqz/mqz-dhs-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DTL-500-HU,Thanh long ruột đỏ sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",205000,220000,assets/products/mqz/mqz-dtl-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DTL-500,Thanh long ruột đỏ sấy dẻo,500g,Túi zip đứng (refill),190000,,assets/products/mqz/mqz-dtl-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DTL-500,Thanh long ruột đỏ sấy dẻo,500g,Túi zip đứng (refill),199000,220000,assets/products/mqz/mqz-dtl-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DCD-500-HU,Chanh dây sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",185000,195000,assets/products/mqz/mqz-dcd-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DCD-500,Chanh dây sấy dẻo,500g,Túi zip đứng (refill),170000,,assets/products/mqz/mqz-dcd-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DDY-500-HU,Dâu tây Đà Lạt sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",210000,225000,assets/products/mqz/mqz-ddy-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DDY-500,Dâu tây Đà Lạt sấy dẻo,500g,Túi zip đứng (refill),195000,,assets/products/mqz/mqz-ddy-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DMC-500-HU,Mãng cầu xiêm sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",230000,245000,assets/products/mqz/mqz-dmc-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DMC-500,Mãng cầu xiêm sấy dẻo,500g,Túi zip đứng (refill),215000,,assets/products/mqz/mqz-dmc-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DGU-500-HU,Gừng Huế sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",135000,145000,assets/products/mqz/mqz-dgu-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DGU-500,Gừng Huế sấy dẻo,500g,Túi zip đứng (refill),120000,,assets/products/mqz/mqz-dgu-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DXO-500-HU,Xoài cát sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",160000,170000,assets/products/mqz/mqz-dxo-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DXO-500,Xoài cát sấy dẻo,500g,Túi zip đứng (refill),145000,,assets/products/mqz/mqz-dxo-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DDN-500-HU,Dừa non sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",135000,145000,assets/products/mqz/mqz-ddn-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DDN-500,Dừa non sấy dẻo,500g,Túi zip đứng (refill),120000,,assets/products/mqz/mqz-ddn-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DCD-500,Chanh dây sấy dẻo,500g,Túi zip đứng (refill),179000,195000,assets/products/mqz/mqz-dcd-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DDY-500-HU,Dâu tây Đà Lạt sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",209000,225000,assets/products/mqz/mqz-ddy-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DDY-500,Dâu tây Đà Lạt sấy dẻo,500g,Túi zip đứng (refill),205000,225000,assets/products/mqz/mqz-ddy-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DMC-500-HU,Mãng cầu xiêm sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",229000,245000,assets/products/mqz/mqz-dmc-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DMC-500,Mãng cầu xiêm sấy dẻo,500g,Túi zip đứng (refill),225000,245000,assets/products/mqz/mqz-dmc-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DGU-500-HU,Gừng Huế sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",139000,145000,assets/products/mqz/mqz-dgu-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DGU-500,Gừng Huế sấy dẻo,500g,Túi zip đứng (refill),135000,145000,assets/products/mqz/mqz-dgu-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DXO-500-HU,Xoài cát sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",159000,170000,assets/products/mqz/mqz-dxo-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DXO-500,Xoài cát sấy dẻo,500g,Túi zip đứng (refill),155000,170000,assets/products/mqz/mqz-dxo-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DDN-500-HU,Dừa non sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",139000,145000,assets/products/mqz/mqz-ddn-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DDN-500,Dừa non sấy dẻo,500g,Túi zip đứng (refill),135000,145000,assets/products/mqz/mqz-ddn-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DTH-500-HU,Thơm sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",175000,185000,assets/products/mqz/mqz-dth-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DTH-500,Thơm sấy dẻo,500g,Túi zip đứng (refill),160000,,assets/products/mqz/mqz-dth-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DDD-500-HU,Đu đủ sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",180000,190000,assets/products/mqz/mqz-ddd-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DDD-500,Đu đủ sấy dẻo,500g,Túi zip đứng (refill),165000,,assets/products/mqz/mqz-ddd-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DCA-500-HU,Cam lát sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",240000,255000,assets/products/mqz/mqz-dca-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DCA-500,Cam lát sấy dẻo,500g,Túi zip đứng (refill),225000,,assets/products/mqz/mqz-dca-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DHO-1000-HU,Hồng Đà Lạt sấy dẻo,Hồng chẻ · 1kg,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",260000,275000,assets/products/mqz/mqz-dho-1000-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DHO-1000,Hồng Đà Lạt sấy dẻo,Hồng chẻ · 1kg,Túi zip đứng (refill),245000,,assets/products/mqz/mqz-dho-1000.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DTH-500,Thơm sấy dẻo,500g,Túi zip đứng (refill),169000,185000,assets/products/mqz/mqz-dth-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DDD-500-HU,Đu đủ sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",179000,190000,assets/products/mqz/mqz-ddd-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DDD-500,Đu đủ sấy dẻo,500g,Túi zip đứng (refill),175000,190000,assets/products/mqz/mqz-ddd-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DCA-500-HU,Cam lát sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",239000,255000,assets/products/mqz/mqz-dca-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DCA-500,Cam lát sấy dẻo,500g,Túi zip đứng (refill),235000,255000,assets/products/mqz/mqz-dca-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DHO-1000-HU,Hồng Đà Lạt sấy dẻo,Hồng chẻ · 1kg,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",255000,275000,assets/products/mqz/mqz-dho-1000-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DHO-1000,Hồng Đà Lạt sấy dẻo,Hồng chẻ · 1kg,Túi zip đứng (refill),249000,275000,assets/products/mqz/mqz-dho-1000.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DKL-1000-HU,Khoai lang mật sấy dẻo,1kg,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",205000,220000,assets/products/mqz/mqz-dkl-1000-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DKL-1000,Khoai lang mật sấy dẻo,1kg,Túi zip đứng (refill),190000,,assets/products/mqz/mqz-dkl-1000.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DKL-1000,Khoai lang mật sấy dẻo,1kg,Túi zip đứng (refill),199000,220000,assets/products/mqz/mqz-dkl-1000.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DHOE-500-HU,Hồng Đà Lạt sấy dẻo,Nguyên trái ép · 500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",175000,185000,assets/products/mqz/mqz-dhoe-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DHOE-500,Hồng Đà Lạt sấy dẻo,Nguyên trái ép · 500g,Túi zip đứng (refill),160000,,assets/products/mqz/mqz-dhoe-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DOI-500-HU,Ổi sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",190000,200000,assets/products/mqz/mqz-doi-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DOI-500,Ổi sấy dẻo,500g,Túi zip đứng (refill),175000,,assets/products/mqz/mqz-doi-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DHOE-500,Hồng Đà Lạt sấy dẻo,Nguyên trái ép · 500g,Túi zip đứng (refill),169000,185000,assets/products/mqz/mqz-dhoe-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DOI-500-HU,Ổi sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",189000,200000,assets/products/mqz/mqz-doi-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DOI-500,Ổi sấy dẻo,500g,Túi zip đứng (refill),185000,200000,assets/products/mqz/mqz-doi-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-DMI-500-HU,Mít sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",215000,230000,assets/products/mqz/mqz-dmi-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DMI-500,Mít sấy dẻo,500g,Túi zip đứng (refill),200000,,assets/products/mqz/mqz-dmi-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-DNH-500-HU,Nhãn Hưng Yên sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",210000,225000,assets/products/mqz/mqz-dnh-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-DNH-500,Nhãn Hưng Yên sấy dẻo,500g,Túi zip đứng (refill),195000,,assets/products/mqz/mqz-dnh-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THSU-100,Sung sấy thăng hoa,100g,Túi zip đứng có cửa sổ,170000,180000,assets/products/mqz/mqz-thsu-100.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DMI-500,Mít sấy dẻo,500g,Túi zip đứng (refill),209000,230000,assets/products/mqz/mqz-dmi-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-DNH-500-HU,Nhãn Hưng Yên sấy dẻo,500g,"Hũ PET nắp vặn xanh/vàng, tem tròn (mặc định)",209000,225000,assets/products/mqz/mqz-dnh-500-hu.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-DNH-500,Nhãn Hưng Yên sấy dẻo,500g,Túi zip đứng (refill),205000,225000,assets/products/mqz/mqz-dnh-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THSU-100,Sung sấy thăng hoa,100g,Túi zip đứng có cửa sổ,169000,180000,assets/products/mqz/mqz-thsu-100.jpg,mockup đồ hoạ (cách điệu)
 MQZ-THMC-100,Mãng cầu xiêm sấy thăng hoa,100g,Túi zip đứng có cửa sổ,205000,220000,assets/products/mqz/mqz-thmc-100.jpg,mockup đồ hoạ (cách điệu)
 MQZ-THNH-100,Nhãn Hưng Yên sấy thăng hoa,100g,Túi zip đứng có cửa sổ,225000,240000,assets/products/mqz/mqz-thnh-100.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THTLT-100,Thanh long sấy thăng hoa,Ruột trắng · 100g,Túi zip đứng có cửa sổ,170000,180000,assets/products/mqz/mqz-thtlt-100.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THTLD-100,Thanh long sấy thăng hoa,Ruột đỏ · 100g,Túi zip đứng có cửa sổ,190000,200000,assets/products/mqz/mqz-thtld-100.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THTH-100,Thơm Queen sấy thăng hoa,100g,Túi zip đứng có cửa sổ,185000,195000,assets/products/mqz/mqz-thth-100.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THXO-100,Xoài cát sấy thăng hoa,100g,Túi zip đứng có cửa sổ,190000,200000,assets/products/mqz/mqz-thxo-100.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THSR-100C,Sầu riêng Ri6 sấy thăng hoa,Múi cắt · 100g,Túi zip đứng có cửa sổ,225000,240000,assets/products/mqz/mqz-thsr-100c.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THSR-100N,Sầu riêng Ri6 sấy thăng hoa,Nguyên múi · 100g,Túi zip đứng có cửa sổ,260000,275000,assets/products/mqz/mqz-thsr-100n.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THTLT-100,Thanh long sấy thăng hoa,Ruột trắng · 100g,Túi zip đứng có cửa sổ,165000,180000,assets/products/mqz/mqz-thtlt-100.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THTLD-100,Thanh long sấy thăng hoa,Ruột đỏ · 100g,Túi zip đứng có cửa sổ,185000,200000,assets/products/mqz/mqz-thtld-100.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THTH-100,Thơm Queen sấy thăng hoa,100g,Túi zip đứng có cửa sổ,179000,195000,assets/products/mqz/mqz-thth-100.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THXO-100,Xoài cát sấy thăng hoa,100g,Túi zip đứng có cửa sổ,185000,200000,assets/products/mqz/mqz-thxo-100.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THSR-100C,Sầu riêng Ri6 sấy thăng hoa,Múi cắt · 100g,Túi zip đứng có cửa sổ,229000,240000,assets/products/mqz/mqz-thsr-100c.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THSR-100N,Sầu riêng Ri6 sấy thăng hoa,Nguyên múi · 100g,Túi zip đứng có cửa sổ,259000,275000,assets/products/mqz/mqz-thsr-100n.jpg,mockup đồ hoạ (cách điệu)
 MQZ-GMI-500,Mít Thái sấy giòn,500g,Túi zip đứng có cửa sổ,135000,145000,assets/products/mqz/mqz-gmi-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-GKM-500,Khoai môn sấy giòn,500g,Túi zip đứng có cửa sổ,135000,145000,assets/products/mqz/mqz-gkm-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-GTC-500,Trái cây thập cẩm sấy giòn,500g,Túi zip đứng có cửa sổ,90000,99000,assets/products/mqz/mqz-gtc-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-GKLV-500,Khoai lang Đà Lạt sấy giòn,Vàng · 500g,Túi zip đứng có cửa sổ,95000,105000,assets/products/mqz/mqz-gklv-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-GKLT-500,Khoai lang Đà Lạt sấy giòn,Tím · 500g,Túi zip đứng có cửa sổ,95000,105000,assets/products/mqz/mqz-gklt-500.jpg,mockup đồ hoạ (cách điệu)
-MQZ-THSR-200,Sầu riêng sấy thăng hoa túi lớn,200g,Túi zip đứng có cửa sổ,205000,220000,assets/products/mqz/mqz-thsr-200.jpg,mockup đồ hoạ (cách điệu)
-MQZ-KNH-1000,Nhãn sấy khô nguyên vỏ,1kg,Túi zip đứng có cửa sổ,160000,170000,assets/products/mqz/mqz-knh-1000.jpg,mockup đồ hoạ (cách điệu)
-MQZ-KVA-1000,Vải thiều sấy khô,1kg,Túi zip đứng có cửa sổ,180000,190000,assets/products/mqz/mqz-kva-1000.jpg,mockup đồ hoạ (cách điệu)
-MQZ-GCH-500,Chuối sấy giòn,500g,Túi zip đứng có cửa sổ,90000,95000,assets/products/mqz/mqz-gch-500.jpg,mockup đồ hoạ (cách điệu)
+MQZ-THSR-200,Sầu riêng sấy thăng hoa túi lớn,200g,Túi zip đứng có cửa sổ,209000,220000,assets/products/mqz/mqz-thsr-200.jpg,mockup đồ hoạ (cách điệu)
+MQZ-KNH-1000,Nhãn sấy khô nguyên vỏ,1kg,Túi zip đứng có cửa sổ,159000,170000,assets/products/mqz/mqz-knh-1000.jpg,mockup đồ hoạ (cách điệu)
+MQZ-KVA-1000,Vải thiều sấy khô,1kg,Túi zip đứng có cửa sổ,175000,190000,assets/products/mqz/mqz-kva-1000.jpg,mockup đồ hoạ (cách điệu)
+MQZ-GCH-500,Chuối sấy giòn,500g,Túi zip đứng có cửa sổ,89000,95000,assets/products/mqz/mqz-gch-500.jpg,mockup đồ hoạ (cách điệu)
 MQZ-THVA-100,Vải Lục Ngạn sấy thăng hoa,100g,Túi zip đứng có cửa sổ,285000,300000,assets/products/mqz/mqz-thva-100.jpg,mockup đồ hoạ (cách điệu)
-MQZ-SET9-980,Hộp quà 9 vị quả & quà,980g,Hộp quà cứng 9 ngăn,260000,275000,assets/products/mqz/mqz-set9-980.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SET12-1700,Bộ 12 vị mứt sấy dẻo,"1,7kg",Combo 2 hũ PET có quai xách,710000,750000,assets/products/mqz/mqz-set12-1700.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETTH-1000,Đôi thơm sấy: mộc & muối ớt,1kg,Combo 2 hũ PET có quai xách,445000,470000,assets/products/mqz/mqz-setth-1000.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETDN-1200,Bộ mứt dừa non 4 vị,"1,2kg",Combo 2 hũ PET có quai xách,320000,340000,assets/products/mqz/mqz-setdn-1200.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETMO-1000,Đôi mứt muối ớt: thơm & mãng cầu,1kg,Combo 2 hũ PET có quai xách,385000,410000,assets/products/mqz/mqz-setmo-1000.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SET9-980,Hộp quà 9 vị quả & quà,980g,Hộp quà cứng 9 ngăn,259000,275000,assets/products/mqz/mqz-set9-980.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SET12-1700,Bộ 12 vị mứt sấy dẻo,"1,7kg",Combo 2 hũ PET có quai xách,715000,750000,assets/products/mqz/mqz-set12-1700.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETTH-1000,Đôi thơm sấy: mộc & muối ớt,1kg,Combo 2 hũ PET có quai xách,449000,470000,assets/products/mqz/mqz-setth-1000.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETDN-1200,Bộ mứt dừa non 4 vị,"1,2kg",Combo 2 hũ PET có quai xách,325000,340000,assets/products/mqz/mqz-setdn-1200.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETMO-1000,Đôi mứt muối ớt: thơm & mãng cầu,1kg,Combo 2 hũ PET có quai xách,389000,410000,assets/products/mqz/mqz-setmo-1000.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
 MQZ-SETK7-750,Khay mứt 7 vị,750g,Khay sơn mài 7 ngăn + nắp,265000,279000,assets/products/mqz/mqz-setk7-750.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETK5-500,Khay mứt 5 vị thượng hạng,500g,Khay sơn mài 5 ngăn + nắp,260000,275000,assets/products/mqz/mqz-setk5-500.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETH4-1000,Hộp quả & hạt Mộc Quả,1kg · 4 vị,Hộp quà cứng 4 ngăn,560000,590000,assets/products/mqz/mqz-seth4-1000.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETH3-600,Hộp quả & hạt Mộc Quả,600g · 3 vị,Hộp quà cứng 3 ngăn,370000,390000,assets/products/mqz/mqz-seth3-600.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETGIO-2500,Giỏ quà quả Việt,"2,5kg",Giỏ mây 4 hũ PET,750000,790000,assets/products/mqz/mqz-setgio-2500.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
-MQZ-SETG6-650,Giỏ mứt dẻo 6 vị,650g,Giỏ mây 3 hũ PET,225000,240000,assets/products/mqz/mqz-setg6-650.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETK5-500,Khay mứt 5 vị thượng hạng,500g,Khay sơn mài 5 ngăn + nắp,259000,275000,assets/products/mqz/mqz-setk5-500.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETH4-1000,Hộp quả & hạt Mộc Quả,1kg · 4 vị,Hộp quà cứng 4 ngăn,565000,590000,assets/products/mqz/mqz-seth4-1000.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETH3-600,Hộp quả & hạt Mộc Quả,600g · 3 vị,Hộp quà cứng 3 ngăn,369000,390000,assets/products/mqz/mqz-seth3-600.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETGIO-2500,Giỏ quà quả Việt,"2,5kg",Giỏ mây 4 hũ PET,755000,790000,assets/products/mqz/mqz-setgio-2500.jpg,"ảnh dựng ghép, ruột quả ảnh thật"
+MQZ-SETG6-650,Giỏ mứt dẻo 6 vị,650g,Giỏ mây 3 hũ PET,229000,240000,assets/products/mqz/mqz-setg6-650.jpg,"ảnh dựng ghép, ruột quả ảnh thật"

@@ -24,17 +24,18 @@ for i,(pid,vs) in enumerate(G.items()):
         if cat=='deo':
             ww=w.replace(' · ',' ')
             vv.append(f"V('{s['sku']}-HU',{json.dumps('Hũ PET · '+ww,ensure_ascii=False)},{s['g']},'mq',{s['price']},'mqz/{s['sku'].lower()}-hu')")
-            zz.append(f"V('{s['sku']}',{json.dumps('Túi zip · '+ww,ensure_ascii=False)},{s['g']},'mq',{s['price']-15000},'mqz/{s['sku'].lower()}')")
+            zz.append(f"V('{s['sku']}',{json.dumps('Túi zip · '+ww,ensure_ascii=False)},{s['g']},'mq',{s['price_zip']},'mqz/{s['sku'].lower()}')")
         else:
             vv.append(f"V('{s['sku']}',{json.dumps(w,ensure_ascii=False)},{s['g']},'mq',{s['price']},'mqz/{s['sku'].lower()}')")
     vv+=zz
-    pack=(SETPACK.get(pid,'Set quà Mộc Quả.') if cat=='set' else 'Có 2 lựa chọn đóng gói: Hũ PET trong nắp vặn xanh viền vàng, tem tròn Mộc Quả — đẹp để biếu, đậy kín sau mỗi lần dùng; hoặc Túi zip đứng refill, rẻ hơn 15.000đ.' if cat=='deo' else None) or ('Set quà Mộc Quả gồm các túi zip nhãn Mộc Quả, kèm túi xách & thiệp (demo).' if cat=='set' else f'Đóng túi zip đứng Mộc Quả (mocqua.com) có cửa sổ nhìn rõ sản phẩm, khoá zip giữ {keep(cat)} sau khi mở.')
+    pack=(SETPACK.get(pid,'Set quà Mộc Quả.') if cat=='set' else 'Có 2 lựa chọn đóng gói: Hũ PET trong nắp vặn xanh viền vàng, tem tròn Mộc Quả — đẹp để biếu, đậy kín sau mỗi lần dùng; hoặc Túi zip đứng refill, giá mềm hơn.' if cat=='deo' else None) or ('Set quà Mộc Quả gồm các túi zip nhãn Mộc Quả, kèm túi xách & thiệp (demo).' if cat=='set' else f'Đóng túi zip đứng Mộc Quả (mocqua.com) có cửa sổ nhìn rõ sản phẩm, khoá zip giữ {keep(cat)} sau khi mở.')
     o=dict(id=pid,name=h['name'],cat=cat,fruit=fr,flavour=h['flavour'],maker='mocqua',own=True,rank=rank)
+    if not badge and h.get('pct',0)>=8: badge='Giá tốt'
     if badge:o['badge']=badge
     if cat=='set':o['pack']=SETPACK.get(pid)
     js='{'+','.join(f"{k}:{json.dumps(v,ensure_ascii=False)}" for k,v in o.items())+f",\n  variants:[{','.join(vv)}],\n  taste:{json.dumps(TASTE[cat])},\n  short:{json.dumps(h['short'],ensure_ascii=False)},\n  long:{json.dumps(h['short']+' '+pack,ensure_ascii=False)}}}"
     out.append(' '+js)
-block='/* ==== MQZ-BEGIN: dòng Mộc Quả (mocqua.com) — sinh tự động bởi research/gen_data.py; giá tham khảo (demo) ==== */\n'+',\n'.join(out)+',\n/* ==== MQZ-END ==== */'
+block='/* ==== MQZ-BEGIN: dòng Mộc Quả (mocqua.com) — sinh tự động bởi research/gen_data.py; giá theo quy tắc research/pricing.py (rẻ hơn 4–10% so với tham chiếu) ==== */\n'+',\n'.join(out)+',\n/* ==== MQZ-END ==== */'
 p='/workspace/mocqua/js/data.js';s=open(p,encoding='utf-8').read()
 if 'MQZ-BEGIN' in s: s=re.sub(r'/\* ==== MQZ-BEGIN.*?MQZ-END ==== \*/',lambda m:block,s,flags=re.S)
 else:

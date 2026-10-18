@@ -63,6 +63,7 @@ MQ.findVar=(p,k)=>MQ.vars(p).find(v=>v.sku===k)||MQ.vars(p).find(v=>v.w===k)||MQ
 MQ.chipLabel=(p,v)=>{const l=MQ.varLabel(p,v),L=MQ.LINES[v.line];return L&&L.short&&l.includes(L.name)?MQ.esc(l.replace(L.name,'%%')).replace('%%',`<span class="l-full">${MQ.esc(L.name)}</span><span class="l-short">${MQ.esc(L.short)}</span>`):MQ.esc(l)};
 MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
 MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.vars(p).map(v=>`<button type="button" class="wchip${v===sel?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
+MQ.cardPerk=(p,v)=>!p.own?'':p.cat==='set'?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^Hũ PET/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -80,6 +81,7 @@ MQ.card=(p,opts={})=>{
       <span class="pcard__origin">${p.own?`<i class="mqseal" aria-hidden="true">MQ</i>Mộc Quả`:MQ.esc(lines||MQ.makerName(p))} · ${MQ.CATS[p.cat].short}</span>
       <h3 class="pcard__name"><a href="${MQ.url(p)}">${p.name}</a> <span class="pcard__w" data-card-w>${MQ.esc(v.w)}</span></h3>
       ${multi?MQ.chips(p,v):''}
+      <div class="perkw" data-perk>${MQ.cardPerk(p,v)}</div>
       <div class="pcard__price"><span class="price${v.p?'':' price--quote'}" data-card-price>${v.p?MQ.fmt(v.p):'Liên hệ báo giá'}</span>${multi?`<small>${MQ.vars(p).length} quy cách</small>`:''}</div>
       <div class="pcard__btns"><a class="cbtn cbtn--line" href="${MQ.url(p)}">Chi tiết</a><button class="cbtn cbtn--buy addbtn${v.p?'':' is-quote'}" data-add="${p.id}" data-w="${v.sku}" aria-label="Đặt mua ${MQ.esc(p.name)}"><svg><use href="#i-cart"/></svg><span>${v.p?'Đặt mua':'Báo giá'}</span></button></div>
     </div></article>`;
@@ -89,6 +91,7 @@ MQ.cardSelect=(card,sku)=>{const p=MQ.byId(card.dataset.id);if(!p)return;const v
   card.querySelectorAll('.wchip').forEach(b=>b.classList.toggle('is-on',b.dataset.sku===v.sku));
   const im=card.querySelector('[data-card-img]');if(im&&v.img)im.src=MQ.img(v.img,true);
   card.querySelector('[data-card-w]').textContent=v.w;
+  const pk=card.querySelector('[data-perk]');if(pk)pk.innerHTML=MQ.cardPerk(p,v);
   const pr=card.querySelector('[data-card-price]');pr.textContent=v.p?MQ.fmt(v.p):'Liên hệ báo giá';pr.classList.toggle('price--quote',!v.p);
   const ab=card.querySelector('.addbtn');ab.dataset.w=v.sku;ab.classList.toggle('is-quote',!v.p);ab.querySelector('span').textContent=v.p?'Đặt mua':'Báo giá';};
 
@@ -114,22 +117,59 @@ MQ.SHIP_METHODS=[
   {id:'fast',name:'Hoả tốc nội thành',eta:'trong 2 giờ (TP.HCM, Hà Nội)',fee:55000},
   {id:'gift',name:'Giao quà hẹn giờ',eta:'đúng ngày & khung giờ bạn chọn',fee:40000}
 ];
-MQ.calc=(items,couponCode,shipId='std')=>{
+/* ---------- khuyến mãi minh bạch (tự động) ---------- */
+MQ.TIERS=[{min:2000000,pct:10},{min:1000000,pct:8},{min:500000,pct:5}];   // giảm theo giá trị đơn
+MQ.ZIPQ=[{n:6,pct:8},{n:3,pct:5}];                                       // mua nhiều túi zip Mộc Quả
+MQ.GIFT_OPTS=[{id:'xoai',name:'Xoài cát sấy dẻo',img:'products/mqz/mqz-dxo-500'},{id:'dautay',name:'Dâu tây Đà Lạt sấy dẻo',img:'products/mqz/mqz-ddy-500'},{id:'ximuoi',name:'Xí muội đỏ đặc biệt',img:'products/mqz/mqz-omxd-250'}];
+MQ.GIFT_BAG_MIN=1000000;
+MQ.r1k=v=>Math.round(v/1000)*1000;
+MQ.isZipItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat!=='set'&&!/^Hũ PET/.test(i.w||''))};
+MQ.isSetItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat==='set')};
+MQ.giftPick=()=>MQ.GIFT_OPTS.find(o=>o.id===MQ.store.get('giftpick','xoai'))||MQ.GIFT_OPTS[0];
+MQ.promo=items=>{
   const sub=items.reduce((s,i)=>s+i.qty*i.price,0);
+  const zip=items.filter(MQ.isZipItem),zipN=zip.reduce((s,i)=>s+i.qty,0),zipSub=zip.reduce((s,i)=>s+i.qty*i.price,0);
+  const zq=MQ.ZIPQ.find(t=>zipN>=t.n),qtyDisc=zq?MQ.r1k(zipSub*zq.pct/100):0;
+  const base=sub-qtyDisc,tier=MQ.TIERS.find(t=>base>=t.min),tierDisc=tier?MQ.r1k(base*tier.pct/100):0;
+  const up=[...MQ.TIERS].reverse().find(t=>base<t.min);
+  const setN=items.filter(MQ.isSetItem).reduce((s,i)=>s+i.qty,0),g=MQ.giftPick(),gifts=[];
+  if(setN)gifts.push({key:'gift-set',name:'Túi 100g '+g.name,w:'Quà tặng kèm Set quà · 1 túi/set',qty:setN,img:g.img,pick:true});
+  if(base>=MQ.GIFT_BAG_MIN)gifts.push({key:'gift-bag',name:'Túi giấy quà & thiệp viết tay Mộc Quả',w:'Quà tặng đơn từ '+MQ.fmt(MQ.GIFT_BAG_MIN),qty:1,img:null,box:'#1e3a2f',ribbon:'#c4a265'});
+  return {sub,zipN,zq,qtyDisc,base,tier,tierDisc,up,gifts,zipNeed:zq?null:MQ.ZIPQ[MQ.ZIPQ.length-1].n-zipN};
+};
+/* gợi ý tiến độ: giao miễn phí → bậc giảm kế tiếp */
+MQ.progress=P=>{const b=P.base;
+  if(!P.sub)return {text:`Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b> · đơn từ <b>${MQ.fmt(MQ.TIERS[2].min)}</b> giảm 5%.`,pct:0};
+  if(b<MQ.FREE_SHIP)return {text:`Mua thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b>.`,pct:b/MQ.FREE_SHIP*100};
+  if(P.up)return {text:`${P.tier?`Đang giảm <b>${P.tier.pct}%</b> · `:'Đã miễn phí giao · '}Mua thêm <b>${MQ.fmt(P.up.min-b)}</b> để được giảm <b>${P.up.pct}%</b>.`,pct:b/P.up.min*100};
+  return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng.`,pct:100};
+};
+MQ.calc=(items,couponCode,shipId='std')=>{
+  const P=MQ.promo(items),sub=P.sub;
   const m=MQ.SHIP_METHODS.find(x=>x.id===shipId)||MQ.SHIP_METHODS[0];
-  let ship=sub===0?0:m.fee; if(m.freeOver&&sub>=MQ.FREE_SHIP) ship=0;
-  let disc=0,cp=null,msg='';
+  let ship=sub===0?0:m.fee; if(m.freeOver&&P.base>=MQ.FREE_SHIP) ship=0;
+  let cdisc=0,cp=null,msg='',note='';
   if(couponCode){const c=MQ.COUPONS[couponCode.toUpperCase()];
     if(!c) msg='Mã không hợp lệ';
-    else if(c.min&&sub<c.min) msg=`Đơn tối thiểu ${MQ.fmt(c.min)}`;
+    else if(c.min&&P.base<c.min) msg=`Đơn tối thiểu ${MQ.fmt(c.min)}`;
     else{cp={code:couponCode.toUpperCase(),...c};
-      if(c.type==='pct') disc=Math.min(c.max||1e12,Math.round(sub*c.value/100/1000)*1000);
-      if(c.type==='fixed') disc=c.value;
+      if(c.type==='pct') cdisc=Math.min(c.max||1e12,MQ.r1k(P.base*c.value/100));
+      if(c.type==='fixed') cdisc=c.value;
       if(c.type==='ship'){ if(m.id==='std') ship=0; else msg='FREESHIP chỉ áp dụng cho giao tiêu chuẩn'; }
     }}
+  // mã giảm giá và ưu đãi theo đơn không cộng dồn: tự chọn mức có lợi hơn cho khách
+  let tierDisc=P.tierDisc;
+  if(cdisc&&tierDisc){ if(cdisc>tierDisc){note=`Mã ${cp.code} có lợi hơn nên thay cho ưu đãi giảm ${P.tier.pct}% theo đơn`;tierDisc=0}else{note=`Ưu đãi giảm ${P.tier.pct}% theo đơn có lợi hơn mã ${cp.code} (không cộng dồn)`;cdisc=0} }
+  const disc=P.qtyDisc+tierDisc+cdisc;
+  const rows=[];
+  if(P.qtyDisc)rows.push({k:'qty',label:`Mua ${P.zipN} túi zip Mộc Quả (−${P.zq.pct}%)`,v:P.qtyDisc});
+  if(tierDisc)rows.push({k:'tier',label:`Ưu đãi đơn từ ${MQ.fmt(P.tier.min)} (−${P.tier.pct}%)`,v:tierDisc});
+  if(cdisc)rows.push({k:'coupon',label:`Mã ${cp.code}`,v:cdisc});
   const total=Math.max(0,sub-disc+ship);
-  return {sub,ship,disc,total,coupon:cp,msg,points:Math.floor(total/10000)};
+  return {sub,ship,disc,qtyDisc:P.qtyDisc,tierDisc,cdisc,rows,gifts:P.gifts,promo:P,total,coupon:cp,msg,note,points:Math.floor(total/10000)};
 };
+MQ.discRowsHtml=r=>r.rows.map(x=>`<div class="srow srow--disc" data-drow="${x.k}"><span>${MQ.esc(x.label)}</span><b>−${MQ.fmt(x.v)}</b></div>`).join('');
+MQ.giftPickSel=()=>`<select class="giftpick" data-giftpick aria-label="Chọn quà tặng kèm">${MQ.GIFT_OPTS.map(o=>`<option value="${o.id}"${o.id===MQ.giftPick().id?' selected':''}>${o.name}</option>`).join('')}</select>`;
 
 /* ---------- wishlist ---------- */
 MQ.wish={
@@ -161,7 +201,7 @@ function header(){
   const omai=live.filter(p=>p.cat==='omai').sort((a,b)=>(a.rank||99)-(b.rank||99));
   return `
 <div class="tbar"><div class="wrap tbar__in">
-  <span class="tbar__msg"><svg><use href="#i-truck"/></svg>Giao hàng toàn quốc · Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b></span>
+  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
   <span class="tbar__msg tbar__demo">Website demo — đặt hàng thử, chưa thanh toán thật</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>
@@ -225,7 +265,7 @@ function footer(){
     <div><h5>Hỗ trợ</h5><a href="chinh-sach.html#huong-dan">Hướng dẫn mua hàng</a><a href="chinh-sach.html#thanh-toan">Hình thức thanh toán</a><a href="chinh-sach.html#giao-hang">Giao hàng &amp; vận chuyển</a><a href="chinh-sach.html#doi-tra">Đổi trả &amp; hoàn tiền</a><a href="chinh-sach.html#bao-mat">Bảo mật thông tin</a><a href="tra-cuu-don.html">Tra cứu đơn hàng</a></div>
     <div><h5>Liên hệ</h5><a href="tel:${MQ.TEL}">Hotline: ${MQ.HOTLINE}</a><a href="mailto:hello@mocqua.com">hello@mocqua.com</a><a href="lien-he.html">[Địa chỉ showroom đang cập nhật]</a><span>8:00 – 21:00, tất cả các ngày</span><div class="footer__social"><a href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener" aria-label="Zalo"><svg><use href="#i-zalo"/></svg></a><a href="https://m.me/" target="_blank" rel="noopener" aria-label="Messenger"><svg><use href="#i-msg"/></svg></a></div></div>
   </div>
-  <div class="container footer__bottom"><span>© 2026 Mộc Quả · mocqua.com</span><span>Website demo giao diện — đánh giá, thông tin liên hệ là dữ liệu mẫu; giá bán lẻ tham khảo</span></div>
+  <div class="container footer__bottom"><span>© 2026 Mộc Quả · mocqua.com</span><span>Website demo giao diện — đánh giá, thông tin liên hệ là dữ liệu mẫu</span></div>
   <div class="footer__word" aria-hidden="true">Mộc Quả</div>
 </footer>
 <div class="float">
@@ -249,7 +289,9 @@ function footer(){
   <div class="drawer__empty">${MQ.mark()}<p>Giỏ hàng đang trống.</p><a href="cua-hang.html" class="btn btn--line">Khám phá cửa hàng</a></div>
   <footer class="drawer__foot">
     <div class="drawer__row"><span>Tạm tính</span><b data-subtotal>0đ</b></div>
-    <p class="drawer__note">Phí giao hàng &amp; mã giảm giá được tính ở bước thanh toán.</p>
+    <div data-dr-disc></div>
+    <div class="drawer__row drawer__row--total" data-dr-totrow hidden><span>Sau ưu đãi</span><b data-dr-total></b></div>
+    <p class="drawer__note">Ưu đãi &amp; quà tặng tự áp dụng · phí giao hàng tính ở bước thanh toán.</p>
     <div class="drawer__btns"><a href="gio-hang.html" class="btn btn--line">Xem giỏ hàng</a><a href="thanh-toan.html" class="btn btn--gold">Thanh toán</a></div>
     <p class="drawer__demo">Website demo · Chưa phát sinh thanh toán thật</p>
   </footer>
@@ -267,9 +309,13 @@ MQ.renderDrawer=()=>{
   const items=MQ.cart.items(), sub=MQ.cart.subtotal(), count=MQ.cart.count(), d=$('.drawer');
   $('[data-count-text]').textContent=count?`(${count})`:'';
   $('[data-items]').innerHTML=items.map(i=>`<li class="ci">${MQ.thumb(i)}<div><h4>${MQ.esc(i.name)}</h4><small>${MQ.esc(i.w)}${i.meta?' · '+MQ.esc(i.meta):''}</small><div class="qty qty--sm"><button data-dec="${i.key}" aria-label="Giảm">−</button><span>${i.qty}</span><button data-inc="${i.key}" aria-label="Tăng">+</button></div></div><div class="ci__r"><b>${MQ.fmt(i.price*i.qty)}</b><button class="ci__rm" data-rm="${i.key}">Xoá</button></div></li>`).join('');
+  const r=MQ.calc(items,''),pg=MQ.progress(r.promo);
+  $('[data-items]').insertAdjacentHTML('beforeend',r.gifts.map(g=>`<li class="ci ci--gift">${MQ.thumb(g)}<div><h4>${MQ.esc(g.name)}</h4><small>${MQ.esc(g.w)}</small><small class="ci__qty">× ${g.qty}</small></div><div class="ci__r"><b>0đ</b><span class="ci__tag">Quà tặng</span></div></li>`).join(''));
   $('[data-subtotal]').textContent=MQ.fmt(sub);
-  $('[data-ship-text]').innerHTML=sub>=MQ.FREE_SHIP?'Tuyệt vời! Đơn hàng được <b>miễn phí giao hàng</b> tiêu chuẩn.':`Mua thêm <b>${MQ.fmt(MQ.FREE_SHIP-sub)}</b> để được miễn phí giao hàng.`;
-  $('[data-ship-bar]').style.width=Math.min(100,sub/MQ.FREE_SHIP*100)+'%';
+  $('[data-dr-disc]').innerHTML=r.rows.map(x=>`<div class="drawer__row drawer__row--disc"><span>${MQ.esc(x.label)}</span><b>−${MQ.fmt(x.v)}</b></div>`).join('');
+  $('[data-dr-totrow]').hidden=!r.disc;$('[data-dr-total]').textContent=MQ.fmt(sub-r.disc);
+  $('[data-ship-text]').innerHTML=pg.text;
+  $('[data-ship-bar]').style.width=Math.min(100,pg.pct)+'%';
   d.classList.toggle('is-empty',count===0);
 };
 MQ.openCart=()=>{if(page==='cart'||page==='checkout')return;document.body.classList.add('cart-open');$('.drawer').setAttribute('aria-hidden','false')};

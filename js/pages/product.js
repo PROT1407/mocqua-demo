@@ -27,6 +27,7 @@ root.innerHTML=`<div class="pd">
   <div class="pinfo__brand">${p.own?'<span class="pinfo__mq"><i class="mqseal" aria-hidden="true">MQ</i>Thương hiệu: <b>Mộc Quả</b> · mocqua.com</span><span>Tuyển chọn &amp; đóng gói bởi Mộc Quả</span>':`<span>Nhà sản xuất: <b>${maker.name}</b></span><span>Dòng sản phẩm: <b data-line>${MQ.lineName(v.line)||'Đang cập nhật'}</b></span>`}<span class="pinfo__auth"><svg><use href="#i-shield"/></svg>${p.own?'Nguồn quả rõ ràng':'Hàng chính hãng'}</span></div>
   ${soon?`<p class="pinfo__short">${p.short}</p><p class="notice">Sản phẩm đang chuẩn bị ra mắt. Đăng ký để được báo khi mở bán.</p><button class="btn btn--gold" data-notify="${p.id}">Báo tôi khi có hàng</button>`:`
   <div class="pinfo__price" data-pricebox></div>
+  <ul class="perks" data-perks></ul>
   <p class="pinfo__short">${p.short}</p>
   <div class="opt-label">Chọn quy cách <em data-wlabel></em></div>
   <div class="variants variants--rich" data-vars>${varBtns()}</div>
@@ -40,7 +41,7 @@ root.innerHTML=`<div class="pd">
 <div class="tabs" id="tabs">
  <div class="tabs__nav" role="tablist">${[['ds','Mô tả'],['ma',p.own?'Thương hiệu':'Nhà sản xuất'],['bq','Bảo quản & sử dụng'],['rv','Đánh giá']].map(([k,l],i)=>`<button role="tab" class="${i?'':'is-on'}" data-tab="${k}" id="tab-${k}">${l}</button>`).join('')}</div>
  <div class="tabs__panel is-on" data-panel="ds"><div class="prose"><p>${p.long||p.short}</p>
-   <h4>Thông tin sản phẩm</h4><ul><li>Phân loại: ${MQ.CATS[p.cat].name}${flv?' · '+flv:''}</li><li>Quy cách đang bán: ${vars.map(x=>x.w+(x.line?' ('+MQ.lineName(x.line)+')':'')).join(' · ')}</li><li>Bao bì: ${p.own?(p.cat==='set'?(p.pack||'set quà Mộc Quả'):(vars.some(x=>/^Hũ PET/.test(x.w))?'chọn Hũ PET trong nắp vặn có tem tròn Mộc Quả (đẹp để biếu, đậy kín nhiều lần) hoặc Túi zip đứng refill tiết kiệm 15.000đ':'túi zip đứng Mộc Quả có cửa sổ nhìn rõ sản phẩm, khoá zip đóng mở nhiều lần')):'giữ nguyên bao bì gốc của nhà sản xuất'}</li>${p.own?'<li>Giá bán: giá tham khảo (website demo).</li>':''}<li>Thành phần, hạn sử dụng, thông tin dinh dưỡng: in trên bao bì (xem ảnh mặt sau nếu có).</li></ul>
+   <h4>Thông tin sản phẩm</h4><ul><li>Phân loại: ${MQ.CATS[p.cat].name}${flv?' · '+flv:''}</li><li>Quy cách đang bán: ${vars.map(x=>x.w+(x.line?' ('+MQ.lineName(x.line)+')':'')).join(' · ')}</li><li>Bao bì: ${p.own?(p.cat==='set'?(p.pack||'set quà Mộc Quả'):(vars.some(x=>/^Hũ PET/.test(x.w))?'chọn Hũ PET trong nắp vặn có tem tròn Mộc Quả (đẹp để biếu, đậy kín nhiều lần) hoặc Túi zip đứng refill giá mềm hơn':'túi zip đứng Mộc Quả có cửa sổ nhìn rõ sản phẩm, khoá zip đóng mở nhiều lần')):'giữ nguyên bao bì gốc của nhà sản xuất'}</li>${p.own?'':''}<li>Thành phần, hạn sử dụng, thông tin dinh dưỡng: in trên bao bì (xem ảnh mặt sau nếu có).</li></ul>
    <h4>Ăn lúc nào cũng hợp</h4><ul>${OCC.map(o=>`<li>${o}</li>`).join('')}</ul></div></div>
  <div class="tabs__panel" data-panel="ma"><div class="maker">${MQ.mark('maker__mark')}<div><h4>${maker.name||'Mộc Quả'}</h4><p>${maker.note||''}</p>${p.own?'':`<p>Mộc Quả là nhà bán lẻ — phân phối nguyên bao bì các dòng sản phẩm của ${maker.name}: ${Object.values(MQ.LINES).filter(l=>l.maker===p.maker).map(l=>l.name).join(', ')}.</p>`}</div></div></div>
  <div class="tabs__panel" data-panel="bq"><div class="prose"><ul><li>Bảo quản nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp.</li><li>Sau khi mở, đóng kín miệng túi; dùng ngon nhất trong 7–10 ngày.</li><li>${p.cat==='deo'?'Có thể để ngăn mát tủ lạnh để giữ độ dẻo lâu hơn.':'Sản phẩm sấy giòn / thăng hoa rất dễ hút ẩm — nên dùng hết sau khi mở.'}</li><li>Hạn sử dụng: xem trên bao bì.</li></ul></div></div>
@@ -70,7 +71,13 @@ const etaSel=$('[data-eta-prov]'),upEta=()=>$('[data-eta]').textContent=MQ.eta(e
 if(!soon){
  const n=()=>{const q=$('[data-qty]');return q?Math.max(1,Math.min(99,+q.value||1)):1};
  const upd=()=>{
-   $('[data-pricebox]').innerHTML=v.p?`<small>${p.own?'Giá tham khảo':'Giá bán lẻ'}</small><b>${MQ.fmt(v.p)}</b>${v.g?`<span class="pinfo__unit">≈ ${MQ.fmt(Math.round(v.p/v.g*100/100)*100)} / 100g</span>`:''}`:`<small>Giá</small><b class="is-quote">Liên hệ báo giá</b>`;
+   $('[data-pricebox]').innerHTML=v.p?`<small>Giá bán</small><b>${MQ.fmt(v.p)}</b>${v.g?`<span class="pinfo__unit">≈ ${MQ.fmt(Math.round(v.p/v.g*100/100)*100)} / 100g</span>`:''}`:`<small>Giá</small><b class="is-quote">Liên hệ báo giá</b>`;
+   const zipV=p.own&&p.cat!=='set'&&!/^Hũ PET/.test(v.w),T=MQ.TIERS;
+   $('[data-perks]').innerHTML=v.p?[
+     p.own&&p.cat==='set'?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Quà tặng kèm:</b> mỗi set tặng 1 túi 100g — Xoài cát sấy dẻo, Dâu tây sấy dẻo hoặc Xí muội đỏ (chọn trong giỏ hàng).</span></li>`:'',
+     zipV?`<li class="perk"><svg><use href="#i-cart"/></svg><span><b>Mua nhiều túi zip:</b> từ 3 túi Mộc Quả (cộng mọi vị) giảm 5%, từ 6 túi giảm 8%.</span></li>`:'',
+     `<li class="perk"><svg><use href="#i-truck"/></svg><span>Đơn từ ${MQ.fmt(T[2].min)} <b>−${T[2].pct}%</b> · từ ${MQ.fmt(T[1].min)} <b>−${T[1].pct}%</b> · từ ${MQ.fmt(T[0].min)} <b>−${T[0].pct}%</b> · miễn phí giao từ ${MQ.fmt(MQ.FREE_SHIP)} — tự áp dụng trong giỏ. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
+   ].join(''):'';
    $('[data-wlabel]').textContent=MQ.varLabel(p,v);
    $$('[data-vars] .var').forEach(x=>x.classList.toggle('is-on',x.dataset.sku===v.sku));
    const ln=$('[data-line]');if(ln)ln.textContent=MQ.lineName(v.line)||'Đang cập nhật';

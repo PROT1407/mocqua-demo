@@ -5,7 +5,7 @@ MQ.giftCard=(g,i)=>{const tag=g.tag||(['Thăm hỏi','Đoàn viên','Biếu Tế
   return `<article class="gift${g.tag?' gift--feature':''} reveal" id="${g.id}">${g.tag?`<span class="gift__ribbon">${g.tag}</span>`:''}
   <div class="gift__art">${MQ.giftSvg(g.box,g.ribbon)}</div><span class="gift__tag">${g.slots} món${g.tag?'':' · '+tag}</span><h3>${g.name}</h3><p>${g.desc}</p>
   <div class="gift__items">${g.items.map(id=>{const p=MQ.byId(id);return p?`<img src="${MQ.img(p.img,true)}" alt="${MQ.esc(p.name)}" title="${MQ.esc(p.name)}" loading="lazy">`:''}).join('')}</div>
-  <div class="gift__foot"><span class="price"><small>Giá tham khảo</small>${MQ.fmt(g.price)}</span><button class="btn btn--gold" data-add="${g.id}">Thêm vào giỏ</button></div></article>`};
+  <div class="gift__foot"><span class="price"><small>Giá bán</small>${MQ.fmt(g.price)}</span><button class="btn btn--gold" data-add="${g.id}">Thêm vào giỏ</button></div></article>`};
 MQ.reviewCard=r=>`<figure class="review reveal">${MQ.stars(r.rating)}<blockquote>${r.text}</blockquote><figcaption><b>${r.name}</b><span>${r.city} · ${r.product} · nhận xét mẫu</span></figcaption></figure>`;
 MQ.postCard=(a,feature)=>`<a class="post${feature?' post--feature':''} reveal" href="bai-viet.html?slug=${a.slug}"><div class="post__img"><img src="${MQ.img(a.img,true)}" alt="" loading="lazy"></div><div><small>${a.cat} · ${a.date} · ${a.read} đọc</small><h3>${a.title}</h3><p>${a.excerpt}</p></div></a>`;
 MQ.calendar=()=>{const now=new Date().getMonth()+1;
