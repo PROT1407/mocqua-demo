@@ -6,6 +6,11 @@ TASTE={'deo':dict(ngot=4,chua=2,deo=4,gion=0),'thanghoa':dict(ngot=4,chua=1,deo=
 RANK={'mqz-sau-rieng-ri6-thang-hoa':(2,'Mới · Mộc Quả'),'mqz-xoai-say-deo':(4,None),'mqz-mit-say-gion':(6,'Giá tốt'),'mqz-xi-muoi-dac-biet':(8,None),'mqz-dau-tay-say-deo':(10,None),'mqz-thanh-long-thang-hoa':(12,None),
  'mqz-hop-qua-hat':(14,'Quà Tết'),'mqz-chanh-day-say-deo':(16,None),'mqz-khay-mut-7-vi':(18,'Quà Tết'),'mqz-xoai-thang-hoa':(20,None),'mqz-chum-ruot-muoi-ot':(22,None),'mqz-dua-non-say-deo':(24,None),
  'mqz-thap-cam-say-gion':(26,'Giá tốt'),'mqz-gio-qua-viet':(28,'Quà biếu'),'mqz-hong-say-deo':(30,None),'mqz-nhan-say-deo':(32,None)}
+JAR='Combo 2 hũ PET trong có quai xách, nắp xanh viền vàng, tem tròn Mộc Quả; kèm túi xách & thiệp.'
+BOX='Hộp quà cứng xanh rừng nhiều ngăn, nắp in tem tròn Mộc Quả nhũ vàng; kèm túi xách & thiệp.'
+TRAY='Khay sơn mài đỏ viền vàng nhiều ngăn, nắp tròn in tem Mộc Quả; kèm túi xách & thiệp.'
+BASK='Giỏ mây đan thắt nơ đỏ, xếp các hũ PET tem tròn Mộc Quả; kèm thiệp.'
+SETPACK={'mqz-hop-9-vi':BOX,'mqz-hop-qua-hat':BOX,'mqz-bo-12-vi-mut':JAR,'mqz-doi-thom-say':JAR,'mqz-bo-mut-dua-non':JAR,'mqz-doi-mut-muoi-ot':JAR,'mqz-khay-mut-7-vi':TRAY,'mqz-khay-mut-5-vi':TRAY,'mqz-gio-qua-viet':BASK,'mqz-gio-mut-6-vi':BASK}
 G=collections.OrderedDict()
 for s in D['spec']: G.setdefault(s['pid'],[]).append(s)
 def keep(t): return 'độ giòn xốp' if t in('gion','thanghoa') else 'độ dẻo và hương thơm'
@@ -13,13 +18,20 @@ out=[]
 for i,(pid,vs) in enumerate(G.items()):
     h=vs[0];cat=h['cat'];fr=FMAP.get(h['fruit'],h['fruit'])
     rank,badge=RANK.get(pid,(40+i,None))
-    vv=[]
+    vv=[];zz=[]
     for s in vs:
         v=s['variant'];w=v if '·' in v else v
-        vv.append(f"V('{s['sku']}',{json.dumps(w,ensure_ascii=False)},{s['g']},'mq',{s['price']},'mqz/{s['sku'].lower()}')")
-    pack=('Set quà Mộc Quả gồm các túi zip nhãn Mộc Quả, kèm túi xách & thiệp (demo).' if cat=='set' else f'Đóng túi zip đứng Mộc Quả (mocqua.com) có cửa sổ nhìn rõ sản phẩm, khoá zip giữ {keep(cat)} sau khi mở.')
+        if cat=='deo':
+            ww=w.replace(' · ',' ')
+            vv.append(f"V('{s['sku']}-HU',{json.dumps('Hũ PET · '+ww,ensure_ascii=False)},{s['g']},'mq',{s['price']},'mqz/{s['sku'].lower()}-hu')")
+            zz.append(f"V('{s['sku']}',{json.dumps('Túi zip · '+ww,ensure_ascii=False)},{s['g']},'mq',{s['price']-15000},'mqz/{s['sku'].lower()}')")
+        else:
+            vv.append(f"V('{s['sku']}',{json.dumps(w,ensure_ascii=False)},{s['g']},'mq',{s['price']},'mqz/{s['sku'].lower()}')")
+    vv+=zz
+    pack=(SETPACK.get(pid,'Set quà Mộc Quả.') if cat=='set' else 'Có 2 lựa chọn đóng gói: Hũ PET trong nắp vặn xanh viền vàng, tem tròn Mộc Quả — đẹp để biếu, đậy kín sau mỗi lần dùng; hoặc Túi zip đứng refill, rẻ hơn 15.000đ.' if cat=='deo' else None) or ('Set quà Mộc Quả gồm các túi zip nhãn Mộc Quả, kèm túi xách & thiệp (demo).' if cat=='set' else f'Đóng túi zip đứng Mộc Quả (mocqua.com) có cửa sổ nhìn rõ sản phẩm, khoá zip giữ {keep(cat)} sau khi mở.')
     o=dict(id=pid,name=h['name'],cat=cat,fruit=fr,flavour=h['flavour'],maker='mocqua',own=True,rank=rank)
     if badge:o['badge']=badge
+    if cat=='set':o['pack']=SETPACK.get(pid)
     js='{'+','.join(f"{k}:{json.dumps(v,ensure_ascii=False)}" for k,v in o.items())+f",\n  variants:[{','.join(vv)}],\n  taste:{json.dumps(TASTE[cat])},\n  short:{json.dumps(h['short'],ensure_ascii=False)},\n  long:{json.dumps(h['short']+' '+pack,ensure_ascii=False)}}}"
     out.append(' '+js)
 block='/* ==== MQZ-BEGIN: dòng Mộc Quả (mocqua.com) — sinh tự động bởi research/gen_data.py; giá tham khảo (demo) ==== */\n'+',\n'.join(out)+',\n/* ==== MQZ-END ==== */'

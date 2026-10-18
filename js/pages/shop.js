@@ -73,7 +73,7 @@ function render(){
   history.replaceState(null,'','cua-hang.html'+(u.toString()?'?'+u:''));
   drawTiles();
   const ownOn=st.line.size===1&&st.line.has('mq');
-  $('[data-owncta]').innerHTML=ownOn?'':`<div><small>Thương hiệu riêng · mocqua.com</small><h3>Mộc Quả <em>túi zip đứng</em></h3><p>${live.filter(p=>p.own).length} sản phẩm tuyển chọn: sấy dẻo, thăng hoa, ô mai, set quà — túi zip có cửa sổ nhìn rõ quả, nhãn Mộc Quả xanh rừng ánh vàng.</p><a class="btn btn--gold btn--sm" href="cua-hang.html?line=mq">Xem dòng Mộc Quả <svg><use href="#i-arrow"/></svg></a></div><div class="owncta__imgs">${['mqz-thsr-100c','mqz-dxo-500','mqz-omxd-250'].map(f=>`<img src="${MQ.img('products/mqz/'+f,true)}" alt="" loading="lazy">`).join('')}</div>`;
+  $('[data-owncta]').innerHTML=ownOn?'':`<div><small>Thương hiệu riêng · mocqua.com</small><h3>Mộc Quả <em>hũ PET &amp; túi zip</em></h3><p>${live.filter(p=>p.own).length} sản phẩm tuyển chọn: sấy dẻo, thăng hoa, ô mai, set quà — hũ PET tem tròn hoặc túi zip có cửa sổ nhìn rõ quả, nhãn Mộc Quả xanh rừng ánh vàng.</p><a class="btn btn--gold btn--sm" href="cua-hang.html?line=mq">Xem dòng Mộc Quả <svg><use href="#i-arrow"/></svg></a></div><div class="owncta__imgs">${['mqz-thsr-100c','mqz-dxo-500','mqz-omxd-250'].map(f=>`<img src="${MQ.img('products/mqz/'+f,true)}" alt="" loading="lazy">`).join('')}</div>`;
   MQ.reveal(g);
 }
 const clearAll=()=>{KEYS.forEach(n=>st[n].clear());st.q='';qIn.value='';st.max=MAXP;pr.value=MAXP;st.soon=false;soon.checked=false;st.onlySoon=false;st.priced=false;pc.checked=false;$$('.filters input[type=checkbox]').forEach(c=>c.checked=false)};

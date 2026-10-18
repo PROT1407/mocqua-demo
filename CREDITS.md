@@ -36,3 +36,33 @@ Tất cả ảnh lấy qua Openverse, giấy phép CC0 / Public Domain Mark (kh�
 | assets/img/hong3.jpg | https://upload.wikimedia.org/wikipedia/commons/c/ce/Dried_persimmon_cakes.jpg |
 
 Lưu ý: một số ảnh chỉ mang tính minh hoạ gần đúng (ví dụ `xoai2.jpg` là lát táo sấy dùng tạm cho xoài sấy; `hero.jpg`, `cho.jpg`, `phin.jpg`, `nuongche.jpg` là ảnh không khí). Logo, favicon, hộp quà SVG và bản đồ là đồ hoạ vector tự vẽ cho dự án.
+
+## Ảnh ruột quả trong hũ/hộp/khay/giỏ Mộc Quả (ảnh dựng ghép)
+
+Các ảnh `assets/products/mqz/*-hu.jpg` và `assets/products/mqz/mqz-set*.jpg` là ảnh dựng ghép: hũ PET, hộp, khay, giỏ được dựng bằng máy (brand/photoreal/), phần quả bên trong là ảnh chụp thật lấy từ Wikimedia Commons, đã cắt, uốn theo thân hũ, chỉnh sáng và đôi khi đổi tông màu (ví dụ hạt sen, mãng cầu, me, dâu tằm, táo đỏ, vỏ bưởi, dừa non lá dứa/cà phê/khoai môn). Ảnh gốc cắt sẵn nằm ở `brand/photoreal/tex/`.
+
+| Tệp | Ảnh gốc | Tác giả | Giấy phép |
+|---|---|---|---|
+| tex/xoai.jpg | [File:Mangues sechees.jpg](https://commons.wikimedia.org/wiki/File:Mangues_sechees.jpg) | Asabengurtza | CC BY-SA 3.0 |
+| tex/dautay.jpg | [File:Dried Strawberries.jpg](https://commons.wikimedia.org/wiki/File:Dried_Strawberries.jpg) | Fumikas Sagisavas | CC0 |
+| tex/thanhlong.jpg | [File:Zhejiang Jiaxing freeze-dried dragon fruit slices.jpg](https://commons.wikimedia.org/wiki/File:Zhejiang_Jiaxing_freeze-dried_dragon_fruit_slices.jpg) | Fumikas Sagisavas | CC0 |
+| tex/chanhday.jpg | [File:Passion fruit preserves with lemon.jpg](https://commons.wikimedia.org/wiki/File:Passion_fruit_preserves_with_lemon.jpg) | Fumikas Sagisavas | CC0 |
+| tex/gung.jpg | [File:Candied Ginger (IMG 7223).jpg](https://commons.wikimedia.org/wiki/File:Candied_Ginger_(IMG_7223).jpg) | Marc Majcher | CC BY-SA 2.0 |
+| tex/duanon.jpg | [File:Bánh xốp mứt dừa Tết 2018 nhà cậu Cảm (3).jpg](https://commons.wikimedia.org/wiki/File:B%C3%A1nh_x%E1%BB%91p_m%E1%BB%A9t_d%E1%BB%ABa_T%E1%BA%BFt_2018_nh%C3%A0_c%E1%BA%ADu_C%E1%BA%A3m_(3).jpg) | Phương Huy (thảo luận) | Public domain |
+| tex/thom.jpg | [File:Candies Dried Pineapple.jpg](https://commons.wikimedia.org/wiki/File:Candies_Dried_Pineapple.jpg) | François Nguyen | CC BY 2.0 |
+| tex/thomring.jpg | [File:Dried pineapple.JPG](https://commons.wikimedia.org/wiki/File:Dried_pineapple.JPG) | JHistory | CC BY-SA 4.0 |
+| tex/dudu.jpg | [File:Dried papaya.jpg](https://commons.wikimedia.org/wiki/File:Dried_papaya.jpg) | ד"ר יעל ויילר ישראל ,יעל י | CC BY-SA 3.0 |
+| tex/cam.jpg | [File:Freeze-dried orange slices.jpg](https://commons.wikimedia.org/wiki/File:Freeze-dried_orange_slices.jpg) | Fumikas Sagisavas | CC0 |
+| tex/hong.jpg | [File:Dried persimmon slices.jpg](https://commons.wikimedia.org/wiki/File:Dried_persimmon_slices.jpg) | sarang | Public domain |
+| tex/hongep.jpg | [File:Dried persimmon cakes.jpg](https://commons.wikimedia.org/wiki/File:Dried_persimmon_cakes.jpg) | Fumikas Sagisavas | CC0 |
+| tex/khoailang.jpg | [File:Dried sweet potatoes.jpg](https://commons.wikimedia.org/wiki/File:Dried_sweet_potatoes.jpg) | François Nguyen | CC BY 2.0 |
+| tex/oi.jpg | [File:Candied guava.jpg](https://commons.wikimedia.org/wiki/File:Candied_guava.jpg) | Fumikas Sagisavas | CC0 |
+| tex/mit.jpg | [File:Freeze-dried jackfruit.jpg](https://commons.wikimedia.org/wiki/File:Freeze-dried_jackfruit.jpg) | François Nguyen | CC BY 2.0 |
+| tex/nhan.jpg | [File:Dried longan meat.jpg](https://commons.wikimedia.org/wiki/File:Dried_longan_meat.jpg) | Fumikas Sagisavas | CC0 |
+| tex/hatsen.jpg | [File:Dried longan (20240619).jpg](https://commons.wikimedia.org/wiki/File:Dried_longan_(20240619).jpg) | Fumikas Sagisavas | CC0 |
+| tex/mangcau.jpg | [File:Close-up of Sun-dried sliced mangoes.jpg](https://commons.wikimedia.org/wiki/File:Close-up_of_Sun-dried_sliced_mangoes.jpg) | Lalsing Vanya Valavi from Dhadgaon (Akrani), Nandurbar | CC0 |
+| tex/mixnuts.jpg | [File:Nut and-fruit mixes DEN LILLE NOTTEFABRIKKEN Norway Naturblanding rosiner torket frukt naturlige notterr (paranotter mandler valnotter) og torrostede cashewnotter 2017.jpg](https://commons.wikimedia.org/wiki/File:Nut_and-fruit_mixes_DEN_LILLE_NOTTEFABRIKKEN_Norway_Naturblanding_rosiner_torket_frukt_naturlige_notterr_(paranotter_mandler_valnotter)_og_torrostede_cashewnotter_2017.jpg) | Wolfmann | CC BY-SA 4.0 |
+| tex/wicker.jpg | [File:Basketwork wicker basket close up.jpg](https://commons.wikimedia.org/wiki/File:Basketwork_wicker_basket_close_up.jpg) | Titus Tscharntke | Public domain |
+
+Các ảnh CC BY / CC BY-SA cần ghi công như trên khi dùng; bản dựng ghép từ ảnh CC BY-SA cũng theo giấy phép CC BY-SA tương ứng.
+Lưu ý ảnh gần đúng: `hatsen` dùng ảnh nhãn khô đã đổi màu ngà, `mangcau` dùng ảnh xoài phơi lát đổi tông kem, `me`/`dâu tằm`/`táo đỏ`/`vỏ bưởi` trong các set là ảnh hồng/dâu/gừng đổi tông — cần thay bằng ảnh chụp sản phẩm thật trước khi bán.
