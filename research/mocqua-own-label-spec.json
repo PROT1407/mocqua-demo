@@ -285,7 +285,8 @@
    "tier": "standard",
    "price_zip": 140000,
    "pct": 6.5,
-   "pct_zip": 9.7
+   "pct_zip": 9.7,
+   "box": "square"
   },
   {
    "idx": 15,
@@ -306,7 +307,8 @@
    "tier": "standard",
    "price_zip": 199000,
    "pct": 6.8,
-   "pct_zip": 9.5
+   "pct_zip": 9.5,
+   "box": "square"
   },
   {
    "idx": 16,
@@ -327,7 +329,8 @@
    "tier": "traffic",
    "price_zip": 179000,
    "pct": 5.1,
-   "pct_zip": 8.2
+   "pct_zip": 8.2,
+   "box": "square"
   },
   {
    "idx": 17,
@@ -348,7 +351,8 @@
    "tier": "traffic",
    "price_zip": 205000,
    "pct": 7.1,
-   "pct_zip": 8.9
+   "pct_zip": 8.9,
+   "box": "square"
   },
   {
    "idx": 18,
@@ -369,7 +373,8 @@
    "tier": "standard",
    "price_zip": 225000,
    "pct": 6.5,
-   "pct_zip": 8.2
+   "pct_zip": 8.2,
+   "box": "square"
   },
   {
    "idx": 19,
@@ -390,7 +395,8 @@
    "tier": "standard",
    "price_zip": 135000,
    "pct": 4.1,
-   "pct_zip": 6.9
+   "pct_zip": 6.9,
+   "box": "square"
   },
   {
    "idx": 20,
@@ -411,7 +417,8 @@
    "tier": "traffic",
    "price_zip": 155000,
    "pct": 6.5,
-   "pct_zip": 8.8
+   "pct_zip": 8.8,
+   "box": "square"
   },
   {
    "idx": 23,
@@ -432,7 +439,8 @@
    "tier": "traffic",
    "price_zip": 135000,
    "pct": 4.1,
-   "pct_zip": 6.9
+   "pct_zip": 6.9,
+   "box": "square"
   },
   {
    "idx": 24,
@@ -453,7 +461,8 @@
    "tier": "standard",
    "price_zip": 169000,
    "pct": 5.4,
-   "pct_zip": 8.6
+   "pct_zip": 8.6,
+   "box": "square"
   },
   {
    "idx": 27,
@@ -474,7 +483,8 @@
    "tier": "standard",
    "price_zip": 175000,
    "pct": 5.8,
-   "pct_zip": 7.9
+   "pct_zip": 7.9,
+   "box": "square"
   },
   {
    "idx": 28,
@@ -495,7 +505,8 @@
    "tier": "standard",
    "price_zip": 235000,
    "pct": 6.3,
-   "pct_zip": 7.8
+   "pct_zip": 7.8,
+   "box": "square"
   },
   {
    "idx": 29,
@@ -516,7 +527,8 @@
    "tier": "traffic",
    "price_zip": 249000,
    "pct": 7.3,
-   "pct_zip": 9.5
+   "pct_zip": 9.5,
+   "box": "square"
   },
   {
    "idx": 31,
@@ -537,7 +549,8 @@
    "tier": "standard",
    "price_zip": 199000,
    "pct": 6.8,
-   "pct_zip": 9.5
+   "pct_zip": 9.5,
+   "box": "square"
   },
   {
    "idx": 32,
@@ -558,7 +571,8 @@
    "tier": "traffic",
    "price_zip": 169000,
    "pct": 5.4,
-   "pct_zip": 8.6
+   "pct_zip": 8.6,
+   "box": "square"
   },
   {
    "idx": 33,
@@ -579,7 +593,8 @@
    "tier": "standard",
    "price_zip": 185000,
    "pct": 5.5,
-   "pct_zip": 7.5
+   "pct_zip": 7.5,
+   "box": "square"
   },
   {
    "idx": 34,
@@ -600,7 +615,8 @@
    "tier": "standard",
    "price_zip": 209000,
    "pct": 6.5,
-   "pct_zip": 9.1
+   "pct_zip": 9.1,
+   "box": "square"
   },
   {
    "idx": 35,
@@ -621,7 +637,8 @@
    "tier": "standard",
    "price_zip": 205000,
    "pct": 7.1,
-   "pct_zip": 8.9
+   "pct_zip": 8.9,
+   "box": "square"
   },
   {
    "idx": 37,
@@ -1381,6 +1398,134 @@
    "tier": "premium",
    "price": 185000,
    "pct": 5.1
+  },
+  {
+   "idx": 99,
+   "cat": "deo",
+   "set": null,
+   "tier": "standard",
+   "variant": "500g",
+   "pid": "mqz-coc-non-say-deo",
+   "name": "Cóc non sấy dẻo",
+   "fruit": "coc",
+   "flavour": "nguyen",
+   "sku": "MQZ-DCO-500",
+   "sub": "Chua giòn, ngọt dịu",
+   "g": 500,
+   "box": "octa",
+   "short": "Cóc non miền Tây sấy dẻo, giữ nguyên trái — chua dịu, ngọt nhẹ, cắn sần sật.",
+   "their_name": "Cóc Sấy Dẻo Đặt Biệt (0.5kg)",
+   "their_price": 180000,
+   "price": 169000,
+   "price_zip": 165000,
+   "pct": 6.1,
+   "pct_zip": 8.3
+  },
+  {
+   "idx": 100,
+   "cat": "deo",
+   "set": null,
+   "tier": "standard",
+   "variant": "500g",
+   "pid": "mqz-vo-buoi-say-deo",
+   "name": "Vỏ bưởi sấy dẻo",
+   "fruit": "voboi",
+   "flavour": "nguyen",
+   "sku": "MQZ-DVB-500",
+   "sub": "Thơm the, ngọt vừa",
+   "g": 500,
+   "box": "octa",
+   "short": "Vỏ bưởi da xanh Bến Tre sấy dẻo — vàng óng, thơm the đặc trưng, ngọt vừa phải.",
+   "their_name": "Vỏ Bưởi Sấy Dẻo Đặt Biệt (0.5kg)",
+   "their_price": 175000,
+   "price": 165000,
+   "price_zip": 159000,
+   "pct": 5.7,
+   "pct_zip": 9.1
+  },
+  {
+   "idx": 101,
+   "cat": "deo",
+   "set": null,
+   "tier": "standard",
+   "variant": "500g",
+   "pid": "mqz-ca-chua-bi-say-deo",
+   "name": "Cà chua bi sấy dẻo",
+   "fruit": "cachua",
+   "flavour": "nguyen",
+   "sku": "MQZ-DCC-500",
+   "sub": "Chua ngọt, dẻo mọng",
+   "g": 500,
+   "box": "octa",
+   "short": "Cà chua bi Đà Lạt sấy dẻo nguyên trái — đỏ tự nhiên, chua ngọt hài hoà, dẻo mọng.",
+   "their_name": "Cà Chua Sấy Dẻo Đặc Biệt (0.5kg)",
+   "their_price": 165000,
+   "price": 155000,
+   "price_zip": 149000,
+   "pct": 6.1,
+   "pct_zip": 9.7
+  },
+  {
+   "idx": 102,
+   "cat": "deo",
+   "set": null,
+   "tier": "standard",
+   "variant": "500g",
+   "pid": "mqz-tao-say-deo",
+   "name": "Táo sấy dẻo",
+   "fruit": "tao",
+   "flavour": "nguyen",
+   "sku": "MQZ-DTA-500",
+   "sub": "Thơm táo, chua dẻo",
+   "g": 500,
+   "box": "octa",
+   "short": "Táo lát sấy dẻo còn rõ mùi táo chín, chua nhẹ đầu lưỡi rồi ngọt dần.",
+   "their_name": "Táo Sấy Dẻo Đặc Biệt (0.5kg)",
+   "their_price": 185000,
+   "price": 175000,
+   "price_zip": 169000,
+   "pct": 5.4,
+   "pct_zip": 8.6
+  },
+  {
+   "idx": 103,
+   "cat": "deo",
+   "set": null,
+   "tier": "standard",
+   "variant": "Hộp quà 2 × 500g",
+   "pid": "mqz-hong-treo-say-gio",
+   "name": "Hồng treo sấy gió Đà Lạt — hộp quà",
+   "fruit": "hong",
+   "flavour": "nguyen",
+   "sku": "MQZ-DHT-1000",
+   "sub": "Nguyên trái, mềm dẻo",
+   "g": 1000,
+   "box": "hongwin",
+   "short": "Hồng Đà Lạt treo sấy gió kiểu Nhật, nguyên trái to — mềm dẻo, ngọt sâu. Hộp ngăn kéo cửa sổ, sẵn để biếu.",
+   "their_name": "Hồng Dẻo Sấy Treo Việt Nhật XK (1kg)",
+   "their_price": 580000,
+   "price": 539000,
+   "pct": 7.1
+  },
+  {
+   "idx": 104,
+   "cat": "deo",
+   "set": null,
+   "tier": "standard",
+   "variant": "Hộp xách 2 × 500g",
+   "pid": "mqz-hong-say-deo-hop-xach",
+   "name": "Hồng sấy dẻo nguyên trái — hộp xách",
+   "fruit": "hong",
+   "flavour": "nguyen",
+   "sku": "MQZ-DHV-1000",
+   "sub": "Nguyên trái, ngọt đậm",
+   "g": 1000,
+   "box": "hongcarton",
+   "short": "Hồng sấy dẻo nguyên trái Đà Lạt trong hộp quai xách — ngọt đậm, dẻo mềm, món quà mang đi tiện tay.",
+   "their_name": "Hồng Sấy Dẻo Việt Nhật (1kg)",
+   "their_price": 470000,
+   "price": 439000,
+   "pct": 6.6
   }
  ],
  "setnames": {

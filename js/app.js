@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018c';
+MQ.IMGV='20261018d';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 MQ.lineName=k=>k&&MQ.LINES[k]?MQ.LINES[k].name:'';
@@ -64,7 +64,7 @@ MQ.findVar=(p,k)=>MQ.vars(p).find(v=>v.sku===k)||MQ.vars(p).find(v=>v.w===k)||MQ
 MQ.chipLabel=(p,v)=>{const l=MQ.varLabel(p,v),L=MQ.LINES[v.line];return L&&L.short&&l.includes(L.name)?MQ.esc(l.replace(L.name,'%%')).replace('%%',`<span class="l-full">${MQ.esc(L.name)}</span><span class="l-short">${MQ.esc(L.short)}</span>`):MQ.esc(l)};
 MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
 MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.vars(p).map(v=>`<button type="button" class="wchip${v===sel?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
-MQ.cardPerk=(p,v)=>!p.own?'':p.cat==='set'?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^Hũ PET/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
+MQ.cardPerk=(p,v)=>!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -124,8 +124,8 @@ MQ.ZIPQ=[{n:6,pct:8},{n:3,pct:5}];                                       // mua 
 MQ.GIFT_OPTS=[{id:'xoai',name:'Xoài cát sấy dẻo',img:'products/mqz/mqz-dxo-500'},{id:'dautay',name:'Dâu tây Đà Lạt sấy dẻo',img:'products/mqz/mqz-ddy-500'},{id:'ximuoi',name:'Xí muội đỏ đặc biệt',img:'products/mqz/mqz-omxd-250'}];
 MQ.GIFT_BAG_MIN=1000000;
 MQ.r1k=v=>Math.round(v/1000)*1000;
-MQ.isZipItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat!=='set'&&!/^Hũ PET/.test(i.w||''))};
-MQ.isSetItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat==='set')};
+MQ.isZipItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(i.w||''))};
+MQ.isSetItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&(p.cat==='set'||p.giftbox))};
 MQ.giftPick=()=>MQ.GIFT_OPTS.find(o=>o.id===MQ.store.get('giftpick','xoai'))||MQ.GIFT_OPTS[0];
 MQ.promo=items=>{
   const sub=items.reduce((s,i)=>s+i.qty*i.price,0);

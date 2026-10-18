@@ -4,6 +4,7 @@ M={
 'MQZ-OMMA-1000':('man',None,'plum',1,1),'MQZ-OMMN-500':('me',None,'plum',0,1.05),'MQZ-OMMX-500':('me',None,'plum',0,1),'MQZ-OMMG-500':('me',None,'plum',0,1),
 'MQZ-OMDT-500':('dautam',(80,22,48),'berry',0,1),'MQZ-OMDY-500':('dautay',None,'berry',0,1),'MQZ-OMCR-1000':('chumruot',None,'sage',1,1),
 'MQZ-OMMC-500':('me',None,'plum',1,1),'MQZ-OMMR-500':('me',None,'plum',0,1),'MQZ-OMXK-500':('ximuoi',(140,60,40),'plum',0,1),'MQZ-OMDA-500':('dao',None,'plum',0,1),
+'MQZ-DCO-500':('mo',(184,160,52),'sage',0,1),'MQZ-DVB-500':('voboi',None,'golden',0,1),'MQZ-DCC-500':('cachua',None,'berry',0,1),'MQZ-DTA-500':('tao',None,'saffron',0,1),
 'MQZ-DHS-500':('hatsen',(214,200,160),'cream',0,1),'MQZ-DTL-500':('thanhlong',None,'magenta',0,1),'MQZ-DCD-500':('chanhday',None,'saffron',0,1),'MQZ-DDY-500':('dautay',None,'berry',0,1),
 'MQZ-DMC-500':('mangcau',(214,178,112),'sage',0,1),'MQZ-DGU-500':('gung',None,'golden',0,1),'MQZ-DXO-500':('xoai',None,'saffron',0,1),'MQZ-DDN-500':('duanon',None,'cream',0,1),
 'MQZ-DTH-500':('thom',None,'golden',0,1),'MQZ-DDD-500':('dudu',None,'saffron',0,1),'MQZ-DCA-500':('cam',None,'saffron',0,1),'MQZ-DHO-1000':('hong',None,'terracotta',0,1),
