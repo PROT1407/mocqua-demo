@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018q';
+MQ.IMGV='20261018r';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 /* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */
@@ -429,4 +429,37 @@ MQ.renderCounts();MQ.renderDrawer();
 document.documentElement.classList.remove('no-js');
 addEventListener('DOMContentLoaded',()=>MQ.reveal());
 if(document.readyState!=='loading')setTimeout(()=>MQ.reveal(),0);
+})();
+/* ===== Viza Food trên kệ: ảnh kệ hàng thực tế + lightbox ===== */
+MQ.VIZA_LINES=Object.keys(MQ.LINES).filter(k=>MQ.LINES[k].maker==='viza');
+MQ.SHELF_URL='cua-hang.html?line='+MQ.VIZA_LINES.join(',')+'#tren-ke';
+MQ.SHELF=[
+ 'Kệ trái cây sấy Viza Food: xoài, mít, sầu riêng',
+ 'Sầu riêng sấy thăng hoa Yummy và Cheers+ trong tủ kệ',
+ 'Sầu riêng Cheers+ và mít sấy Fresh & Healthy',
+ 'Xoài sấy dẻo Fresh & Healthy trên kệ',
+ 'Xoài sấy dẻo Cheers+, GoodGood, Fresh & Healthy tại siêu thị',
+ 'Quầy xoài, mít sấy Viza Food tại siêu thị',
+ 'Giá treo xoài sấy dẻo Fresh & Healthy',
+ 'Xoài sấy dẻo Fresh & Healthy tại cửa hàng',
+ 'Sầu riêng sấy và mít sấy trên kệ',
+ 'Sầu riêng sấy Viza Food tại siêu thị',
+ 'Kệ sầu riêng sấy Viza Food',
+ 'Thanh long sấy Viza Food tại siêu thị'
+].map((cap,i)=>{const n=String(i+1).padStart(2,'0');return{src:`assets/shelf/viza-ke-${n}.webp?v=${MQ.IMGV}`,th:`assets/shelf/viza-ke-${n}-t.webp?v=${MQ.IMGV}`,cap}});
+MQ.shelfSection=()=>`<div class="shelf__head"><div><small class="shelf__eyebrow">Viza Food trên kệ</small><h2>Hàng thật trên kệ <em>siêu thị &amp; sân bay</em></h2></div>
+ <p>Các dòng trái cây sấy Viza Food được phân phối tại siêu thị, cửa hàng ở sân bay trong nước và có xuất khẩu. Dưới đây là một số ảnh kệ hàng thực tế. Những túi Mộc Quả gửi tới bạn là đúng loại hàng đó: chính hãng, nguyên bao bì gốc, không san chiết hay dán nhãn lại.</p></div>
+ <div class="shelf__grid">${MQ.SHELF.map((s,i)=>`<button type="button" class="shelf__item" data-lb="${i}" aria-label="Phóng to ảnh: ${MQ.esc(s.cap)}"><img src="${s.th}" alt="${MQ.esc(s.cap)}" loading="lazy" decoding="async"><span>${MQ.esc(s.cap)}</span></button>`).join('')}</div>`;
+MQ.shelfStrip=()=>`<a class="shstrip" href="${MQ.SHELF_URL}"><span class="shstrip__copy"><small>Viza Food trên kệ</small><b>Hàng thật trên kệ siêu thị &amp; sân bay</b><i>Xem ảnh kệ hàng thực tế →</i></span><span class="shstrip__pics">${MQ.SHELF.slice(0,6).map(s=>`<img src="${s.th}" alt="${MQ.esc(s.cap)}" loading="lazy" decoding="async">`).join('')}</span></a>`;
+(function(){let idx=0,box=null;
+ const draw=()=>{const s=MQ.SHELF[idx];box.querySelector('img').src=s.src;box.querySelector('img').alt=s.cap;box.querySelector('figcaption').textContent=`${s.cap} · ${idx+1}/${MQ.SHELF.length}`};
+ const close=()=>{if(box){box.remove();box=null;document.body.style.overflow=''}};
+ const open=i=>{idx=i;if(!box){document.body.insertAdjacentHTML('beforeend',`<div class="lbox" role="dialog" aria-modal="true" aria-label="Ảnh kệ hàng Viza Food"><button class="lbox__x" data-lbx aria-label="Đóng">×</button><button class="lbox__nav lbox__nav--p" data-lbn="-1" aria-label="Ảnh trước">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lbox__nav lbox__nav--n" data-lbn="1" aria-label="Ảnh sau">›</button></div>`);box=document.querySelector('.lbox');document.body.style.overflow='hidden';
+   let x0=null;box.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});box.addEventListener('touchend',e=>{if(x0==null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>40)step(d<0?1:-1);x0=null});box.querySelector('[data-lbx]').focus()}
+   draw()};
+ const step=d=>{idx=(idx+d+MQ.SHELF.length)%MQ.SHELF.length;draw()};
+ document.addEventListener('click',e=>{const t=e.target.closest('[data-lb]');if(t){open(+t.dataset.lb);return}
+  if(!box)return;const n=e.target.closest('[data-lbn]');if(n){step(+n.dataset.lbn);return}
+  if(e.target.closest('[data-lbx]')||e.target===box||e.target.tagName==='FIGURE')close()});
+ document.addEventListener('keydown',e=>{if(!box)return;if(e.key==='Escape')close();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
 })();

@@ -103,6 +103,8 @@ function render(){
   const u=new URLSearchParams();KEYS.forEach(n=>{if(st[n].size)u.set(n,[...st[n]].join(','))});if(st.q)u.set('q',st.q);if(st.sort!=='best')u.set('sort',st.sort);if(st.page>1)u.set('page',st.page);if(st.onlySoon)u.set('cat','soon');
   history.replaceState(null,'','cua-hang.html'+(u.toString()?'?'+u:''));
   drawTiles();
+  {const sh=$('[data-shelf]'),on=st.line.size>0&&[...st.line].every(l=>MQ.VIZA_LINES.includes(l));sh.hidden=!on;if(on&&!sh.innerHTML)sh.innerHTML=MQ.shelfSection();
+   if(on&&st.line.size===MQ.VIZA_LINES.length&&!st.cat.size&&!c1){$('[data-shop-title]').innerHTML='Hàng chính hãng <em>Viza Food</em>'}}
   const ownOn=st.line.size===1&&st.line.has('mq');
   $('[data-owncta]').innerHTML=ownOn?'':`<div><small>Thương hiệu riêng · mocqua.com</small><h3>Mộc Quả <em>hũ PET &amp; túi zip</em></h3><p>${live.filter(p=>p.own).length} sản phẩm tuyển chọn: sấy dẻo, thăng hoa, ô mai, set quà — hũ PET tem tròn hoặc túi zip có cửa sổ nhìn rõ quả, nhãn Mộc Quả xanh rừng ánh vàng.</p><a class="btn btn--gold btn--sm" href="cua-hang.html?line=mq">Xem dòng Mộc Quả <svg><use href="#i-arrow"/></svg></a></div><div class="owncta__imgs">${['mqz-thsr-100c','mqz-dxo-500','mqz-omxd-250'].map(f=>`<img src="${MQ.img('products/mqz/'+f,true)}" alt="" loading="lazy">`).join('')}</div>`;
   MQ.reveal(g);
@@ -128,5 +130,7 @@ document.addEventListener('click',e=>{let el;
   if(e.target.closest('[data-filters-close]')||e.target.closest('.overlay'))document.body.classList.remove('filters-open');
 });
 $('.filters').insertAdjacentHTML('beforeend','<div class="side__extra">'+MQ.sideHelp()+MQ.sideGift()+MQ.sideNews()+'</div>');
+const wantShelf=location.hash==='#tren-ke';
 render();MQ.renderRecent();
+if(wantShelf){const sh=$('[data-shelf]');if(!sh.hidden)setTimeout(()=>sh.scrollIntoView({block:'start'}),60)}
 })();

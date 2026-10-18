@@ -58,4 +58,5 @@ $('[data-psecs]').innerHTML=SEC.map(s=>{if(s.promo)return promo[s.promo];
 /* đối tác Viza Food */
 $('[data-lines]').innerHTML=Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>{const ps=live.filter(p=>p.lines.includes(k));const v=ps.flatMap(p=>p.variants).find(v=>v.line===k);return `<a class="lineb" href="cua-hang.html?line=${k}">${v?`<img src="${MQ.img(v.img,true)}" alt="" loading="lazy">`:''}<b>${l.name}</b><small>${ps.length} sản phẩm</small></a>`}).join('');
 MQ.renderRecent();
+{const el=MQ.$('[data-shstrip]');if(el)el.innerHTML=MQ.shelfStrip()}
 })();
