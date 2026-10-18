@@ -76,9 +76,9 @@ MQ.PRODUCTS = [
   short:'Xoài sấy dẻo dòng GoodGood của Viza Food, túi trắng đáy vàng 100g và 200g — lát xoài dẻo, chua ngọt.',
   long:'Xoài chín thái lát, sấy dẻo giữ màu vàng tự nhiên. Túi đứng 200g dòng GoodGood (Viza Food), bán nguyên bao bì.'},
  {id:'xoai-say-deo-muoi-ot-goodgood',name:'Xoài sấy dẻo muối ớt GoodGood',cat:'deo',fruit:'xoai',flavour:'muoiot',maker:'viza',rank:13,
-  variants:[V('MQ-DXM-300-GG','300g',300,'goodgood',100000,'dxmo300'),V('MQ-DXM-200-GG','200g',200,'goodgood',69000,'ggx-mo200','dxmo200'),V('MQ-DXM-S-GG','Gói nhỏ',0,'goodgood',null,'dxmogn',null,'Khối lượng đang xác nhận')],
+  variants:[V('MQ-DXM-300-GG','300g',300,'goodgood',100000,'dxmo300'),V('MQ-DXM-200-GG','200g',200,'goodgood',69000,'ggx-mo200','dxmo200'),V('MQ-DXM-S-GG','Gói nhỏ 50–100g',0,'goodgood',35000,'dxmogn',null,'Gói nhỏ 50–100g, cùng một cỡ túi; hay dùng làm quà tặng kèm')],
   taste:{ngot:3,chua:3,deo:4,gion:0},
-  short:'Xoài dẻo muối ớt dòng GoodGood (Viza Food) — túi 300g, 200g và gói nhỏ.',
+  short:'Xoài dẻo muối ớt dòng GoodGood (Viza Food) — túi 300g, 200g và gói nhỏ 50–100g.',
   long:'Vị ngọt của xoài chín gặp vị mặn – cay của muối ớt. Dòng GoodGood của Viza Food, bán nguyên bao bì.'},
  /* Cheers+ (Viza): 1 trang · 250g / 300g · 2 mẫu nhãn Đỏ / Xanh lá. Giá do chủ cửa hàng đặt trực tiếp (không áp × 3). Gộp listing "Xoài sấy dẻo chín cây" 500g cũ. */
  {id:'xoai-chin-cay',name:'Xoài sấy dẻo Cheers+',tagline:'Xoài chín cây tuyển chọn',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:11,badge:'Xoài chín cây',def:'MQ-DXC-250-CHD',

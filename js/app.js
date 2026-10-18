@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018r';
+MQ.IMGV='20261018s';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 /* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */
@@ -78,7 +78,8 @@ MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
 MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.sizeVars(p,sel).map(v=>`<button type="button" class="wchip${v.w===sel.w?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
 MQ.dealTag=(p,cls='')=>p&&p.bundle?`<span class="deal${cls}"><svg><use href="#i-gift"/></svg>${MQ.esc(p.bundle.label)}</span>`:'';
 MQ.COMBO100={n:5,price:165000,skus:['MQ-DXO-100-GG','MQ-DXO-100-FHG','MQ-DXO-100-FHX']};
-MQ.cardPerk=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}"><svg><use href="#i-gift"/></svg>Combo 100g mua 5 tặng 1</a></p>`:p.bundle?`<p class="perk perk--deal">${MQ.dealTag(p)}</p>`:!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
+MQ.cardPerk=(p,v)=>MQ.cardPerk0(p,v)+(MQ.gnEligible(p)?`<p class="perk perk--gn">${MQ.gnNote()}</p>`:'');
+MQ.cardPerk0=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}"><svg><use href="#i-gift"/></svg>Combo 100g mua 5 tặng 1</a></p>`:p.bundle?`<p class="perk perk--deal">${MQ.dealTag(p)}</p>`:!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -144,6 +145,11 @@ MQ.r1k=v=>Math.round(v/1000)*1000;
 MQ.isZipItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(i.w||''))};
 MQ.isSetItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&(p.cat==='set'||p.giftbox))};
 MQ.giftPick=()=>MQ.GIFT_OPTS.find(o=>o.id===MQ.store.get('giftpick','xoai'))||MQ.GIFT_OPTS[0];
+/* Quà gói nhỏ xoài muối ớt GoodGood 50–100g: đơn từ 300k tặng 1 · mua 2 túi xoài 200g+ tặng 1 (mỗi 2 túi) — lấy mức cao hơn, không cộng dồn, tối đa 3 gói/đơn */
+MQ.GN={pid:'xoai-say-deo-muoi-ot-goodgood',sku:'MQ-DXM-S-GG',min:300000,pair:2,minG:200,max:3,label:'Gói nhỏ 50–100g'};
+MQ.gnBig=i=>{const p=MQ.byId(i.id);if(!p||p.fruit!=='xoai'||!(i.price>0))return false;const v=MQ.findVar(p,i.sku);return !!(v&&v.g>=MQ.GN.minG)};
+MQ.gnEligible=p=>p&&p.fruit==='xoai'&&!p.soon&&MQ.vars(p).some(v=>v.g>=MQ.GN.minG&&v.p);
+MQ.gnNote=(cls='')=>`<span class="gnnote${cls}" title="Mua 2 túi xoài từ 200g hoặc đơn từ ${MQ.fmt(MQ.GN.min)}: tặng 1 gói nhỏ xoài muối ớt GoodGood"><svg><use href="#i-gift"/></svg>Quà tặng: gói nhỏ 50–100g</span>`;
 MQ.promo=items=>{
   const sub=items.reduce((s,i)=>s+i.qty*i.price,0);
   const zip=items.filter(MQ.isZipItem),zipN=zip.reduce((s,i)=>s+i.qty,0),zipSub=zip.reduce((s,i)=>s+i.qty*i.price,0);
@@ -165,6 +171,8 @@ MQ.promo=items=>{
     gifts.push({key:'gift-b-'+id,name:(gp?gp.name:'Quà tặng')+(gv?' · '+gv.w:''),w:'Quà tặng 0đ · KM “'+b.label+'”',qty:k,img:gv?gv.img:null,bundle:id})});
   if(comboN){const cnt={};cu.forEach(i=>cnt[i.sku]=(cnt[i.sku]||0)+1);const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],gi=cu.find(i=>i.sku===top),gp=MQ.byId(gi.id),gv=gp&&MQ.findVar(gp,top);
     gifts.push({key:'gift-c100',name:(gp?gp.name:'Xoài sấy dẻo')+' · 100g',w:'Quà tặng 0đ · Combo xoài 100g mua 5 tặng 1',qty:comboN,img:gv?gv.img:null})}
+  {const G=MQ.GN,bigN=items.filter(MQ.gnBig).reduce((s,i)=>s+i.qty,0),byPair=Math.floor(bigN/G.pair),byOrder=base>=G.min?1:0,q=Math.min(G.max,Math.max(byPair,byOrder));
+   if(q){const gp=MQ.byId(G.pid),gv=gp&&MQ.findVar(gp,G.sku);gifts.push({key:'gift-gn',name:'Xoài sấy dẻo muối ớt GoodGood · '+G.label,w:'Quà tặng 0đ · '+(byPair>=byOrder?`Mua ${G.pair} túi xoài từ ${G.minG}g tặng 1 gói nhỏ`:`Đơn từ ${MQ.fmt(G.min)} tặng 1 gói nhỏ`),qty:q,img:gv?gv.img:null})}}
   if(base>=MQ.GIFT_BAG_MIN)gifts.push({key:'gift-bag',name:'Túi giấy quà & thiệp viết tay Mộc Quả',w:'Quà tặng đơn từ '+MQ.fmt(MQ.GIFT_BAG_MIN),qty:1,img:null,box:'#1e3a2f',ribbon:'#c4a265'});
   return {sub,zipN,zq,qtyDisc,comboN,comboDisc,base,tier,tierDisc,up,gifts,zipNeed:zq?null:MQ.ZIPQ[MQ.ZIPQ.length-1].n-zipN};
 };
@@ -235,7 +243,7 @@ function header(){
   const omai=live.filter(p=>p.cat==='omai').sort((a,b)=>(a.rank||99)-(b.rank||99));
   return `
 <div class="tbar"><div class="wrap tbar__in">
-  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
+  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g<i>·</i>Đơn 300k tặng gói xoài muối ớt</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
   <span class="tbar__msg tbar__demo">Website demo — đặt hàng thử, chưa thanh toán thật</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>
