@@ -1,0 +1,67 @@
+/* ===== 07 · Thương hiệu Mộc Quả (mocqua.com) — dòng túi zip đứng ===== */
+.mqseal{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--forest);color:var(--gold-l);font:600 8px/1 var(--serif);font-style:normal;letter-spacing:.02em;margin-right:6px;box-shadow:0 0 0 1px var(--gold) inset;vertical-align:-4px}
+.pcard--mq .pcard__origin{color:var(--forest);font-weight:500}
+.pcard--mq .pcard__media{background:radial-gradient(120% 90% at 50% 40%,#faf6ee 0,#ece2ce 100%)}
+.badge--set{background:var(--clay)}
+/* home showcase */
+.mqbrand{background:radial-gradient(110% 80% at 80% 10%,#1f4536 0,#122b22 60%,#0d2119 100%);color:var(--ivory);position:relative;overflow:hidden}
+.mqbrand::before{content:"";position:absolute;inset:18px;border:1px solid rgba(211,180,124,.22);pointer-events:none}
+.mqbrand__top{display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:center;margin-bottom:56px}
+.mqbrand__copy h2{font-size:clamp(40px,5vw,70px);color:var(--ivory)}
+.mqbrand__copy>p{color:rgba(246,240,228,.78);margin:22px 0 22px;max-width:520px}
+.eyebrow--gold{color:var(--gold-l)}
+.mqbrand__pts{list-style:none;margin:0 0 30px;padding:0;display:grid;gap:10px}
+.mqbrand__pts li{position:relative;padding-left:26px;color:rgba(246,240,228,.88);font-size:15px}
+.mqbrand__pts li::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:12px;transform:rotate(45deg);border:1px solid var(--gold-l)}
+.mqbrand__pts b{color:var(--gold-l);font-family:var(--serif);font-size:20px}
+.mqbrand__cta{display:flex;gap:12px;flex-wrap:wrap}
+.mqbrand__shelf{position:relative;height:440px;display:flex;align-items:flex-end;justify-content:center}
+.mqbrand__shelf img{position:relative;width:24%;margin:0 -2.4%;filter:drop-shadow(0 22px 18px rgba(0,0,0,.45));transform:translateY(calc(var(--i) * 0px)) rotate(calc((var(--i) - 2) * 3deg));transition:transform .5s var(--ease);z-index:calc(5 - (var(--i) - 2) * (var(--i) - 2))}
+.mqbrand__shelf img:nth-child(3){width:30%;z-index:9;transform:translateY(-14px)}
+.mqbrand__shelf:hover img{transform:translateY(-8px) rotate(calc((var(--i) - 2) * 4deg))}
+.mqbrand__shelf:hover img:nth-child(3){transform:translateY(-24px)}
+.mqbrand__plank{position:absolute;left:4%;right:4%;bottom:-6px;height:14px;background:linear-gradient(#c9a868,#8a6a3a);border-radius:2px;box-shadow:0 18px 30px rgba(0,0,0,.4)}
+.mqbrand__tabs{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px;flex-wrap:wrap}
+.chips--light .chip{color:var(--ivory);border-color:rgba(246,240,228,.25)}
+.chips--light .chip em{font-style:normal;font-size:11px;color:var(--gold-l);margin-left:2px}
+.chips--light .chip.is-on{background:var(--gold-l);color:var(--ink);border-color:var(--gold-l)} .chips--light .chip.is-on em{color:var(--ink)}
+.mqbrand__all{color:var(--gold-l);font-size:13px;letter-spacing:.12em;text-transform:uppercase;display:inline-flex;gap:10px;align-items:center}
+.mqbrand__all svg{width:16px;height:16px}
+.mqbrand .pcard{background:var(--card);color:var(--text)}
+/* shop: pager, filters */
+.pager{display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap}
+.pg{min-width:42px;height:42px;padding:0 10px;border:1px solid var(--line);background:var(--card);font-size:14px;display:inline-grid;place-items:center;transition:all .2s}
+.pg:hover:not([disabled]){border-color:var(--gold)}
+.pg.is-on{background:var(--ink);color:var(--ivory);border-color:var(--ink)}
+.pg[disabled]{opacity:.35;cursor:default}
+.pg--gap{border:0;background:none;min-width:20px}
+.pg--nav svg{width:14px;height:14px;transform:rotate(90deg)} .pg--next svg{transform:rotate(-90deg)}
+.fmore__btn{font-size:13px;color:var(--gold);margin-top:6px;text-decoration:underline;text-underline-offset:3px}
+.fsub{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
+.fown{font-weight:600;color:var(--forest)}
+.cattiles{grid-template-columns:repeat(8,1fr)}
+.ctile--own .ctile__img{background:radial-gradient(#2c5644,#173a2e)}
+/* mega menu */
+.mega__own{display:flex!important;align-items:center;gap:12px;padding:10px 12px!important;background:var(--forest);color:var(--ivory)!important;margin:4px 0 6px}
+.mega__own .mega__seal{width:30px;height:30px;color:var(--gold-l)}
+.mega__own span{display:flex;flex-direction:column;font-family:var(--serif);font-size:20px;line-height:1.1}
+.mega__own small{font-family:var(--sans);font-size:11px;color:var(--gold-l);letter-spacing:.04em}
+.mega__sub{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:10px 0 2px}
+.mega__all{color:var(--gold)!important;font-style:italic}
+/* product page */
+.pinfo__mq .mqseal{margin-right:6px}
+@media (max-width:1200px){.cattiles{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:980px){
+  .mqbrand__top{grid-template-columns:1fr;gap:30px}
+  .mqbrand__shelf{height:300px}
+}
+@media (max-width:640px){
+  .mqbrand::before{inset:8px}
+  .pcard__origin .l-full{display:none}
+  .mqbrand__shelf{height:210px;margin:0 6px}
+  .mqbrand__shelf img{width:22%;margin:0 -2%}
+  .mqbrand__shelf img:nth-child(3){width:28%}
+  .mqbrand__tabs{flex-direction:column;align-items:flex-start}
+  .mqbrand__tabs .chips{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}
+  .pg{min-width:38px;height:38px}
+}

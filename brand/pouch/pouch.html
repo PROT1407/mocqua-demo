@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<title>Mộc Quả — pouch &amp; label template</title>
+<style>
+html,body{margin:0;background:transparent}
+svg{display:block}
+text{font-kerning:normal}
+</style></head>
+<body>
+<div id="stage"></div>
+<script>
+/* =====================================================================
+   Mộc Quả pouch / label template  (reusable)
+   brand: 'mocqua'  -> mocqua.com  (premium: forest green / ivory / muted gold, serif, seal)
+          (single brand; per-fruit accent colours via fruit / accent)
+   print: 1 (label mode) -> window left blank for the printer die-line
+   mode : 'pouch'  -> full stand-up zip pouch mockup, 900x1250, transparent bg
+          'label'  -> flat front label, 1000x1400 units (=100x140 mm @10u/mm)
+   usage: render({brand,mode,name,sub,type,weight,fruit,flavour,seed}) -> svg string
+   ===================================================================== */
+const NS='http://www.w3.org/2000/svg';
+let UID=0;const uid=p=>p+(++UID);
+function rng(seed){let s=seed>>>0||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+/* ---------- fruit library: piece shape + colours (stylised, no photos) ---------- */
+const F={
+ xoai:{t:'strip',c:['#F6A726','#FFD46E','#C7701A'],brand:'#F2A51F',ink:'#7A4A08',vi:'Xoài'},
+ thom:{t:'wedge',c:['#F3C431','#FFE680','#C9921A'],brand:'#E9B618',ink:'#6B5208',vi:'Thơm'},
+ dudu:{t:'strip',c:['#F27B30','#FFB27A','#C4521A'],brand:'#F07A32',ink:'#7A3410',vi:'Đu đủ'},
+ thanhlong:{t:'chunk',c:['#C8215F','#EE5C93','#8E0F40'],seeds:'#1A1012',brand:'#D3266A',ink:'#6E0C33',vi:'Thanh long'},
+ thanhlongtrang:{t:'chunk',c:['#F3EFE6','#FFFFFF','#CFC6B4'],seeds:'#1A1012',brand:'#8DB04A',ink:'#3E5418',vi:'Thanh long trắng'},
+ chanhday:{t:'chunk',c:['#A2441F','#D9783F','#6E2A10'],seeds:'#2a1508',brand:'#8C4FA0',ink:'#4A1E58',vi:'Chanh dây'},
+ dautay:{t:'heart',c:['#D7263D','#F2667A','#8E1022'],seeds:'#F5D36B',brand:'#E23E57',ink:'#7C1020',vi:'Dâu tây'},
+ mangcau:{t:'chunk',c:['#EADDB2','#FBF3D8','#BFAE7A'],brand:'#6FA344',ink:'#33521A',vi:'Mãng cầu'},
+ gung:{t:'strip',c:['#E9D79B','#FFF1C2','#BFA764'],thin:1,brand:'#C9A13B',ink:'#5E4A10',vi:'Gừng'},
+ coc:{t:'wedge',c:['#A3974A','#D4CB82','#6E6420'],brand:'#7BA23A',ink:'#3A5212',vi:'Cóc'},
+ vobuoi:{t:'strip',c:['#EAD57E','#FFF0B0','#BEA548'],thin:1,sugar:1,brand:'#A8C43A',ink:'#4A5A10',vi:'Vỏ bưởi'},
+ duanon:{t:'strip',c:['#F7F2E6','#FFFFFF','#D8CFBC'],thin:1,brand:'#3FA7A0',ink:'#14524E',vi:'Dừa non'},
+ hong:{t:'chunk',c:['#C4562C','#E8884F','#8A3014'],brand:'#E0662E',ink:'#6E2A0C',vi:'Hồng'},
+ cam:{t:'ring',c:['#F39A12','#FFD06A','#C46A06'],seg:1,brand:'#F28C12',ink:'#713E04',vi:'Cam'},
+ cachua:{t:'chunk',c:['#C9341F','#EE6A4E','#8A1A0C'],brand:'#D6402A',ink:'#6E160A',vi:'Cà chua'},
+ khoailang:{t:'strip',c:['#E98A2F','#FFC27A','#B5571A'],brand:'#E07F2B',ink:'#6E3608',vi:'Khoai lang'},
+ khoailangtim:{t:'chip',c:['#7B3C8F','#A970BC','#4E1E60'],brand:'#7D3C93',ink:'#3E124E',vi:'Khoai lang tím'},
+ khoailangvang:{t:'chip',c:['#F0B840','#FFDA86','#C08A1A'],brand:'#E8A92A',ink:'#6A4806',vi:'Khoai lang vàng'},
+ oi:{t:'wedge',c:['#BCC66C','#E4EBA6','#86902E'],flesh:'#F4B6A6',brand:'#83B63B',ink:'#3A5612',vi:'Ổi'},
+ mit:{t:'chunk',c:['#F3B733','#FFDB7A','#C7861A'],brand:'#EFA91E',ink:'#6E4A06',vi:'Mít'},
+ nhan:{t:'ball',c:['#8E5D2C','#C08A52','#5A3412'],brand:'#B07A3A',ink:'#4E3010',vi:'Nhãn'},
+ tao:{t:'ring',c:['#EBCB8C','#FFF0C4','#C79A50'],rim:'#B5302A',brand:'#D8473A',ink:'#6E1A14',vi:'Táo'},
+ hatsen:{t:'ball',c:['#F0E2B6','#FFF7DD','#C9B47A'],small:1,brand:'#6E9F5A',ink:'#2E4E22',vi:'Hạt sen'},
+ sung:{t:'chunk',c:['#B3566B','#DA8C9C','#7A2A3E'],seeds:'#F2D7A6',brand:'#9E4A6A',ink:'#4E1A30',vi:'Sung'},
+ saurieng:{t:'chunk',c:['#F6D35B','#FFEFA6','#C9A22A'],brand:'#D9B21F',ink:'#5E4A06',vi:'Sầu riêng'},
+ khoaimon:{t:'strip',c:['#D3C0DC','#F0E6F4','#A68DB4'],thin:1,brand:'#9A7AB8',ink:'#45305E',vi:'Khoai môn'},
+ chuoi:{t:'chip',c:['#E9C56A','#FFE7A4','#BE9532'],brand:'#E6BE2E',ink:'#5E4A06',vi:'Chuối'},
+ vai:{t:'ball',c:['#B07A4E','#D9A77A','#764822'],brand:'#C4475C',ink:'#5E1626',vi:'Vải'},
+ taodo:{t:'ball',c:['#8E1D1D','#C24A3A','#560C0C'],wrinkle:1,brand:'#A52A2A',ink:'#4E0C0C',vi:'Táo đỏ'},
+ ximuoi:{t:'ball',c:['#7C2C1A','#B25A3A','#4A140A'],wrinkle:1,brand:'#B2402A',ink:'#561608',vi:'Xí muội'},
+ ximuoitrang:{t:'ball',c:['#CDAE80','#F0D9B0','#9A7A4A'],wrinkle:1,sugar:1,brand:'#C69A52',ink:'#5A4016',vi:'Xí muội trắng'},
+ mo:{t:'ball',c:['#C88232','#EDB46A','#8E5212'],wrinkle:1,brand:'#E39A2E',ink:'#6A400A',vi:'Mơ'},
+ dao:{t:'ball',c:['#D9786A','#F4A89A','#A2483A'],wrinkle:1,brand:'#E87B86',ink:'#6E2430',vi:'Đào'},
+ man:{t:'chunk',c:['#8A1D30','#C44A5E','#560A1A'],chili:1,brand:'#9E2140',ink:'#4E0A1C',vi:'Mận'},
+ me:{t:'pod',c:['#6E3C1E','#A6683E','#40200A'],sugar:1,brand:'#9A5A2A',ink:'#4A260A',vi:'Me'},
+ dautam:{t:'cluster',c:['#3E1532','#7A3462','#1E0818'],sugar:1,brand:'#6E2A5E',ink:'#360E2C',vi:'Dâu tằm'},
+ chumruot:{t:'ball',c:['#C4C64E','#E8EA8C','#8E9020'],chili:1,brand:'#9CB52E',ink:'#465410',vi:'Chùm ruột'},
+ mix:{t:'mix',mix:['xoai','mit','khoaimon','chuoi','khoailang','thanhlong'],brand:'#2E9C6A',ink:'#0E4A30',vi:'Thập cẩm'},
+ mixdeo:{t:'mix',mix:['xoai','dudu','thom','cam','gung','duanon','thanhlong','hong'],brand:'#C9A868',ink:'#4A3A12',vi:'Thập cẩm'},
+ mixtet:{t:'mix',mix:['me','ximuoi','dautam','gung','duanon','xoai','cam','chumruot'],brand:'#B8322A',ink:'#5A0E0A',vi:'Mứt Tết'}
+};
+function shade(hex,k){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.max(0,Math.min(255,Math.round(k<0?v*(1+k):v+(255-v)*k)));return'#'+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}
+/* ---------- stylised fruit window ---------- */
+function fruitFill(fk,x,y,w,h,seed,defs,chili){
+  const R=rng(seed);const out=[];const fr=F[fk]||F.xoai;
+  const pick=()=>fr.t==='mix'?F[fr.mix[Math.floor(R()*fr.mix.length)]]:fr;
+  out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${shade((fr.c||F[fr.mix[0]].c)[2],-0.35)}"/>`);
+  const size=fr.t==='ball'?(fr.small?44:60):fr.t==='cluster'?55:fr.t==='chip'?62:fr.t==='strip'?(fr.thin?60:80):fr.t==='ring'?95:80;
+  const n=Math.ceil(w*h/(size*size)*(fr.t==='strip'?2.6:fr.t==='wedge'?4.6:3.4));
+  for(let i=0;i<n;i++){
+    const f=pick();const px=x-size*.3+R()*(w+size*.6),py=y-size*.3+R()*(h+size*.6),rot=R()*360,s=0.75+R()*0.5;
+    const g=uid('g'),tv=(R()-.5)*.28;const c0=shade(f.c[0],tv),c1=shade(f.c[1],tv*.5),c2=shade(f.c[2],tv);defs.push(`<radialGradient id="${g}" cx="${28+R()*20}%" cy="${22+R()*20}%" r="85%"><stop offset="0" stop-color="${c1}"/><stop offset=".5" stop-color="${c0}"/><stop offset="1" stop-color="${c2}"/></radialGradient>`);
+    let sh='';const fl=`fill="url(#${g})"`;
+    switch(f.t){
+      case 'strip':{const L=(f.thin?150:190)*s,W=(f.thin?26:46)*s;sh=`<rect x="${-L/2}" y="${-W/2}" width="${L}" height="${W}" rx="${W/2.2}" ${fl}/><path d="M${-L*.4} ${-W*.1} Q 0 ${W*.25} ${L*.4} ${-W*.05}" stroke="${f.c[1]}" stroke-opacity=".55" stroke-width="${W*.12}" fill="none"/>`;break}
+      case 'chunk':{const k=8,pts=[];for(let j=0;j<k;j++){const a=j/k*Math.PI*2,r=(36+R()*26)*s;pts.push([Math.cos(a)*r*1.2,Math.sin(a)*r*.95])}let d=`M${((pts[0][0]+pts[k-1][0])/2).toFixed(1)} ${((pts[0][1]+pts[k-1][1])/2).toFixed(1)}`;for(let j=0;j<k;j++){const p=pts[j],q=pts[(j+1)%k];d+=` Q${p[0].toFixed(1)} ${p[1].toFixed(1)} ${((p[0]+q[0])/2).toFixed(1)} ${((p[1]+q[1])/2).toFixed(1)}`}sh=`<path d="${d}Z" ${fl}/><path d="M${-20*s} ${-8*s} q ${18*s} ${-10*s} ${36*s} ${2*s}" stroke="${f.c[1]}" stroke-opacity=".7" stroke-width="${5*s}" fill="none" stroke-linecap="round"/>`;if(f.seeds){for(let j=0;j<7;j++)sh+=`<ellipse cx="${(R()-.5)*60*s}" cy="${(R()-.5)*44*s}" rx="2.6" ry="1.8" fill="${f.seeds}" opacity=".85"/>`}break}
+      case 'ball':{const r=(f.small?20:28)*s;sh=`<ellipse rx="${r*1.08}" ry="${r}" ${fl}/>`;if(f.wrinkle)for(let j=0;j<3;j++)sh+=`<path d="M${-r*.6} ${(j-1)*r*.35} q ${r*.6} ${-r*.25} ${r*1.2} 0" stroke="${f.c[2]}" stroke-width="2.4" fill="none" opacity=".7"/>`;break}
+      case 'cluster':{for(let j=0;j<9;j++){const a=j/9*Math.PI*2,r=j?18*s:0;sh+=`<circle cx="${Math.cos(a)*r}" cy="${Math.sin(a)*r*1.3}" r="${9*s}" ${fl}/>`}break}
+      case 'ring':{const r=48*s;sh=`<circle r="${r}" fill="${f.rim||f.c[2]}"/><circle r="${r*.88}" ${fl}/>`;if(f.seg)for(let j=0;j<9;j++){const a=j/9*Math.PI*2;sh+=`<line x1="0" y1="0" x2="${Math.cos(a)*r*.84}" y2="${Math.sin(a)*r*.84}" stroke="${f.c[1]}" stroke-width="3"/>`}else sh+=`<circle r="${r*.22}" fill="${f.c[2]}" opacity=".5"/>`;break}
+      case 'wedge':{const r=62*s;sh=`<path d="M0 0 L${r} ${-r*.35} A ${r} ${r} 0 0 1 ${r} ${r*.35} Z" transform="translate(${-r/2} 0)" ${fl} stroke="${f.c[0]}" stroke-width="8" stroke-linejoin="round"/>`;if(f.flesh)sh+=`<circle cx="${r*.25}" r="${r*.16}" fill="${f.flesh}" opacity=".8"/>`;break}
+      case 'heart':{const r=34*s;sh=`<path d="M0 ${r} C ${-r*1.6} ${-r*.2} ${-r*.7} ${-r*1.2} 0 ${-r*.45} C ${r*.7} ${-r*1.2} ${r*1.6} ${-r*.2} 0 ${r} Z" ${fl}/>`;for(let j=0;j<7;j++)sh+=`<ellipse cx="${(R()-.5)*r*1.2}" cy="${(R()-.6)*r}" rx="1.8" ry="2.6" fill="${f.seeds}"/>`;break}
+      case 'chip':{const r=32*s;sh=`<ellipse rx="${r}" ry="${r*.92}" ${fl}/><ellipse rx="${r*.55}" ry="${r*.5}" fill="${f.c[1]}" opacity=".45"/>`;break}
+      case 'pod':{const L=120*s,W=34*s;sh=`<path d="M${-L/2} 0 C ${-L/2} ${-W} ${-L/6} ${-W*.6} 0 ${-W*.7} C ${L/6} ${-W*.8} ${L/2} ${-W} ${L/2} 0 C ${L/2} ${W} ${-L/2} ${W} ${-L/2} 0Z" ${fl}/>`;break}
+    }
+    if(f.sugar)for(let j=0;j<5;j++)sh+=`<circle cx="${(R()-.5)*60*s}" cy="${(R()-.5)*30*s}" r="1.6" fill="#fff" opacity=".8"/>`;
+    if(f.chili||fr.chili||chili)for(let j=0;j<4;j++)sh+=`<circle cx="${(R()-.5)*50*s}" cy="${(R()-.5)*30*s}" r="2.2" fill="#E0301E" opacity=".9"/>`;
+    out.push(`<g transform="translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${rot.toFixed(0)})" filter="url(#pieceSh)">${sh}</g>`);
+  }
+  return out.join('');
+}
+/* ---------- text helpers ---------- */
+const cvs=document.createElement('canvas').getContext('2d');
+function wrap(txt,font,maxw){cvs.font=font;const ws=txt.split(' ');const L=[];let cur='';for(const w of ws){const t=cur?cur+' '+w:w;if(cvs.measureText(t).width>maxw&&cur){L.push(cur);cur=w}else cur=t}if(cur)L.push(cur);return L}
+function fitLines(txt,family,weight,size,maxw,maxLines){let s=size,L;while(s>20){L=wrap(txt,`${weight} ${s}px "${family}"`,maxw);if(L.length<=maxLines&&L.every(l=>{cvs.font=`${weight} ${s}px "${family}"`;return cvs.measureText(l).width<=maxw}))break;s-=2}return{L,s}}
+/* ---------- MOCQUA.COM label (1000x1400) ---------- */
+function labelMocqua(sp,defs,mode){
+  const G='#C4A265',GD='#9C7C44',GR='#1E3A2F',IV='#F7F1E5',INK='#1B2F26';
+  const AC=sp.accent||(F[sp.fruit]||F.xoai).brand;const win=uid('w');const g=[];
+  // arch label card
+  const arch='M70 1360 L70 520 A430 430 0 0 1 930 520 L930 1360 Z';
+  defs.push(`<linearGradient id="${win}iv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBF7EE"/><stop offset="1" stop-color="#F1E8D6"/></linearGradient>`);
+  g.push(`<path d="${arch}" fill="url(#${win}iv)"/>`);
+  g.push(`<path d="${arch}" fill="none" stroke="${G}" stroke-width="5"/>`);
+  g.push(`<path d="M92 1338 L92 520 A408 408 0 0 1 908 520 L908 1338 Z" fill="none" stroke="${G}" stroke-width="1.6" opacity=".9"/>`);
+  // window (arched)
+  const wp='M235 840 L235 520 A265 265 0 0 1 765 520 L765 840 Z';
+  defs.push(`<clipPath id="${win}"><path d="${wp}"/></clipPath>`);
+  if(mode==='pouch'){g.push(`<g clip-path="url(#${win})">${fruitFill(sp.fruit,225,245,550,605,sp.seed||7,defs,sp.chili)}<rect x="225" y="245" width="550" height="605" fill="url(#winGloss)"/></g>`)}
+  else{g.push((sp.print?`<path d="${wp}" fill="#FFFFFF"/>`:`<g clip-path="url(#${win})" opacity=".55">${fruitFill(sp.fruit,225,245,550,605,sp.seed||7,defs,sp.chili)}</g>`)+`<path d="${wp}" fill="none" stroke="#7a7a7a" stroke-width="2" stroke-dasharray="10 8"/><text x="500" y="560" text-anchor="middle" font-family="Be Vietnam Pro" font-size="22" fill="#333" letter-spacing="2">CỬA SỔ TRONG SUỐT · KHÔNG IN</text>`)}
+  g.push(`<path d="M220 855 L220 520 A280 280 0 0 1 780 520 L780 855 Z" fill="none" stroke="${AC}" stroke-width="9" opacity=".95"/><path d="${wp}" fill="none" stroke="${G}" stroke-width="3"/>`);
+  // seal (overlapping arch top)
+  g.push(sealMocqua(500,170,128,defs));
+  // texts
+  g.push(`<text x="500" y="905" text-anchor="middle" font-family="Be Vietnam Pro" font-weight="500" font-size="27" letter-spacing="9" fill="${shade(AC,-0.35)}">${esc((sp.type||'').toUpperCase())}</text>`);
+  const {L,s}=fitLines(sp.name,'Cormorant Garamond',600,78,720,2);
+  const y0=sp.sub? 990:1005;
+  L.forEach((l,i)=>g.push(`<text x="500" y="${y0+i*s*1.02}" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="${s}" fill="${INK}">${esc(l)}</text>`));
+  let y=y0+(L.length-1)*s*1.02;
+  if(sp.sub){y+=46;g.push(`<text x="500" y="${y}" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="34" fill="#5E6B60">${esc(sp.sub)}</text>`)}
+  // ornament
+  y+=34;g.push(`<g transform="translate(500 ${y})"><line x1="-150" x2="-22" stroke="${G}" stroke-width="1.6"/><line x1="22" x2="150" stroke="${G}" stroke-width="1.6"/><path d="M0 -9 L9 0 L0 9 L-9 0Z" fill="${AC}"/></g>`);
+  // weight pill
+  y+=54;g.push(`<g transform="translate(500 ${y})"><rect x="-120" y="-40" width="240" height="66" rx="33" fill="${GR}"/><rect x="-112" y="-32" width="224" height="50" rx="25" fill="none" stroke="${G}" stroke-width="1.4"/><text y="7" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="40" letter-spacing="2" fill="${G}">${esc(sp.weight)}</text></g>`);
+  g.push(`<rect x="92" y="1244" width="816" height="24" fill="${AC}"/><rect x="92" y="1272" width="816" height="1.6" fill="${G}"/>`);
+  g.push(`<text x="500" y="1318" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="34" letter-spacing="7" fill="${GR}">mocqua.com</text>`);
+  return g.join('');
+}
+function sealMocqua(cx,cy,r,defs){
+  const G='#C4A265',GR='#1E3A2F';const p=uid('arc');
+  defs.push(`<path id="${p}" d="M ${cx-r*.78} ${cy} A ${r*.78} ${r*.78} 0 1 1 ${cx+r*.78} ${cy} A ${r*.78} ${r*.78} 0 1 1 ${cx-r*.78} ${cy}"/>`);
+  let ticks='';for(let i=0;i<60;i++){const a=i/60*Math.PI*2;ticks+=`<line x1="${cx+Math.cos(a)*r*.93}" y1="${cy+Math.sin(a)*r*.93}" x2="${cx+Math.cos(a)*r*.97}" y2="${cy+Math.sin(a)*r*.97}" stroke="${G}" stroke-width="1.4"/>`}
+  return `<g><circle cx="${cx}" cy="${cy}" r="${r}" fill="${GR}"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${G}" stroke-width="4"/>${ticks}<circle cx="${cx}" cy="${cy}" r="${r*.64}" fill="none" stroke="${G}" stroke-width="1.6"/>
+  <text font-family="Be Vietnam Pro" font-weight="500" font-size="${r*.12}" fill="${G}"><textPath href="#${p}" startOffset="0" textLength="${(2*Math.PI*r*.78*.985).toFixed(1)}" lengthAdjust="spacing">MỘC QUẢ · QUẢ CỦA ĐẤT · QUÀ CỦA TÌNH · </textPath></text>
+  <g transform="translate(${cx} ${cy})"><path d="M0 ${-r*.40} C ${r*.30} ${-r*.36} ${r*.36} ${-r*.05} ${r*.30} ${r*.14} C ${r*.22} ${r*.38} ${-r*.22} ${r*.38} ${-r*.30} ${r*.14} C ${-r*.36} ${-r*.05} ${-r*.30} ${-r*.36} 0 ${-r*.40}Z" fill="none" stroke="${G}" stroke-width="2.4"/>
+  <path d="M0 ${-r*.40} C ${r*.04} ${-r*.52} ${r*.14} ${-r*.58} ${r*.24} ${-r*.56} C ${r*.18} ${-r*.46} ${r*.08} ${-r*.42} 0 ${-r*.40}Z" fill="${G}"/>
+  <text y="${r*.13}" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="${r*.34}" fill="${G}">MQ</text></g></g>`;
+}
+/* ---------- pouch body ---------- */
+function render(sp){
+  UID=0;const defs=[];const mode=sp.mode||'pouch';
+  defs.push(`<filter id="pieceSh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000" flood-opacity=".35"/></filter>`);
+  defs.push(`<linearGradient id="winGloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset=".22" stop-color="#fff" stop-opacity=".08"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset=".8" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient>`);
+  const lab=labelMocqua(sp,defs,mode);
+  if(mode==='label'){
+    const bg=`<rect width="1000" height="1400" fill="#1E3A2F"/>`;
+    return `<svg xmlns="${NS}" width="100mm" height="140mm" viewBox="0 0 1000 1400"><defs>${defs.join('')}</defs>${bg}${lab}</svg>`;
+  }
+  const W=900,H=1250;const body='M70 52 Q70 34 90 34 L810 34 Q830 34 830 52 L838 1110 Q842 1176 790 1186 Q450 1214 110 1186 Q58 1176 62 1110 Z';
+  const prem=true;
+  const base=prem?'#1E3A2F':'#FFFDF7';
+  defs.push(`<clipPath id="bodyClip"><path d="${body}"/></clipPath>`);
+  defs.push(`<linearGradient id="edge" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="${prem?.42:.22}"/><stop offset=".07" stop-color="#000" stop-opacity="0"/><stop offset=".93" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="${prem?.45:.24}"/></linearGradient>`);
+  defs.push(`<linearGradient id="gloss" x1="0" x2="1"><stop offset=".10" stop-color="#fff" stop-opacity="0"/><stop offset=".17" stop-color="#fff" stop-opacity="${prem?.10:.42}"/><stop offset=".22" stop-color="#fff" stop-opacity="${prem?.03:.12}"/><stop offset=".30" stop-color="#fff" stop-opacity="0"/><stop offset=".76" stop-color="#fff" stop-opacity="0"/><stop offset=".81" stop-color="#fff" stop-opacity="${prem?.06:.22}"/><stop offset=".86" stop-color="#fff" stop-opacity="0"/></linearGradient>`);
+  defs.push(`<linearGradient id="vshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${prem?.06:.2}"/><stop offset=".15" stop-color="#fff" stop-opacity="0"/><stop offset=".86" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="${prem?.35:.16}"/></linearGradient>`);
+  defs.push(`<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .09 0"/></filter>`);
+  defs.push(`<pattern id="crimp" width="7" height="10" patternUnits="userSpaceOnUse"><rect width="3" height="10" fill="#000" opacity="${prem?.22:.07}"/></pattern>`);
+  defs.push(`<mask id="notch"><rect width="${W}" height="${H}" fill="#fff"/><path d="M58 118 L80 128 L58 138Z M842 118 L820 128 L842 138Z" fill="#000"/>${prem?'':'<rect x="405" y="56" width="90" height="26" rx="13" fill="#000"/>'}</mask>`);
+  const s=prem?0.66:0.72, lx=prem?120:90, ly=prem?232:182;
+  const out=`<svg xmlns="${NS}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${defs.join('')}</defs>
+  <g mask="url(#notch)">
+   <path d="${body}" fill="${base}"/>
+   <g clip-path="url(#bodyClip)">
+    ${prem?`<rect width="${W}" height="${H}" filter="url(#grain)"/>`:''}
+    ${prem?`<rect x="96" y="176" width="708" height="1000" rx="6" fill="none" stroke="#C4A265" stroke-width="1.2" opacity=".45"/>`:''}
+    <g transform="translate(${lx} ${ly}) scale(${s})">${lab}</g>
+    ${prem?`<text x="450" y="212" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="28" letter-spacing="1" fill="#C4A265" opacity=".95">Quả của đất, quà của tình</text>`:''}
+    <rect x="0" y="34" width="${W}" height="78" fill="url(#crimp)"/>
+    <rect x="0" y="146" width="${W}" height="5" fill="#000" opacity="${prem?.45:.14}"/><rect x="0" y="152" width="${W}" height="3" fill="#fff" opacity="${prem?.18:.7}"/>
+    <rect x="0" y="160" width="${W}" height="3" fill="#000" opacity="${prem?.25:.08}"/>
+    ${prem?`<rect x="0" y="112" width="${W}" height="1.5" fill="#C4A265" opacity=".6"/>`:`<rect x="0" y="112" width="${W}" height="2" fill="${(F[sp.fruit]||F.xoai).brand}" opacity=".5"/>`}
+    <path d="M62 1112 Q450 1150 838 1112" stroke="#fff" stroke-opacity="${prem?.12:.6}" stroke-width="3" fill="none"/>
+    <path d="M62 1118 Q450 1158 838 1118 L838 1200 L62 1200Z" fill="#000" opacity="${prem?.18:.05}"/>
+    <rect width="${W}" height="${H}" fill="url(#edge)"/>
+    <rect width="${W}" height="${H}" fill="url(#gloss)"/>
+    <rect width="${W}" height="${H}" fill="url(#vshade)"/>
+    <path d="M120 230 C 160 400 140 700 170 1000" stroke="#fff" stroke-opacity="${prem?.05:.18}" stroke-width="16" fill="none" stroke-linecap="round"/>
+   </g>
+   <path d="${body}" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="2"/>
+  </g></svg>`;
+  return out;
+}
+window.render=render;window.FRUITS=F;
+// standalone preview: pouch.html?name=...&fruit=xoai&type=Sấy dẻo&weight=500g
+const q=new URLSearchParams(location.search);
+if(q.get('name')){document.getElementById('stage').innerHTML=render(Object.fromEntries(q))}
+</script></body></html>

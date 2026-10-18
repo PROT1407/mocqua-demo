@@ -2,7 +2,7 @@
 const MQ=window.MQ,{$,$$}=MQ;
 $('[data-gifts]').innerHTML=MQ.GIFTS.map(MQ.giftCard).join('');
 /* builder */
-const O=MQ.BOX_OPTIONS,picks=MQ.PRODUCTS.filter(p=>!p.soon&&MQ.minPrice(p)).sort((a,b)=>(a.rank||99)-(b.rank||99));
+const O=MQ.BOX_OPTIONS,picks=MQ.PRODUCTS.filter(p=>!p.soon&&p.cat!=='set'&&MQ.minPrice(p)).sort((a,b)=>(a.rank||99)-(b.rank||99));
 /* mỗi ngăn = 1 gói quy cách nhỏ nhất có giá */
 const pv=p=>MQ.priced(p).sort((a,b)=>a.p-b.p)[0];
 const unit=p=>p?pv(p).p:0;

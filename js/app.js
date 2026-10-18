@@ -70,14 +70,14 @@ MQ.card=(p,opts={})=>{
     <div class="pcard__body"><span class="pcard__origin">${p.own?'Túi zip · '+v.w:MQ.CATS[p.cat].short}</span><h3 class="pcard__name">${p.name}</h3><p class="pcard__desc">${p.short}</p>
     <div class="pcard__foot"><span class="muted small">Sắp ra mắt</span><button class="btn btn--line btn--sm" data-notify="${p.id}">Báo tôi</button></div></div></article>`}
   const v=MQ.defVar(p), lines=p.lines.map(MQ.lineName).join(' · ');
-  return `<article class="pcard${opts.cls?' '+opts.cls:''}" data-id="${p.id}" data-sku="${v.sku}">
+  return `<article class="pcard${p.own?' pcard--mq':''}${opts.cls?' '+opts.cls:''}" data-id="${p.id}" data-sku="${v.sku}">
     <div class="pcard__media">
       <span class="badge badge--type badge--${p.cat}">${MQ.CATS[p.cat].short}</span>${p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}
       <a href="${MQ.url(p)}" class="pcard__img" aria-label="${MQ.esc(p.name)}"><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" loading="lazy" data-card-img></a>
       <div class="pcard__tools"><button class="tool${w?' is-on':''}" data-wish="${p.id}" aria-label="Yêu thích"><svg><use href="#i-heart${w?'-f':''}"/></svg></button><button class="tool" data-quick="${p.id}" aria-label="Xem nhanh"><svg><use href="#i-eye"/></svg></button></div>
     </div>
     <div class="pcard__body">
-      <span class="pcard__origin">${lines||MQ.makerName(p)}${p.flavour==='muoiot'?' · <em class="flv">Muối ớt</em>':''}</span>
+      <span class="pcard__origin">${p.own?`<i class="mqseal" aria-hidden="true">MQ</i>Mộc Quả<span class="l-full"> · mocqua.com</span>`:(lines||MQ.makerName(p))}${p.flavour==='muoiot'?' · <em class="flv">Muối ớt</em>':''}</span>
       <h3 class="pcard__name"><a href="${MQ.url(p)}">${p.name}</a></h3>
       ${MQ.chips(p,v)}
       <div class="pcard__foot">
@@ -152,14 +152,15 @@ const page=document.body.dataset.page||'';
 const act=k=>page===k?' class="is-active"':'';
 const live=MQ.PRODUCTS.filter(p=>!p.soon);
 const cnt=f=>live.filter(f).length;
-const CATLINKS=Object.entries(MQ.CATS).filter(([k,c])=>!c.soon).map(([k,c])=>`<a href="cua-hang.html?cat=${k}">${c.name}<small>${cnt(p=>p.cat===k)} sản phẩm</small></a>`).join('')+`<a href="cua-hang.html?cat=soon">Hạt · Trà · Mứt <em class="soon-tag">Sắp có</em></a>`;
-const FRUITLINKS=Object.entries(MQ.FRUITS).filter(([k])=>cnt(p=>p.fruit===k)).map(([k,f])=>`<a href="cua-hang.html?fruit=${k}">${f.name}</a>`).join('');
-const LINELINKS=Object.entries(MQ.LINES).filter(([k,l])=>!l.soon).map(([k,l])=>`<a href="cua-hang.html?line=${k}">${l.name}</a>`).join('')+`<a href="cua-hang.html?line=mq">Mộc Quả tuyển chọn <em class="soon-tag soon-tag--gold">Sắp ra mắt</em></a>`;
+const CATLINKS=Object.entries(MQ.CATS).filter(([k,c])=>!c.soon).map(([k,c])=>`<a href="cua-hang.html?cat=${k}">${c.name}<small>${cnt(p=>p.cat===k)} sản phẩm</small></a>`).join('')+`<a href="cua-hang.html?cat=soon">Hạt · Trà · Kẹo <em class="soon-tag">Sắp có</em></a>`;
+const FRUITLINKS=Object.entries(MQ.FRUITS).filter(([k,f])=>f.top&&cnt(p=>p.fruit===k)).map(([k,f])=>`<a href="cua-hang.html?fruit=${k}">${f.name}</a>`).join('')+`<a href="cua-hang.html#loai-qua" class="mega__all">+ ${Object.keys(MQ.FRUITS).filter(k=>!MQ.FRUITS[k].top&&cnt(p=>p.fruit===k)).length} loại khác</a>`;
+const FLAVLINKS=Object.entries(MQ.FLAVOURS).filter(([k])=>cnt(p=>p.flavour===k)).map(([k,f])=>`<a href="cua-hang.html?flavour=${k}">${f.name}</a>`).join('');
+const LINELINKS=`<a href="cua-hang.html?line=mq" class="mega__own">${MQ.mark('mega__seal')}<span>Mộc Quả<small>mocqua.com · ${cnt(p=>p.lines.includes('mq'))} sản phẩm</small></span></a><span class="mega__sub">Viza Food</span>`+Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>`<a href="cua-hang.html?line=${k}">${l.name}</a>`).join('');
 function header(){
-  const feat=MQ.byId('sau-rieng-say-thang-hoa');
+  const feat=MQ.byId('mqz-sau-rieng-ri6-thang-hoa');
   return `
 <div class="announce"><div class="announce__track">
-  <span>Giao hàng toàn quốc</span><i>✦</i><span>Miễn phí giao hàng cho đơn từ ${MQ.fmt(MQ.FREE_SHIP)}</span><i>✦</i><span>Hàng chính hãng Viza Food</span><i>✦</i><span>Nhập <b>MOCQUA10</b> giảm 10% (demo)</span><i>✦</i><span class="announce__demo">Website demo — đặt hàng thử, chưa thanh toán thật</span>
+  <span>Giao hàng toàn quốc</span><i>✦</i><span>Miễn phí giao hàng cho đơn từ ${MQ.fmt(MQ.FREE_SHIP)}</span><i>✦</i><span>Thương hiệu riêng <b>Mộc Quả</b> · mocqua.com</span><i>✦</i><span>Hàng chính hãng Viza Food</span><i>✦</i><span>Nhập <b>MOCQUA10</b> giảm 10% (demo)</span><i>✦</i><span class="announce__demo">Website demo — đặt hàng thử, chưa thanh toán thật</span>
 </div></div>
 <header class="header">
   <div class="header__inner">
@@ -169,9 +170,9 @@ function header(){
       <div class="nav__item has-mega"><a href="cua-hang.html"${act('shop')}>Cửa hàng <svg class="chev"><use href="#i-chev"/></svg></a>
         <div class="mega"><div class="mega__inner">
           <div class="mega__col"><h6>Theo cách sấy</h6>${CATLINKS}</div>
-          <div class="mega__col"><h6>Theo loại quả</h6><div class="mega__2col">${FRUITLINKS}</div><h6 class="mt">Hương vị</h6><a href="cua-hang.html?flavour=nguyen">Nguyên vị</a><a href="cua-hang.html?flavour=muoiot">Muối ớt</a></div>
-          <div class="mega__col"><h6>Dòng sản phẩm</h6>${LINELINKS}<h6 class="mt">Nhanh</h6><a href="cua-hang.html?tag=small">Gói nhỏ 80g</a><a href="cua-hang.html?tag=big">Túi lớn 500g</a><a href="cua-hang.html">Tất cả sản phẩm</a></div>
-          <a class="mega__feat" href="${MQ.url(feat)}"><img src="${MQ.img(feat.img)}" alt=""><span><small>Được yêu thích nhất</small>${feat.name}<em>${MQ.priceLabel(feat)}</em></span></a>
+          <div class="mega__col"><h6>Theo loại quả</h6><div class="mega__2col">${FRUITLINKS}</div><h6 class="mt">Hương vị</h6><div class="mega__2col">${FLAVLINKS}</div></div>
+          <div class="mega__col"><h6>Thương hiệu</h6>${LINELINKS}<h6 class="mt">Nhanh</h6><a href="cua-hang.html?tag=small">Gói nhỏ ≤ 100g</a><a href="cua-hang.html?tag=big">Túi lớn ≥ 350g</a><a href="cua-hang.html">Tất cả sản phẩm</a></div>
+          <a class="mega__feat" href="${MQ.url(feat)}"><img src="${MQ.img(feat.img)}" alt=""><span><small>Mới · thương hiệu Mộc Quả</small>${feat.name}<em>${MQ.priceLabel(feat)}</em></span></a>
         </div></div></div>
       <div class="nav__item has-mega"><a href="hop-qua.html"${act('gift')}>Hộp quà <svg class="chev"><use href="#i-chev"/></svg></a>
         <div class="mega mega--sm"><div class="mega__inner">
@@ -193,8 +194,8 @@ function header(){
   </div>
 </header>
 <div class="search" aria-hidden="true"><div class="search__panel">
-  <form class="search__form" action="cua-hang.html"><svg><use href="#i-search"/></svg><input name="q" type="search" placeholder="Tìm xoài sấy dẻo, sầu riêng, mã SP…" autocomplete="off" aria-label="Tìm kiếm"><button type="button" class="icon-btn" data-search-close aria-label="Đóng"><svg><use href="#i-close"/></svg></button></form>
-  <div class="search__body"><div class="search__hint"><small>Tìm nhiều</small><div class="chips"><a class="chip" href="cua-hang.html?fruit=xoai">Xoài sấy</a><a class="chip" href="cua-hang.html?fruit=saurieng">Sầu riêng thăng hoa</a><a class="chip" href="cua-hang.html?flavour=muoiot">Vị muối ớt</a><a class="chip" href="cua-hang.html?cat=gion">Mít sấy giòn</a><a class="chip" href="hop-qua.html">Hộp quà Tết</a></div></div><div class="search__results" data-search-results></div></div>
+  <form class="search__form" action="cua-hang.html"><svg><use href="#i-search"/></svg><input name="q" type="search" placeholder="Tìm xoài sấy dẻo, xí muội, mã SP…" autocomplete="off" aria-label="Tìm kiếm"><button type="button" class="icon-btn" data-search-close aria-label="Đóng"><svg><use href="#i-close"/></svg></button></form>
+  <div class="search__body"><div class="search__hint"><small>Tìm nhiều</small><div class="chips"><a class="chip" href="cua-hang.html?fruit=xoai">Xoài sấy</a><a class="chip" href="cua-hang.html?fruit=saurieng">Sầu riêng thăng hoa</a><a class="chip" href="cua-hang.html?flavour=muoiot">Vị muối ớt</a><a class="chip" href="cua-hang.html?line=mq">Mộc Quả</a><a class="chip" href="cua-hang.html?cat=omai">Ô mai · xí muội</a><a class="chip" href="cua-hang.html?cat=gion">Mít sấy giòn</a><a class="chip" href="hop-qua.html">Hộp quà Tết</a></div></div><div class="search__results" data-search-results></div></div>
 </div></div>`;
 }
 function footer(){
@@ -206,9 +207,9 @@ function footer(){
 <footer class="footer">
   <div class="container footer__grid">
     <div class="footer__brand"><a href="index.html" class="brand brand--light">${MQ.mark('brand__mark')}<span class="brand__text"><b>Mộc Quả</b><small>Quả ngon · Quà trọn</small></span></a>
-      <p>Quả của đất, quà của tình. Mộc Quả tuyển chọn trái cây sấy chính hãng từ nhà sản xuất uy tín Viza Food — cho bữa ăn vặt mỗi ngày và những món quà trọn vẹn.</p>
+      <p>Quả của đất, quà của tình. Mộc Quả tuyển chọn trái cây sấy dưới thương hiệu riêng <b>mocqua.com</b> và phân phối hàng chính hãng Viza Food — cho bữa ăn vặt mỗi ngày và những món quà trọn vẹn.</p>
       <div class="footer__pay"><span>COD</span><span>VietQR</span><span>Ví điện tử</span><span>Thẻ ATM/Visa</span></div></div>
-    <div><h5>Cửa hàng</h5><a href="cua-hang.html?cat=deo">Trái cây sấy dẻo</a><a href="cua-hang.html?cat=thanghoa">Trái cây sấy thăng hoa</a><a href="cua-hang.html?cat=gion">Trái cây sấy giòn</a><a href="hop-qua.html">Hộp quà Tết</a><a href="hop-qua.html#tu-thiet-ke">Tự thiết kế hộp quà</a></div>
+    <div><h5>Cửa hàng</h5><a href="cua-hang.html?cat=deo">Trái cây sấy dẻo</a><a href="cua-hang.html?cat=thanghoa">Trái cây sấy thăng hoa</a><a href="cua-hang.html?cat=gion">Trái cây sấy giòn</a><a href="cua-hang.html?cat=omai">Ô mai &amp; xí muội</a><a href="cua-hang.html?line=mq">Thương hiệu Mộc Quả</a><a href="hop-qua.html">Hộp quà Tết</a><a href="hop-qua.html#tu-thiet-ke">Tự thiết kế hộp quà</a></div>
     <div><h5>Hỗ trợ</h5><a href="chinh-sach.html#huong-dan">Hướng dẫn mua hàng</a><a href="chinh-sach.html#thanh-toan">Hình thức thanh toán</a><a href="chinh-sach.html#giao-hang">Giao hàng &amp; vận chuyển</a><a href="chinh-sach.html#doi-tra">Đổi trả &amp; hoàn tiền</a><a href="chinh-sach.html#bao-mat">Bảo mật thông tin</a><a href="tra-cuu-don.html">Tra cứu đơn hàng</a></div>
     <div><h5>Liên hệ</h5><a href="tel:${MQ.TEL}">Hotline: ${MQ.HOTLINE}</a><a href="mailto:hello@mocqua.com">hello@mocqua.com</a><a href="lien-he.html">[Địa chỉ showroom đang cập nhật]</a><span>8:00 – 21:00, tất cả các ngày</span><div class="footer__social"><a href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener" aria-label="Zalo"><svg><use href="#i-zalo"/></svg></a><a href="https://m.me/" target="_blank" rel="noopener" aria-label="Messenger"><svg><use href="#i-msg"/></svg></a></div></div>
   </div>
