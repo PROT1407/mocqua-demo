@@ -14,7 +14,7 @@ NEW={'MQ-DXO-100-FHX':35000,'MQ-DXO-100-FHG':35000,'MQ-DXO-200-FHX':69000,'MQ-DX
  'MQ-GMI-300-FH':85000,'MQ-GMI-500-FH':140000,
  'MQ-DTH-080-GG':30000,'MQ-DMC-080':55000,'MQ-DME-080-GG':15000,'MQ-DTL-080-GG':35000,'MQ-DDU-080-GG':30000}
 # Giá cố định theo quyết định chủ shop (18/10/2026, gấp đôi giá benchmark) — luôn ghi đè NEW, chạy lại không mất.
-OVERRIDES={'MQ-DXM-S-GG':35000,  # gói nhỏ 50–100g xoài muối ớt GG (≈ benchmark GG muối ớt 100g 35k), dùng làm quà KM
+OVERRIDES={'MQ-DXM-S-GG':27000,  # gói nhỏ 50–100g (vốn ~12k): chuẩn dacsancaocap Xoài sấy dẻo 0.5kg 170k → quy đổi ~75g ≈32k −5k; thấp hơn túi 100g 35k vì ruột 50–100g
  'MQ-THSR-080-FH':185000,'MQ-THSR-110-CH':259000,  # sầu riêng TH mới: chuẩn dacsancaocap Ri6 múi cắt 100g 240k → 192k/80g −7k; 264k/110g −5k (Cheers+ ≈+2% /gram so F&H)
  'MQ-GSR-100-GG':110000,'MQ-GSR-100-KT':90000,  # sầu riêng sấy (không phải thăng hoa), giá chủ shop 18/10/2026
  'MQ-THMC-100-GG':149000,  # măng cụt TH GoodGood 100g: chủ shop chốt 149k (benchmark Palida 210g 320k ≈ 152k/100g)

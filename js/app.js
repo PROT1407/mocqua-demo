@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018s';
+MQ.IMGV='20261018t';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 /* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */
@@ -145,8 +145,8 @@ MQ.r1k=v=>Math.round(v/1000)*1000;
 MQ.isZipItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(i.w||''))};
 MQ.isSetItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&(p.cat==='set'||p.giftbox))};
 MQ.giftPick=()=>MQ.GIFT_OPTS.find(o=>o.id===MQ.store.get('giftpick','xoai'))||MQ.GIFT_OPTS[0];
-/* Quà gói nhỏ xoài muối ớt GoodGood 50–100g: đơn từ 300k tặng 1 · mua 2 túi xoài 200g+ tặng 1 (mỗi 2 túi) — lấy mức cao hơn, không cộng dồn, tối đa 3 gói/đơn */
-MQ.GN={pid:'xoai-say-deo-muoi-ot-goodgood',sku:'MQ-DXM-S-GG',min:300000,pair:2,minG:200,max:3,label:'Gói nhỏ 50–100g'};
+/* Quà gói nhỏ xoài muối ớt GoodGood 50–100g (giá vốn ~12k): đơn từ 199k tặng 1 · mua 2 túi xoài 200g+ tặng 1 (mỗi 2 túi) — lấy mức cao hơn, không cộng dồn, tối đa 3 gói/đơn */
+MQ.GN={pid:'xoai-say-deo-muoi-ot-goodgood',sku:'MQ-DXM-S-GG',min:199000,pair:2,minG:200,max:3,label:'Gói nhỏ 50–100g'};
 MQ.gnBig=i=>{const p=MQ.byId(i.id);if(!p||p.fruit!=='xoai'||!(i.price>0))return false;const v=MQ.findVar(p,i.sku);return !!(v&&v.g>=MQ.GN.minG)};
 MQ.gnEligible=p=>p&&p.fruit==='xoai'&&!p.soon&&MQ.vars(p).some(v=>v.g>=MQ.GN.minG&&v.p);
 MQ.gnNote=(cls='')=>`<span class="gnnote${cls}" title="Mua 2 túi xoài từ 200g hoặc đơn từ ${MQ.fmt(MQ.GN.min)}: tặng 1 gói nhỏ xoài muối ớt GoodGood"><svg><use href="#i-gift"/></svg>Quà tặng: gói nhỏ 50–100g</span>`;
@@ -179,7 +179,9 @@ MQ.promo=items=>{
 /* gợi ý tiến độ: giao miễn phí → bậc giảm kế tiếp */
 MQ.progress=P=>{const b=P.base;
   if(!P.sub)return {text:`Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b> · đơn từ <b>${MQ.fmt(MQ.TIERS[2].min)}</b> giảm 5%.`,pct:0};
-  if(b<MQ.FREE_SHIP)return {text:`Mua thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b>.`,pct:b/MQ.FREE_SHIP*100};
+  const hasGN=P.gifts&&P.gifts.some(g=>g.key==='gift-gn');
+  if(b<MQ.GN.min&&!hasGN)return {text:`Mua thêm <b>${MQ.fmt(MQ.GN.min-b)}</b> để được <b>tặng 1 gói xoài muối ớt</b> (0đ).`,pct:b/MQ.FREE_SHIP*100};
+  if(b<MQ.FREE_SHIP)return {text:`Đã có quà gói xoài · Mua thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b>.`,pct:b/MQ.FREE_SHIP*100};
   if(P.up)return {text:`${P.tier?`Đang giảm <b>${P.tier.pct}%</b> · `:'Đã miễn phí giao · '}Mua thêm <b>${MQ.fmt(P.up.min-b)}</b> để được giảm <b>${P.up.pct}%</b>.`,pct:b/P.up.min*100};
   return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng.`,pct:100};
 };
@@ -243,7 +245,7 @@ function header(){
   const omai=live.filter(p=>p.cat==='omai').sort((a,b)=>(a.rank||99)-(b.rank||99));
   return `
 <div class="tbar"><div class="wrap tbar__in">
-  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g<i>·</i>Đơn 300k tặng gói xoài muối ớt</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
+  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g<i>·</i>Đơn 199k tặng gói xoài muối ớt</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
   <span class="tbar__msg tbar__demo">Website demo — đặt hàng thử, chưa thanh toán thật</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>
