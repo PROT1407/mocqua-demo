@@ -11,6 +11,9 @@ BOX='Hộp quà cứng xanh rừng nhiều ngăn, nắp in tem tròn Mộc Quả
 TRAY='Khay sơn mài đỏ viền vàng nhiều ngăn, nắp tròn in tem Mộc Quả; kèm túi xách & thiệp.'
 BASK='Giỏ mây đan thắt nơ đỏ, xếp các hũ PET tem tròn Mộc Quả; kèm thiệp.'
 SETPACK={'mqz-hop-9-vi':BOX,'mqz-hop-qua-hat':BOX,'mqz-bo-12-vi-mut':JAR,'mqz-doi-thom-say':JAR,'mqz-bo-mut-dua-non':JAR,'mqz-doi-mut-muoi-ot':JAR,'mqz-khay-mut-7-vi':TRAY,'mqz-khay-mut-5-vi':TRAY,'mqz-gio-qua-viet':BASK,'mqz-gio-mut-6-vi':BASK}
+GB=json.load(open('/workspace/mocqua/research/mocqua-giftboxes.json'))['boxes']
+GBP={b['pid']:(k,b) for k,b in GB.items()}
+RANK.update({'mqz-hop-tim-8-vi':(13,'Mới · Tết 2027'),'mqz-hop-ngan-keo-600':(15,'Quà Tết'),'mqz-hop-6-hu-mini':(17,'Mới'),'mqz-khay-hat-hoa-mai':(19,'Mới'),'mqz-hop-hat-5-vi':(21,'Mới'),'mqz-khay-6-mon-qua-say':(23,'Mới')})
 G=collections.OrderedDict()
 for s in D['spec']: G.setdefault(s['pid'],[]).append(s)
 def keep(t): return 'độ giòn xốp' if t in('gion','thanghoa') else 'độ dẻo và hương thơm'
@@ -32,7 +35,11 @@ for i,(pid,vs) in enumerate(G.items()):
     o=dict(id=pid,name=h['name'],cat=cat,fruit=fr,flavour=h['flavour'],maker='mocqua',own=True,rank=rank)
     if not badge and h.get('pct',0)>=8: badge='Giá tốt'
     if badge:o['badge']=badge
-    if cat=='set':o['pack']=SETPACK.get(pid)
+    if cat=='set' and pid in GBP:
+        k,b=GBP[pid];pack=b['pack'];o['pack']=pack;o['box']=b['type']
+        o['contents']=[[c[0],c[1]] for c in b['contents']];o['occ']=b['occ']
+        o['gallery']=['products/mqz/'+k.lower()+x for x in (('','-g3','-g4') if b['type']=='tubs' else ('','-g2','-g3','-g4'))]
+    elif cat=='set':o['pack']=SETPACK.get(pid)
     js='{'+','.join(f"{k}:{json.dumps(v,ensure_ascii=False)}" for k,v in o.items())+f",\n  variants:[{','.join(vv)}],\n  taste:{json.dumps(TASTE[cat])},\n  short:{json.dumps(h['short'],ensure_ascii=False)},\n  long:{json.dumps(h['short']+' '+pack,ensure_ascii=False)}}}"
     out.append(' '+js)
 block='/* ==== MQZ-BEGIN: dòng Mộc Quả (mocqua.com) — sinh tự động bởi research/gen_data.py; giá theo quy tắc research/pricing.py (rẻ hơn 4–10% so với tham chiếu) ==== */\n'+',\n'.join(out)+',\n/* ==== MQZ-END ==== */'

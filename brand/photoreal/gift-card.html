@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}*{box-sizing:border-box}
+.c{width:1200px;height:1200px;background:radial-gradient(circle at 40% 30%,#FBF6EC,#EFE4CC);font-family:'Be Vietnam Pro';color:#1E3A2F;padding:70px 80px;position:relative;overflow:hidden}
+.c:before{content:"";position:absolute;inset:28px;border:3px solid #C9A35F;pointer-events:none}.c:after{content:"";position:absolute;inset:40px;border:1px solid #C9A35F;pointer-events:none}
+.k{letter-spacing:6px;font-size:18px;color:#9C7432;font-weight:600;text-align:center}
+h1{font-family:'Cormorant Garamond';font-size:62px;margin:10px 0 0;text-align:center;line-height:1.05}
+.w{text-align:center;font-size:22px;margin-top:10px;color:#4B5E54}
+.g{display:grid;gap:26px 22px;margin:44px auto 0;justify-content:center}
+.i{text-align:center}.i img{width:100%;aspect-ratio:1;border-radius:50%;object-fit:cover;border:5px solid #fff;box-shadow:0 6px 16px rgba(60,40,10,.25),0 0 0 2px #C9A35F}
+.n{font-weight:600;font-size:21px;margin-top:12px;line-height:1.2}.gr{font-size:19px;color:#9C7432;margin-top:4px;font-weight:600}
+.o{position:absolute;left:80px;right:80px;bottom:150px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.o span{border:1.5px solid #C9A35F;border-radius:30px;padding:8px 18px;font-size:18px;background:#fff8}
+.f{position:absolute;left:0;right:0;bottom:78px;text-align:center;font-size:20px;font-weight:600;color:#8E1C1E}
+.seal{position:absolute;right:70px;top:60px;width:110px}
+</style></head><body><div id="s"></div><script>
+function render(o){const n=o.items.length;const cols=n<=4?n:(n<=6?3:(n==9?3:4));const sz=n<=4?220:(n<=6?200:(n==9?150:180));
+document.getElementById('s').innerHTML=`<div class="c"><img class="seal" src="${o.seal}"><div class="k">MỘC QUẢ · BÊN TRONG HỘP</div><h1>${o.name}</h1><div class="w">${o.variant} · ${o.pack}</div>
+<div class="g" style="grid-template-columns:repeat(${cols},${sz}px)">${o.items.map(i=>`<div class="i"><img src="${i.img}"><div class="n">${i.n}</div><div class="gr">${i.g}g</div></div>`).join('')}</div>
+<div class="o">${o.occ.map(x=>`<span>${x}</span>`).join('')}</div><div class="f">Tặng kèm 1 túi 100g (chọn vị trong giỏ hàng) · Túi xách & thiệp chúc</div></div>`}
+</script></body></html>

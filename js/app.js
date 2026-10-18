@@ -49,7 +49,8 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))):'assets/img/'+f;
+MQ.IMGV='20261018c';
+MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 MQ.lineName=k=>k&&MQ.LINES[k]?MQ.LINES[k].name:'';
 MQ.makerName=p=>(MQ.MAKERS[p.maker]||{}).name||'';

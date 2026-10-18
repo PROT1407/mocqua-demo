@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:transparent}</style></head><body><div id="s"></div>
+<script>
+// Mộc Quả zip pouch — print layer (ink only; pouch film, colour and window are composited in pouch2.py)
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function lines(t,n){const w=t.split(' ');const L=[];let c='';for(const x of w){if((c+' '+x).trim().length>n&&c){L.push(c);c=x}else c=(c+' '+x).trim()}if(c)L.push(c);return L}
+function render(o){
+ const INK=o.ink||'#F6EEDC',G=o.gold||'#D9B872',PB=o.pill||G,PT=o.pillText||'#1E3A2F';
+ const X0=135,X1=765,AT=330,AB=840,R=(X1-X0)/2,CY=AT+R;
+ const arch=(d)=>`M${X0-d},${AB+d} L${X0-d},${CY} A${R+d},${R+d} 0 0 1 ${X1+d},${CY} L${X1+d},${AB+d} Z`;
+ const nm=lines(o.name,o.name.length>22?17:22).slice(0,2);const fs=nm.length>1?52:(o.name.length>16?54:62);
+ const y0=nm.length>1?955:975;
+ return `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200"><defs>
+ <path id="sr" d="M 389 325 A 61 61 0 1 1 511 325 A 61 61 0 1 1 389 325"/></defs>
+ <text x="450" y="160" text-anchor="middle" font-family="Be Vietnam Pro" font-weight="500" font-size="15" letter-spacing="6" fill="${INK}" opacity=".72">QUẢ CỦA ĐẤT · QUÀ CỦA TÌNH</text>
+ <text x="450" y="222" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="44" letter-spacing="1" fill="${INK}">Mộc Quả</text>
+ <path d="${arch(10)}" fill="none" stroke="${G}" stroke-width="4"/>
+ <path d="${arch(20)}" fill="none" stroke="${G}" stroke-width="1.4" opacity=".8"/>
+ <circle cx="450" cy="325" r="74" fill="#1E3A2F" stroke="${G}" stroke-width="4"/>
+ <circle cx="450" cy="325" r="44" fill="none" stroke="${G}" stroke-width="1.5"/>
+ <text font-family="Be Vietnam Pro" font-weight="600" font-size="11.5" letter-spacing="3.2" fill="${G}"><textPath href="#sr" startOffset="0">MỘC QUẢ · MOCQUA.COM · QUÀ VIỆT TUYỂN CHỌN ·</textPath></text>
+ <text x="450" y="340" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="40" fill="${G}">MQ</text>
+ <text x="450" y="900" text-anchor="middle" font-family="Be Vietnam Pro" font-weight="600" font-size="18" letter-spacing="6" fill="${G}">${esc(o.type.toUpperCase())}</text>
+ ${nm.map((l,i)=>`<text x="450" y="${y0+i*fs*1.0}" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="${fs}" fill="${INK}">${esc(l)}</text>`).join('')}
+ ${o.sub?`<text x="450" y="${y0+(nm.length-1)*fs+42}" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-weight="500" font-size="27" fill="${INK}" opacity=".85">${esc(o.sub)}</text>`:''}
+ <rect x="370" y="${y0+(nm.length-1)*fs+66}" width="160" height="46" rx="23" fill="${PB}"/>
+ <text x="450" y="${y0+(nm.length-1)*fs+97}" text-anchor="middle" font-family="Be Vietnam Pro" font-weight="600" font-size="22" letter-spacing="1" fill="${PT}">${esc(o.weight)}</text>
+ <text x="450" y="1150" text-anchor="middle" font-family="Be Vietnam Pro" font-weight="500" font-size="15" letter-spacing="7" fill="${INK}" opacity=".7">MOCQUA.COM</text>
+ </svg>`}
+</script></body></html>

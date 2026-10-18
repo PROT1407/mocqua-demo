@@ -7,11 +7,11 @@ const own=live.filter(p=>p.own), viza=live.filter(p=>p.maker==='viza');
 /* sidebar */
 $('[data-side]').innerHTML=MQ.side();
 /* banner slider */
-const CUT=f=>`assets/products/mqz/cut/${f}.webp`, VCUT=f=>`assets/products/cut/${f}.webp`;
+const CUT=f=>`assets/products/mqz/cut/${f}.webp?v=${MQ.IMGV}`, VCUT=f=>`assets/products/cut/${f}.webp`;
 const SL=[
  {cls:'mq',href:'cua-hang.html?line=mq',k:'Thương hiệu riêng · mocqua.com',h:'Mộc Quả <em>hũ PET &amp; túi zip</em>',p:`${own.length} sản phẩm: sấy thăng hoa, sấy dẻo, ô mai, set quà. Nhìn rõ quả trước khi mua.`,cta:'Mua dòng Mộc Quả',imgs:[CUT('mqz-omxd-250'),CUT('mqz-dxo-500-hu'),CUT('mqz-ddy-500-hu')]},
  {cls:'th',href:'cua-hang.html?cat=thanghoa',k:'Sấy thăng hoa',h:'Giòn xốp, <em>giữ trọn màu &amp; vị quả</em>',p:`${cnt(p=>p.cat==='thanghoa')} sản phẩm sầu riêng Ri6, xoài cát, thanh long, vải Lục Ngạn… túi 100g – 200g.`,cta:'Xem sấy thăng hoa',imgs:[VCUT('tsr105'),CUT('mqz-thsr-100c'),CUT('mqz-thtld-100')]},
- {cls:'tet',href:'cua-hang.html?cat=set',k:'Quà Tết Đinh Mùi 2027',h:'Set quà &amp; <em>hộp quà Tết</em>',p:'Khay mứt, hộp quả &amp; hạt, giỏ quà đóng sẵn — hoặc tự thiết kế hộp quà kèm thiệp viết tay.',cta:'Chọn quà Tết',cta2:['hop-qua.html#tu-thiet-ke','Tự thiết kế hộp quà'],gift:true,imgs:[CUT('mqz-setk7-750')]},
+ {cls:'tet',href:'cua-hang.html?cat=set',k:'Quà Tết Đinh Mùi 2027',h:'Set quà &amp; <em>hộp quà Tết</em>',p:'Khay mứt, hộp quả &amp; hạt, giỏ quà đóng sẵn — hoặc tự thiết kế hộp quà kèm thiệp viết tay.',cta:'Chọn quà Tết',cta2:['hop-qua.html#tu-thiet-ke','Tự thiết kế hộp quà'],gift:true,imgs:[CUT('mqz-setht-700')]},
  {cls:'vz',href:'cua-hang.html?line='+Object.keys(MQ.LINES).filter(k=>MQ.LINES[k].maker==='viza').join(','),k:'Hàng chính hãng',h:'Viza Food <em>· 5 dòng sản phẩm</em>',p:`GoodGood, Fresh &amp; Healthy, Cheers+, KITA, Yummy — ${viza.length} sản phẩm nguyên bao bì, đủ quy cách.`,cta:'Xem hàng Viza Food',imgs:[VCUT('dx350'),VCUT('gm500'),VCUT('dxmo300')]}
 ];
 $('[data-slides]').innerHTML=SL.map((s,i)=>`<a class="slide slide--${s.cls}${i?'':' is-on'}" href="${s.href}" aria-label="${s.k}"${i?' aria-hidden="true" tabindex="-1"':''}>

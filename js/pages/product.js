@@ -12,14 +12,14 @@ const maker=MQ.MAKERS[p.maker]||{};
 const flv=p.flavour?MQ.FLAVOURS[p.flavour].name:'';
 const bars=n=>Array.from({length:5},(_,i)=>`<b class="${i<n?'on':''}"></b>`).join('');
 const imgsOf=x=>[x.img,x.back].filter(Boolean);
-const allImgs=()=>[...imgsOf(v),...vars.filter(x=>x!==v).flatMap(imgsOf)].filter((x,i,a)=>x&&a.indexOf(x)===i);
+const allImgs=()=>[...(p.gallery&&v===vars[0]?p.gallery:imgsOf(v)),...vars.filter(x=>x!==v).flatMap(imgsOf),...(p.gallery||[]).slice(1)].filter((x,i,a)=>x&&a.indexOf(x)===i);
 const varBtns=()=>vars.map(x=>`<button class="var${x===v?' is-on':''}${x.p?'':' is-quote'}" data-sku="${x.sku}"><span>${MQ.esc(x.w)}</span>${x.line&&!p.own?`<em>${MQ.lineName(x.line)}</em>`:''}<small>${soon?'—':x.p?MQ.fmt(x.p):'Liên hệ'}</small></button>`).join('');
 const spec=()=>[['Mã sản phẩm',`<code>${v.sku}</code>`],...(p.own?[['Thương hiệu','Mộc Quả · mocqua.com'],['Đóng gói',p.cat==='set'?(p.pack||'Set quà Mộc Quả'):(/^Hũ PET/.test(v.w)?'Hũ PET trong, nắp vặn xanh viền vàng, tem tròn Mộc Quả':'Túi zip đứng có cửa sổ, nhãn Mộc Quả')]]:[['Nhà sản xuất',maker.name||'—'],['Dòng sản phẩm',MQ.lineName(v.line)||'Đang cập nhật']]),['Cách sấy',MQ.CATS[p.cat].name],['Hương vị',flv||'—'],['Khối lượng',v.g?(v.w.split(' · ').find(x=>/\d/.test(x))||v.w):(v.note||'Đang xác nhận')]];
 const OCC=['Ăn vặt văn phòng, giờ nghỉ trưa','Mang theo khi du lịch, dã ngoại','Nhâm nhi cùng trà, cà phê, xem phim','Bày mâm quả, hộp quà Tết, quà biếu'];
 root.innerHTML=`<div class="pd">
  <div class="gallery">
   <div class="gallery__thumbs" data-thumbs></div>
-  <div class="gallery__main" data-zoom><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-main>${p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}<span class="gallery__note">${p.own?'Ảnh minh hoạ bao bì Mộc Quả':'Ảnh bao bì thật · di chuột để phóng to'}</span></div>
+  <div class="gallery__main" data-zoom><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-main>${p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}${p.own?'':'<span class="gallery__note">Ảnh bao bì thật · di chuột để phóng to</span>'}</div>
  </div>
  <div class="pinfo">
   <span class="pinfo__origin">${MQ.CATS[p.cat].name}${flv?' · '+flv:''}</span>
@@ -29,6 +29,7 @@ root.innerHTML=`<div class="pd">
   <div class="pinfo__price" data-pricebox></div>
   <ul class="perks" data-perks></ul>
   <p class="pinfo__short">${p.short}</p>
+  ${p.contents?`<div class="inbox"><div class="inbox__h"><svg><use href="#i-gift"/></svg>Trong ${p.box==='basket'?'giỏ':p.box==='tubs'?'combo':p.box&&p.box.startsWith('tray')?'khay':'hộp'} có <em>${p.contents.length} ${p.box==='tubs'||p.box==='basket'||p.box==='jars6'?'hũ':'ngăn'} · ${(t=>t>=1000?(t/1000).toLocaleString('vi-VN')+'kg':t+'g')(p.contents.reduce((a,c)=>a+c[1],0))}</em></div><ol class="inbox__list">${p.contents.map(c=>`<li><span>${MQ.esc(c[0])}</span><b>${c[1]}g</b></li>`).join('')}</ol>${p.occ?`<div class="inbox__occ"><small>Dịp tặng:</small>${p.occ.map(o=>`<span>${MQ.esc(o)}</span>`).join('')}</div>`:''}</div>`:''}
   <div class="opt-label">Chọn quy cách <em data-wlabel></em></div>
   <div class="variants variants--rich" data-vars>${varBtns()}</div>
   <div data-buybox></div>`}
@@ -42,7 +43,7 @@ root.innerHTML=`<div class="pd">
  <div class="tabs__nav" role="tablist">${[['ds','Mô tả'],['ma',p.own?'Thương hiệu':'Nhà sản xuất'],['bq','Bảo quản & sử dụng'],['rv','Đánh giá']].map(([k,l],i)=>`<button role="tab" class="${i?'':'is-on'}" data-tab="${k}" id="tab-${k}">${l}</button>`).join('')}</div>
  <div class="tabs__panel is-on" data-panel="ds"><div class="prose"><p>${p.long||p.short}</p>
    <h4>Thông tin sản phẩm</h4><ul><li>Phân loại: ${MQ.CATS[p.cat].name}${flv?' · '+flv:''}</li><li>Quy cách đang bán: ${vars.map(x=>x.w+(x.line?' ('+MQ.lineName(x.line)+')':'')).join(' · ')}</li><li>Bao bì: ${p.own?(p.cat==='set'?(p.pack||'set quà Mộc Quả'):(vars.some(x=>/^Hũ PET/.test(x.w))?'chọn Hũ PET trong nắp vặn có tem tròn Mộc Quả (đẹp để biếu, đậy kín nhiều lần) hoặc Túi zip đứng refill giá mềm hơn':'túi zip đứng Mộc Quả có cửa sổ nhìn rõ sản phẩm, khoá zip đóng mở nhiều lần')):'giữ nguyên bao bì gốc của nhà sản xuất'}</li>${p.own?'':''}<li>Thành phần, hạn sử dụng, thông tin dinh dưỡng: in trên bao bì (xem ảnh mặt sau nếu có).</li></ul>
-   <h4>Ăn lúc nào cũng hợp</h4><ul>${OCC.map(o=>`<li>${o}</li>`).join('')}</ul></div></div>
+   ${p.contents?`<h4>Thành phần hộp quà</h4><ul>${p.contents.map(c=>`<li>${MQ.esc(c[0])} — ${c[1]}g</li>`).join('')}</ul><h4>Dịp tặng phù hợp</h4><ul>${(p.occ||[]).map(o=>`<li>${o}</li>`).join('')}</ul>`:`<h4>Ăn lúc nào cũng hợp</h4><ul>${OCC.map(o=>`<li>${o}</li>`).join('')}</ul>`}</div></div>
  <div class="tabs__panel" data-panel="ma"><div class="maker">${MQ.mark('maker__mark')}<div><h4>${maker.name||'Mộc Quả'}</h4><p>${maker.note||''}</p>${p.own?'':`<p>Mộc Quả là nhà bán lẻ — phân phối nguyên bao bì các dòng sản phẩm của ${maker.name}: ${Object.values(MQ.LINES).filter(l=>l.maker===p.maker).map(l=>l.name).join(', ')}.</p>`}</div></div></div>
  <div class="tabs__panel" data-panel="bq"><div class="prose"><ul><li>Bảo quản nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp.</li><li>Sau khi mở, đóng kín miệng túi; dùng ngon nhất trong 7–10 ngày.</li><li>${p.cat==='deo'?'Có thể để ngăn mát tủ lạnh để giữ độ dẻo lâu hơn.':'Sản phẩm sấy giòn / thăng hoa rất dễ hút ẩm — nên dùng hết sau khi mở.'}</li><li>Hạn sử dụng: xem trên bao bì.</li></ul></div></div>
  <div class="tabs__panel" data-panel="rv">

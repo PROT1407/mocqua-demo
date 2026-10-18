@@ -15,13 +15,13 @@ def tile(path,x,y,w,h,title,sub,cut=True):
 C=R+'/assets/products/mqz/cut/'
 L=os.path.join(os.path.dirname(__file__),'labels')+'/'
 row1=[(L+'SEAL.png','Tem tròn Mộc Quả','Ø 60 mm · nắp hộp, khay, giỏ'),(L+'MQZ-DXO-500.png','Tem hũ (thân)','Ø 60 mm · loại, tên quả, vị, khối lượng'),
-      (C+'mqz-dxo-500-hu.webp','Hũ PET 500g · Xoài cát','nắp vặn xanh rừng, viền vàng'),(C+'mqz-ddy-500-hu.webp','Hũ PET 500g · Dâu tây','mặc định cho 17 vị sấy dẻo'),(C+'mqz-dho-1000-hu.webp','Hũ PET 1kg · Hồng chẻ','thân cao cho 1kg')]
+      (C+'mqz-dxo-500-hu.webp','Hũ PET 500g · Xoài cát','nắp vặn xanh rừng, viền vàng'),(C+'mqz-ddy-500-hu.webp','Hũ PET 500g · Dâu tây','mặc định cho 17 vị sấy dẻo'),(C+'mqz-omxd-250.webp','Túi zip đứng · màu theo vị','cửa sổ lớn, 9 màu nhóm quả')]
 x=60;y=230;w=(W-120)//5
 for p,t,s in row1:tile(p,x,y,w,900,t,s);x+=w
-row2=[(C+'mqz-setth-1000.webp','Combo 2 hũ có quai xách','Đôi thơm · Đôi muối ớt · 12 vị · Dừa non'),(C+'mqz-seth4-1000.webp','Hộp quà cứng nhiều ngăn','Hộp 9 vị · Hộp quả & hạt'),
-      (C+'mqz-setk7-750.webp','Khay sơn mài đỏ','Khay mứt 7 vị · 5 vị'),(C+'mqz-setgio-2500.webp','Giỏ mây thắt nơ','Giỏ quà quả Việt · Giỏ 6 vị')]
-x=60;y=1170;w=(W-120)//4
+row2=[(C+'mqz-seth3-600.webp','Hộp ngăn kéo + túi','600g · 4 ngăn · hoạ tiết sen'),(C+'mqz-seth4-1000.webp','Hộp nắp gập + túi','1kg · 4 ngăn lót giấy bạc'),
+      (C+'mqz-setht-700.webp','Hộp tim 8 ngăn + túi','700g · hoạ tiết hoa đào'),(C+'mqz-setk7-750.webp','Khay nắp trong','lục giác · vuông · tròn · hoa mai'),(C+'mqz-setgio-2500.webp','Giỏ mây bọc màng kính','4 hũ PET · nơ satin')]
+x=60;y=1170;w=(W-120)//5
 for p,t,s in row2:tile(p,x,y,w,960,t,s);x+=w
 d.line((60,1150,W-60,1150),fill=(220,210,190),width=2)
-d.text((W//2,H-46),'Bảng màu: xanh rừng #1E3A2F · vàng nhũ #C4A265 · ngà #FBF9F4 · đỏ sơn mài #801A18 · màu nhấn theo vị quả',font=BV(28),fill=(110,118,110),anchor='mm')
+d.text((W//2,H-46),'Bảng màu: xanh rừng #1E3A2F · vàng nhũ #C4A265 · ngà #FBF9F4 · đỏ son #8E1C1E · túi zip theo nhóm quả',font=BV(28),fill=(110,118,110),anchor='mm')
 S.save(R+'/brand/packaging-mocqua.png',optimize=True);print(S.size)

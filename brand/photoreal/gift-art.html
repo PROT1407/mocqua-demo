@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}</style></head><body><div id="s"></div>
+<script>
+// Mộc Quả original gift-packaging artwork (lids, bags, heart lid). Motifs drawn here from scratch:
+// lotus (sen), apricot blossom (mai), peach blossom (đào), auspicious clouds (mây), wave band.
+const G='#D8B46A',G2='#B8914A';
+function flower(x,y,r,fill,stroke,rot=0,center=G){let p='';for(let i=0;i<5;i++){const a=(rot+i*72)*Math.PI/180;p+=`<ellipse cx="${x+Math.cos(a)*r*0.55}" cy="${y+Math.sin(a)*r*0.55}" rx="${r*0.52}" ry="${r*0.42}" transform="rotate(${rot+i*72} ${x+Math.cos(a)*r*0.55} ${y+Math.sin(a)*r*0.55})" fill="${fill}" stroke="${stroke}" stroke-width="${r*0.06}"/>`}
+ p+=`<circle cx="${x}" cy="${y}" r="${r*0.2}" fill="${center}"/>`;for(let i=0;i<10;i++){const a=i*36*Math.PI/180;p+=`<line x1="${x}" y1="${y}" x2="${x+Math.cos(a)*r*0.42}" y2="${y+Math.sin(a)*r*0.42}" stroke="${center}" stroke-width="${r*0.03}"/><circle cx="${x+Math.cos(a)*r*0.44}" cy="${y+Math.sin(a)*r*0.44}" r="${r*0.045}" fill="${center}"/>`}return p}
+function bud(x,y,r,fill){return `<ellipse cx="${x}" cy="${y}" rx="${r*0.32}" ry="${r*0.42}" fill="${fill}"/>`}
+function branch(x0,y0,x1,y1,w,col,fl,fstroke,seed=1){let r=seed;const rnd=()=>{r=(r*9301+49297)%233280;return r/233280};
+ const mx=(x0+x1)/2+(rnd()-.5)*120,my=(y0+y1)/2-80;let s=`<path d="M${x0},${y0} Q${mx},${my} ${x1},${y1}" stroke="${col}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+ const pts=[];for(let i=1;i<=6;i++){const t=i/7;const x=(1-t)*(1-t)*x0+2*(1-t)*t*mx+t*t*x1,y=(1-t)*(1-t)*y0+2*(1-t)*t*my+t*t*y1;pts.push([x,y])}
+ pts.forEach(([x,y],i)=>{const dx=(i%2?1:-1)*(40+rnd()*50),dy=-30-rnd()*50;s+=`<path d="M${x},${y} q${dx*0.5},${dy*0.3} ${dx},${dy}" stroke="${col}" stroke-width="${w*0.45}" fill="none" stroke-linecap="round"/>`;
+  s+=flower(x+dx,y+dy,22+rnd()*16,fl,fstroke,rnd()*70);if(rnd()>.4)s+=bud(x+dx*0.4,y+dy*0.6-6,16,fl)});return s}
+function lotus(x,y,s,fill,stroke){let p='';const pet=(a,l,w)=>`<path d="M0,0 C${-w},${-l*0.4} ${-w*0.6},${-l*0.9} 0,${-l} C${w*0.6},${-l*0.9} ${w},${-l*0.4} 0,0Z" transform="translate(${x},${y}) rotate(${a}) scale(${s})" fill="${fill}" stroke="${stroke}" stroke-width="${2/s}"/>`;
+ [[-62,70,26],[62,70,26],[-36,86,28],[36,86,28],[0,96,30]].forEach(([a,l,w])=>p+=pet(a,l,w));
+ p+=`<path d="M${x-80*s},${y+6*s} Q${x},${y+40*s} ${x+80*s},${y+6*s}" stroke="${stroke}" stroke-width="3" fill="none"/>`;return p}
+function cloud(x,y,s,col){return `<g transform="translate(${x},${y}) scale(${s})" fill="none" stroke="${col}" stroke-width="3.2" stroke-linecap="round">
+ <path d="M0,0 c0,-26 34,-30 40,-8 c6,-28 52,-28 54,4 c22,-8 40,10 30,28 l-130,0 c-14,0 -20,-18 6,-24"/><path d="M28,-2 c0,-10 12,-12 14,-4"/><path d="M70,0 c2,-12 16,-12 18,0"/></g>`}
+function waves(w,y,h,col){let s='';const r=h/2.2;for(let row=0;row<3;row++){for(let x=-r+(row%2)*r;x<w+r;x+=2*r){for(let k=1;k<=3;k++)s+=`<path d="M${x-r*k/3},${y+row*r*0.7} a${r*k/3},${r*k/3} 0 0 1 ${2*r*k/3},0" stroke="${col}" stroke-width="2" fill="none"/>`}}return s}
+function seal(x,y,r){return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="#1E3A2F" stroke="${G}" stroke-width="${r*0.06}"/><circle cx="${x}" cy="${y}" r="${r*0.62}" fill="none" stroke="${G}" stroke-width="${r*0.025}"/>
+ <path id="sr${x}${y}" d="M ${x-r*0.8} ${y} A ${r*0.8} ${r*0.8} 0 1 1 ${x+r*0.8} ${y} A ${r*0.8} ${r*0.8} 0 1 1 ${x-r*0.8} ${y}" fill="none"/>
+ <text font-family="Be Vietnam Pro" font-weight="600" font-size="${r*0.16}" letter-spacing="${r*0.045}" fill="${G}"><textPath href="#sr${x}${y}">MỘC QUẢ · MOCQUA.COM · QUÀ VIỆT TUYỂN CHỌN ·</textPath></text>
+ <text x="${x}" y="${y+r*0.2}" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="${r*0.58}" fill="${G}">MQ</text></g>`}
+const TH={sen:{bg:'#1F3D31',bg2:'#173026',fl:'#EAD9AE',st:G2},mai:{bg:'#8E1C1E',bg2:'#741618',fl:'#F2C14E',st:'#A8741F'},dao:{bg:'#9B1E36',bg2:'#7E152B',fl:'#F4B6C2',st:'#C9707F'},ivory:{bg:'#F3EAD6',bg2:'#E6D9BC',fl:'#C9483F',st:'#9C3A2F'}};
+function art(o){const W=o.w,H=o.h,t=TH[o.theme];const m=Math.min(W,H);let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+ <defs><radialGradient id="rg" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="${t.bg}"/><stop offset="1" stop-color="${t.bg2}"/></radialGradient>
+ <clipPath id="cp"><rect width="${W}" height="${H}"/></clipPath></defs><g clip-path="url(#cp)"><rect width="${W}" height="${H}" fill="url(#rg)"/>`;
+ // faint tone-on-tone cloud pattern
+ for(let y=40;y<H;y+=m*0.22)for(let x=(Math.round(y/(m*0.22))%2)*m*0.15;x<W;x+=m*0.3)s+=`<g opacity=".13">${cloud(x,y,m/1100,o.theme=='ivory'?'#B89A62':'#E9D3A0')}</g>`;
+ if(o.motif=='lotus'){s+=waves(W,H-m*0.12,m*0.09,G);s+=lotus(W*0.18,H*0.82,m/650,t.fl,t.st);s+=lotus(W*0.84,H*0.86,m/820,t.fl,t.st);
+   s+=`<path d="M${W*0.18},${H*0.82} q-30,90 10,200" stroke="${G}" stroke-width="3" fill="none"/>`;}
+ if(o.motif=='mai'||o.motif=='dao'){s+=branch(-20,H*0.25,W*0.48,H*0.06,m*0.022,'#3B2416',t.fl,t.st,3);s+=branch(W+20,H*0.82,W*0.58,H*0.98,m*0.02,'#3B2416',t.fl,t.st,7);
+   s+=cloud(W*0.70,H*0.2,m/700,G)+cloud(W*0.08,H*0.78,m/800,G)}
+ // double gold frame
+ const f=m*0.035;s+=`<rect x="${f}" y="${f}" width="${W-2*f}" height="${H-2*f}" fill="none" stroke="${G}" stroke-width="${m*0.008}"/><rect x="${f*1.6}" y="${f*1.6}" width="${W-3.2*f}" height="${H-3.2*f}" fill="none" stroke="${G}" stroke-width="${m*0.003}"/>`;
+ if(o.seal!==false){const cy=o.sealY?H*o.sealY:H*0.42,r=m*(o.sealR||0.17);s+=seal(W/2,cy,r);
+  if(o.title)s+=`<text x="${W/2}" y="${cy+r+m*0.1}" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="${m*0.075}" fill="${o.theme=='ivory'?'#1E3A2F':'#F4EAD2'}">${o.title}</text>`;
+  if(o.sub)s+=`<text x="${W/2}" y="${cy+r+m*0.16}" text-anchor="middle" font-family="Be Vietnam Pro" font-weight="500" letter-spacing="${m*0.008}" font-size="${m*0.028}" fill="${G}">${o.sub}</text>`}
+ return s+'</g></svg>'}
+function render(o){document.getElementById('s').innerHTML=art(o)}
+</script></body></html>

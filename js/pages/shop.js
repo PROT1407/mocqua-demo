@@ -46,12 +46,23 @@ function list(){
   a.sort(S[st.sort]||S.best);
   return a.sort((x,y)=>(x.soon?1:0)-(y.soon?1:0));
 }
+const giftCard=p=>{const v=MQ.defVar(p),tot=(p.contents||[]).reduce((a,c)=>a+c[1],0);
+  const unit=p.box==='tubs'||p.box==='basket'||p.box==='jars6'?'hũ':'ngăn';
+  return `<article class="gcard reveal"><a class="gcard__img" href="${MQ.url(p)}"><img src="${MQ.img(v.img,true)}" alt="${MQ.esc(p.name)}" loading="lazy">${p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}<span class="gcard__gift"><svg><use href="#i-gift"/></svg>Tặng túi 100g</span></a>
+  <div class="gcard__b"><small class="gcard__k">${p.contents?p.contents.length+' '+unit+' · '+(tot>=1000?(tot/1000).toLocaleString('vi-VN')+'kg':tot+'g'):MQ.esc(v.w)}</small><h3><a href="${MQ.url(p)}">${MQ.esc(p.name)}</a></h3>
+  <p class="gcard__c">${(p.contents||[]).slice(0,5).map(c=>MQ.esc(c[0].split(':')[0])).join(' · ')}${(p.contents||[]).length>5?' …':''}</p>
+  ${p.occ?`<p class="gcard__o">${p.occ.slice(0,2).map(o=>`<span>${MQ.esc(o)}</span>`).join('')}</p>`:''}
+  <div class="gcard__f"><span class="gcard__p">${v.p?MQ.fmt(v.p):'Liên hệ'}</span><div class="gcard__btns"><a class="cbtn cbtn--line" href="${MQ.url(p)}">Chi tiết</a><button class="cbtn cbtn--buy addbtn" data-add="${p.id}" data-w="${v.sku}" aria-label="Đặt mua ${MQ.esc(p.name)}"><svg><use href="#i-cart"/></svg><span>Đặt mua</span></button></div></div></div></article>`};
 const NAMES={cat:k=>MQ.CATS[k].name,fruit:k=>MQ.FRUITS[k].name,flavour:k=>MQ.FLAVOURS[k].name,line:k=>MQ.LINES[k].name,tag:k=>TAGS[k]};
 const KEYS=['cat','fruit','flavour','line','tag'];
 function render(){
   const a=list(),pages=Math.max(1,Math.ceil(a.length/PER));if(st.page>pages)st.page=pages;const shown=a.slice((st.page-1)*PER,st.page*PER);
   const g=$('[data-grid]');g.classList.toggle('is-list',st.view==='list');
-  g.innerHTML=shown.map(p=>MQ.card(p)).join('');
+  const giftOn=st.cat.size===1&&st.cat.has('set')&&st.view!=='list';
+  g.classList.toggle('pgrid--gift',giftOn);
+  g.innerHTML=shown.map(p=>giftOn?giftCard(p):MQ.card(p)).join('');
+  const tb=$('[data-tet]');tb.hidden=!giftOn;
+  if(giftOn)tb.innerHTML=`<div class="tetbar__t"><small>Bộ sưu tập</small><b>Quà Tết 2027</b><span>Hộp mứt · khay nắp trong · giỏ quà Mộc Quả — mỗi set <em>tặng 1 túi 100g</em>, kèm túi xách &amp; thiệp.</span></div><div class="tetbar__r"><span>Đơn từ ${MQ.fmt(MQ.TIERS[1].min)} −${MQ.TIERS[1].pct}% · tặng túi quà &amp; thiệp</span><a href="hop-qua.html">Hộp quà tự chọn →</a></div>`;
   $('[data-empty]').hidden=a.length>0;
   $('[data-count]').innerHTML=`<b>${a.length}</b> sản phẩm · ${a.reduce((s,p)=>s+MQ.vars(p).filter(v=>!st.line.size||st.line.has(v.line)).length,0)} mã SP`;
   const mw=$('[data-more-wrap]');mw.style.display=pages>1?'':'none';
