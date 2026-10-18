@@ -21,19 +21,19 @@ const varBtns=()=>(p.packs?MQ.sizeVars(p,v):vars).map(x=>`<button class="var${(p
 /* mẫu bao bì (cùng khối lượng = cùng giá) */
 const packBtns=()=>!p.packs?'':Object.entries(p.packs).map(([k,pk])=>{const has=vars.some(x=>x.pk===k&&x.w===v.w),ws=[...new Set(vars.filter(x=>x.pk===k).map(x=>x.w))];
   return `<button type="button" class="sw${v.pk===k?' is-on':''}${has?'':' is-na'}" data-pk="${k}" title="${MQ.esc(pk.name)}${has?'':' · có ở '+ws.join(', ')}" aria-label="Mẫu bao bì ${MQ.esc(pk.name)}"><i style="background:linear-gradient(180deg,${pk.c[0]} 0 55%,${pk.c[1]} 55%)"></i><span>${MQ.esc(pk.name)}<small>${ws.join(' · ')}</small></span></button>`}).join('');
-const spec=()=>[['Mã sản phẩm',`<code>${v.sku}</code>`],...(p.own?[['Thương hiệu','Mộc Quả · mocqua.com'],['Đóng gói',p.cat==='set'?(p.pack||'Set quà Mộc Quả'):(/^Hũ PET/.test(v.w)?'Hũ PET trong, nắp vặn xanh viền vàng, tem tròn Mộc Quả':/^Hộp vuông/.test(v.w)?'Hộp vuông nhựa PET trong, tem tròn Mộc Quả':/^Hộp bát giác/.test(v.w)?'Hộp bát giác nhựa PET trong, tem tròn Mộc Quả':p.giftbox?(p.pack||'Hộp quà Mộc Quả'):'Túi zip đứng có cửa sổ, nhãn Mộc Quả')]]:[['Nhà sản xuất',maker.name||'—'],['Dòng sản phẩm',MQ.lineName(v.line)||'Đang cập nhật']]),['Cách sấy',MQ.CATS[p.cat].name],['Hương vị',flv||'—'],['Khối lượng',v.g?(v.w.split(' · ').find(x=>/\d/.test(x))||v.w):(v.note||'Đang xác nhận')]];
+const spec=()=>[['Mã sản phẩm',`<code>${v.sku}</code>`],...(p.own?[['Thương hiệu','Mộc Quả · mocqua.com'],['Đóng gói',p.cat==='set'?(p.pack||'Set quà Mộc Quả'):(/^Hũ PET/.test(v.w)?'Hũ PET trong, nắp vặn xanh viền vàng, tem tròn Mộc Quả':/^Hộp vuông/.test(v.w)?'Hộp vuông nhựa PET trong, tem tròn Mộc Quả':/^Hộp bát giác/.test(v.w)?'Hộp bát giác nhựa PET trong, tem tròn Mộc Quả':p.giftbox?(p.pack||'Hộp quà Mộc Quả'):'Túi zip đứng có cửa sổ, nhãn Mộc Quả')]]:[['Nhà sản xuất',maker.name||'—'],['Dòng sản phẩm',MQ.lineName(v.line)||'Đang cập nhật']]),['Cách sấy',MQ.CATS[p.cat].name],['Hương vị',flv||'—'],['Khối lượng',(v.g?(v.w.split(' · ').find(x=>/\d/.test(x))||v.w):(v.note||'Đang xác nhận'))+(p.wnote?` <small class="wnote">(${MQ.esc(p.wnote)})</small>`:'')]];
 const OCC=['Ăn vặt văn phòng, giờ nghỉ trưa','Mang theo khi du lịch, dã ngoại','Nhâm nhi cùng trà, cà phê, xem phim','Bày mâm quả, hộp quà Tết, quà biếu'];
 root.innerHTML=`<div class="pd">
  <div class="gallery">
   <div class="gallery__thumbs" data-thumbs></div>
-  <div class="gallery__main" data-zoom><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-main>${p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}${p.own?'':'<span class="gallery__note">Ảnh bao bì thật · di chuột để phóng to</span>'}</div>
+  <div class="gallery__main" data-zoom><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-main>${p.oos?'<span class="badge badge--oos">Hết hàng</span>':p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}${p.own?'':'<span class="gallery__note">Ảnh bao bì thật · di chuột để phóng to</span>'}</div>
  </div>
  <div class="pinfo">
   <span class="pinfo__origin">${MQ.CATS[p.cat].name}${flv?' · '+flv:''}</span>
   <h1>${p.name}</h1>${p.tagline?`<p class="pinfo__tag">${MQ.esc(p.tagline)}</p>`:''}
   <div class="pinfo__brand">${p.own?'<span class="pinfo__mq"><i class="mqseal" aria-hidden="true">MQ</i>Thương hiệu: <b>Mộc Quả</b> · mocqua.com</span><span>Tuyển chọn &amp; đóng gói bởi Mộc Quả</span>':`<span>Nhà sản xuất: <b>${maker.name}</b></span><span>Dòng sản phẩm: <b data-line>${MQ.lineName(v.line)||'Đang cập nhật'}</b></span>`}<span class="pinfo__auth"><svg><use href="#i-shield"/></svg>${p.own?'Nguồn quả rõ ràng':'Hàng chính hãng'}</span></div>
   ${soon?`<p class="pinfo__short">${p.short}</p><p class="notice">Sản phẩm đang chuẩn bị ra mắt. Đăng ký để được báo khi mở bán.</p><button class="btn btn--gold" data-notify="${p.id}">Báo tôi khi có hàng</button>`:`
-  <div class="pinfo__price" data-pricebox></div>
+  <div class="pinfo__price" data-pricebox></div>${MQ.dealTag(p,' deal--lg')}
   ${p.own||p.vizabox?`<ul class="trust" aria-label="Cam kết"><li><svg><use href="#i-check"/></svg><span><b>Hoàn tiền 100%</b> nếu không hài lòng</span></li><li><svg><use href="#i-shield"/></svg><span>${p.own?'<b>Sản xuất tại VN</b> nguồn quả rõ vùng':'<b>Chính hãng Viza Food</b> nguyên hộp, nguyên tem'}</span></li><li><svg><use href="#i-gift"/></svg><span><b>Cam kết chất lượng</b> &amp; VSATTP</span></li></ul>`:''}
   <ul class="perks" data-perks></ul>
   <p class="pinfo__short">${p.short}</p>
@@ -85,6 +85,7 @@ if(!soon){
    const zipV=p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(v.w),T=MQ.TIERS;
    $('[data-perks]').innerHTML=v.p?[
      p.own&&(p.cat==='set'||p.giftbox)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Quà tặng kèm:</b> mỗi ${p.giftbox?'hộp quà':'set'} tặng 1 túi 100g — Xoài cát sấy dẻo, Dâu tây sấy dẻo hoặc Xí muội đỏ (chọn trong giỏ hàng).</span></li>`:'',
+     p.bundle?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Khuyến mãi: ${MQ.esc(p.bundle.label)}</b> — giỏ hàng tự thêm quà 0đ (${MQ.esc((MQ.byId(p.bundle.gid)||p).name)} · ${MQ.esc((MQ.findVar(MQ.byId(p.bundle.gid)||p,p.bundle.gsku)||{}).w||'')}) cho mỗi ${p.bundle.buy} ${p.bundle.buy>1?'hộp/gói':'combo'}.</span></li>`:'',
      zipV?`<li class="perk"><svg><use href="#i-cart"/></svg><span><b>Mua nhiều túi zip:</b> từ 3 túi Mộc Quả (cộng mọi vị) giảm 5%, từ 6 túi giảm 8%.</span></li>`:'',
      `<li class="perk"><svg><use href="#i-truck"/></svg><span>Đơn từ ${MQ.fmt(T[2].min)} <b>−${T[2].pct}%</b> · từ ${MQ.fmt(T[1].min)} <b>−${T[1].pct}%</b> · từ ${MQ.fmt(T[0].min)} <b>−${T[0].pct}%</b> · miễn phí giao từ ${MQ.fmt(MQ.FREE_SHIP)} — tự áp dụng trong giỏ. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
    ].join(''):'';
@@ -92,14 +93,14 @@ if(!soon){
    if(p.packs){$('[data-vars]').innerHTML=varBtns();$('[data-packs]').innerHTML=packBtns();$('[data-pklabel]').textContent=p.packs[v.pk].name}else
    $$('[data-vars] .var').forEach(x=>x.classList.toggle('is-on',x.dataset.sku===v.sku));
    const ln=$('[data-line]');if(ln)ln.textContent=MQ.lineName(v.line)||'Đang cập nhật';
-   $('[data-buybox]').innerHTML=v.p?`<div class="buy"><div class="qty"><button data-q="-1" aria-label="Giảm">−</button><input type="number" value="1" min="1" max="99" data-qty aria-label="Số lượng"><button data-q="1" aria-label="Tăng">+</button></div>
+   $('[data-buybox]').innerHTML=p.oos?`<div class="oos"><p><b>Hết hàng</b> — đợt hàng này đã bán hết, Mộc Quả đang chờ lô mới từ nhà sản xuất. Để lại đăng ký, có hàng là chúng tôi báo ngay.</p><button class="btn btn--gold" data-notify="${p.id}">Báo khi có hàng</button><a class="btn btn--line" href="tel:${MQ.TEL}">Hỏi hotline ${MQ.HOTLINE}</a></div>`:v.p?`<div class="buy"><div class="qty"><button data-q="-1" aria-label="Giảm">−</button><input type="number" value="1" min="1" max="99" data-qty aria-label="Số lượng"><button data-q="1" aria-label="Tăng">+</button></div>
      <button class="btn btn--dark" data-add-pd>Thêm vào giỏ</button><button class="btn btn--gold" data-buy-now>Mua ngay</button>
      <button class="wishbig${MQ.wish.has(p.id)?' is-on':''}" data-wish="${p.id}" aria-label="Yêu thích"><svg><use href="#i-heart${MQ.wish.has(p.id)?'-f':''}"/></svg></button></div>
      <div class="pd-links"><button data-share><svg><use href="#i-share"/></svg>Sao chép liên kết</button><a href="hop-qua.html#tu-thiet-ke"><svg><use href="#i-gift"/></svg>Cho vào hộp quà tự chọn</a><a href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg>Đặt qua hotline ${MQ.HOTLINE}</a></div>`
      :MQ.quoteBox(p,v);
    main.src=MQ.img(v.img);drawThumbs();drawSpec();
    const sb=$('[data-sticky]');sb.querySelector('[data-sp]').textContent=(v.p?MQ.fmt(v.p):'Liên hệ báo giá')+' · '+MQ.varLabel(p,v);
-   sb.querySelector('[data-add-pd]').textContent=v.p?'Thêm vào giỏ':'Nhận báo giá';
+   if(p.oos)sb.querySelector('[data-add-pd]').outerHTML=`<button class="btn btn--gold btn--sm" data-notify="${p.id}">Báo khi có hàng</button>`;else sb.querySelector('[data-add-pd]').textContent=v.p?'Thêm vào giỏ':'Nhận báo giá';
    history.replaceState(null,'',MQ.url(p)+'&sku='+v.sku);
  };
  $('[data-sticky]').innerHTML=`<div class="stickybuy__in"><img src="${MQ.img(p.img,true)}" alt=""><b>${p.name}<small data-sp></small></b><button class="btn btn--gold btn--sm" data-add-pd>Thêm vào giỏ</button></div>`;
@@ -108,8 +109,8 @@ if(!soon){
  document.addEventListener('click',e=>{
    if(e.target.closest('[data-q]')){const q=$('[data-qty]');q.value=Math.max(1,Math.min(99,(+q.value||1)+ +e.target.closest('[data-q]').dataset.q))}
    if(e.target.closest('[data-share]'))navigator.clipboard?.writeText(location.href).then(()=>MQ.toast('Đã sao chép liên kết sản phẩm'),()=>MQ.toast('Liên kết: '+location.href));
-   if(e.target.closest('[data-add-pd]')){if(v.p)MQ.cart.addProduct(p.id,v.sku,n());else MQ.quickView(p.id,v.sku)}
-   if(e.target.closest('[data-buy-now]')){MQ.cart.addProduct(p.id,v.sku,n(),true);location.href='thanh-toan.html'}});
+   if(e.target.closest('[data-add-pd]')&&!p.oos){if(v.p)MQ.cart.addProduct(p.id,v.sku,n());else MQ.quickView(p.id,v.sku)}
+   if(e.target.closest('[data-buy-now]')&&!p.oos){MQ.cart.addProduct(p.id,v.sku,n(),true);location.href='thanh-toan.html'}});
  upd();
  const bt=$('[data-vars]');new IntersectionObserver(([en])=>$('[data-sticky]').classList.toggle('is-on',!en.isIntersecting&&en.boundingClientRect.top<0)).observe(bt);
 }

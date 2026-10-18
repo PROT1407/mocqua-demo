@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018g';
+MQ.IMGV='20261018j';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 MQ.lineName=k=>k&&MQ.LINES[k]?MQ.LINES[k].name:'';
@@ -68,7 +68,8 @@ MQ._fv=(p,k)=>MQ.vars(p).find(v=>v.sku===k)||MQ.vars(p).find(v=>v.w===k)||MQ.def
 MQ.chipLabel=(p,v)=>{if(p.packs)return MQ.esc(v.w);const l=MQ.varLabel(p,v),L=MQ.LINES[v.line];return L&&L.short&&l.includes(L.name)?MQ.esc(l.replace(L.name,'%%')).replace('%%',`<span class="l-full">${MQ.esc(L.name)}</span><span class="l-short">${MQ.esc(L.short)}</span>`):MQ.esc(l)};
 MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
 MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.sizeVars(p,sel).map(v=>`<button type="button" class="wchip${v.w===sel.w?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
-MQ.cardPerk=(p,v)=>!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
+MQ.dealTag=(p,cls='')=>p&&p.bundle?`<span class="deal${cls}"><svg><use href="#i-gift"/></svg>${MQ.esc(p.bundle.label)}</span>`:'';
+MQ.cardPerk=(p,v)=>p.bundle?`<p class="perk perk--deal">${MQ.dealTag(p)}</p>`:!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -76,9 +77,9 @@ MQ.card=(p,opts={})=>{
     <div class="pcard__body"><span class="pcard__origin">${MQ.CATS[p.cat].short}</span><h3 class="pcard__name">${p.name}</h3>
     <div class="pcard__btns"><button class="cbtn cbtn--line" data-notify="${p.id}">Báo tôi khi có hàng</button></div></div></article>`}
   const v=MQ.defVar(p), lines=p.lines.map(MQ.lineName).join(' · '), multi=MQ.vars(p).length>1;
-  return `<article class="pcard${p.own?' pcard--mq':''}${opts.cls?' '+opts.cls:''}" data-id="${p.id}" data-sku="${v.sku}">
+  return `<article class="pcard${p.oos?' pcard--oos':''}${p.own?' pcard--mq':''}${opts.cls?' '+opts.cls:''}" data-id="${p.id}" data-sku="${v.sku}">
     <div class="pcard__media">
-      ${p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}
+      ${p.oos?'<span class="badge badge--oos">Hết hàng</span>':p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}
       <a href="${MQ.url(p)}" class="pcard__img" aria-label="${MQ.esc(p.name)}"><img src="${MQ.img(v.img,true)}" alt="${MQ.esc(p.name)}" loading="lazy" data-card-img></a>
       <button class="tool${w?' is-on':''}" data-wish="${p.id}" aria-label="Yêu thích"><svg><use href="#i-heart${w?'-f':''}"/></svg></button>
     </div>
@@ -88,7 +89,7 @@ MQ.card=(p,opts={})=>{
       ${multi?MQ.chips(p,v):''}
       <div class="perkw" data-perk>${MQ.cardPerk(p,v)}</div>
       <div class="pcard__price"><span class="price${v.p?'':' price--quote'}" data-card-price>${v.p?MQ.fmt(v.p):'Liên hệ báo giá'}</span>${multi?`<small>${MQ.sizeVars(p).length} quy cách${p.packs?' · '+Object.keys(p.packs).length+' mẫu':''}</small>`:''}</div>
-      <div class="pcard__btns"><a class="cbtn cbtn--line" href="${MQ.url(p)}">Chi tiết</a><button class="cbtn cbtn--buy addbtn${v.p?'':' is-quote'}" data-add="${p.id}" data-w="${v.sku}" aria-label="Đặt mua ${MQ.esc(p.name)}"><svg><use href="#i-cart"/></svg><span>${v.p?'Đặt mua':'Báo giá'}</span></button></div>
+      <div class="pcard__btns"><a class="cbtn cbtn--line" href="${MQ.url(p)}">Chi tiết</a>${p.oos?`<button class="cbtn cbtn--buy cbtn--oos" data-notify="${p.id}">Báo khi có hàng</button>`:`<button class="cbtn cbtn--buy addbtn${v.p?'':' is-quote'}" data-add="${p.id}" data-w="${v.sku}" aria-label="Đặt mua ${MQ.esc(p.name)}"><svg><use href="#i-cart"/></svg><span>${v.p?'Đặt mua':'Báo giá'}</span></button>`}</div>
     </div></article>`;
 };
 /* đổi quy cách trên thẻ sản phẩm */
@@ -106,7 +107,7 @@ MQ.cart={
   items(){return store.get('cart',[])},
   save(a){store.set('cart',a);MQ.renderCounts();MQ.renderDrawer();document.dispatchEvent(new CustomEvent('mq:cart'))},
   add(item,qty=1){const a=this.items();const ex=a.find(i=>i.key===item.key);if(ex)ex.qty+=qty;else a.push({...item,qty});this.save(a)},
-  addProduct(id,w,qty=1,silent){const p=MQ.byId(id)||MQ.giftById(id);if(!p)return;
+  addProduct(id,w,qty=1,silent){const p=MQ.byId(id)||MQ.giftById(id);if(!p)return;if(p.oos){MQ.toast&&MQ.toast(p.name+' đang tạm hết hàng');return}
     let price,img=null,sku='';
     if(p.variants){const v=MQ.findVar(p,w);if(!v.p){MQ.quickView(id,v.sku);return}price=v.p;sku=v.sku;w=MQ.varLabel(p,v);img=v.img||p.img}else{price=p.price;w=p.w}
     this.add({key:id+'|'+(sku||w),id,sku,name:p.name,w,price,img,box:p.box,ribbon:p.ribbon},qty);
@@ -139,6 +140,11 @@ MQ.promo=items=>{
   const up=[...MQ.TIERS].reverse().find(t=>base<t.min);
   const setN=items.filter(MQ.isSetItem).reduce((s,i)=>s+i.qty,0),g=MQ.giftPick(),gifts=[];
   if(setN)gifts.push({key:'gift-set',name:'Túi 100g '+g.name,w:'Quà tặng kèm Set quà · 1 túi/set',qty:setN,img:g.img,pick:true});
+  /* KM tặng kèm theo sản phẩm (p.bundle): đủ buy món cùng sản phẩm -> tặng 1 món quà 0đ */
+  const bq={};items.forEach(i=>{const p=MQ.byId(i.id);if(p&&p.bundle&&i.price>0)bq[p.id]=(bq[p.id]||0)+i.qty});
+  Object.entries(bq).forEach(([id,q])=>{const p=MQ.byId(id),b=p.bundle,k=Math.floor(q/b.buy);if(!k)return;
+    const gp=MQ.byId(b.gid),gv=gp&&MQ.findVar(gp,b.gsku);
+    gifts.push({key:'gift-b-'+id,name:(gp?gp.name:'Quà tặng')+(gv?' · '+gv.w:''),w:'Quà tặng 0đ · KM “'+b.label+'”',qty:k,img:gv?gv.img:null,bundle:id})});
   if(base>=MQ.GIFT_BAG_MIN)gifts.push({key:'gift-bag',name:'Túi giấy quà & thiệp viết tay Mộc Quả',w:'Quà tặng đơn từ '+MQ.fmt(MQ.GIFT_BAG_MIN),qty:1,img:null,box:'#1e3a2f',ribbon:'#c4a265'});
   return {sub,zipN,zq,qtyDisc,base,tier,tierDisc,up,gifts,zipNeed:zq?null:MQ.ZIPQ[MQ.ZIPQ.length-1].n-zipN};
 };
@@ -333,7 +339,7 @@ let tt;MQ.toast=html=>{const t=$('.toast');t.innerHTML=html;t.classList.add('sho
 
 /* quick view */
 MQ.quoteBox=(p,v)=>`<div class="qbox"><p><b>Liên hệ báo giá</b> — quy cách này đang cập nhật giá. Nhắn Mộc Quả để nhận báo giá &amp; tồn kho trong 5 phút (8:00–21:00).</p><div class="qbox__btns"><a class="btn btn--gold btn--sm" href="${MQ.zaloQuote(p,v)}" target="_blank" rel="noopener"><svg><use href="#i-zalo"/></svg>Chat Zalo</a><a class="btn btn--line btn--sm" href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg>${MQ.HOTLINE}</a></div><small>Mã SP: ${v.sku}</small></div>`;
-MQ.quickView=(id,sku)=>{const p=MQ.byId(id);if(!p||p.soon)return;const dlg=$('#qv');const v=MQ.findVar(p,sku);
+MQ.quickView=(id,sku)=>{const p=MQ.byId(id);if(!p||p.soon)return;if(p.oos){location.href=MQ.url(p);return}const dlg=$('#qv');const v=MQ.findVar(p,sku);
   $('.qv__body',dlg).innerHTML=`<div class="qv__img"><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-qv-img></div><div class="qv__info"><span class="pcard__origin">${MQ.CATS[p.cat].short} · ${MQ.FLAVOURS[p.flavour].name}</span><h3>${p.name}</h3><p>${p.short}</p>
   ${MQ.chips(p,v,'wchips wchips--lg')}
   <dl class="qv__spec"><dt>Mã SP</dt><dd data-qv-sku>${v.sku}</dd><dt>Dòng sản phẩm</dt><dd data-qv-line>${MQ.lineName(v.line)||'Đang cập nhật'}</dd><dt>Nhà sản xuất</dt><dd>${MQ.makerName(p)}</dd></dl>

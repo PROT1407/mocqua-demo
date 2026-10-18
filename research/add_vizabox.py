@@ -1,5 +1,5 @@
 # Thêm 5 sản phẩm hộp giấy 100g Viza Food + combo. Idempotent: thay khối VZH-BEGIN/END trong js/data.js.
-# Giá bán lẻ = giá nhà cung cấp × 2 (riêng nhóm này, theo chủ cửa hàng). KHÔNG ghi giá nhà cung cấp lên site.
+# Giá: theo chuẩn dacsancaocap (research/viza_benchmark.py, 18/10/2026); không có hàng tương đương thì giữ giá cũ. KHÔNG ghi giá nhà cung cấp lên site.
 import json,re
 P='/workspace/mocqua/js/data.js'
 CR=json.load(open('/workspace/mocqua/assets/desc/credits.json'))
@@ -16,7 +16,7 @@ def spec(name_on_box,tp,ket):
 GIFT_TAIL='Mộc Quả gói quà và viết thiệp tay miễn phí, nên bạn chỉ cần chọn vị, phần còn lại để chúng tôi lo.'
 PRODS=[
  dict(id='vz-hat-sen-say',name='Hạt sen sấy giòn Viza Food',cat='hat',fruit='hatsen',flavour='nguyen',rank=40,badge='Hộp giấy 100g',
-  sku='MQ-HHS-100-VZ',p=114000,img='vzh-sen',taste=dict(ngot=2,chua=0,deo=0,gion=5),
+  sku='MQ-HHS-100-VZ',p=75000,bundle=dict(buy=2,gid='vz-hat-sen-say',gsku='MQ-HHS-100-VZ',label='Mua 2 tặng 1 hộp'),img='vzh-sen',taste=dict(ngot=2,chua=0,deo=0,gion=5),
   short='Hạt sen sấy giòn tan, bùi và thơm nhẹ mùi sen — hộp giấy 100g chính hãng Viza Food, đẹp để biếu.',
   long='Hạt sen già sấy tới khi giòn xốp từ vỏ vào lõi: vị bùi, ngọt rất nhẹ, mùi sen thoang thoảng. Hộp giấy 100g Viza Food “Giòn Tan – Thơm Nhẹ”, bán nguyên hộp.',
   desc=dict(intro='Hạt sen sấy giòn là món chúng tôi hay mời khách nếm đầu tiên mỗi khi khui hộp mới. Cắn một hạt nghe tiếng “rộp” rất khẽ, rồi vị bùi và mùi sen thoang thoảng mới tới sau. Hộp 100g của Viza Food làm đúng điều dòng chữ trên hộp hứa hẹn: Giòn Tan – Thơm Nhẹ.',
@@ -60,7 +60,7 @@ PRODS=[
         dict(k='dung',h='Bảo quản & dùng',p=['Ăn liền; rắc lên sữa chua, chè, kem hay bát yến mạch cho thêm giòn và thơm. Cũng rất hợp để bày đĩa mời khách cùng hạt sen, hạt điều.','Mở hộp rồi thì cho vào hũ kín ngay, để nơi khô mát, tránh nắng. Dừa sấy hút ẩm nhanh, nên dùng trong khoảng 1–2 tuần để lát dừa còn giòn.']),
         dict(k='qua',h='Hợp làm quà',p=['Hộp tranh bãi biển rặng dừa, màu ấm và vui mắt. Giá nhẹ nhàng, rất hợp làm quà cho các bé, quà văn phòng, hoặc ghép vào hộp quà Tết cho thêm một vị ngọt thanh. '+GIFT_TAIL])])),
  dict(id='vz-hat-dieu-rang-muoi',name='Hạt điều rang muối Viza Food',cat='hat',fruit='dieu',flavour='nguyen',rank=44,badge='Hộp giấy 100g',
-  sku='MQ-HDR-100-VZ',p=70000,img='vzh-dieu',taste=dict(ngot=1,chua=0,deo=0,gion=4),
+  sku='MQ-HDR-100-VZ',p=49000,img='vzh-dieu',taste=dict(ngot=1,chua=0,deo=0,gion=4),
   short='Hạt điều rang muối giòn bùi, mặn vừa, đậm đà — hộp giấy 100g Viza Food “Mặn Mà – Đậm Đà”.',
   long='Hạt điều Việt Nam rang chín vàng, áo lớp muối mỏng vừa miệng. Nhân giòn, bùi, càng nhai càng đậm vị. Hộp giấy 100g chính hãng Viza Food.',
   desc=dict(intro='Hạt điều là loại hạt mà người Việt có quyền tự hào: Việt Nam nhiều năm liền là một trong những nước xuất khẩu điều lớn nhất thế giới. Hộp hạt điều rang muối 100g này của Viza Food đúng như tên gọi “Mặn Mà – Đậm Đà”: hạt rang vàng, giòn, mặn vừa đủ để thấy vị bùi béo của điều.',
@@ -72,9 +72,9 @@ PRODS=[
         dict(k='qua',h='Hợp làm quà',p=['Hộp tranh người nông dân thu hoạch điều bên vườn, đậm chất Việt, rất hợp làm quà cho bạn bè ở xa hay đối tác nước ngoài. Ghép cùng hạt sen, macca, dẻ cười là thành một hộp quà hạt đủ vị. '+GIFT_TAIL])])),
 ]
 NM={'vz-hat-sen-say':'Hạt sen sấy giòn','vz-hat-de-cuoi':'Hạt dẻ cười','vz-hat-macca-say':'Hạt macca sấy nứt vỏ','vz-dua-say-gion':'Dừa sấy giòn','vz-hat-dieu-rang-muoi':'Hạt điều rang muối'}
-SUM=sum(p['p'] for p in PRODS);CP=395000;assert 0.05<=1-CP/SUM<=0.08,(SUM,CP)
+SUM=sum(p['p'] for p in PRODS);CP=339000;assert 0.05<=1-CP/SUM<=0.08,(SUM,CP)
 COMBO=dict(id='vz-combo-5-hop-hat',name='Combo 5 hộp hạt Viza Food',cat='hat',fruit='mix',flavour='mix',rank=39,badge=f'Combo −{round((1-CP/SUM)*100)}%',
-  box='boxes',contents=[[NM[p['id']]+' (hộp giấy)',100] for p in PRODS],occ=['Quà Tết','Quà biếu đối tác','Khay mời khách','Ăn vặt văn phòng'],
+  bundle=dict(buy=1,gid='vz-hat-dieu-rang-muoi',gsku='MQ-HDR-100-VZ',label='Tặng thêm 1 hộp Hạt điều 100g'),box='boxes',contents=[[NM[p['id']]+' (hộp giấy)',100] for p in PRODS],occ=['Quà Tết','Quà biếu đối tác','Khay mời khách','Ăn vặt văn phòng'],
   short=f'Đủ 5 hộp giấy 100g Viza Food: hạt sen, dẻ cười, macca, dừa sấy giòn, hạt điều — giá combo {CP//1000}.000đ, tiết kiệm hơn mua lẻ.',
   long='Bộ 5 hộp giấy 100g chính hãng Viza Food, mỗi hộp một vị, gom lại thành một phần quà hạt đủ đầy.',
   desc=dict(intro='Khách hay hỏi chúng tôi: “Nên lấy hộp nào?” Câu trả lời thật lòng là mỗi hộp một cái ngon, nên chúng tôi gom cả năm hộp vào một combo. Giòn tan của hạt sen, béo của dẻ cười, bùi ngậy của macca, ngọt thanh của dừa sấy và đậm đà của điều rang muối: đủ vị cho một bàn trà, một khay Tết, hay một món quà không phải đắn đo.',
@@ -87,10 +87,10 @@ def js(o):return json.dumps(o,ensure_ascii=False)
 def line(p):
     v=f"V('{p['sku']}','100g · hộp giấy',100,'vizabox',{p['p']},'{p['img']}')"
     meta={k:p[k] for k in ['id','name','cat','fruit','flavour']};
-    s='{'+','.join(f'{k}:{js(v_)}' for k,v_ in meta.items())+f",maker:'viza',vizabox:true,rank:{p['rank']},badge:{js(p['badge'])},variants:[{v}],gallery:['products/{p['img']}','products/vzh-combo5'],taste:{js(p['taste'])},short:{js(p['short'])},long:{js(p['long'])},desc:{js(p['desc'])}}}"
+    s='{'+','.join(f'{k}:{js(v_)}' for k,v_ in meta.items())+f",maker:'viza',vizabox:true,rank:{p['rank']},badge:{js(p['badge'])},variants:[{v}],gallery:['products/{p['img']}','products/vzh-combo5'],taste:{js(p['taste'])},"+(f"bundle:{js(p['bundle'])}," if p.get('bundle') else '')+f"short:{js(p['short'])},long:{js(p['long'])},desc:{js(p['desc'])}}}"
     return s
 c=COMBO
-cl='{'+','.join(f'{k}:{js(c[k])}' for k in ['id','name','cat','fruit','flavour'])+f",maker:'viza',vizabox:true,rank:{c['rank']},badge:{js(c['badge'])},box:'boxes',contents:{js(c['contents'])},occ:{js(c['occ'])},variants:[V('MQ-CBH-5X100-VZ','Combo 5 hộp · 5 × 100g',500,'vizabox',{CP},'vzh-combo5')],gallery:['products/vzh-combo5',{','.join(js('products/'+p['img']) for p in PRODS)}],short:{js(c['short'])},long:{js(c['long'])},desc:{js(c['desc'])}}}"
+cl='{'+','.join(f'{k}:{js(c[k])}' for k in ['id','name','cat','fruit','flavour'])+f",maker:'viza',vizabox:true,rank:{c['rank']},badge:{js(c['badge'])},bundle:{js(c['bundle'])},box:'boxes',contents:{js(c['contents'])},occ:{js(c['occ'])},variants:[V('MQ-CBH-5X100-VZ','Combo 5 hộp · 5 × 100g',500,'vizabox',{CP},'vzh-combo5')],gallery:['products/vzh-combo5',{','.join(js('products/'+p['img']) for p in PRODS)}],short:{js(c['short'])},long:{js(c['long'])},desc:{js(c['desc'])}}}"
 block='/* ==== VZH-BEGIN: Viza Food hộp giấy 100g (sinh bởi research/add_vizabox.py) ==== */\n '+',\n '.join([line(p) for p in PRODS]+[cl])+',\n/* ==== VZH-END ==== */\n'
 s=open(P).read()
 if 'VZH-BEGIN' in s: s=re.sub(r'/\* ==== VZH-BEGIN.*?VZH-END ==== \*/\n',lambda m:block,s,flags=re.S)
