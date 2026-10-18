@@ -5,7 +5,7 @@ const MAXP=800000;
 const set=k=>new Set(q(k)?q(k).split(','):[]);
 const st={cat:set('cat'),fruit:set('fruit'),flavour:set('flavour'),line:set('line'),tag:set('tag'),q:q('q')||'',max:MAXP,priced:false,soon:false,sort:q('sort')||'best',view:'grid',page:Math.max(1,+q('page')||1)};
 if(st.cat.has('soon')){st.cat.delete('soon');st.soon=true;st.onlySoon=true}
-const PER=18;
+const PER=24;
 const all=MQ.PRODUCTS, live=all.filter(p=>!p.soon);
 const opt=(name,k,label,n)=>`<label class="fopt"><input type="checkbox" data-${name}="${k}"${st[name].has(k)?' checked':''}><span>${label}</span><em>${n}</em></label>`;
 const gs=v=>v.g||0;
@@ -96,5 +96,6 @@ document.addEventListener('click',e=>{let el;
   if(e.target.closest('[data-filters-open]'))document.body.classList.add('filters-open');
   if(e.target.closest('[data-filters-close]')||e.target.closest('.overlay'))document.body.classList.remove('filters-open');
 });
+$('.filters').insertAdjacentHTML('beforeend','<div class="side__extra">'+MQ.sideHelp()+MQ.sideGift()+MQ.sideNews()+'</div>');
 render();MQ.renderRecent();
 })();

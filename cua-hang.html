@@ -15,14 +15,10 @@
 </head>
 <body data-page="shop">
 <main id="main">
-<section class="phero phero--light phero--shop"><div class="grain"></div><div class="phero__inner">
-<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Trang chủ</a><span>Cửa hàng</span></nav>
-<h1 data-shop-title>Trái cây sấy &amp; <em>quà quả Việt</em></h1><p data-shop-sub>Thương hiệu riêng Mộc Quả (mocqua.com) và hàng chính hãng Viza Food — phân loại rõ theo cách sấy, loại quả và hương vị.</p></div></section>
-<div class="container">
-  <nav class="cattiles" data-cattiles aria-label="Danh mục nhanh"></nav>
-  <div class="fruitbar" data-fruitbar aria-label="Lọc theo loại quả"></div>
-  <div class="shop">
-  <aside class="filters" aria-label="Bộ lọc">
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Trang chủ</a><span>Cửa hàng</span></nav>
+<div class="shop layout">
+  <aside class="filters side" aria-label="Bộ lọc">
     <div class="filters__head"><h3>Bộ lọc</h3><button class="icon-btn" data-filters-close aria-label="Đóng bộ lọc"><svg><use href="#i-close"/></svg></button></div>
     <div class="fgroup"><h4>Tìm trong cửa hàng</h4><div class="field"><input type="search" data-f-q placeholder="Tên quả, dòng SP, mã SP…" aria-label="Tìm trong cửa hàng"></div></div>
     <div class="fgroup"><h4>Cách sấy</h4><div data-f-cat></div></div>
@@ -34,20 +30,23 @@
     <div class="fgroup"><label class="fopt"><input type="checkbox" data-f-priced><span>Chỉ hiện sản phẩm có giá</span></label><label class="fopt"><input type="checkbox" data-f-soon><span>Hiện sản phẩm sắp ra mắt</span></label></div>
     <div class="filters__apply"><button class="btn btn--line btn--sm btn--block" data-f-reset>Xoá bộ lọc</button></div>
   </aside>
-  <div>
+  <div class="layout__main">
+    <div class="shophead"><h1 data-shop-title>Trái cây sấy &amp; <em>quà quả Việt</em></h1><p data-shop-sub>Thương hiệu riêng Mộc Quả (mocqua.com) và hàng chính hãng Viza Food — phân loại rõ theo cách sấy, loại quả và hương vị.</p></div>
+    <nav class="cattiles" data-cattiles aria-label="Danh mục nhanh"></nav>
+    <div class="fruitbar" data-fruitbar aria-label="Lọc theo loại quả"></div>
     <div class="toolbar">
       <div class="toolbar__l"><button class="btn btn--line btn--sm filter-toggle" data-filters-open><svg><use href="#i-filter"/></svg>Bộ lọc</button><span class="toolbar__count" data-count></span></div>
       <div class="toolbar__r"><select class="sort" data-sort aria-label="Sắp xếp"><option value="best">Nổi bật</option><option value="asc">Giá: thấp → cao</option><option value="desc">Giá: cao → thấp</option><option value="az">Tên A → Z</option></select>
       <button class="viewbtn is-on" data-view="grid" aria-label="Dạng lưới"><svg><use href="#i-grid"/></svg></button><button class="viewbtn" data-view="list" aria-label="Dạng danh sách"><svg><use href="#i-list"/></svg></button></div>
     </div>
     <div class="active-filters" data-active></div>
-    <div class="pgrid pgrid--3" data-grid></div>
+    <div class="pgrid pgrid--4" data-grid></div>
     <div class="empty" data-empty hidden><svg><use href="#mark"/></svg><h3>Chưa có sản phẩm phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc tìm với từ khoá khác.</p><button class="btn btn--line" data-f-reset>Xoá bộ lọc</button></div>
     <div class="loadmore" data-more-wrap><small data-more-text></small><div class="bar"><i data-more-bar></i></div><nav class="pager" data-pager aria-label="Phân trang"></nav></div>
     <aside class="owncta" data-owncta></aside>
   </div>
 </div></div>
-<section class="section" style="padding-top:0" data-recent-wrap hidden><div class="container"><div class="sec-head"><div><h2>Bạn vừa <em>xem</em></h2></div></div><div class="hscroll" data-recent></div></div></section>
+<section class="wrap recent" data-recent-wrap hidden><div class="psec__bar"><h2>Bạn vừa xem</h2></div><div class="hscroll" data-recent></div></section>
 </main>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
