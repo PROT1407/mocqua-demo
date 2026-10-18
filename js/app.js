@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018m';
+MQ.IMGV='20261018n';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 /* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */
@@ -58,7 +58,8 @@ MQ.BRAND_ORDER=['mq','fh','goodgood','cheers','yummy','kita','vizabox'];
 MQ.brandOf=p=>p.own?'mq':((p.lines||[])[0]||'zz');
 MQ.minG=p=>Math.min(...MQ.vars(p).map(v=>v.g||9999));
 MQ.procTag=p=>MQ.PROC.includes(p.cat)?`<span class="ptag ptag--${p.cat}">${MQ.CATS[p.cat].short}</span>`:'';
-MQ.fruitProc=(f,c)=>MQ.FRUITS[f].name+' '+MQ.CATS[c].short.toLowerCase();
+MQ.GROUP_NAMES={'gion:saurieng':'Sầu riêng sấy'};
+MQ.fruitProc=(f,c)=>MQ.GROUP_NAMES[c+':'+f]||MQ.FRUITS[f].name+' '+MQ.CATS[c].short.toLowerCase();
 MQ.lineName=k=>k&&MQ.LINES[k]?MQ.LINES[k].name:'';
 MQ.makerName=p=>(MQ.MAKERS[p.maker]||{}).name||'';
 MQ.vars=p=>p.variants||p.sizes||[];
@@ -112,7 +113,10 @@ MQ.cardSelect=(card,sku)=>{const p=MQ.byId(card.dataset.id);if(!p)return;const v
 MQ.searchText=p=>MQ.norm([p.name,MQ.CATS[p.cat].name,MQ.CATS[p.cat].short,p.fruit&&MQ.FRUITS[p.fruit].name,p.flavour&&MQ.FLAVOURS[p.flavour].name,MQ.makerName(p),...(p.lines||[]).map(MQ.lineName),...MQ.vars(p).map(v=>v.sku+' '+v.w),p.short].join(' '));
 /* ---------- cart ---------- */
 MQ.cart={
-  items(){return store.get('cart',[])},
+  items(){const a=store.get('cart',[]);let ch=false;   // giỏ cũ: đổi id/SKU đã gộp hoặc đổi tên sang trang mới
+    a.forEach(i=>{if(!((MQ.ID_ALIAS||{})[i.id]||(MQ.SKU_ALIAS||{})[i.sku]))return;const p=MQ.byId(i.id);if(!p||!p.variants)return;const v=MQ.findVar(p,i.sku);
+      Object.assign(i,{id:p.id,sku:v.sku,name:p.name,price:v.p||i.price,w:MQ.varLabel(p,v),img:v.img||i.img,key:p.id+'|'+v.sku});ch=true});
+    if(ch)store.set('cart',a);return a},
   save(a){store.set('cart',a);MQ.renderCounts();MQ.renderDrawer();document.dispatchEvent(new CustomEvent('mq:cart'))},
   add(item,qty=1){const a=this.items();const ex=a.find(i=>i.key===item.key);if(ex)ex.qty+=qty;else a.push({...item,qty});this.save(a)},
   addProduct(id,w,qty=1,silent){const p=MQ.byId(id)||MQ.giftById(id);if(!p)return;if(p.oos){MQ.toast&&MQ.toast(p.name+' đang tạm hết hàng');return}

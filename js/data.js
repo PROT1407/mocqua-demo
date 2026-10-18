@@ -45,8 +45,8 @@ const V=(sku,w,g,line,p,img,back,note)=>({sku,w,g,line,p,img:img&&('products/'+i
 const VP=(pk,...a)=>Object.assign(V(...a),{pk});
 /* mã cũ đã gộp -> mã mới (giữ link/giỏ hàng cũ) */
 /* id cũ đã gộp -> trang mới (link cũ, giỏ hàng cũ vẫn chạy) */
-MQ.ID_ALIAS={'coc-say-deo':'coc-say-deo-muoi-ot-goodgood','mqz-sau-rieng-thang-hoa-200':'mqz-sau-rieng-ri6-thang-hoa','mqz-hong-say-deo-hop-xach':'mqz-hong-say-deo'};
-MQ.SKU_ALIAS={'MQ-THMC-210-GG':'MQ-THMC-100-GG','MQ-DCO-080':'MQ-DCM-080-GG','MQ-DXO-350-FH':'MQ-DXO-500-FHG','MQ-DXO-NEW-FH':'MQ-DXO-200-FHX','MQ-DXC-500-CHD':'MQ-DXC-300-CHD','MQ-DXC-500-CHX':'MQ-DXC-300-CHX'};
+MQ.ID_ALIAS={'sau-rieng-say-thang-hoa':'sau-rieng-say-goodgood','sau-rieng-say-thang-hoa-kita':'sau-rieng-say-kita','coc-say-deo':'coc-say-deo-muoi-ot-goodgood','mqz-sau-rieng-thang-hoa-200':'mqz-sau-rieng-ri6-thang-hoa','mqz-hong-say-deo-hop-xach':'mqz-hong-say-deo'};
+MQ.SKU_ALIAS={'MQ-THSR-100-GG':'MQ-GSR-100-GG','MQ-THSR-100-KT':'MQ-GSR-100-KT','MQ-THMC-210-GG':'MQ-THMC-100-GG','MQ-DCO-080':'MQ-DCM-080-GG','MQ-DXO-350-FH':'MQ-DXO-500-FHG','MQ-DXO-NEW-FH':'MQ-DXO-200-FHX','MQ-DXC-500-CHD':'MQ-DXC-300-CHD','MQ-DXC-500-CHX':'MQ-DXC-300-CHX'};
 MQ.PRODUCTS = [
  /* Xoài sấy dẻo Fresh & Healthy (Viza): 1 trang · chọn khối lượng + mẫu bao bì. Cùng khối lượng = cùng giá, mọi màu bao bì.
     Giá theo dacsancaocap "Xoài Sấy Dẻo Đặc Biệt" 500g 170k: 500g 165k · 200g 69k · 100g 35k (túi nhỏ đắt hơn/gram). */
@@ -97,16 +97,16 @@ MQ.PRODUCTS = [
   taste:{ngot:4,chua:2,deo:0,gion:5},
   short:'Xoài sấy thăng hoa giòn xốp, tan nhẹ trong miệng, giữ màu và hương xoài gần như tươi.',
   long:'Công nghệ sấy thăng hoa rút nước ở nhiệt độ rất thấp, nhờ vậy miếng xoài giữ được màu sắc, hình dáng và hương vị tự nhiên, cho cảm giác giòn tan rất lạ miệng.'},
- {id:'sau-rieng-say-thang-hoa',name:'Sầu riêng sấy thăng hoa GoodGood',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:5,badge:'Cao cấp',
-  variants:[V('MQ-THSR-100-GG','100g',100,'goodgood',235000,'tsr100g','tsr100g_back')],
-  taste:{ngot:5,chua:0,deo:0,gion:5},
-  short:'Múi sầu riêng sấy thăng hoa giòn xốp, béo thơm, ít mùi hơn sầu riêng tươi — "vua trái cây" tiện mang theo.',
-  long:'Sầu riêng chín được sấy thăng hoa để giữ trọn vị béo ngọt và màu vàng tự nhiên. Miếng sầu riêng giòn xốp, tan trong miệng; túi kín, dễ mang đi du lịch hay làm quà biếu.'},
- {id:'sau-rieng-say-thang-hoa-kita',name:'Sầu riêng sấy thăng hoa KITA',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:6,
-  variants:[V('MQ-THSR-100-KT','100g',100,'kita',235000,'tsr100k')],
-  taste:{ngot:5,chua:0,deo:0,gion:5},
-  short:'Múi sầu riêng sấy thăng hoa giòn xốp, béo thơm, ít mùi hơn sầu riêng tươi — "vua trái cây" tiện mang theo.',
-  long:'Sầu riêng chín được sấy thăng hoa để giữ trọn vị béo ngọt và màu vàng tự nhiên. Miếng sầu riêng giòn xốp, tan trong miệng; túi kín, dễ mang đi du lịch hay làm quà biếu.'},
+ {id:'sau-rieng-say-goodgood',name:'Sầu riêng sấy GoodGood',cat:'gion',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:5,badge:'Cao cấp',
+  variants:[V('MQ-GSR-100-GG','100g',100,'goodgood',110000,'tsr100g','tsr100g_back')],
+  taste:{ngot:5,chua:0,deo:0,gion:4},
+  short:'Múi sầu riêng sấy khô giòn, béo thơm, ít mùi hơn sầu riêng tươi — túi GoodGood 100g tiện mang theo.',
+  long:'Sầu riêng chín tách múi rồi sấy, giữ vị béo ngọt và màu vàng của cơm sầu riêng. Miếng sấy giòn, ăn thơm mà không nồng như quả tươi; túi kín, dễ mang đi du lịch hay làm quà. Dòng GoodGood của Viza Food, bán nguyên túi.'},
+ {id:'sau-rieng-say-kita',name:'Sầu riêng sấy KITA',cat:'gion',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:6,
+  variants:[V('MQ-GSR-100-KT','100g',100,'kita',90000,'tsr100k')],
+  taste:{ngot:5,chua:0,deo:0,gion:4},
+  short:'Sầu riêng sấy giòn dòng KITA, túi 100g — béo, thơm, giá dễ chịu để ăn thử hay chia nhau.',
+  long:'Sầu riêng chín tách múi, sấy giòn, giữ vị béo ngọt tự nhiên. Túi 100g dòng KITA của Viza Food, bán nguyên bao bì gốc.'},
  {id:'sau-rieng-say-thang-hoa-yummy',name:'Sầu riêng sấy thăng hoa Yummy',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:6,
   variants:[V('MQ-THSR-105-YM','105g',105,'yummy',245000,'tsr105')],
   taste:{ngot:5,chua:0,deo:0,gion:5},
@@ -537,8 +537,8 @@ MQ.PRODUCTS.forEach(p=>{p.sizes=p.variants;if(!p.img)p.img=p.variants[0].img;els
 MQ.GIFTS = [
  {id:'hop-an-nhien',name:'Hộp An Nhiên',slots:4,w:'4 món',price:450000,box:'#2b4a3d',ribbon:'#c9a868',items:['xoai-say-deo','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['gia-dinh','ban-be'],desc:'Bốn vị dẻo chua ngọt — món quà thăm hỏi nhỏ xinh cho người thân, bạn bè.'},
  {id:'hop-sum-vay',name:'Hộp Sum Vầy',slots:6,w:'6 món',price:790000,box:'#5b4632',ribbon:'#e2c48a',items:['xoai-say-deo','xoai-say-deo-muoi-ot','mit-say-gion','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['gia-dinh'],desc:'Đủ dẻo, giòn, muối ớt cho mâm quả ngày đoàn viên.'},
- {id:'hop-phu-quy',name:'Hộp Phú Quý',slots:6,w:'6 món',price:1090000,box:'#7a2e22',ribbon:'#d8b878',items:['sau-rieng-say-thang-hoa','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','mit-say-gion','mang-cau-say-deo'],for:['gia-dinh','doi-tac'],tag:'Tết Đinh Mùi 2027',desc:'Có sầu riêng sấy thăng hoa — vị quà sang được yêu thích. Hộp đỏ son, thiệp thư pháp.'},
- {id:'hop-thinh-vuong',name:'Hộp Thịnh Vượng',slots:9,w:'9 món',price:1490000,box:'#1b1f1d',ribbon:'#b08d57',items:['sau-rieng-say-thang-hoa','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','xoai-chin-cay','mit-say-gion','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['doi-tac','sep'],desc:'Trọn bộ sấy dẻo – giòn – thăng hoa trong hộp cứng sang trọng cho đối tác, khách hàng VIP.'}
+ {id:'hop-phu-quy',name:'Hộp Phú Quý',slots:6,w:'6 món',price:1090000,box:'#7a2e22',ribbon:'#d8b878',items:['sau-rieng-say-thang-hoa-yummy','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','mit-say-gion','mang-cau-say-deo'],for:['gia-dinh','doi-tac'],tag:'Tết Đinh Mùi 2027',desc:'Có sầu riêng sấy thăng hoa — vị quà sang được yêu thích. Hộp đỏ son, thiệp thư pháp.'},
+ {id:'hop-thinh-vuong',name:'Hộp Thịnh Vượng',slots:9,w:'9 món',price:1490000,box:'#1b1f1d',ribbon:'#b08d57',items:['sau-rieng-say-thang-hoa-yummy','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','xoai-chin-cay','mit-say-gion','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['doi-tac','sep'],desc:'Trọn bộ sấy dẻo – giòn – thăng hoa trong hộp cứng sang trọng cho đối tác, khách hàng VIP.'}
 ];
 MQ.BOX_OPTIONS = {
   sizes:[{slots:4,name:'Hộp 4 ngăn',fee:90000},{slots:6,name:'Hộp 6 ngăn',fee:120000},{slots:9,name:'Hộp 9 ngăn',fee:160000}],
@@ -553,7 +553,7 @@ MQ.PROVINCES = ['TP. Hồ Chí Minh','Hà Nội','Đà Nẵng','Hải Phòng','C
 MQ.POSTS = [
  {slug:'5-cach-an-xoai-say-deo',cat:'Thưởng thức',title:'5 cách thưởng thức xoài sấy dẻo ngon hơn bạn nghĩ',img:'products/dx350.jpg',date:'12/10/2026',read:'4 phút',excerpt:'Không chỉ là món ăn vặt: xoài sấy dẻo còn hợp với sữa chua, trà, salad và cả mâm quả Tết.',products:['xoai-say-deo','xoai-say-deo-muoi-ot'],
   body:[['p','Xoài sấy dẻo là món ăn vặt quen thuộc, nhưng chỉ cần thay đổi một chút cách ăn là bạn đã có thêm nhiều trải nghiệm mới. Dưới đây là năm cách đội ngũ Mộc Quả yêu thích.'],['h','1. Ăn trực tiếp cùng trà nóng'],['p','Vị chua ngọt của xoài rất hợp với trà xanh hoặc trà ô long — cân bằng vị chát nhẹ của trà.'],['h','2. Thả vào sữa chua hoặc granola'],['p','Cắt nhỏ lát xoài, trộn cùng sữa chua và hạt cho bữa sáng nhanh mà đủ chất.'],['h','3. Phiên bản muối ớt cho buổi tụ tập'],['p','Xoài sấy dẻo muối ớt mặn mặn cay cay là "vua" của những buổi xem phim, tán gẫu cùng bạn bè.'],['quote','Mẹo nhỏ: đóng kín túi zip sau khi mở để xoài luôn dẻo và thơm.'],['h','4. Trộn salad'],['p','Vài lát xoài dẻo thái sợi làm salad rau xanh thêm vị ngọt tự nhiên.'],['h','5. Bày mâm quả, hộp quà'],['p','Sắc vàng óng của xoài làm mâm quả Tết và hộp quà tặng thêm tươi tắn — kết hợp cùng sầu riêng thăng hoa, mít sấy giòn để đủ vị.']]},
- {slug:'say-lanh-khac-say-nong',cat:'Kiến thức',title:'Sấy dẻo, sấy giòn và sấy thăng hoa khác nhau thế nào?',img:'products/tsr105.jpg',date:'28/09/2026',read:'6 phút',excerpt:'Vì sao cùng là xoài nhưng có loại dẻo, có loại giòn xốp? Hiểu về cách sấy để chọn đúng món mình thích.',products:['xoai-say-thang-hoa','xoai-say-deo','sau-rieng-say-thang-hoa','mit-say-gion'],
+ {slug:'say-lanh-khac-say-nong',cat:'Kiến thức',title:'Sấy dẻo, sấy giòn và sấy thăng hoa khác nhau thế nào?',img:'products/tsr105.jpg',date:'28/09/2026',read:'6 phút',excerpt:'Vì sao cùng là xoài nhưng có loại dẻo, có loại giòn xốp? Hiểu về cách sấy để chọn đúng món mình thích.',products:['xoai-say-thang-hoa','xoai-say-deo','sau-rieng-say-thang-hoa-yummy','mit-say-gion'],
   body:[['p','Trái cây sấy ngon hay không phụ thuộc rất nhiều vào cách sấy. Mỗi phương pháp cho ra một kết cấu và hương vị khác nhau.'],['h','Sấy nóng truyền thống'],['p','Dùng nhiệt độ cao để rút nước nhanh. Ưu điểm là nhanh và rẻ, nhưng dễ làm quả sẫm màu và mất bớt hương thơm.'],['h','Sấy lạnh'],['p','Sấy ở nhiệt độ thấp với không khí khô tuần hoàn. Thời gian lâu hơn nhưng giữ được màu sắc và độ dẻo — phù hợp với xoài, thơm, đu đủ — cho ra miếng quả dẻo mềm.'],['h','Sấy thăng hoa (đông khô)'],['p','Quả được cấp đông rồi rút nước trong môi trường chân không. Nước thăng hoa trực tiếp từ đá thành hơi, nên lát quả giữ gần như nguyên hình dáng, màu sắc, và có độ giòn xốp đặc trưng.'],['quote','Mỗi cách sấy hợp với một loại quả — Mộc Quả phân loại rõ Sấy dẻo · Sấy giòn · Sấy thăng hoa để bạn chọn nhanh.'],['h','Chọn thế nào?'],['p','Thích dẻo, đậm vị: chọn sấy dẻo (xoài, thơm, me…). Thích giòn rụm: chọn sấy giòn (mít). Thích giòn xốp tan trong miệng, giữ hương như quả tươi: chọn sấy thăng hoa (sầu riêng, xoài).']]},
  {slug:'goi-y-qua-tet-doanh-nghiep',cat:'Quà tặng',title:'Gợi ý quà Tết doanh nghiệp 2027: tinh tế, đúng ngân sách',img:'cho.jpg',date:'15/09/2026',read:'4 phút',excerpt:'Checklist chọn quà Tết cho đối tác và nhân viên: ngân sách, thời gian đặt, cá nhân hoá và giao hàng theo danh sách.',products:['hop-phu-quy','hop-thinh-vuong'],
   body:[['p','Quà Tết doanh nghiệp không chỉ là món quà — đó là lời chào năm mới mang hình ảnh thương hiệu của bạn. Dưới đây là vài gợi ý để chọn quà vừa tinh tế vừa đúng ngân sách.'],['h','Chốt ngân sách và số lượng sớm'],['p','Thời điểm lý tưởng để đặt quà Tết là 6–8 tuần trước Tết. Đặt sớm giúp bạn có nhiều lựa chọn mẫu hộp và thời gian in ấn logo.'],['h','Cá nhân hoá vừa đủ'],['p','Một tấm thiệp viết tay tên người nhận, logo ép kim nhỏ trên nắp hộp — chừng đó đủ để món quà trở nên riêng tư mà không phô trương.'],['h','Giao theo danh sách'],['p','Gửi cho chúng tôi danh sách người nhận, Mộc Quả sẽ giao tận nơi, chụp ảnh xác nhận và gửi báo cáo cho bộ phận hành chính.'],['quote','Ưu đãi demo: đơn từ 50 hộp được tặng thiệp thư pháp viết tay cho từng người nhận.']]}
