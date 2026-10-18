@@ -42,3 +42,21 @@
  .dsc__spec th{width:40%}.dsc__spec th,.dsc__spec td{padding:9px 11px;font-size:14px}
 }
 .pinfo .perks{grid-template-columns:1fr}
+.pinfo .perks .perk b{display:inline;font-size:inherit}.pinfo .perks .perk svg{width:15px;height:15px}
+/* chọn mẫu bao bì + giá/100g */
+.variants--rich .var .var__u{font-style:normal;font-size:10.5px;color:var(--muted);margin-top:2px}
+.variants--rich .var.is-on .var__u{color:rgba(246,240,228,.7)}
+.variants--rich .var{position:relative}
+.var__best{position:absolute;top:-9px;right:-6px;background:var(--clay,#c2532f);color:#fff;font-size:9.5px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:9px}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 8px}
+.sw{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12.5px;line-height:1.2;text-align:left;transition:all .2s;cursor:pointer}
+.sw i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);flex:none}
+.sw span{display:flex;flex-direction:column}.sw small{font-size:10.5px;color:var(--muted)}
+.sw:hover{border-color:var(--gold)}
+.sw.is-on{border-color:var(--forest);box-shadow:0 0 0 1px var(--forest)}
+.sw.is-na{opacity:.6}.sw.is-na i{filter:saturate(.6)}
+.pk-note{font-size:12px;color:var(--muted);margin:0 0 22px}
+@media(max-width:600px){.sw{font-size:12px;padding:5px 10px 5px 5px}.sw i{width:22px;height:22px}}
+.pinfo__tag{margin:-6px 0 12px;font-family:var(--serif,inherit);font-style:italic;font-size:17px;color:var(--gold)}
+.pk-custom{display:flex;align-items:center;gap:8px;margin:-10px 0 22px;padding:9px 12px;border:1px dashed var(--gold);border-radius:8px;background:#fbf8f1;font-size:13px;color:var(--forest);width:fit-content}
+.pk-custom svg{width:18px;height:18px;color:#0068ff;flex:none}.pk-custom:hover{background:#f6efdf}

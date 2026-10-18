@@ -49,21 +49,25 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018d';
+MQ.IMGV='20261018g';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 MQ.lineName=k=>k&&MQ.LINES[k]?MQ.LINES[k].name:'';
 MQ.makerName=p=>(MQ.MAKERS[p.maker]||{}).name||'';
 MQ.vars=p=>p.variants||p.sizes||[];
 MQ.priced=p=>MQ.vars(p).filter(v=>v.p);
-MQ.defVar=p=>MQ.priced(p)[0]||MQ.vars(p)[0];
+MQ.defVar=p=>(p.def&&MQ.vars(p).find(v=>v.sku===p.def))||MQ.priced(p)[0]||MQ.vars(p)[0];
+/* sản phẩm có mẫu bao bì: mỗi khối lượng 1 nút (biến thể đại diện) */
+MQ.sizeVars=(p,sel)=>{const vs=MQ.vars(p);if(!p.packs)return vs;const ws=[...new Set(vs.map(v=>v.w))];return ws.map(w=>sel&&sel.w===w?sel:vs.find(v=>v.w===w&&sel&&v.pk===sel.pk)||vs.find(v=>v.w===w&&v.sku===p.def)||vs.find(v=>v.w===w))};
+MQ.per100=v=>v.p&&v.g?MQ.fmt(Math.round(v.p/v.g*100/100)*100)+'/100g':'';
 MQ.minPrice=p=>{const a=MQ.priced(p).map(v=>v.p);return a.length?Math.min(...a):null};
 MQ.priceLabel=p=>{const m=MQ.minPrice(p);if(m==null)return 'Liên hệ báo giá';return (MQ.priced(p).length>1?'từ ':'')+MQ.fmt(m)};
-MQ.varLabel=(p,v)=>{const dup=MQ.vars(p).filter(x=>x.w===v.w).length>1||new Set(MQ.vars(p).map(x=>x.line)).size>1;return v.w+(dup&&v.line?' · '+MQ.lineName(v.line):'')};
-MQ.findVar=(p,k)=>MQ.vars(p).find(v=>v.sku===k)||MQ.vars(p).find(v=>v.w===k)||MQ.defVar(p);
-MQ.chipLabel=(p,v)=>{const l=MQ.varLabel(p,v),L=MQ.LINES[v.line];return L&&L.short&&l.includes(L.name)?MQ.esc(l.replace(L.name,'%%')).replace('%%',`<span class="l-full">${MQ.esc(L.name)}</span><span class="l-short">${MQ.esc(L.short)}</span>`):MQ.esc(l)};
+MQ.varLabel=(p,v)=>{if(p.packs&&v.pk)return v.w+' · bao bì '+p.packs[v.pk].name.toLowerCase();const dup=MQ.vars(p).filter(x=>x.w===v.w).length>1||new Set(MQ.vars(p).map(x=>x.line)).size>1;return v.w+(dup&&v.line?' · '+MQ.lineName(v.line):'')};
+MQ.findVar=(p,k)=>{k=(MQ.SKU_ALIAS||{})[k]||k;return MQ._fv(p,k)};
+MQ._fv=(p,k)=>MQ.vars(p).find(v=>v.sku===k)||MQ.vars(p).find(v=>v.w===k)||MQ.defVar(p);
+MQ.chipLabel=(p,v)=>{if(p.packs)return MQ.esc(v.w);const l=MQ.varLabel(p,v),L=MQ.LINES[v.line];return L&&L.short&&l.includes(L.name)?MQ.esc(l.replace(L.name,'%%')).replace('%%',`<span class="l-full">${MQ.esc(L.name)}</span><span class="l-short">${MQ.esc(L.short)}</span>`):MQ.esc(l)};
 MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
-MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.vars(p).map(v=>`<button type="button" class="wchip${v===sel?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
+MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.sizeVars(p,sel).map(v=>`<button type="button" class="wchip${v.w===sel.w?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
 MQ.cardPerk=(p,v)=>!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
@@ -83,13 +87,13 @@ MQ.card=(p,opts={})=>{
       <h3 class="pcard__name"><a href="${MQ.url(p)}">${p.name}</a> <span class="pcard__w" data-card-w>${MQ.esc(v.w)}</span></h3>
       ${multi?MQ.chips(p,v):''}
       <div class="perkw" data-perk>${MQ.cardPerk(p,v)}</div>
-      <div class="pcard__price"><span class="price${v.p?'':' price--quote'}" data-card-price>${v.p?MQ.fmt(v.p):'Liên hệ báo giá'}</span>${multi?`<small>${MQ.vars(p).length} quy cách</small>`:''}</div>
+      <div class="pcard__price"><span class="price${v.p?'':' price--quote'}" data-card-price>${v.p?MQ.fmt(v.p):'Liên hệ báo giá'}</span>${multi?`<small>${MQ.sizeVars(p).length} quy cách${p.packs?' · '+Object.keys(p.packs).length+' mẫu':''}</small>`:''}</div>
       <div class="pcard__btns"><a class="cbtn cbtn--line" href="${MQ.url(p)}">Chi tiết</a><button class="cbtn cbtn--buy addbtn${v.p?'':' is-quote'}" data-add="${p.id}" data-w="${v.sku}" aria-label="Đặt mua ${MQ.esc(p.name)}"><svg><use href="#i-cart"/></svg><span>${v.p?'Đặt mua':'Báo giá'}</span></button></div>
     </div></article>`;
 };
 /* đổi quy cách trên thẻ sản phẩm */
 MQ.cardSelect=(card,sku)=>{const p=MQ.byId(card.dataset.id);if(!p)return;const v=MQ.findVar(p,sku);card.dataset.sku=v.sku;
-  card.querySelectorAll('.wchip').forEach(b=>b.classList.toggle('is-on',b.dataset.sku===v.sku));
+  card.querySelectorAll('.wchip').forEach(b=>b.classList.toggle('is-on',b.dataset.sku===v.sku||(p.packs&&MQ.findVar(p,b.dataset.sku).w===v.w)));
   const im=card.querySelector('[data-card-img]');if(im&&v.img)im.src=MQ.img(v.img,true);
   card.querySelector('[data-card-w]').textContent=v.w;
   const pk=card.querySelector('[data-perk]');if(pk)pk.innerHTML=MQ.cardPerk(p,v);
@@ -223,6 +227,8 @@ function header(){
       <div class="dd__col"><h6>Quy cách</h6><a href="cua-hang.html?tag=small">Gói nhỏ ≤ 100g</a><a href="cua-hang.html?tag=mid">Túi vừa 120 – 300g</a><a href="cua-hang.html?tag=big">Túi lớn ≥ 350g</a><h6 class="mt">Hương vị</h6>${FLAVLINKS}</div></div></div>
   <div class="mbar__item has-dd"><a href="cua-hang.html?cat=omai">Ô mai &amp; xí muội <svg class="chev"><use href="#i-chev"/></svg></a>
     <div class="dd"><div class="dd__col"><h6>Ô mai · xí muội · ngào đường</h6><div class="dd__2">${omai.map(p=>dl(MQ.url(p),p.name)).join('')}</div><a href="cua-hang.html?cat=omai" class="dd__all">Xem tất cả ${omai.length} sản phẩm →</a></div></div></div>
+  <div class="mbar__item has-dd"><a href="cua-hang.html?cat=hat">Hạt dinh dưỡng <svg class="chev"><use href="#i-chev"/></svg></a>
+    <div class="dd"><div class="dd__col"><h6>Hộp giấy 100g · Viza Food</h6>${live.filter(p=>p.vizabox).sort((a,b)=>(a.rank||99)-(b.rank||99)).map(p=>dl(MQ.url(p),p.name.replace(' Viza Food',''))).join('')}<a href="cua-hang.html?line=vizabox" class="dd__all">Xem tất cả hộp giấy Viza →</a></div></div></div>
   <div class="mbar__item has-dd"><a href="cua-hang.html?cat=set">Set quà <svg class="chev"><use href="#i-chev"/></svg></a>
     <div class="dd"><div class="dd__col"><h6>Quà tặng</h6>${dl('cua-hang.html?cat=set','Set quà &amp; khay mứt Mộc Quả',cc('set'))}<a href="hop-qua.html#hop-san">Hộp quà Tết 2027</a><a href="hop-qua.html#tu-thiet-ke">Tự thiết kế hộp quà <em class="soon-tag soon-tag--gold">Mới</em></a><a href="hop-qua.html#doanh-nghiep">Quà tặng doanh nghiệp</a><a href="hop-qua.html#chon-qua">Gợi ý chọn quà</a></div></div></div>
   <div class="mbar__item has-dd"><a href="cua-hang.html?line=mq">Mộc Quả <svg class="chev"><use href="#i-chev"/></svg></a>
@@ -247,6 +253,7 @@ MQ.side=()=>{const cc=k=>cnt(p=>p.cat===k);const L=(h,t,n)=>`<li><a href="${h}">
   return `<section class="sbox"><h3 class="sbox__t sbox__t--menu"><svg><use href="#i-list"/></svg>Danh mục sản phẩm</h3><ul class="tree">
   <li class="tree__g"><a href="cua-hang.html"><b>Trái cây sấy</b></a><ul>${['deo','thanghoa','gion','kho'].map(k=>L('cua-hang.html?cat='+k,MQ.CATS[k].name,cc(k))).join('')}${L('cua-hang.html?flavour=muoiot','Vị muối ớt · cay',cnt(p=>p.flavour==='muoiot'))}</ul></li>
   <li class="tree__g"><a href="cua-hang.html?cat=omai"><b>Ô mai &amp; xí muội</b><em>${cc('omai')}</em></a></li>
+  <li class="tree__g"><a href="cua-hang.html?cat=hat"><b>Hạt dinh dưỡng</b><em>${cc('hat')}</em></a></li>
   <li class="tree__g"><a href="cua-hang.html?cat=set"><b>Set quà &amp; hộp quà</b></a><ul>${L('cua-hang.html?cat=set','Set quà &amp; khay mứt',cc('set'))}${L('hop-qua.html#hop-san','Hộp quà Tết 2027')}${L('hop-qua.html#tu-thiet-ke','Tự thiết kế hộp quà')}</ul></li>
   <li class="tree__g"><span><b>Theo loại quả</b></span><ul class="tree__fr">${fr.filter(x=>x[1].top).map(([k,f,n])=>L('cua-hang.html?fruit='+k,f.name,n)).join('')}${L('cua-hang.html#loai-qua',`+ ${fr.filter(x=>!x[1].top).length} loại quả khác`)}</ul></li>
   <li class="tree__g"><span><b>Thương hiệu</b></span><ul>${L('cua-hang.html?line=mq','<i class="mqseal">MQ</i>Mộc Quả',cnt(p=>p.own))}<li class="tree__sub">Viza Food</li>${Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>L('cua-hang.html?line='+k,l.name,cnt(p=>p.lines.includes(k)))).join('')}</ul></li>
@@ -262,7 +269,7 @@ function footer(){
     <div class="footer__brand"><a href="index.html" class="brand brand--light">${MQ.mark('brand__mark')}<span class="brand__text"><b>Mộc Quả</b><small>Quả ngon · Quà trọn</small></span></a>
       <p>Quả của đất, quà của tình. Mộc Quả tuyển chọn trái cây sấy dưới thương hiệu riêng <b>mocqua.com</b> và phân phối hàng chính hãng Viza Food — cho bữa ăn vặt mỗi ngày và những món quà trọn vẹn.</p>
       <div class="footer__pay"><span>COD</span><span>VietQR</span><span>Ví điện tử</span><span>Thẻ ATM/Visa</span></div></div>
-    <div><h5>Cửa hàng</h5><a href="cua-hang.html?cat=deo">Trái cây sấy dẻo</a><a href="cua-hang.html?cat=thanghoa">Trái cây sấy thăng hoa</a><a href="cua-hang.html?cat=gion">Trái cây sấy giòn</a><a href="cua-hang.html?cat=omai">Ô mai &amp; xí muội</a><a href="cua-hang.html?line=mq">Thương hiệu Mộc Quả</a><a href="hop-qua.html">Hộp quà Tết</a><a href="hop-qua.html#tu-thiet-ke">Tự thiết kế hộp quà</a></div>
+    <div><h5>Cửa hàng</h5><a href="cua-hang.html?cat=deo">Trái cây sấy dẻo</a><a href="cua-hang.html?cat=thanghoa">Trái cây sấy thăng hoa</a><a href="cua-hang.html?cat=gion">Trái cây sấy giòn</a><a href="cua-hang.html?cat=omai">Ô mai &amp; xí muội</a><a href="cua-hang.html?cat=hat">Hạt dinh dưỡng</a><a href="cua-hang.html?line=mq">Thương hiệu Mộc Quả</a><a href="hop-qua.html">Hộp quà Tết</a><a href="hop-qua.html#tu-thiet-ke">Tự thiết kế hộp quà</a></div>
     <div><h5>Hỗ trợ</h5><a href="chinh-sach.html#huong-dan">Hướng dẫn mua hàng</a><a href="chinh-sach.html#thanh-toan">Hình thức thanh toán</a><a href="chinh-sach.html#giao-hang">Giao hàng &amp; vận chuyển</a><a href="chinh-sach.html#doi-tra">Đổi trả &amp; hoàn tiền</a><a href="chinh-sach.html#bao-mat">Bảo mật thông tin</a><a href="tra-cuu-don.html">Tra cứu đơn hàng</a></div>
     <div><h5>Liên hệ</h5><a href="tel:${MQ.TEL}">Hotline: ${MQ.HOTLINE}</a><a href="mailto:hello@mocqua.com">hello@mocqua.com</a><a href="lien-he.html">[Địa chỉ showroom đang cập nhật]</a><span>8:00 – 21:00, tất cả các ngày</span><div class="footer__social"><a href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener" aria-label="Zalo"><svg><use href="#i-zalo"/></svg></a><a href="https://m.me/" target="_blank" rel="noopener" aria-label="Messenger"><svg><use href="#i-msg"/></svg></a></div></div>
   </div>

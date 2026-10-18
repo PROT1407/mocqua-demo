@@ -141,3 +141,12 @@ Tất cả từ Wikimedia Commons, dùng theo giấy phép ghi bên dưới (CC0
 | assets/desc/raw-vai.jpg | [Lychee fruits and seed.jpg](https://commons.wikimedia.org/wiki/File:Lychee_fruits_and_seed.jpg) | Ivar Leidus | CC BY-SA 4.0 |
 | assets/desc/raw-voboi.jpg | [Pomelo fruit.jpg](https://commons.wikimedia.org/wiki/File:Pomelo_fruit.jpg) | Ivar Leidus | CC BY-SA 4.0 |
 | assets/desc/raw-xoai.jpg | [Mangos - single and halved.jpg](https://commons.wikimedia.org/wiki/File:Mangos_-_single_and_halved.jpg) | Ivar Leidus | CC BY-SA 4.0 |
+| assets/desc/raw-pistachio.jpg | [Fried pistachio nuts.jpg](https://commons.wikimedia.org/wiki/File:Fried_pistachio_nuts.jpg) | Fumikas Sagisavas | CC0 |
+| assets/desc/tree-pistachio.jpg | [Pistachio in qazvin traditional garden.jpg](https://commons.wikimedia.org/wiki/File:Pistachio_in_qazvin_traditional_garden.jpg) | Aseman.za | CC BY-SA 4.0 |
+| assets/desc/raw-macca.jpg | [Nuts of Macadamia 1152861.jpg](https://commons.wikimedia.org/wiki/File:Nuts_of_Macadamia_1152861.jpg) | Wow Phochiangrak | CC0 |
+| assets/desc/tree-macca.jpg | [Macadamia nuts on tree.JPG](https://commons.wikimedia.org/wiki/File:Macadamia_nuts_on_tree.JPG) | MorePix | CC BY-SA 3.0 |
+| assets/desc/raw-dua.jpg | [Coconuts - single and cracked open.jpg](https://commons.wikimedia.org/wiki/File:Coconuts_-_single_and_cracked_open.jpg) | Ivar Leidus | CC BY-SA 4.0 |
+| assets/desc/raw-dieu.jpg | [Roasted Cashew Nuts (52746470588).jpg](https://commons.wikimedia.org/wiki/File:Roasted_Cashew_Nuts_(52746470588).jpg) | Choo Yut Shing from Singapore, Singapore | CC BY 2.0 |
+
+## Ảnh sản phẩm Viza Food hộp giấy 100g (vzh-*)
+Ảnh chụp hàng thật do chủ cửa hàng cung cấp; tách nền, chỉnh phối cảnh và màu trong brand/viza-box/ (cut.py, export.py). Bao bì là thiết kế gốc của Viza Food, giữ nguyên.
