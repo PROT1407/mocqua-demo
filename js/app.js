@@ -8,7 +8,7 @@ MQ.HOTLINE='0909 000 000'; MQ.TEL='0909000000';
 MQ.FREE_SHIP=300000;
 MQ.norm=s=>(s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
 MQ.esc=s=>(s||'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-MQ.byId=id=>MQ.PRODUCTS.find(p=>p.id===id);
+MQ.byId=id=>MQ.PRODUCTS.find(p=>p.id===id)||(MQ.ID_ALIAS&&MQ.ID_ALIAS[id]?MQ.PRODUCTS.find(p=>p.id===MQ.ID_ALIAS[id]):undefined);
 MQ.giftById=id=>MQ.GIFTS.find(g=>g.id===id);
 MQ.qs=k=>new URLSearchParams(location.search).get(k);
 const store={get(k,d){try{return JSON.parse(localStorage.getItem('mq_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('mq_'+k,JSON.stringify(v))}catch(e){}}};
@@ -49,9 +49,16 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018j';
+MQ.IMGV='20261018l';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
+/* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */
+MQ.PROC=['deo','thanghoa','gion','kho'];
+MQ.BRAND_ORDER=['mq','fh','goodgood','cheers','yummy','kita','vizabox'];
+MQ.brandOf=p=>p.own?'mq':((p.lines||[])[0]||'zz');
+MQ.minG=p=>Math.min(...MQ.vars(p).map(v=>v.g||9999));
+MQ.procTag=p=>MQ.PROC.includes(p.cat)?`<span class="ptag ptag--${p.cat}">${MQ.CATS[p.cat].short}</span>`:'';
+MQ.fruitProc=(f,c)=>MQ.FRUITS[f].name+' '+MQ.CATS[c].short.toLowerCase();
 MQ.lineName=k=>k&&MQ.LINES[k]?MQ.LINES[k].name:'';
 MQ.makerName=p=>(MQ.MAKERS[p.maker]||{}).name||'';
 MQ.vars=p=>p.variants||p.sizes||[];
@@ -69,7 +76,8 @@ MQ.chipLabel=(p,v)=>{if(p.packs)return MQ.esc(v.w);const l=MQ.varLabel(p,v),L=MQ
 MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
 MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.sizeVars(p,sel).map(v=>`<button type="button" class="wchip${v.w===sel.w?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
 MQ.dealTag=(p,cls='')=>p&&p.bundle?`<span class="deal${cls}"><svg><use href="#i-gift"/></svg>${MQ.esc(p.bundle.label)}</span>`:'';
-MQ.cardPerk=(p,v)=>p.bundle?`<p class="perk perk--deal">${MQ.dealTag(p)}</p>`:!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
+MQ.COMBO100={n:5,price:165000,skus:['MQ-DXO-100-GG','MQ-DXO-100-FHG','MQ-DXO-100-FHX']};
+MQ.cardPerk=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}"><svg><use href="#i-gift"/></svg>Combo 100g mua 5 tặng 1</a></p>`:p.bundle?`<p class="perk perk--deal">${MQ.dealTag(p)}</p>`:!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -80,11 +88,11 @@ MQ.card=(p,opts={})=>{
   return `<article class="pcard${p.oos?' pcard--oos':''}${p.own?' pcard--mq':''}${opts.cls?' '+opts.cls:''}" data-id="${p.id}" data-sku="${v.sku}">
     <div class="pcard__media">
       ${p.oos?'<span class="badge badge--oos">Hết hàng</span>':p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}
-      <a href="${MQ.url(p)}" class="pcard__img" aria-label="${MQ.esc(p.name)}"><img src="${MQ.img(v.img,true)}" alt="${MQ.esc(p.name)}" loading="lazy" data-card-img></a>
+      <a href="${MQ.url(p)}" class="pcard__img" aria-label="${MQ.esc(p.name)}"><img src="${MQ.img(v.img,true)}" alt="${MQ.esc(p.name)}" loading="lazy" data-card-img>${MQ.procTag(p)}</a>
       <button class="tool${w?' is-on':''}" data-wish="${p.id}" aria-label="Yêu thích"><svg><use href="#i-heart${w?'-f':''}"/></svg></button>
     </div>
     <div class="pcard__body">
-      <span class="pcard__origin">${p.own?`<i class="mqseal" aria-hidden="true">MQ</i>Mộc Quả`:MQ.esc(lines||MQ.makerName(p))} · ${MQ.CATS[p.cat].short}</span>
+      <span class="pcard__origin">${p.own?`<i class="mqseal" aria-hidden="true">MQ</i>Mộc Quả`:MQ.esc(lines||MQ.makerName(p))}${MQ.PROC.includes(p.cat)?'':' · '+MQ.CATS[p.cat].short}</span>
       <h3 class="pcard__name"><a href="${MQ.url(p)}">${p.name}</a> <span class="pcard__w" data-card-w>${MQ.esc(v.w)}</span></h3>
       ${multi?MQ.chips(p,v):''}
       <div class="perkw" data-perk>${MQ.cardPerk(p,v)}</div>
@@ -136,17 +144,25 @@ MQ.promo=items=>{
   const sub=items.reduce((s,i)=>s+i.qty*i.price,0);
   const zip=items.filter(MQ.isZipItem),zipN=zip.reduce((s,i)=>s+i.qty,0),zipSub=zip.reduce((s,i)=>s+i.qty*i.price,0);
   const zq=MQ.ZIPQ.find(t=>zipN>=t.n),qtyDisc=zq?MQ.r1k(zipSub*zq.pct/100):0;
-  const base=sub-qtyDisc,tier=MQ.TIERS.find(t=>base>=t.min),tierDisc=tier?MQ.r1k(base*tier.pct/100):0;
+  const C=MQ.COMBO100,cu=[];items.forEach(i=>{if(C.skus.includes(i.sku)&&i.price>0)for(let k=0;k<i.qty;k++)cu.push(i)});
+  const comboN=Math.floor(cu.length/C.n);let comboDisc=0;
+  if(comboN){const sorted=[...cu].sort((a,b)=>a.price-b.price).slice(0,comboN*C.n);comboDisc=Math.max(0,sorted.reduce((s,i)=>s+i.price,0)-comboN*C.price)}
+  const base=sub-qtyDisc-comboDisc,tier=MQ.TIERS.find(t=>base>=t.min),tierDisc=tier?MQ.r1k(base*tier.pct/100):0;
   const up=[...MQ.TIERS].reverse().find(t=>base<t.min);
   const setN=items.filter(MQ.isSetItem).reduce((s,i)=>s+i.qty,0),g=MQ.giftPick(),gifts=[];
   if(setN)gifts.push({key:'gift-set',name:'Túi 100g '+g.name,w:'Quà tặng kèm Set quà · 1 túi/set',qty:setN,img:g.img,pick:true});
   /* KM tặng kèm theo sản phẩm (p.bundle): đủ buy món cùng sản phẩm -> tặng 1 món quà 0đ */
-  const bq={};items.forEach(i=>{const p=MQ.byId(i.id);if(p&&p.bundle&&i.price>0)bq[p.id]=(bq[p.id]||0)+i.qty});
+  const bq={};items.forEach(i=>{const p=MQ.byId(i.id);if(p&&p.bundle&&i.price>0){
+    if(p.bundle.gmap){const g=p.bundle.gmap[i.sku]||Object.values(p.bundle.gmap)[0],gp=MQ.byId(g[0]),gv=gp&&MQ.findVar(gp,g[1]);
+      gifts.push({key:'gift-b-'+i.sku,name:(gp?gp.name:'Quà tặng')+(gv?' · '+gv.w:''),w:'Quà tặng 0đ · KM “'+p.bundle.label+'”',qty:i.qty,img:gv?gv.img:null,bundle:p.id});return}
+    bq[p.id]=(bq[p.id]||0)+i.qty}});
   Object.entries(bq).forEach(([id,q])=>{const p=MQ.byId(id),b=p.bundle,k=Math.floor(q/b.buy);if(!k)return;
     const gp=MQ.byId(b.gid),gv=gp&&MQ.findVar(gp,b.gsku);
     gifts.push({key:'gift-b-'+id,name:(gp?gp.name:'Quà tặng')+(gv?' · '+gv.w:''),w:'Quà tặng 0đ · KM “'+b.label+'”',qty:k,img:gv?gv.img:null,bundle:id})});
+  if(comboN){const cnt={};cu.forEach(i=>cnt[i.sku]=(cnt[i.sku]||0)+1);const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],gi=cu.find(i=>i.sku===top),gp=MQ.byId(gi.id),gv=gp&&MQ.findVar(gp,top);
+    gifts.push({key:'gift-c100',name:(gp?gp.name:'Xoài sấy dẻo')+' · 100g',w:'Quà tặng 0đ · Combo xoài 100g mua 5 tặng 1',qty:comboN,img:gv?gv.img:null})}
   if(base>=MQ.GIFT_BAG_MIN)gifts.push({key:'gift-bag',name:'Túi giấy quà & thiệp viết tay Mộc Quả',w:'Quà tặng đơn từ '+MQ.fmt(MQ.GIFT_BAG_MIN),qty:1,img:null,box:'#1e3a2f',ribbon:'#c4a265'});
-  return {sub,zipN,zq,qtyDisc,base,tier,tierDisc,up,gifts,zipNeed:zq?null:MQ.ZIPQ[MQ.ZIPQ.length-1].n-zipN};
+  return {sub,zipN,zq,qtyDisc,comboN,comboDisc,base,tier,tierDisc,up,gifts,zipNeed:zq?null:MQ.ZIPQ[MQ.ZIPQ.length-1].n-zipN};
 };
 /* gợi ý tiến độ: giao miễn phí → bậc giảm kế tiếp */
 MQ.progress=P=>{const b=P.base;
@@ -171,8 +187,9 @@ MQ.calc=(items,couponCode,shipId='std')=>{
   // mã giảm giá và ưu đãi theo đơn không cộng dồn: tự chọn mức có lợi hơn cho khách
   let tierDisc=P.tierDisc;
   if(cdisc&&tierDisc){ if(cdisc>tierDisc){note=`Mã ${cp.code} có lợi hơn nên thay cho ưu đãi giảm ${P.tier.pct}% theo đơn`;tierDisc=0}else{note=`Ưu đãi giảm ${P.tier.pct}% theo đơn có lợi hơn mã ${cp.code} (không cộng dồn)`;cdisc=0} }
-  const disc=P.qtyDisc+tierDisc+cdisc;
+  const disc=P.qtyDisc+P.comboDisc+tierDisc+cdisc;
   const rows=[];
+  if(P.comboDisc)rows.push({k:'combo100',label:`Combo xoài 100g mua 5 tặng 1 (×${P.comboN})`,v:P.comboDisc});
   if(P.qtyDisc)rows.push({k:'qty',label:`Mua ${P.zipN} túi zip Mộc Quả (−${P.zq.pct}%)`,v:P.qtyDisc});
   if(tierDisc)rows.push({k:'tier',label:`Ưu đãi đơn từ ${MQ.fmt(P.tier.min)} (−${P.tier.pct}%)`,v:tierDisc});
   if(cdisc)rows.push({k:'coupon',label:`Mã ${cp.code}`,v:cdisc});
@@ -201,6 +218,8 @@ const page=document.body.dataset.page||'';
 const act=k=>page===k?' class="is-active"':'';
 const live=MQ.PRODUCTS.filter(p=>!p.soon);
 const cnt=f=>live.filter(f).length;
+const procFruits=k=>{const fr=[...new Set(live.filter(p=>p.cat===k&&p.fruit).map(p=>p.fruit))].map(f=>[f,cnt(p=>p.cat===k&&p.fruit===f)]).filter(x=>x[1]>1).sort((a,b)=>b[1]-a[1]);
+  return fr.length?`<p class="dd__sub">${fr.map(([f,n])=>`<a href="cua-hang.html?cat=${k}&fruit=${f}">${MQ.FRUITS[f].name}</a>`).join('')}</p>`:''};
 const CATLINKS=Object.entries(MQ.CATS).filter(([k,c])=>!c.soon).map(([k,c])=>`<a href="cua-hang.html?cat=${k}">${c.name}<small>${cnt(p=>p.cat===k)} sản phẩm</small></a>`).join('')+`<a href="cua-hang.html?cat=soon">Hạt · Trà · Kẹo <em class="soon-tag">Sắp có</em></a>`;
 const FRUITLINKS=Object.entries(MQ.FRUITS).filter(([k,f])=>f.top&&cnt(p=>p.fruit===k)).map(([k,f])=>`<a href="cua-hang.html?fruit=${k}">${f.name}</a>`).join('')+`<a href="cua-hang.html#loai-qua" class="mega__all">+ ${Object.keys(MQ.FRUITS).filter(k=>!MQ.FRUITS[k].top&&cnt(p=>p.fruit===k)).length} loại khác</a>`;
 const FLAVLINKS=Object.entries(MQ.FLAVOURS).filter(([k])=>cnt(p=>p.flavour===k)).map(([k,f])=>`<a href="cua-hang.html?flavour=${k}">${f.name}</a>`).join('');
@@ -228,7 +247,7 @@ function header(){
   <div class="mbar__head"><b>Danh mục</b><button class="icon-btn" data-close-all aria-label="Đóng"><svg><use href="#i-close"/></svg></button></div>
   <div class="mbar__item"><a href="index.html"${act('home')}>Trang chủ</a></div>
   <div class="mbar__item has-dd"><a href="cua-hang.html"${page==='shop'?' class="is-active"':''}>Trái cây sấy <svg class="chev"><use href="#i-chev"/></svg></a>
-    <div class="dd dd--wide"><div class="dd__col"><h6>Theo cách sấy</h6>${['deo','thanghoa','gion','kho'].map(k=>dl('cua-hang.html?cat='+k,MQ.CATS[k].name,cc(k))).join('')}<a href="cua-hang.html?flavour=muoiot">Vị muối ớt · cay<small>${cnt(p=>p.flavour==='muoiot')}</small></a><a href="cua-hang.html" class="dd__all">Tất cả sản phẩm →</a></div>
+    <div class="dd dd--wide"><div class="dd__col"><h6>Theo cách sấy</h6>${MQ.PROC.map(k=>dl('cua-hang.html?cat='+k,MQ.CATS[k].name,cc(k))+procFruits(k)).join('')}<a href="cua-hang.html?flavour=muoiot">Vị muối ớt · cay<small>${cnt(p=>p.flavour==='muoiot')}</small></a><a href="cua-hang.html" class="dd__all">Tất cả sản phẩm →</a></div>
       <div class="dd__col"><h6>Theo loại quả</h6><div class="dd__2">${FRUITLINKS}</div></div>
       <div class="dd__col"><h6>Quy cách</h6><a href="cua-hang.html?tag=small">Gói nhỏ ≤ 100g</a><a href="cua-hang.html?tag=mid">Túi vừa 120 – 300g</a><a href="cua-hang.html?tag=big">Túi lớn ≥ 350g</a><h6 class="mt">Hương vị</h6>${FLAVLINKS}</div></div></div>
   <div class="mbar__item has-dd"><a href="cua-hang.html?cat=omai">Ô mai &amp; xí muội <svg class="chev"><use href="#i-chev"/></svg></a>
@@ -257,7 +276,7 @@ MQ.sideGift=()=>`<a class="sbanner" href="hop-qua.html#tu-thiet-ke">${MQ.giftSvg
 MQ.side=()=>{const cc=k=>cnt(p=>p.cat===k);const L=(h,t,n)=>`<li><a href="${h}">${t}${n!=null?`<em>${n}</em>`:''}</a></li>`;
   const fr=Object.entries(MQ.FRUITS).map(([k,f])=>[k,f,cnt(p=>p.fruit===k)]).filter(x=>x[2]);
   return `<section class="sbox"><h3 class="sbox__t sbox__t--menu"><svg><use href="#i-list"/></svg>Danh mục sản phẩm</h3><ul class="tree">
-  <li class="tree__g"><a href="cua-hang.html"><b>Trái cây sấy</b></a><ul>${['deo','thanghoa','gion','kho'].map(k=>L('cua-hang.html?cat='+k,MQ.CATS[k].name,cc(k))).join('')}${L('cua-hang.html?flavour=muoiot','Vị muối ớt · cay',cnt(p=>p.flavour==='muoiot'))}</ul></li>
+  <li class="tree__g"><a href="cua-hang.html"><b>Trái cây sấy</b></a><ul>${MQ.PROC.map(k=>L('cua-hang.html?cat='+k,MQ.CATS[k].name,cc(k))+(()=>{const fr=[...new Set(live.filter(p=>p.cat===k&&p.fruit).map(p=>p.fruit))].map(f=>[f,cnt(p=>p.cat===k&&p.fruit===f)]).filter(x=>x[1]>1).sort((a,b)=>b[1]-a[1]);return fr.length?`<li class="tree__sub">${fr.map(([f,n])=>`<a href="cua-hang.html?cat=${k}&fruit=${f}">${MQ.fruitProc(f,k)}<em>${n}</em></a>`).join('')}</li>`:''})()).join('')}${L('cua-hang.html?flavour=muoiot','Vị muối ớt · cay',cnt(p=>p.flavour==='muoiot'))}</ul></li>
   <li class="tree__g"><a href="cua-hang.html?cat=omai"><b>Ô mai &amp; xí muội</b><em>${cc('omai')}</em></a></li>
   <li class="tree__g"><a href="cua-hang.html?cat=hat"><b>Hạt dinh dưỡng</b><em>${cc('hat')}</em></a></li>
   <li class="tree__g"><a href="cua-hang.html?cat=set"><b>Set quà &amp; hộp quà</b></a><ul>${L('cua-hang.html?cat=set','Set quà &amp; khay mứt',cc('set'))}${L('hop-qua.html#hop-san','Hộp quà Tết 2027')}${L('hop-qua.html#tu-thiet-ke','Tự thiết kế hộp quà')}</ul></li>

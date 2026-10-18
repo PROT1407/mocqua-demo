@@ -18,7 +18,7 @@ MQ.CATS = {
 };
 /* loại quả — top: hiển thị trước trong bộ lọc */
 MQ.FRUITS = {
-  xoai:{name:'Xoài',top:1}, saurieng:{name:'Sầu riêng',top:1}, mit:{name:'Mít',top:1}, thanhlong:{name:'Thanh long',top:1}, dautay:{name:'Dâu tây',top:1},
+  xoai:{name:'Xoài',top:1}, mangcut:{name:'Măng cụt'}, saurieng:{name:'Sầu riêng',top:1}, mit:{name:'Mít',top:1}, thanhlong:{name:'Thanh long',top:1}, dautay:{name:'Dâu tây',top:1},
   thom:{name:'Thơm (dứa)',top:1}, me:{name:'Me',top:1}, ximuoi:{name:'Xí muội',top:1}, mangcau:{name:'Mãng cầu',top:1}, nhan:{name:'Nhãn',top:1},
   dudu:{name:'Đu đủ'}, coc:{name:'Cóc'}, chanhday:{name:'Chanh dây'}, vai:{name:'Vải'}, hong:{name:'Hồng'}, sung:{name:'Sung'}, cam:{name:'Cam'},
   oi:{name:'Ổi'}, duanon:{name:'Dừa non'}, gung:{name:'Gừng'}, hatsen:{name:'Hạt sen'}, mo:{name:'Mơ'}, dao:{name:'Đào'}, man:{name:'Mận'},
@@ -44,14 +44,18 @@ const V=(sku,w,g,line,p,img,back,note)=>({sku,w,g,line,p,img:img&&('products/'+i
 /* VP: biến thể có mẫu bao bì (pk = khoá trong p.packs) */
 const VP=(pk,...a)=>Object.assign(V(...a),{pk});
 /* mã cũ đã gộp -> mã mới (giữ link/giỏ hàng cũ) */
-MQ.SKU_ALIAS={'MQ-DXO-350-FH':'MQ-DXO-500-FHG','MQ-DXO-NEW-FH':'MQ-DXO-200-FHX','MQ-DXC-500-CHD':'MQ-DXC-300-CHD','MQ-DXC-500-CHX':'MQ-DXC-300-CHX'};
+/* id cũ đã gộp -> trang mới (link cũ, giỏ hàng cũ vẫn chạy) */
+MQ.ID_ALIAS={'coc-say-deo':'coc-say-deo-muoi-ot-goodgood','mqz-sau-rieng-thang-hoa-200':'mqz-sau-rieng-ri6-thang-hoa','mqz-hong-say-deo-hop-xach':'mqz-hong-say-deo'};
+MQ.SKU_ALIAS={'MQ-DCO-080':'MQ-DCM-080-GG','MQ-DXO-350-FH':'MQ-DXO-500-FHG','MQ-DXO-NEW-FH':'MQ-DXO-200-FHX','MQ-DXC-500-CHD':'MQ-DXC-300-CHD','MQ-DXC-500-CHX':'MQ-DXC-300-CHX'};
 MQ.PRODUCTS = [
  /* Xoài sấy dẻo Fresh & Healthy (Viza): 1 trang · chọn khối lượng + mẫu bao bì. Cùng khối lượng = cùng giá, mọi màu bao bì.
     Giá theo dacsancaocap "Xoài Sấy Dẻo Đặc Biệt" 500g 170k: 500g 165k · 200g 69k · 100g 35k (túi nhỏ đắt hơn/gram). */
  {id:'xoai-say-deo',name:'Xoài sấy dẻo Fresh & Healthy',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:1,badge:'Bán chạy',def:'MQ-DXO-200-FHX',
+  combo:{id:'combo-xoai-say-deo-100g',label:'Combo túi 100g mua 5 tặng 1 — 165.000đ cho 6 túi'},
+  pknote:'Cùng khối lượng – cùng giá ở mọi mẫu bao bì. Mẫu Trắng trong 200g: nhãn không in khối lượng, xếp theo cỡ túi tương đương túi 200g.',
   packs:{xanh:{name:'Xanh lá – trắng',c:['#8cc63f','#f7f7f2']},dayxanh:{name:'Trắng – đáy xanh',c:['#f7f7f2','#3fae3a']},vang:{name:'Kem – đáy vàng',c:['#f3ecd2','#f2b705']},trong:{name:'Trắng trong',c:['#ffffff','#f0c64a']}},
-  variants:[VP('xanh','MQ-DXO-100-FHX','100g',100,'fh',35000,'fhx-xanh'),VP('dayxanh','MQ-DXO-100-FHG','100g',100,'fh',35000,'fhx-dayxanh-s'),
-    VP('xanh','MQ-DXO-200-FHX','200g',200,'fh',69000,'fhx-xanh'),VP('dayxanh','MQ-DXO-200-FHG','200g',200,'fh',69000,'fhx-dayxanh-s'),
+  variants:[VP('xanh','MQ-DXO-100-FHX','100g',100,'fh',35000,'fhx-xanh'),VP('dayxanh','MQ-DXO-100-FHG','100g',100,'fh',35000,'fhx-dayxanh-100r','fhx-dayxanh-100'),
+    VP('xanh','MQ-DXO-200-FHX','200g',200,'fh',69000,'fhx-xanh'),VP('dayxanh','MQ-DXO-200-FHG','200g',200,'fh',69000,'fhx-dayxanh-s'),VP('trong','MQ-DXO-200-FHT','200g',200,'fh',69000,'fhx-trong'),
     VP('dayxanh','MQ-DXO-500-FHG','500g',500,'fh',165000,'fhx-dayxanh-l','dx350_back'),VP('vang','MQ-DXO-500-FHV','500g',500,'fh',165000,'fhx-vang'),VP('trong','MQ-DXO-500-FH','500g',500,'fh',165000,'dx500')],
   taste:{ngot:4,chua:2,deo:4,gion:0},
   short:'Lát xoài chín vàng óng, dẻo mềm, chua ngọt hài hoà — chọn túi 100g, 200g hay 500g, nhiều mẫu bao bì Fresh & Healthy, cùng một vị xoài.',
@@ -65,13 +69,14 @@ MQ.PRODUCTS = [
  /* dòng GoodGood tách trang riêng (trước đây chung trang với F&H).
     Giá theo dacsancaocap (Xoài Sấy Dẻo Đặc Biệt 500g 170k): 200g 69k, 300g 100k; Cheers+ cao hơn 3–5k cùng khối lượng (300g 105k).
     Gói nhỏ chưa rõ khối lượng -> giữ Liên hệ. */
- {id:'xoai-say-deo-goodgood',name:'Xoài sấy dẻo GoodGood',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:12,
-  variants:[V('MQ-DXO-200-GG','200g',200,'goodgood',69000,'dx200','dx200_back')],
+ {id:'xoai-say-deo-goodgood',name:'Xoài sấy dẻo GoodGood',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:12,def:'MQ-DXO-200-GG',
+  combo:{id:'combo-xoai-say-deo-100g',label:'Combo túi 100g mua 5 tặng 1 — 165.000đ cho 6 túi'},
+  variants:[V('MQ-DXO-100-GG','100g',100,'goodgood',35000,'ggx-100'),V('MQ-DXO-200-GG','200g',200,'goodgood',69000,'ggx-200','dx200_back')],
   taste:{ngot:4,chua:2,deo:4,gion:0},
-  short:'Xoài sấy dẻo dòng GoodGood của Viza Food, túi 200g đáy vàng — lát xoài dẻo, chua ngọt.',
+  short:'Xoài sấy dẻo dòng GoodGood của Viza Food, túi trắng đáy vàng 100g và 200g — lát xoài dẻo, chua ngọt.',
   long:'Xoài chín thái lát, sấy dẻo giữ màu vàng tự nhiên. Túi đứng 200g dòng GoodGood (Viza Food), bán nguyên bao bì.'},
  {id:'xoai-say-deo-muoi-ot-goodgood',name:'Xoài sấy dẻo muối ớt GoodGood',cat:'deo',fruit:'xoai',flavour:'muoiot',maker:'viza',rank:13,
-  variants:[V('MQ-DXM-300-GG','300g',300,'goodgood',100000,'dxmo300'),V('MQ-DXM-200-GG','200g',200,'goodgood',69000,'dxmo200','dxmo200_back'),V('MQ-DXM-S-GG','Gói nhỏ',0,'goodgood',null,'dxmogn',null,'Khối lượng đang xác nhận')],
+  variants:[V('MQ-DXM-300-GG','300g',300,'goodgood',100000,'dxmo300'),V('MQ-DXM-200-GG','200g',200,'goodgood',69000,'ggx-mo200','dxmo200'),V('MQ-DXM-S-GG','Gói nhỏ',0,'goodgood',null,'dxmogn',null,'Khối lượng đang xác nhận')],
   taste:{ngot:3,chua:3,deo:4,gion:0},
   short:'Xoài dẻo muối ớt dòng GoodGood (Viza Food) — túi 300g, 200g và gói nhỏ.',
   long:'Vị ngọt của xoài chín gặp vị mặn – cay của muối ớt. Dòng GoodGood của Viza Food, bán nguyên bao bì.'},
@@ -92,8 +97,18 @@ MQ.PRODUCTS = [
   taste:{ngot:4,chua:2,deo:0,gion:5},
   short:'Xoài sấy thăng hoa giòn xốp, tan nhẹ trong miệng, giữ màu và hương xoài gần như tươi.',
   long:'Công nghệ sấy thăng hoa rút nước ở nhiệt độ rất thấp, nhờ vậy miếng xoài giữ được màu sắc, hình dáng và hương vị tự nhiên, cho cảm giác giòn tan rất lạ miệng.'},
- {id:'sau-rieng-say-thang-hoa',name:'Sầu riêng sấy thăng hoa',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:5,badge:'Cao cấp',
-  variants:[V('MQ-THSR-100-GG','100g',100,'goodgood',235000,'tsr100g','tsr100g_back'),V('MQ-THSR-100-KT','100g',100,'kita',235000,'tsr100k'),V('MQ-THSR-105-YM','105g',105,'yummy',245000,'tsr105')],
+ {id:'sau-rieng-say-thang-hoa',name:'Sầu riêng sấy thăng hoa GoodGood',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:5,badge:'Cao cấp',
+  variants:[V('MQ-THSR-100-GG','100g',100,'goodgood',235000,'tsr100g','tsr100g_back')],
+  taste:{ngot:5,chua:0,deo:0,gion:5},
+  short:'Múi sầu riêng sấy thăng hoa giòn xốp, béo thơm, ít mùi hơn sầu riêng tươi — "vua trái cây" tiện mang theo.',
+  long:'Sầu riêng chín được sấy thăng hoa để giữ trọn vị béo ngọt và màu vàng tự nhiên. Miếng sầu riêng giòn xốp, tan trong miệng; túi kín, dễ mang đi du lịch hay làm quà biếu.'},
+ {id:'sau-rieng-say-thang-hoa-kita',name:'Sầu riêng sấy thăng hoa KITA',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:6,
+  variants:[V('MQ-THSR-100-KT','100g',100,'kita',235000,'tsr100k')],
+  taste:{ngot:5,chua:0,deo:0,gion:5},
+  short:'Múi sầu riêng sấy thăng hoa giòn xốp, béo thơm, ít mùi hơn sầu riêng tươi — "vua trái cây" tiện mang theo.',
+  long:'Sầu riêng chín được sấy thăng hoa để giữ trọn vị béo ngọt và màu vàng tự nhiên. Miếng sầu riêng giòn xốp, tan trong miệng; túi kín, dễ mang đi du lịch hay làm quà biếu.'},
+ {id:'sau-rieng-say-thang-hoa-yummy',name:'Sầu riêng sấy thăng hoa Yummy',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:6,
+  variants:[V('MQ-THSR-105-YM','105g',105,'yummy',245000,'tsr105')],
   taste:{ngot:5,chua:0,deo:0,gion:5},
   short:'Múi sầu riêng sấy thăng hoa giòn xốp, béo thơm, ít mùi hơn sầu riêng tươi — "vua trái cây" tiện mang theo.',
   long:'Sầu riêng chín được sấy thăng hoa để giữ trọn vị béo ngọt và màu vàng tự nhiên. Miếng sầu riêng giòn xốp, tan trong miệng; túi kín, dễ mang đi du lịch hay làm quà biếu.'},
@@ -107,17 +122,34 @@ MQ.PRODUCTS = [
   taste:{ngot:4,chua:3,deo:4,gion:0},
   short:'Khoanh thơm sấy dẻo chua ngọt thanh mát — gói 80g nhỏ xinh, giá dễ thương.',
   long:'Thơm chín được cắt khoanh và sấy dẻo, giữ vị chua ngọt tự nhiên. Gói 80g tiện bỏ túi, hợp làm quà nhỏ.'},
- {id:'coc-say-deo',name:'Cóc sấy dẻo',cat:'deo',fruit:'coc',flavour:'nguyen',maker:'viza',rank:15,
-  variants:[V('MQ-DCO-080','80g',80,null,30000,'ph-coc')],
-  taste:{ngot:3,chua:4,deo:3,gion:1},
-  short:'Cóc sấy dẻo chua chua ngọt ngọt, giòn dai nhẹ — vị tuổi thơ trong gói 80g.',
-  long:'Cóc được sấy dẻo giữ vị chua thanh đặc trưng. Ảnh bao bì đang được cập nhật.'},
  {id:'coc-say-deo-muoi-ot-goodgood',name:'Cóc sấy dẻo muối ớt GoodGood',cat:'deo',fruit:'coc',flavour:'muoiot',maker:'viza',rank:16,wnote:'theo bảng quy cách Viza Food, nhãn trước không in khối lượng',
   variants:[V('MQ-DCM-080-GG','80g',80,'goodgood',30000,'ggx-cocmo')],
   taste:{ngot:2,chua:5,deo:3,gion:1},
   short:'Cóc sấy dẻo áo muối ớt, chua giòn sần sật, mặn cay vừa miệng — túi zip GoodGood xanh lá, gói 80g.',
   long:'Miếng cóc sấy dẻo tẩm muối ớt, giữ vị chua thanh và độ sần sật đặc trưng của cóc. Túi zip đứng màu xanh lá dòng GoodGood (Viza Food), in "Dried Ambarella · Cóc sấy dẻo muối ớt". Mộc Quả bán nguyên túi gốc.',
   desc:{intro:'Cóc muối ớt là món của tuổi học trò: cổng trường, gói giấy nhỏ, vừa ăn vừa xuýt xoa. Gói cóc GoodGood này mang lại đúng cảm giác đó nhưng gọn gàng hơn nhiều. Miếng cóc sấy dẻo vẫn giữ chút sần sật, chua là chính, áo muối ớt mặn cay vừa đủ. Chúng tôi để nó cạnh me muối ớt, vì ai đã thích vị này thường lấy cả hai.',sec:[{k:'huong',h:'Hương vị',p:['Chua thanh, mặn cay nhẹ, ngọt rất ít. Miếng dẻo nhưng không mềm nhũn, nhai vẫn thấy sần sật của thịt cóc.']},{k:'spec',h:'Thông tin sản phẩm',spec:[['Thương hiệu','GoodGood · Viza Food (hàng chính hãng)'],['Tên in trên túi','Dried Ambarella · Cóc sấy dẻo muối ớt'],['Dấu trên nhãn','Natural Guaranteed 100% · No Cholesterol · Fresh Fruit'],['Khối lượng','80g (theo bảng quy cách Viza Food)'],['Bao bì','Túi zip đứng màu xanh lá, có lỗ treo'],['Ngày sản xuất & HSD','Xem trên bao bì']]},{k:'dung',h:'Bảo quản & dùng',p:['Ăn liền như món vặt. Kéo kín zip sau khi mở, để nơi khô mát, tránh nắng.']}]}},
+ {id:'combo-xoai-say-deo-100g',name:'Combo xoài sấy dẻo 100g mua 5 tặng 1',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:2,badge:'Mua 5 tặng 1',
+  packs:{vang:{name:'Vàng · GoodGood',c:['#ffffff','#f2b705']},xanh:{name:'Xanh · Fresh & Healthy',c:['#ffffff','#3fae3a']},tron:{name:'Trộn 2 nhãn',c:['#f2b705','#3fae3a']}},
+  pknote:'Cùng một giá cho cả hai nhãn. Chọn "Trộn 2 nhãn" và ghi số túi mỗi màu vào ghi chú đơn hàng (ví dụ: 3 vàng + 3 xanh).',
+  variants:[VP('vang','MQ-CBX-100-GG','5 túi 100g + tặng 1',600,'goodgood',165000,'vzx-combo100','vzx-combo100v'),VP('xanh','MQ-CBX-100-FH','5 túi 100g + tặng 1',600,'fh',165000,'fhx-dayxanh-100r','vzx-combo100'),VP('tron','MQ-CBX-100-MIX','5 túi 100g + tặng 1',600,'goodgood',165000,'vzx-combo100','fhx-dayxanh-100r')],
+  bundle:{buy:1,label:'Mua 5 tặng 1 túi 100g',gmap:{'MQ-CBX-100-GG':['xoai-say-deo-goodgood','MQ-DXO-100-GG'],'MQ-CBX-100-FH':['xoai-say-deo','MQ-DXO-100-FHG'],'MQ-CBX-100-MIX':['xoai-say-deo','MQ-DXO-100-FHG']}},
+  video:{src:'video/combo-xoai-100g.mp4',poster:'video/combo-xoai-100g-poster.jpg'},
+  taste:{ngot:4,chua:2,deo:4,gion:0},
+  short:'5 túi xoài sấy dẻo 100g giá 165.000đ, tặng thêm 1 túi — 6 túi cả thảy. Chọn nhãn vàng GoodGood, nhãn xanh Fresh & Healthy hoặc trộn cả hai.',
+  long:'Combo đóng sẵn trong túi zip trong, dán tem vàng "Combo xoài sấy dẻo 100g · Mua 5 tặng 1 · Buy 5 Get 1". Bên trong là các túi xoài sấy dẻo 100g của Viza Food: nhãn vàng GoodGood hoặc nhãn xanh Fresh & Healthy, cùng một giá.',
+  desc:{intro:'Túi 100g là cỡ khách hỏi nhiều nhất: vừa một lần ăn, bỏ túi xách gọn, chia cho đồng nghiệp cũng tiện. Nên chúng tôi gom thành combo: trả tiền 5 túi, nhận 6 túi, tính ra chỉ chừng 27.500đ một túi. Nhãn vàng GoodGood hay nhãn xanh Fresh & Healthy đều cùng giá, bạn thích màu nào chọn màu đó, hoặc trộn mỗi thứ vài túi để cả nhà nếm thử rồi tự chọn loại mình mê.',sec:[{k:'huong',h:'Trong combo có gì',p:['5 túi xoài sấy dẻo 100g đúng nhãn bạn chọn, thêm 1 túi 100g tặng kèm. Combo đóng trong túi zip trong, dán tem vàng Mua 5 tặng 1. Đặt từ giỏ hàng, túi tặng hiện thành một dòng quà 0đ.','Mua lẻ 5 túi 100g bất kỳ (GoodGood hoặc Fresh & Healthy) trong cùng đơn, giỏ hàng cũng tự tính giá combo 165.000đ và thêm túi tặng.']},{k:'spec',h:'Thông tin combo',spec:[['Gồm','5 túi xoài sấy dẻo 100g + 1 túi 100g tặng kèm'],['Nhãn','Vàng · GoodGood hoặc Xanh · Fresh & Healthy (Viza Food), có thể trộn'],['Giá','165.000đ / combo 6 túi (≈ 27.500đ / túi)'],['Đóng gói','Túi zip trong, tem "Combo xoài sấy dẻo 100g · Mua 5 tặng 1"'],['Ngày sản xuất & HSD','In trên từng túi']]},{k:'qua',h:'Hợp để làm gì',p:['Chia quà nhỏ cho đồng nghiệp, bạn học; để sẵn trong ngăn bàn làm việc; mang theo khi đi du lịch. Mỗi túi một lần ăn, mở ra là vừa, không lo ăn dở để lâu.']}]}},
+ {id:'mang-cut-say-thang-hoa-goodgood',name:'Măng cụt sấy thăng hoa GoodGood',cat:'thanghoa',fruit:'mangcut',flavour:'nguyen',maker:'viza',rank:6,badge:'Mới',wnote:'đang chờ xác nhận khối lượng in trên túi',
+  variants:[V('MQ-THMC-210-GG','210g',210,'goodgood',315000,'ggx-mangcut','ggx-mangcut-poster')],
+  taste:{ngot:4,chua:3,deo:0,gion:5},
+  short:'Múi măng cụt trắng sấy thăng hoa giòn xốp, chua ngọt tự nhiên — túi vàng đỏ dòng GoodGood, ghi 100% Natural · No Additives.',
+  long:'Măng cụt được sấy thăng hoa (sấy đông khô) nên múi giữ màu trắng, giòn xốp và tan nhẹ trong miệng. Túi GoodGood (Viza Food) in "Măng Cụt Sấy Thăng Hoa · Mango Steen Dried", 100% Natural, No Additives, Product of Vietnam.',
+  desc:{intro:'Măng cụt tươi ngon nhưng mùa ngắn, bóc vỏ lại lem tay. Gói măng cụt sấy thăng hoa này giải quyết cả hai: múi trắng vẫn còn nguyên dáng, cắn vào giòn xốp rồi tan dần, vị chua ngọt thanh y như múi tươi. Chúng tôi thích nó vì nhãn ghi rõ 100% tự nhiên, không chất phụ gia, và cách sấy thăng hoa giữ được phần lớn dưỡng chất của quả.',sec:[{k:'huong',h:'Hương vị',p:['Giòn xốp, nhẹ tênh; ngọt dịu xen chút chua thanh rất đặc trưng của măng cụt. Ăn không ngấy, hợp nhâm nhi cùng trà.']},{k:'cach',h:'Vì sao sấy thăng hoa',p:['Quả được làm đông rồi rút nước ở nhiệt độ thấp, nên múi không bị chín nhiệt, giữ màu trắng, hương thơm và dinh dưỡng tốt hơn so với sấy nóng thông thường.']},{k:'spec',h:'Thông tin sản phẩm',spec:[['Thương hiệu','GoodGood · Viza Food (hàng chính hãng)'],['Tên in trên túi','Măng Cụt Sấy Thăng Hoa · Mango Steen Dried'],['Dấu trên nhãn','100% Natural · No Additives · Cholesterol Free · 100% Fresh Fruit · Halal'],['Xuất xứ','Sản phẩm của Việt Nam · Product of Vietnam'],['Khối lượng','210g (đang xác nhận, nhãn trước không in khối lượng)'],['Ngày sản xuất & HSD','Xem trên bao bì']]},{k:'dung',h:'Bảo quản & dùng',p:['Ăn liền. Đồ sấy thăng hoa rất dễ hút ẩm: mở túi xong nên kéo kín zip ngay, để nơi khô mát.']}]}},
+ {id:'xoai-say-deo-yummy',name:'Xoài sấy dẻo Yummy',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:14,
+  variants:[V('MQ-DXO-150-YM','150g · hũ',150,'yummy',52000,'ymx-hu150')],
+  taste:{ngot:4,chua:2,deo:4,gion:0},
+  short:'Xoài sấy dẻo Yummy trong hũ vuông nắp giấy kraft, buộc dây gai và thẻ treo — hũ 150g, đẹp sẵn để làm quà.',
+  long:'Lát xoài sấy dẻo xếp đứng trong hũ vuông trong suốt, nắp bọc giấy kraft in logo Yummy, cổ hũ buộc dây gai với thẻ treo "Xoài sấy dẻo". Dòng Yummy của Viza Food, bán nguyên hũ.',
+  desc:{intro:'Hũ xoài Yummy là món chúng tôi hay gợi ý khi khách hỏi một món quà nhỏ mà vẫn chỉn chu. Nắp giấy kraft, sợi dây gai thắt nơ, tấm thẻ treo in chữ "Xoài sấy dẻo": nhìn là thấy mộc và ấm, chẳng cần gói thêm gì. Qua thành hũ trong, bạn thấy rõ từng lát xoài vàng xếp đứng bên trong.',sec:[{k:'spec',h:'Thông tin sản phẩm',spec:[['Thương hiệu','Yummy · Viza Food (hàng chính hãng)'],['Tên trên thẻ treo','Xoài sấy dẻo'],['Khối lượng','150g (theo thông tin nhà cung cấp; chữ trên thẻ ảnh chụp không đọc rõ)'],['Bao bì','Hũ vuông trong suốt, nắp bọc giấy kraft, dây gai và thẻ treo'],['Ngày sản xuất & HSD','In trên thẻ treo']]},{k:'qua',h:'Hợp làm quà',p:['Đặt vài hũ cạnh nhau trên kệ hay trong giỏ quà là đủ đẹp. Dùng xong, hũ vuông còn để đựng hạt, trà hay kẹo rất tiện.']}]}},
  {id:'xoai-say-deo-hop-giay-viza',name:'Xoài sấy dẻo Viza Food hộp giấy',cat:'deo',fruit:'xoai',flavour:'nguyen',maker:'viza',rank:14,oos:true,
   variants:[V('MQ-DXO-150-VZ','150g · hộp giấy',150,'vizabox',52000,'vzx-xoai150')],
   taste:{ngot:4,chua:2,deo:4,gion:0},
@@ -130,18 +162,18 @@ MQ.PRODUCTS = [
   short:'Mãng cầu sấy dẻo thơm, chua ngọt dịu — một vị quà khác lạ.',
   long:'Mãng cầu chín được sấy dẻo, giữ hương thơm đặc trưng. Ảnh bao bì đang được cập nhật.'},
  {id:'me-say-deo-muoi-ot',name:'Me sấy dẻo muối ớt GoodGood',wnote:'theo bảng quy cách Viza Food, nhãn trước không in khối lượng',cat:'deo',fruit:'me',flavour:'muoiot',maker:'viza',rank:19,
-  variants:[V('MQ-DME-080-GG','80g',80,'goodgood',15000,'ggx-me','me080')],
+  variants:[V('MQ-DME-080-GG','80g',80,'goodgood',30000,'ggx-me','me080')],
   taste:{ngot:3,chua:5,deo:4,gion:0},
   short:'Me dẻo áo muối ớt chua – cay – mặn – ngọt đủ vị, càng ăn càng cuốn.',
   long:'Me được sấy dẻo và tẩm muối ớt, giữ vị chua đặc trưng. Túi zip đứng màu nâu dòng GoodGood (Viza Food), in "Dried Salted Chili Tamarind · Me sấy dẻo muối ớt", gói 80g.',
   desc:{intro:'Có những món ăn vặt mà chỉ nhìn thấy là đã chảy nước miếng, me muối ớt là một trong số đó. Miếng me dẻo, chua trước, ngọt sau, rồi cái mặn cay của muối ớt kéo bạn lấy thêm miếng nữa. Gói GoodGood này nhỏ gọn, giá dễ chịu, để bàn làm việc hay bỏ túi đi đường đều tiện.',sec:[{k:'huong',h:'Hương vị',p:['Chua là chính, có ngọt và cay mặn nhẹ của muối ớt. Ai thích vị chua đậm sẽ mê ngay; người ăn cay kém cũng vẫn ăn được.']},{k:'spec',h:'Thông tin sản phẩm',spec:[['Thương hiệu','GoodGood · Viza Food (hàng chính hãng)'],['Tên in trên túi','Dried Salted Chili Tamarind · Me sấy dẻo muối ớt'],['Dấu trên nhãn','Natural Guaranteed 100% · No Cholesterol · Halal · Fresh Fruit'],['Khối lượng','80g (theo bảng quy cách Viza Food)'],['Bao bì','Túi zip đứng màu nâu, có lỗ treo'],['Ngày sản xuất & HSD','Xem trên bao bì']]},{k:'dung',h:'Bảo quản & dùng',p:['Ăn liền. Kéo kín zip sau khi mở, để nơi khô mát, tránh nắng.']}]}},
  {id:'thanh-long-say-deo',name:'Thanh long sấy dẻo',cat:'deo',fruit:'thanhlong',flavour:'nguyen',maker:'viza',rank:21,
-  variants:[V('MQ-DTL-080-GG','80g',80,'goodgood',35000,'tl080')],
+  variants:[V('MQ-DTL-080-GG','80g',80,'goodgood',70000,'tl080')],
   taste:{ngot:3,chua:1,deo:4,gion:0},
   short:'Thanh long ruột đỏ sấy dẻo, màu hồng tím tự nhiên, ngọt nhẹ.',
   long:'Thanh long được sấy dẻo giữ sắc hồng tím tự nhiên. Gói 80g (Dried Dragon).'},
  {id:'du-du-say-deo',name:'Đu đủ sấy dẻo GoodGood',wnote:'theo bảng quy cách Viza Food, nhãn trước không in khối lượng',cat:'deo',fruit:'dudu',flavour:'nguyen',maker:'viza',rank:23,
-  variants:[V('MQ-DDU-080-GG','80g',80,'goodgood',30000,'ggx-dudu','dd080')],
+  variants:[V('MQ-DDU-080-GG','80g',80,'goodgood',60000,'ggx-dudu','dd080')],
   taste:{ngot:4,chua:1,deo:4,gion:0},
   short:'Đu đủ chín sấy dẻo, miếng cam tươi, ngọt dịu dễ ăn — túi zip GoodGood màu cam, gói 80g.',
   long:'Miếng đu đủ chín sấy dẻo, mềm, ngọt thanh, không gắt. Túi zip đứng dòng GoodGood (Viza Food) in "Dried Papaya · Đu đủ sấy dẻo", kèm các dấu Natural Guaranteed 100%, No Cholesterol và Halal. Mộc Quả bán nguyên túi gốc.',
@@ -495,14 +527,18 @@ MQ.PRODUCTS = [
  {id:'ca-phe',name:'Cà phê Robusta rang mộc',cat:'cafe',img:'caphe.jpg',variants:[V('','500g',500,null,null)],soon:true,short:'Robusta rang mộc, đậm và thơm.'},
  {id:'keo-dua',name:'Kẹo dừa ca cao',cat:'mut',img:'keodua.jpg',variants:[V('','400g',400,null,null)],soon:true,short:'Kẹo dừa truyền thống, gói giấy kiếng xinh xắn.'}
 ];
+/* gộp trang trùng nhãn: cùng thương hiệu + cùng loại => 1 trang, chọn quy cách/bao bì */
+[['mqz-sau-rieng-thang-hoa-200','mqz-sau-rieng-ri6-thang-hoa',w=>'Túi lớn · '+w],['mqz-hong-say-deo-hop-xach','mqz-hong-say-deo',w=>w]].forEach(([from,to,lab])=>{
+  const P=MQ.PRODUCTS,i=P.findIndex(p=>p.id===from),t=P.find(p=>p.id===to);if(i<0||!t)return;
+  P[i].variants.forEach(v=>t.variants.push(Object.assign({},v,{w:lab(v.w)})));if(P[i].gallery)t.gallery=(t.gallery||[]).concat(P[i].gallery.filter(g=>!(t.gallery||[]).includes(g)));P.splice(i,1)});
 /* chuẩn hoá: ảnh chính = ảnh biến thể đầu tiên; sizes = biến thể (tương thích code cũ) */
 MQ.PRODUCTS.forEach(p=>{p.sizes=p.variants;if(!p.img)p.img=p.variants[0].img;else p.img=p.img;
   p.lines=[...new Set(p.variants.map(v=>v.line).filter(Boolean))];if(p.cat==='set')p.isSet=true;});
 MQ.GIFTS = [
- {id:'hop-an-nhien',name:'Hộp An Nhiên',slots:4,w:'4 món',price:450000,box:'#2b4a3d',ribbon:'#c9a868',items:['xoai-say-deo','thom-say-deo','coc-say-deo','mang-cau-say-deo'],for:['gia-dinh','ban-be'],desc:'Bốn vị dẻo chua ngọt — món quà thăm hỏi nhỏ xinh cho người thân, bạn bè.'},
- {id:'hop-sum-vay',name:'Hộp Sum Vầy',slots:6,w:'6 món',price:790000,box:'#5b4632',ribbon:'#e2c48a',items:['xoai-say-deo','xoai-say-deo-muoi-ot','mit-say-gion','thom-say-deo','coc-say-deo','mang-cau-say-deo'],for:['gia-dinh'],desc:'Đủ dẻo, giòn, muối ớt cho mâm quả ngày đoàn viên.'},
+ {id:'hop-an-nhien',name:'Hộp An Nhiên',slots:4,w:'4 món',price:450000,box:'#2b4a3d',ribbon:'#c9a868',items:['xoai-say-deo','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['gia-dinh','ban-be'],desc:'Bốn vị dẻo chua ngọt — món quà thăm hỏi nhỏ xinh cho người thân, bạn bè.'},
+ {id:'hop-sum-vay',name:'Hộp Sum Vầy',slots:6,w:'6 món',price:790000,box:'#5b4632',ribbon:'#e2c48a',items:['xoai-say-deo','xoai-say-deo-muoi-ot','mit-say-gion','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['gia-dinh'],desc:'Đủ dẻo, giòn, muối ớt cho mâm quả ngày đoàn viên.'},
  {id:'hop-phu-quy',name:'Hộp Phú Quý',slots:6,w:'6 món',price:1090000,box:'#7a2e22',ribbon:'#d8b878',items:['sau-rieng-say-thang-hoa','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','mit-say-gion','mang-cau-say-deo'],for:['gia-dinh','doi-tac'],tag:'Tết Đinh Mùi 2027',desc:'Có sầu riêng sấy thăng hoa — vị quà sang được yêu thích. Hộp đỏ son, thiệp thư pháp.'},
- {id:'hop-thinh-vuong',name:'Hộp Thịnh Vượng',slots:9,w:'9 món',price:1490000,box:'#1b1f1d',ribbon:'#b08d57',items:['sau-rieng-say-thang-hoa','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','xoai-chin-cay','mit-say-gion','thom-say-deo','coc-say-deo','mang-cau-say-deo'],for:['doi-tac','sep'],desc:'Trọn bộ sấy dẻo – giòn – thăng hoa trong hộp cứng sang trọng cho đối tác, khách hàng VIP.'}
+ {id:'hop-thinh-vuong',name:'Hộp Thịnh Vượng',slots:9,w:'9 món',price:1490000,box:'#1b1f1d',ribbon:'#b08d57',items:['sau-rieng-say-thang-hoa','xoai-say-thang-hoa','xoai-say-deo','xoai-say-deo-muoi-ot','xoai-chin-cay','mit-say-gion','thom-say-deo','coc-say-deo-muoi-ot-goodgood','mang-cau-say-deo'],for:['doi-tac','sep'],desc:'Trọn bộ sấy dẻo – giòn – thăng hoa trong hộp cứng sang trọng cho đối tác, khách hàng VIP.'}
 ];
 MQ.BOX_OPTIONS = {
   sizes:[{slots:4,name:'Hộp 4 ngăn',fee:90000},{slots:6,name:'Hộp 6 ngăn',fee:120000},{slots:9,name:'Hộp 9 ngăn',fee:160000}],

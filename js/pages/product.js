@@ -2,6 +2,7 @@
 const FIG=(im,cls='')=>im?`<figure class="dsc__fig ${cls}"><img src="${im.src.startsWith('desc/')?'assets/'+im.src+'?v='+MQ.IMGV:MQ.img(im.src)}" alt="${MQ.esc(im.alt||'')}" loading="lazy" width="1200" height="750">${im.cap||im.credit?`<figcaption>${im.cap?`<b>${MQ.esc(im.cap)}</b> `:''}${im.credit?(im.href?`<a href="${im.href}" target="_blank" rel="noopener">${MQ.esc(im.credit)}</a>`:MQ.esc(im.credit)):''}</figcaption>`:''}</figure>`:'';
 const DESC=d=>`<div class="dsc"><div class="dsc__lead"><p>${MQ.esc(d.intro)}</p>${FIG(d.img,'dsc__fig--lead')}</div>${d.sec.map((x,i)=>`<section class="dsc__sec dsc__sec--${x.k}${x.img?' has-fig':''}"><div class="dsc__txt"><h3>${MQ.esc(x.h)}</h3>${(x.p||[]).map(t=>`<p>${MQ.esc(t)}</p>`).join('')}${x.li?`<ul>${x.li.map(t=>`<li>${MQ.esc(t)}</li>`).join('')}</ul>`:''}${x.spec?`<table class="dsc__spec"><tbody>${x.spec.map(r=>`<tr><th>${MQ.esc(r[0])}</th><td>${MQ.esc(r[1])}</td></tr>`).join('')}</tbody></table>`:''}</div>${FIG(x.img)}</section>`).join('')}</div>`;
 const MQ=window.MQ,{$,$$}=MQ;
+{const a=(MQ.ID_ALIAS||{})[MQ.qs('id')];if(a){const k=MQ.qs('sku');location.replace('san-pham.html?id='+a+(k?'&sku='+k:''));return}}
 const p=MQ.byId(MQ.qs('id')||'xoai-say-deo');
 {const k=MQ.qs('sku'),o=k&&p&&!MQ.vars(p).some(x=>x.sku===((MQ.SKU_ALIAS||{})[k]||k))&&MQ.PRODUCTS.find(x=>MQ.vars(x).some(y=>y.sku===k));if(o){location.replace(MQ.url(o)+'&sku='+k);return}}
 const root=$('[data-pd]');
@@ -63,11 +64,15 @@ root.innerHTML=`<div class="pd">
 </div>`;
 /* gallery */
 const main=$('[data-main]'),zoom=$('[data-zoom]');
-const drawThumbs=()=>{$('[data-thumbs]').innerHTML=allImgs().map((im,i)=>`<button class="${im===v.img?'is-on':''}" data-img="${im}" aria-label="Ảnh ${i+1}"><img src="${MQ.img(im,true)}" alt=""></button>`).join('')};
+const VID=p.video?`<button class="gthumb--vid" data-vid aria-label="Xem video sản phẩm"><img src="assets/${p.video.poster}?v=${MQ.IMGV}" alt=""><i aria-hidden="true"></i></button>`:'';
+const drawThumbs=()=>{const t=allImgs().map((im,i)=>`<button class="${im===v.img?'is-on':''}" data-img="${im}" aria-label="Ảnh ${i+1}"><img src="${MQ.img(im,true)}" alt=""></button>`);if(VID)t.splice(1,0,VID);$('[data-thumbs]').innerHTML=t.join('')};
+const hideVid=()=>{const x=zoom.querySelector('video');if(x){x.pause();x.remove()}main.hidden=false;zoom.classList.remove('has-vid')};
+const showVid=()=>{if(zoom.querySelector('video'))return;main.hidden=true;zoom.classList.add('has-vid');zoom.classList.remove('zoom');
+  zoom.insertAdjacentHTML('afterbegin',`<video class="gallery__vid" controls playsinline preload="none" poster="assets/${p.video.poster}?v=${MQ.IMGV}"><source src="assets/${p.video.src}?v=${MQ.IMGV}" type="video/mp4">Trình duyệt chưa hỗ trợ video.</video>`);const x=zoom.querySelector('video');x.play&&x.play().catch(()=>{})};
 drawThumbs();
-$('[data-thumbs]').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;main.src=MQ.img(b.dataset.img);$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b))});
+$('[data-thumbs]').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-vid')){showVid();$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b));return}hideVid();main.src=MQ.img(b.dataset.img);$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b))});
 zoom.addEventListener('mousemove',e=>{const r=zoom.getBoundingClientRect();zoom.style.setProperty('--zx',((e.clientX-r.left)/r.width*100)+'%');zoom.style.setProperty('--zy',((e.clientY-r.top)/r.height*100)+'%')});
-zoom.addEventListener('mouseenter',()=>matchMedia('(hover:hover)').matches&&zoom.classList.add('zoom'));zoom.addEventListener('mouseleave',()=>zoom.classList.remove('zoom'));
+zoom.addEventListener('mouseenter',()=>matchMedia('(hover:hover)').matches&&!zoom.classList.contains('has-vid')&&zoom.classList.add('zoom'));zoom.addEventListener('mouseleave',()=>zoom.classList.remove('zoom'));
 const drawSpec=()=>{$('[data-spec]').innerHTML=spec().map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')};drawSpec();
 /* tabs */
 const openTab=k=>{$$('[data-tab]').forEach(b=>b.classList.toggle('is-on',b.dataset.tab===k));$$('[data-panel]').forEach(x=>x.classList.toggle('is-on',x.dataset.panel===k))};
@@ -85,6 +90,7 @@ if(!soon){
    const zipV=p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(v.w),T=MQ.TIERS;
    $('[data-perks]').innerHTML=v.p?[
      p.own&&(p.cat==='set'||p.giftbox)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Quà tặng kèm:</b> mỗi ${p.giftbox?'hộp quà':'set'} tặng 1 túi 100g — Xoài cát sấy dẻo, Dâu tây sấy dẻo hoặc Xí muội đỏ (chọn trong giỏ hàng).</span></li>`:'',
+     p.combo?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b><a href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label)}</a></b> — chọn nhãn vàng GoodGood, xanh Fresh &amp; Healthy hoặc trộn. Mua lẻ đủ 5 túi 100g, giỏ hàng cũng tự tính giá combo.</span></li>`:'',
      p.bundle?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Khuyến mãi: ${MQ.esc(p.bundle.label)}</b> — giỏ hàng tự thêm quà 0đ (${MQ.esc((MQ.byId(p.bundle.gid)||p).name)} · ${MQ.esc((MQ.findVar(MQ.byId(p.bundle.gid)||p,p.bundle.gsku)||{}).w||'')}) cho mỗi ${p.bundle.buy} ${p.bundle.buy>1?'hộp/gói':'combo'}.</span></li>`:'',
      zipV?`<li class="perk"><svg><use href="#i-cart"/></svg><span><b>Mua nhiều túi zip:</b> từ 3 túi Mộc Quả (cộng mọi vị) giảm 5%, từ 6 túi giảm 8%.</span></li>`:'',
      `<li class="perk"><svg><use href="#i-truck"/></svg><span>Đơn từ ${MQ.fmt(T[2].min)} <b>−${T[2].pct}%</b> · từ ${MQ.fmt(T[1].min)} <b>−${T[1].pct}%</b> · từ ${MQ.fmt(T[0].min)} <b>−${T[0].pct}%</b> · miễn phí giao từ ${MQ.fmt(MQ.FREE_SHIP)} — tự áp dụng trong giỏ. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
@@ -98,7 +104,7 @@ if(!soon){
      <button class="wishbig${MQ.wish.has(p.id)?' is-on':''}" data-wish="${p.id}" aria-label="Yêu thích"><svg><use href="#i-heart${MQ.wish.has(p.id)?'-f':''}"/></svg></button></div>
      <div class="pd-links"><button data-share><svg><use href="#i-share"/></svg>Sao chép liên kết</button><a href="hop-qua.html#tu-thiet-ke"><svg><use href="#i-gift"/></svg>Cho vào hộp quà tự chọn</a><a href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg>Đặt qua hotline ${MQ.HOTLINE}</a></div>`
      :MQ.quoteBox(p,v);
-   main.src=MQ.img(v.img);drawThumbs();drawSpec();
+   hideVid();main.src=MQ.img(v.img);drawThumbs();drawSpec();
    const sb=$('[data-sticky]');sb.querySelector('[data-sp]').textContent=(v.p?MQ.fmt(v.p):'Liên hệ báo giá')+' · '+MQ.varLabel(p,v);
    if(p.oos)sb.querySelector('[data-add-pd]').outerHTML=`<button class="btn btn--gold btn--sm" data-notify="${p.id}">Báo khi có hàng</button>`;else sb.querySelector('[data-add-pd]').textContent=v.p?'Thêm vào giỏ':'Nhận báo giá';
    history.replaceState(null,'',MQ.url(p)+'&sku='+v.sku);

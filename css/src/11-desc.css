@@ -76,3 +76,40 @@
 .oos{margin:6px 0 18px;padding:16px 18px;border:1px solid #d8cfbf;background:#faf6ee;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .oos p{flex:1 1 100%;margin:0 0 4px;font-size:14px;line-height:1.5;color:#4a463f}
 .oos b{color:#7a2e22}
+
+/* phân nhóm danh mục theo cách sấy / loại quả */
+.ptag{position:absolute;left:8px;bottom:8px;z-index:2;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:600;letter-spacing:.02em;line-height:1.5;background:rgba(255,253,248,.92);color:#2b4a3d;border:1px solid #d9cfb9;backdrop-filter:blur(2px)}
+.ptag--thanghoa{color:#5a3f86;border-color:#d4c7e6}
+.ptag--gion{color:#8a5a12;border-color:#ead6b0}
+.ptag--kho{color:#7a2e22;border-color:#e3c4bc}
+.pcard__img{position:relative}
+.pgh .ptag,.dd .ptag{position:static;display:inline-block;margin-right:8px;vertical-align:2px;backdrop-filter:none}
+.pgp{grid-column:1/-1;margin:18px 0 -4px;padding:0 0 8px;font-family:var(--serif,Georgia,serif);font-size:22px;font-weight:500;color:var(--ink,#1b1f1d);border-bottom:1px solid #e6dfd0;display:flex;align-items:baseline;gap:10px}
+.pgp:first-child{margin-top:0}
+.pgp small,.pgh small{font-family:var(--sans);font-size:12px;color:#8a857c;font-weight:400;letter-spacing:0}
+.pgh{grid-column:1/-1;margin:10px 0 -6px;display:flex;align-items:center;gap:8px;font-family:var(--sans);font-size:14px;font-weight:600;color:#2b3a33}
+.pgh b{font-weight:600;text-transform:none}
+.pgh small{margin-left:2px}
+.pgh::after{content:"";flex:1;height:1px;background:#efe9dc;margin-left:6px}
+.is-list .pgh,.is-list .pgp{margin-left:0}
+.dd__sub{display:flex;flex-wrap:wrap;gap:4px 10px;margin:-2px 0 8px 2px}
+.dd__sub a{font-size:12px!important;color:#7d776c!important;padding:0!important}
+.dd__sub a:hover{color:var(--gold,#b08d57)!important}
+.tree__sub{display:flex;flex-wrap:wrap;gap:2px 10px;padding:0 0 6px 12px}
+.tree__sub a{font-size:12px;color:#7d776c}
+.tree__sub a em{margin-left:3px;font-style:normal;color:#b0a998}
+.tree li.tree__sub{display:flex;padding:0 0 6px 14px;border:0}
+.tree li.tree__sub a{display:inline-flex;font-size:12px;text-transform:none;letter-spacing:0;padding:1px 0;font-weight:400;color:#7d776c;background:none;border:0;min-height:0;width:auto}
+.tree li.tree__sub a::before,.tree li.tree__sub a::after{display:none}
+.tree li.tree__sub a em{position:static;background:none;padding:0;min-width:0;font-size:11px}
+
+/* video sản phẩm trong gallery */
+.gthumb--vid{position:relative}
+.gthumb--vid img{object-fit:cover}
+.gthumb--vid i{position:absolute;inset:0;margin:auto;width:30px;height:30px;border-radius:50%;background:rgba(27,31,29,.72);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.gthumb--vid i::after{content:"";position:absolute;left:12px;top:9px;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent #fff}
+.gallery__main.has-vid{background:#111;cursor:default}
+.gallery__vid{display:block;width:100%;height:100%;max-height:78vh;object-fit:contain;background:#111}
+.gallery__main.has-vid .gallery__note{display:none}
+.perk a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+a.deal{text-decoration:none;color:#fff8ec}

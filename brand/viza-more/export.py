@@ -38,3 +38,32 @@ for n in todo:
             rows.append(a[y,x0]*(1-f)+a[y,np.minimum(x0+1,W-1)]*f)
         A=np.array(rows);M=np.full(A.shape[:2],255.,np.float32);M[:,:2]=[90,200];M[:,-2:]=[200,90];M[:2]=np.minimum(M[:2],[[150],[230]])
         save(A,M,'vzx-xoai150')
+def largest(m):
+    from scipy import ndimage
+    lab,n=ndimage.label(m>100)
+    if n<=1:return m
+    sz=ndimage.sum(np.ones_like(m),lab,range(1,n+1));k=1+int(np.argmax(sz));return m*(lab==k)
+for n in todo:
+    if n in('yjar1','w100','gg200','fhw'):
+        a,m=load(n);m=largest(m);save(a,m,{'yjar1':'ymx-hu150','w100':'fhx-dayxanh-100','gg200':'ggx-200','fhw':'fhx-trong'}[n])
+if 'ggmo200' in todo:
+    a,m=load('ggmo200');m=polycut(m,[(86,446),(598,446),(606,700),(620,950),(648,1100),(688,1230),(700,1280),(165,1280)]);m=largest(m);save(a,m,'ggx-mo200')
+if 'combo' in todo:
+    a,m=load('combo');P=Image.new('L',(m.shape[1],m.shape[0]),255);ImageDraw.Draw(P).polygon([(0,0),(180,0),(150,95),(40,250),(0,300)],fill=0);m=m*np.asarray(P.filter(ImageFilter.GaussianBlur(2)),np.float32)/255;m=largest(m);save(a,m,'vzx-combo100v')
+if 'fh100g' in todo:
+    a,m=load('fh100g');m=largest(m);save(a,m,'fhx-dayxanh-100r')
+if 'gg100' in todo:
+    a,m=load('gg100');m=largest(m);save(a,m,'ggx-100')
+if 'combo2c' in todo:
+    a,m=load('combo2c');m=largest(m)
+    # vá chỗ ngón tay che mép trái: nội suy dọc giữa hàng trên/dưới vùng ngón tay
+    y0,y1,x0,x1=462,534,126,206
+    for y in range(y0,y1):
+        t=(y-y0)/(y1-y0);a[y,x0:x1]=a[y0-1,x0:x1]*(1-t)+a[y1,x0:x1]*t
+    m[y0:y1,x0:x1]=np.maximum(m[y0-1,x0:x1],m[y1,x0:x1])[None,:]
+    from scipy import ndimage as _nd
+    a[y0-4:y1+4,x0:x1+6]=_nd.uniform_filter(a[y0-4:y1+4,x0:x1+6],size=(5,5,1))
+    m=polycut(m,[(132,182),(380,152),(775,138),(795,705),(128,725)])
+    save(a,m,'vzx-combo100')
+if 'mcpouch' in todo:
+    a,m=load('mcpouch');m=largest(m);save(a,m,'ggx-mangcut')

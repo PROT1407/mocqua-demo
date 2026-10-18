@@ -44,6 +44,7 @@ function list(){
     return true});
   const S={best:(x,y)=>(x.rank||99)-(y.rank||99),asc:(x,y)=>pz(x)-pz(y),desc:(x,y)=>(y.soon?-1:MQ.minPrice(y)||0)-(x.soon?-1:MQ.minPrice(x)||0),az:(x,y)=>x.name.localeCompare(y.name,'vi')};
   a.sort(S[st.sort]||S.best);
+  if(st.sort==='best')groupSort(a);
   return a.sort((x,y)=>(x.soon?1:0)-(y.soon?1:0));
 }
 const giftCard=p=>{const v=MQ.defVar(p),tot=(p.contents||[]).reduce((a,c)=>a+c[1],0);
@@ -55,12 +56,31 @@ const giftCard=p=>{const v=MQ.defVar(p),tot=(p.contents||[]).reduce((a,c)=>a+c[1
   <div class="gcard__f"><span class="gcard__p">${v.p?MQ.fmt(v.p):'Liên hệ'}</span><div class="gcard__btns"><a class="cbtn cbtn--line" href="${MQ.url(p)}">Chi tiết</a><button class="cbtn cbtn--buy addbtn" data-add="${p.id}" data-w="${v.sku}" aria-label="Đặt mua ${MQ.esc(p.name)}"><svg><use href="#i-cart"/></svg><span>Đặt mua</span></button></div></div></div></article>`};
 const NAMES={cat:k=>MQ.CATS[k].name,fruit:k=>MQ.FRUITS[k].name,flavour:k=>MQ.FLAVOURS[k].name,line:k=>MQ.LINES[k].name,tag:k=>TAGS[k]};
 const KEYS=['cat','fruit','flavour','line','tag'];
+/* nhóm: cách sấy -> loại quả (>=2 sp) -> thương hiệu -> khối lượng; quả lẻ gom vào "… khác" */
+const CATORD=Object.keys(MQ.CATS);
+function groupSort(a){
+  const gk=p=>{if(!MQ.PROC.includes(p.cat))return 'c:'+p.cat;const n=a.filter(x=>x.cat===p.cat&&x.fruit===p.fruit).length;return n>1?'f:'+p.cat+':'+p.fruit:'o:'+p.cat};
+  const best={};a.forEach(p=>{p._g=gk(p);best[p._g]=Math.min(best[p._g]??99,p.rank||99)});
+  const pi=p=>{const i=MQ.PROC.indexOf(p.cat);return i<0?10+CATORD.indexOf(p.cat):i};
+  const bo=p=>{const i=MQ.BRAND_ORDER.indexOf(MQ.brandOf(p));return i<0?99:i};
+  a.sort((x,y)=>pi(x)-pi(y)||(x._g[0]==='o')-(y._g[0]==='o')||best[x._g]-best[y._g]||(x._g<y._g?-1:x._g>y._g?1:0)||bo(x)-bo(y)||MQ.minG(x)-MQ.minG(y)||(x.rank||99)-(y.rank||99));
+  a._grouped=true;return a}
+const gTitle=(p,n)=>{const g=p._g,c=p.cat;
+  if(g[0]==='f')return `${MQ.procTag(p)}<b>${MQ.fruitProc(p.fruit,c)}</b><small>${n} sản phẩm</small>`;
+  if(g[0]==='o')return `${MQ.procTag(p)}<b>Trái cây ${MQ.CATS[c].short.toLowerCase()} khác</b><small>${n} sản phẩm</small>`;
+  return `<b>${MQ.CATS[c].name}</b><small>${n} sản phẩm</small>`};
 function render(){
   const a=list(),pages=Math.max(1,Math.ceil(a.length/PER));if(st.page>pages)st.page=pages;const shown=a.slice((st.page-1)*PER,st.page*PER);
   const g=$('[data-grid]');g.classList.toggle('is-list',st.view==='list');
   const giftOn=st.cat.size===1&&st.cat.has('set')&&st.view!=='list';
   g.classList.toggle('pgrid--gift',giftOn);
-  g.innerHTML=shown.map(p=>giftOn?giftCard(p):MQ.card(p)).join('');
+  const grp=a._grouped&&!giftOn&&!st.q,cntG={};if(grp)a.forEach(p=>cntG[p._g]=(cntG[p._g]||0)+1);
+  let last=null,lastP=null;
+  g.innerHTML=shown.map(p=>{let h='';
+    if(grp&&!p.soon){const pc=MQ.PROC.includes(p.cat)?p.cat:'x:'+p.cat;
+      if(pc!==lastP&&MQ.PROC.includes(p.cat)&&new Set(a.filter(x=>MQ.PROC.includes(x.cat)).map(x=>x.cat)).size>1)h+=`<h2 class="pgp">${MQ.CATS[p.cat].name}<small>${a.filter(x=>x.cat===p.cat).length} sản phẩm</small></h2>`;
+      if(p._g!==last)h+=`<h3 class="pgh">${gTitle(p,cntG[p._g])}</h3>`;last=p._g;lastP=pc}
+    return h+(giftOn?giftCard(p):MQ.card(p))}).join('');
   const tb=$('[data-tet]');tb.hidden=!giftOn;
   if(giftOn)tb.innerHTML=`<div class="tetbar__t"><small>Bộ sưu tập</small><b>Quà Tết 2027</b><span>Hộp mứt · khay nắp trong · giỏ quà Mộc Quả — mỗi set <em>tặng 1 túi 100g</em>, kèm túi xách &amp; thiệp.</span></div><div class="tetbar__r"><span>Đơn từ ${MQ.fmt(MQ.TIERS[1].min)} −${MQ.TIERS[1].pct}% · tặng túi quà &amp; thiệp</span><a href="hop-qua.html">Hộp quà tự chọn →</a></div>`;
   $('[data-empty]').hidden=a.length>0;
