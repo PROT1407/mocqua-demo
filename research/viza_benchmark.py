@@ -15,7 +15,7 @@ NEW={'MQ-DXO-100-FHX':35000,'MQ-DXO-100-FHG':35000,'MQ-DXO-200-FHX':69000,'MQ-DX
  'MQ-DTH-080-GG':30000,'MQ-DMC-080':55000,'MQ-DME-080-GG':15000,'MQ-DTL-080-GG':35000,'MQ-DDU-080-GG':30000}
 # Giá cố định theo quyết định chủ shop (18/10/2026, gấp đôi giá benchmark) — luôn ghi đè NEW, chạy lại không mất.
 OVERRIDES={'MQ-GSR-100-GG':110000,'MQ-GSR-100-KT':90000,  # sầu riêng sấy (không phải thăng hoa), giá chủ shop 18/10/2026
- 'MQ-THMC-100-GG':145000,  # măng cụt TH GoodGood 100g (chủ shop xác nhận 100g): Palida NK Thái 210g 320k ≈ 152k/100g − 7k
+ 'MQ-THMC-100-GG':149000,  # măng cụt TH GoodGood 100g: chủ shop chốt 149k (benchmark Palida 210g 320k ≈ 152k/100g)
  'MQ-CBX-100-GG':165000,'MQ-CBX-100-FH':165000,'MQ-CBX-100-MIX':165000,  # combo do chủ shop đặt
  'MQ-DME-080-GG':30000,'MQ-DDU-080-GG':60000,'MQ-DTL-080-GG':70000}
 NEW.update(OVERRIDES)
