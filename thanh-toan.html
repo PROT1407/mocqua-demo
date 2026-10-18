@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="vi" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Thanh toán | Mộc Quả (demo)</title>
+<meta name="description" content="Mộc Quả — đặc sản Việt cao cấp: trái cây sấy tuyển chọn, hộp quà Tết và quà tặng doanh nghiệp. Website demo.">
+<meta name="theme-color" content="#0f2a22">
+<meta property="og:title" content="Thanh toán — Mộc Quả">
+<meta property="og:image" content="assets/img/hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="checkout">
+<main id="main">
+<div class="container"><div class="steps"><b>1. Giỏ hàng</b><i></i><b>2. Thông tin &amp; thanh toán</b><i></i><span>3. Hoàn tất</span></div><h1 style="font-size:clamp(40px,5vw,64px);color:var(--ink)">Thanh toán</h1><p class="notice" style="margin-top:14px">Đây là trang thanh toán <b>demo</b>: không có giao dịch thật, thông tin chỉ lưu trên trình duyệt của bạn để minh hoạ tra cứu đơn.</p></div>
+<div class="container"><form class="checkout" data-co novalidate>
+ <div>
+  <div class="cstep"><h3><span>1</span>Thông tin người mua</h3>
+   <div class="row2"><label class="field"><span>Họ và tên *</span><input name="name" required autocomplete="name"></label><label class="field"><span>Số điện thoại *</span><input name="phone" type="tel" required pattern="0[0-9]{9}" placeholder="0xxxxxxxxx" autocomplete="tel"></label></div>
+   <label class="field"><span>Email (nhận xác nhận đơn)</span><input name="email" type="email" autocomplete="email"></label>
+  </div>
+  <div class="cstep"><h3><span>2</span>Địa chỉ giao hàng</h3>
+   <div class="row2"><label class="field"><span>Tỉnh / thành phố *</span><select name="prov" required data-prov></select></label><label class="field"><span>Phường / xã *</span><input name="ward" required></label></div>
+   <label class="field"><span>Số nhà, tên đường *</span><input name="addr" required autocomplete="street-address"></label>
+   <label class="check"><input type="checkbox" name="isgift" data-isgift> <span><b>Gửi tặng người khác</b> — giao đến người nhận, kèm thiệp, có thể ẩn giá trên hoá đơn</span></label>
+   <div class="giftopts" data-giftopts>
+    <div class="row2"><label class="field"><span>Tên người nhận</span><input name="rname"></label><label class="field"><span>SĐT người nhận</span><input name="rphone" type="tel"></label></div>
+    <label class="field"><span>Lời nhắn trên thiệp</span><textarea name="card" rows="2" maxlength="160" placeholder="Chúc mừng năm mới…"></textarea></label>
+    <label class="check"><input type="checkbox" name="hideprice" checked> Ẩn giá tiền trong kiện hàng</label>
+   </div>
+  </div>
+  <div class="cstep"><h3><span>3</span>Phương thức giao hàng</h3><div style="display:grid;gap:12px" data-ships></div>
+   <div class="row2" data-sched hidden><label class="field"><span>Ngày giao</span><input type="date" name="date"></label><label class="field"><span>Khung giờ</span><select name="slot"><option>8:00 – 12:00</option><option>13:00 – 17:00</option><option>18:00 – 21:00</option></select></label></div></div>
+  <div class="cstep"><h3><span>4</span>Phương thức thanh toán</h3><div style="display:grid;gap:12px">
+   <label class="radio-card is-on"><input type="radio" name="pay" value="cod" checked><div><b>Thanh toán khi nhận hàng (COD)</b><small>Trả tiền mặt hoặc chuyển khoản cho nhân viên giao hàng.</small></div></label>
+   <label class="radio-card"><input type="radio" name="pay" value="bank"><div><b>Chuyển khoản ngân hàng · VietQR</b><small>Quét mã QR, đơn được xác nhận tự động.</small></div>
+    <div class="paybox"><div class="qr" data-qr></div><div><p><b>Ngân hàng:</b> [Đang cập nhật]<br><b>Số tài khoản:</b> [Đang cập nhật]<br><b>Chủ tài khoản:</b> CÔNG TY MỘC QUẢ<br><b>Nội dung:</b> <span data-memo></span></p><p class="small" style="color:var(--clay);margin-top:8px">Mã QR minh hoạ — không dùng để chuyển tiền.</p></div></div></label>
+   <label class="radio-card"><input type="radio" name="pay" value="wallet"><div><b>Ví điện tử</b><small>Chuyển hướng đến ví để thanh toán (demo).</small><div class="wallets"><span>MoMo</span><span>ZaloPay</span><span>VNPay</span><span>ShopeePay</span></div></div></label>
+  </div>
+  <label class="check"><input type="checkbox" name="vat" data-vat> Xuất hoá đơn VAT (công ty)</label>
+  <div class="row2" data-vatbox hidden><label class="field"><span>Tên công ty</span><input name="company"></label><label class="field"><span>Mã số thuế</span><input name="tax"></label></div>
+  <label class="field"><span>Ghi chú</span><textarea name="note" rows="2" data-note></textarea></label>
+  </div>
+ </div>
+ <aside class="summary"><h3>Đơn hàng <em data-cnt></em></h3>
+  <div data-mini></div>
+  <div class="coupon"><input data-coupon placeholder="Mã giảm giá" aria-label="Mã giảm giá"><button type="button" data-apply>Áp dụng</button></div>
+  <p class="coupon-msg" data-cmsg></p><p class="coupon-hint">Mã demo: <button type="button" data-try="MOCQUA10">MOCQUA10</button> · <button type="button" data-try="TET2027">TET2027</button> · <button type="button" data-try="FREESHIP">FREESHIP</button></p>
+  <div class="srow"><span>Tạm tính</span><b data-sub></b></div>
+  <div class="srow"><span>Phí giao hàng</span><b data-ship></b></div>
+  <div class="srow srow--disc" data-disc-row hidden><span>Giảm giá <span data-ccode></span></span><b data-disc></b></div>
+  <div class="srow srow--total"><span>Tổng cộng</span><b data-total></b></div>
+  <div class="points"><svg><use href="#i-gift"/></svg><span>Nhận <b data-pts>0</b> Hạt Mộc sau khi hoàn tất đơn.</span></div>
+  <label class="check" style="margin:6px 0 16px"><input type="checkbox" required name="agree" checked> <span class="small">Tôi đồng ý với <a href="chinh-sach.html#doi-tra" style="text-decoration:underline">chính sách đổi trả</a> và <a href="chinh-sach.html#bao-mat" style="text-decoration:underline">bảo mật</a>.</span></label>
+  <button class="btn btn--gold btn--block" type="submit" data-place>Đặt hàng</button>
+  <p class="drawer__demo">Giá demo · Không phát sinh thanh toán thật</p>
+  <a href="gio-hang.html" class="small muted" style="display:block;text-align:center;margin-top:10px;text-decoration:underline">← Quay lại giỏ hàng</a>
+ </aside>
+</form>
+<div class="empty" data-empty hidden><svg><use href="#mark"/></svg><h3>Giỏ hàng đang trống</h3><p>Bạn cần thêm sản phẩm trước khi thanh toán.</p><a class="btn btn--dark" href="cua-hang.html">Đến cửa hàng</a></div>
+</div>
+</main>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pages/checkout.js"></script>
+</body>
+</html>

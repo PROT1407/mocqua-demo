@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Cửa hàng — Trái cây sấy tuyển chọn | Mộc Quả (demo)</title>
+<meta name="description" content="Mộc Quả — đặc sản Việt cao cấp: trái cây sấy tuyển chọn, hộp quà Tết và quà tặng doanh nghiệp. Website demo.">
+<meta name="theme-color" content="#0f2a22">
+<meta property="og:title" content="Cửa hàng — Trái cây sấy tuyển chọn — Mộc Quả">
+<meta property="og:image" content="assets/img/hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="shop">
+<main id="main">
+<section class="phero phero--light"><div class="grain"></div><div class="phero__inner">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Trang chủ</a><span>Cửa hàng</span></nav>
+<h1>Cửa hàng <em>Mộc Quả</em></h1><p>Trái cây sấy dẻo, sấy giòn, hộp mix và trà trái cây — tuyển chọn từ sáu vùng quả. Tất cả giá trên trang là giá demo.</p></div></section>
+<div class="container"><div class="shop">
+  <aside class="filters" aria-label="Bộ lọc">
+    <div class="filters__head"><h3>Bộ lọc</h3><button class="icon-btn" data-filters-close aria-label="Đóng bộ lọc"><svg><use href="#i-close"/></svg></button></div>
+    <div class="fgroup"><h4>Tìm trong cửa hàng</h4><div class="field"><input type="search" data-f-q placeholder="Tên quả, vùng…" aria-label="Tìm trong cửa hàng"></div></div>
+    <div class="fgroup"><h4>Danh mục</h4><div data-f-cat></div></div>
+    <div class="fgroup"><h4>Vùng quả</h4><div data-f-region></div></div>
+    <div class="fgroup"><h4>Đặc tính</h4><div data-f-tag></div></div>
+    <div class="fgroup range"><h4>Giá tối đa</h4><output data-f-price-out></output><input type="range" min="100000" max="700000" step="10000" data-f-price aria-label="Giá tối đa"><div class="small muted" style="display:flex;justify-content:space-between"><span>100.000đ</span><span>700.000đ</span></div></div>
+    <div class="fgroup"><label class="fopt"><input type="checkbox" data-f-soon><span>Hiện sản phẩm sắp ra mắt</span></label></div>
+    <div class="filters__apply"><button class="btn btn--line btn--sm btn--block" data-f-reset>Xoá bộ lọc</button></div>
+  </aside>
+  <div>
+    <div class="toolbar">
+      <div class="toolbar__l"><button class="btn btn--line btn--sm filter-toggle" data-filters-open><svg><use href="#i-filter"/></svg>Bộ lọc</button><span class="toolbar__count" data-count></span></div>
+      <div class="toolbar__r"><select class="sort" data-sort aria-label="Sắp xếp"><option value="best">Bán chạy nhất</option><option value="new">Mới nhất</option><option value="rating">Đánh giá cao</option><option value="asc">Giá: thấp → cao</option><option value="desc">Giá: cao → thấp</option><option value="az">Tên A → Z</option></select>
+      <button class="viewbtn is-on" data-view="grid" aria-label="Dạng lưới"><svg><use href="#i-grid"/></svg></button><button class="viewbtn" data-view="list" aria-label="Dạng danh sách"><svg><use href="#i-list"/></svg></button></div>
+    </div>
+    <div class="active-filters" data-active></div>
+    <div class="pgrid pgrid--3" data-grid></div>
+    <div class="empty" data-empty hidden><svg><use href="#mark"/></svg><h3>Chưa có sản phẩm phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc tìm với từ khoá khác.</p><button class="btn btn--line" data-f-reset>Xoá bộ lọc</button></div>
+    <div class="loadmore" data-more-wrap><small data-more-text></small><div class="bar"><i data-more-bar></i></div><button class="btn btn--line" data-more>Xem thêm sản phẩm</button></div>
+  </div>
+</div></div>
+<section class="section" style="padding-top:0" data-recent-wrap hidden><div class="container"><div class="sec-head"><div><h2>Bạn vừa <em>xem</em></h2></div></div><div class="hscroll" data-recent></div></div></section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pages/shop.js"></script>
+</body>
+</html>

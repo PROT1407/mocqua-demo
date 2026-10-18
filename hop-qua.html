@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Hộp quà Tết & tự thiết kế hộp quà | Mộc Quả (demo)</title>
+<meta name="description" content="Mộc Quả — đặc sản Việt cao cấp: trái cây sấy tuyển chọn, hộp quà Tết và quà tặng doanh nghiệp. Website demo.">
+<meta name="theme-color" content="#0f2a22">
+<meta property="og:title" content="Hộp quà Tết & tự thiết kế hộp quà — Mộc Quả">
+<meta property="og:image" content="assets/img/hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="gift">
+<main id="main">
+<section class="phero phero--img"><img src="assets/img/cho.jpg" alt=""><div class="grain"></div><div class="phero__inner">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Trang chủ</a><span>Hộp quà</span></nav>
+<h1>Hộp quà <em>Tết Đinh Mùi 2027</em></h1><p>Bốn bộ sưu tập hộp sẵn, công cụ tự thiết kế hộp quà và gợi ý chọn quà theo ngân sách — kèm thiệp thư pháp viết tay.</p></div></section>
+<section class="section dark" id="hop-san"><div class="container">
+  <div class="sec-head sec-head--light"><div><span class="sec-num">01</span><h2>Hộp quà <em>sẵn sàng</em></h2></div><p class="sec-head__r">Đã phối vị, gói ruy băng và thiệp — chỉ cần chọn và gửi đi. Giá demo.</p></div>
+  <div class="gift-row" data-gifts></div>
+</div></section>
+
+<section class="section" id="tu-thiet-ke"><div class="container">
+  <div class="sec-head"><div><span class="sec-num">02</span><h2>Tự thiết kế <em>hộp quà</em></h2></div><p class="sec-head__r">Chọn hộp, màu, từng vị quả và viết lời chúc. Bản xem trước cập nhật ngay — thiết kế được lưu tự động trên trình duyệt.</p></div>
+  <div class="builder">
+    <div>
+      <div class="bstep"><h3>1. Kích thước hộp <span data-b-size-l></span></h3><p>Mỗi ngăn là một túi quả ~120g.</p><div class="opts" data-b-sizes></div></div>
+      <div class="bstep"><h3>2. Màu hộp &amp; ruy băng <span data-b-color-l></span></h3><p>Hộp giấy mỹ thuật phủ sơn mài, nắp in nhũ logo Mộc Quả.</p><div class="swatches" data-b-colors></div><label class="check" style="margin-top:18px"><input type="checkbox" data-b-ribbon checked> Thắt ruy băng lụa (miễn phí)</label></div>
+      <div class="bstep"><h3>3. Chọn vị cho từng ngăn <span data-b-fill-l></span></h3><p>Bấm vào vị quả để thêm; bấm nút × trên hộp xem trước để bỏ. Có thể chọn một vị nhiều lần.</p><div class="bpicks" data-b-picks></div><div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn--line btn--sm" data-b-auto>Gợi ý phối vị tự động</button><button class="btn btn--line btn--sm" data-b-clear>Làm trống hộp</button></div></div>
+      <div class="bstep"><h3>4. Thiệp viết tay</h3><p>Lời chúc sẽ được viết tay bằng bút mực trên thiệp giấy dó (demo).</p>
+        <div class="chips" style="margin-bottom:14px" data-b-wishes><button class="chip" type="button">An khang thịnh vượng, vạn sự như ý!</button><button class="chip" type="button">Chúc Ba Mẹ năm mới mạnh khoẻ, bình an.</button><button class="chip" type="button">Cảm ơn sự đồng hành của Quý đối tác.</button></div>
+        <div style="display:grid;gap:14px"><label class="field"><span>Lời chúc (tối đa 160 ký tự)</span><textarea rows="3" maxlength="160" data-b-msg placeholder="Viết lời chúc của bạn…"></textarea></label><div class="row2"><label class="field"><span>Gửi đến</span><input data-b-to placeholder="Ví dụ: Ba Mẹ yêu quý"></label><label class="field"><span>Ký tên</span><input data-b-from placeholder="Ví dụ: Con Huy"></label></div></div></div>
+    </div>
+    <aside class="preview" aria-live="polite">
+      <h4>Hộp quà của bạn</h4><small>Bản xem trước minh hoạ</small>
+      <div class="boxview" data-b-box><div class="slots" data-b-slots></div></div>
+      <div class="card-preview" data-b-card></div>
+      <div class="sumrow"><span>Vỏ hộp <span data-b-sz></span></span><span data-b-fee></span></div>
+      <div class="sumrow"><span>Quả (<span data-b-n></span>)</span><span data-b-items></span></div>
+      <div class="sumrow"><span>Thiệp viết tay &amp; ruy băng</span><span>Miễn phí</span></div>
+      <div class="sumrow sumrow--total"><span>Tạm tính <small class="demo-tag">Giá demo</small></span><b data-b-total></b></div>
+      <button class="btn btn--gold btn--block" style="margin-top:18px" data-b-add>Thêm hộp quà vào giỏ</button>
+      <p class="small" style="margin-top:10px;color:rgba(246,240,228,.6)" data-b-hint></p>
+    </aside>
+  </div>
+</div></section>
+
+<section class="section" style="padding-top:0" id="chon-qua"><div class="container">
+  <div class="sec-head"><div><span class="sec-num">03</span><h2>Gợi ý <em>chọn quà</em></h2></div><p class="sec-head__r">Trả lời ba câu hỏi, Mộc Quả gợi ý hộp quà phù hợp.</p></div>
+  <form class="quiz" data-quiz>
+    <label class="field"><span>Bạn tặng ai?</span><select name="who"><option value="gia-dinh">Ba mẹ, gia đình</option><option value="ban-be">Bạn bè, đồng nghiệp</option><option value="doi-tac">Đối tác, khách hàng</option><option value="sep">Sếp, người lớn tuổi</option></select></label>
+    <label class="field"><span>Ngân sách mỗi phần quà</span><select name="budget"><option value="700000">Dưới 700.000đ</option><option value="1000000" selected>700.000đ – 1.000.000đ</option><option value="2000000">Trên 1.000.000đ</option></select></label>
+    <label class="field"><span>Khẩu vị</span><select name="taste"><option value="ngot">Thích ngọt, dẻo</option><option value="chua">Chua ngọt hài hoà</option><option value="gion">Thích giòn, ít ngọt</option></select></label>
+    <button class="btn btn--dark" type="submit">Xem gợi ý <svg><use href="#i-arrow"/></svg></button>
+  </form>
+  <div class="quiz-result" data-quiz-result></div>
+</div></section>
+
+<section class="section" style="background:var(--paper)" id="doanh-nghiep"><div class="container">
+  <div class="split">
+    <div><span class="sec-num">04</span><h2>Quà tặng <em>doanh nghiệp</em></h2><p>In logo ép kim trên nắp hộp, thiệp cá nhân hoá theo tên người nhận, giao theo danh sách địa chỉ trên 34 tỉnh thành và xuất hoá đơn VAT.</p>
+      <div class="tiers"><div><b>20 – 49 hộp</b><p>Giảm 5% · thiệp in logo</p></div><div class="is-on"><b>50 – 199 hộp</b><p>Giảm 10% · ép kim logo nắp hộp</p></div><div><b>200+ hộp</b><p>Báo giá riêng · thiết kế hộp độc quyền</p></div></div>
+      <p class="small muted">Chính sách chiết khấu là ví dụ minh hoạ cho bản demo.</p></div>
+    <form class="formcard" data-demo-form="Đã nhận yêu cầu báo giá (demo) — Mộc Quả sẽ liên hệ trong 24 giờ làm việc.">
+      <h3>Yêu cầu báo giá</h3>
+      <div class="row2"><label class="field"><span>Công ty</span><input required></label><label class="field"><span>Người liên hệ</span><input required></label></div>
+      <div class="row2"><label class="field"><span>Điện thoại</span><input type="tel" required pattern="[0-9 +]{9,13}"></label><label class="field"><span>Email</span><input type="email"></label></div>
+      <div class="row2"><label class="field"><span>Số lượng dự kiến</span><input type="number" min="20" value="50"></label><label class="field"><span>Ngân sách / hộp</span><select><option>500.000 – 800.000đ</option><option>800.000 – 1.200.000đ</option><option>Trên 1.200.000đ</option></select></label></div>
+      <label class="field"><span>Ghi chú</span><textarea rows="3" placeholder="Thời gian cần giao, yêu cầu in logo…"></textarea></label>
+      <button class="btn btn--gold" type="submit">Gửi yêu cầu</button><p class="formnote">Biểu mẫu demo — thông tin không được gửi đi đâu.</p>
+    </form>
+  </div>
+</div></section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pages/gift.js"></script>
+</body>
+</html>

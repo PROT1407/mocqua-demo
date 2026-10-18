@@ -1,0 +1,1 @@
+(function(){const MQ=window.MQ,{$$}=MQ;const ls=$$('[data-pnav] a');const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)ls.forEach(a=>a.classList.toggle('is-on',a.hash==='#'+e.target.id))}),{rootMargin:'-30% 0px -60% 0px'});$$('.policy section').forEach(s=>io.observe(s))})();

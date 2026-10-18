@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Giỏ hàng | Mộc Quả (demo)</title>
+<meta name="description" content="Mộc Quả — đặc sản Việt cao cấp: trái cây sấy tuyển chọn, hộp quà Tết và quà tặng doanh nghiệp. Website demo.">
+<meta name="theme-color" content="#0f2a22">
+<meta property="og:title" content="Giỏ hàng — Mộc Quả">
+<meta property="og:image" content="assets/img/hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="cart">
+<main id="main">
+<div class="container"><div class="steps"><b>1. Giỏ hàng</b><i></i><span>2. Thông tin & thanh toán</span><i></i><span>3. Hoàn tất</span></div><h1 style="font-size:clamp(40px,5vw,64px);color:var(--ink)">Giỏ hàng <em data-cnum></em></h1></div>
+<div class="container"><div class="cartpage" data-cartpage>
+ <div><table class="ctable"><thead><tr><th>Sản phẩm</th><th>Đơn giá</th><th>Số lượng</th><th style="text-align:right">Thành tiền</th></tr></thead><tbody data-rows></tbody></table>
+  <div class="cart-extra"><label class="field"><span>Ghi chú cho đơn hàng</span><textarea rows="3" data-note placeholder="Ví dụ: giao giờ hành chính, gói quà riêng từng hộp…"></textarea></label>
+  <div class="points" style="align-self:end"><svg><use href="#i-gift"/></svg><span>Đơn này tích luỹ <b data-pts>0</b> Hạt Mộc — đổi quà và ưu đãi hội viên (demo).</span></div></div>
+  <div style="display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap"><a href="cua-hang.html" class="btn btn--line btn--sm">← Tiếp tục mua sắm</a><button class="btn btn--line btn--sm" data-clear>Xoá giỏ hàng</button></div>
+ </div>
+ <aside class="summary"><h3>Tóm tắt</h3>
+  <div class="drawer__ship" style="margin:0 -32px 16px;padding:14px 32px"><p data-ship-t></p><div class="bar"><i data-ship-b></i></div></div>
+  <div class="srow"><span>Tạm tính</span><b data-sub></b></div>
+  <div class="srow srow--muted"><span>Phí giao hàng</span><span>Tính ở bước sau</span></div>
+  <div class="coupon"><input data-coupon placeholder="Mã giảm giá" aria-label="Mã giảm giá"><button data-apply>Áp dụng</button></div>
+  <p class="coupon-msg" data-cmsg></p><p class="coupon-hint">Thử mã demo: <button data-try="MOCQUA10">MOCQUA10</button> · <button data-try="TET2027">TET2027</button> · <button data-try="FREESHIP">FREESHIP</button></p>
+  <div class="srow srow--disc" data-disc-row hidden><span>Giảm giá</span><b data-disc></b></div>
+  <div class="srow srow--total"><span>Tổng tạm tính</span><b data-total></b></div>
+  <a href="thanh-toan.html" class="btn btn--gold btn--block" style="margin-top:16px" data-go>Tiến hành thanh toán <svg><use href="#i-arrow"/></svg></a>
+  <p class="drawer__demo">Giá demo · Chưa phát sinh thanh toán thật</p>
+ </aside>
+</div>
+<div class="empty" data-empty hidden><svg><use href="#mark"/></svg><h3>Giỏ hàng đang trống</h3><p>Khám phá trái cây sấy và hộp quà Tết của Mộc Quả.</p><a class="btn btn--dark" href="cua-hang.html">Đến cửa hàng</a> <a class="btn btn--line" href="hop-qua.html">Xem hộp quà</a></div>
+</div>
+<section class="section" style="padding-top:0"><div class="container"><div class="sec-head"><div><h2>Có thể bạn <em>sẽ thích</em></h2></div></div><div class="hscroll" data-upsell></div></div></section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pages/cart.js"></script>
+</body>
+</html>

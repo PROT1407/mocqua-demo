@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Tra cứu đơn hàng | Mộc Quả (demo)</title>
+<meta name="description" content="Mộc Quả — đặc sản Việt cao cấp: trái cây sấy tuyển chọn, hộp quà Tết và quà tặng doanh nghiệp. Website demo.">
+<meta name="theme-color" content="#0f2a22">
+<meta property="og:title" content="Tra cứu đơn hàng — Mộc Quả">
+<meta property="og:image" content="assets/img/hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="track">
+<main id="main">
+<section class="phero phero--light"><div class="grain"></div><div class="phero__inner">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Trang chủ</a><span>Tra cứu đơn hàng</span></nav>
+<h1>Tra cứu <em>đơn hàng</em></h1><p>Nhập mã đơn và số điện thoại đặt hàng. Thử mã mẫu <b>MQ-DEMO-2026</b> với SĐT <b>0909000000</b>.</p></div></section>
+<div class="container section" style="padding-top:60px">
+ <form class="track-form" data-track><label class="field"><span>Mã đơn hàng</span><input name="code" required placeholder="VD: MQ261018-AB12"></label><label class="field"><span>Số điện thoại</span><input name="phone" type="tel" required placeholder="0xxxxxxxxx"></label><button class="btn btn--dark" type="submit" style="align-self:end">Tra cứu</button></form>
+ <p class="small muted" style="text-align:center;margin-top:14px">Bản demo: đơn được lưu trên trình duyệt này; trạng thái giao hàng được mô phỏng theo thời gian.</p>
+ <div data-tracked></div>
+ <div class="orderlist" data-olist></div>
+</div>
+</main>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pages/track.js"></script>
+</body>
+</html>
