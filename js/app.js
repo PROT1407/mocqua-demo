@@ -49,7 +49,7 @@ MQ.giftSvg=(box,ribbon,cls='')=>`<svg class="giftsvg ${cls}" viewBox="0 0 240 20
 MQ.mark=(cls='')=>`<svg class="${cls}"><use href="#mark"/></svg>`;
 
 /* ---------- product helpers ---------- */
-MQ.IMGV='20261018o';
+MQ.IMGV='20261018p';
 MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(/\.\w+$/.test(f)?'':(sq?'.jpg':'-45.jpg'))+'?v='+MQ.IMGV):'assets/img/'+f;
 MQ.url=p=>'san-pham.html?id='+p.id;
 /* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */

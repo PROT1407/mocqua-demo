@@ -67,3 +67,6 @@ if 'combo2c' in todo:
     save(a,m,'vzx-combo100')
 if 'mcpouch' in todo:
     a,m=load('mcpouch');m=largest(m);save(a,m,'ggx-mangcut')
+for n,name in (('srfh','fhx-saurieng80'),('srchf','chx-saurieng110'),('srchb','chx-saurieng110-back')):
+    if n in todo:
+        a,m=load(n);m=largest(m);save(a,m,name)
