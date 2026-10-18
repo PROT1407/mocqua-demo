@@ -2,13 +2,16 @@
 const MQ=window.MQ,{$,$$}=MQ;
 $('[data-gifts]').innerHTML=MQ.GIFTS.map(MQ.giftCard).join('');
 /* builder */
-const O=MQ.BOX_OPTIONS,picks=MQ.PRODUCTS.filter(p=>!p.soon&&['deo','gion','tra'].includes(p.cat));
-const unit=p=>Math.round(p.sizes[0].p*0.62/1000)*1000;
+const O=MQ.BOX_OPTIONS,picks=MQ.PRODUCTS.filter(p=>!p.soon&&MQ.minPrice(p)).sort((a,b)=>(a.rank||99)-(b.rank||99));
+/* mỗi ngăn = 1 gói quy cách nhỏ nhất có giá */
+const pv=p=>MQ.priced(p).sort((a,b)=>a.p-b.p)[0];
+const unit=p=>p?pv(p).p:0;
 const st=Object.assign({size:1,color:'son',ribbon:true,items:[],msg:'',to:'',from:''},MQ.store.get('builder',{}));
+st.items=(st.items||[]).filter(id=>picks.some(p=>p.id===id));
 const save=()=>MQ.store.set('builder',st);
 $('[data-b-sizes]').innerHTML=O.sizes.map((s,i)=>`<button class="opt" data-sz="${i}"><b>${s.name}</b><small>Vỏ hộp ${MQ.fmt(s.fee)}</small></button>`).join('');
 $('[data-b-colors]').innerHTML=O.colors.map(c=>`<button class="swatch" data-col="${c.id}" style="--sw:${c.box};--rib:${c.ribbon}"><i></i>${c.name}</button>`).join('');
-$('[data-b-picks]').innerHTML=picks.map(p=>`<button class="bpick" data-pk="${p.id}"><img src="${MQ.img(p.img)}" alt="" loading="lazy"><span><b>${p.name}</b><small>${MQ.fmt(unit(p))} / ngăn</small></span><em></em></button>`).join('');
+$('[data-b-picks]').innerHTML=picks.map(p=>`<button class="bpick" data-pk="${p.id}"><img src="${MQ.img(pv(p).img,true)}" alt="" loading="lazy"><span><b>${p.name}</b><small>${MQ.esc(MQ.varLabel(p,pv(p)))} · ${MQ.fmt(unit(p))}</small></span><em></em></button>`).join('');
 const msg=$('[data-b-msg]'),to=$('[data-b-to]'),fr=$('[data-b-from]');msg.value=st.msg;to.value=st.to;fr.value=st.from;$('[data-b-ribbon]').checked=st.ribbon;
 function draw(){
   const sz=O.sizes[st.size],col=O.colors.find(c=>c.id===st.color)||O.colors[0];
@@ -18,7 +21,7 @@ function draw(){
   $('[data-b-size-l]').textContent=sz.name;$('[data-b-color-l]').textContent=col.name;$('[data-b-fill-l]').textContent=`${st.items.length}/${sz.slots} ngăn`;
   const box=$('[data-b-box]');box.style.setProperty('--box',col.box);box.style.setProperty('--rib',col.ribbon);box.classList.toggle('no-ribbon',!st.ribbon);
   const sl=$('[data-b-slots]');sl.className='slots s'+sz.slots;
-  sl.innerHTML=Array.from({length:sz.slots},(_,i)=>{const p=MQ.byId(st.items[i]);return `<div class="slot">${p?`<img src="${MQ.img(p.img)}" alt="${MQ.esc(p.name)}" title="${MQ.esc(p.name)}"><button data-unslot="${i}" aria-label="Bỏ ${MQ.esc(p.name)}"><svg><use href="#i-close"/></svg></button>`:`Ngăn ${i+1}`}</div>`}).join('');
+  sl.innerHTML=Array.from({length:sz.slots},(_,i)=>{const p=MQ.byId(st.items[i]);return `<div class="slot">${p?`<img src="${MQ.img(pv(p).img,true)}" alt="${MQ.esc(p.name)}" title="${MQ.esc(p.name)}"><button data-unslot="${i}" aria-label="Bỏ ${MQ.esc(p.name)}"><svg><use href="#i-close"/></svg></button>`:`Ngăn ${i+1}`}</div>`}).join('');
   const cnt={};st.items.forEach(id=>cnt[id]=(cnt[id]||0)+1);
   $$('[data-pk]').forEach(b=>{const n=cnt[b.dataset.pk]||0;b.classList.toggle('has',n>0);b.querySelector('em').textContent=n?'×'+n:''});
   $('[data-b-card]').innerHTML=`<small>${st.to?'Gửi '+MQ.esc(st.to):'Thiệp Mộc Quả'}</small>${st.msg?MQ.esc(st.msg):'<span style="opacity:.45">Lời chúc của bạn sẽ hiện ở đây…</span>'}${st.from?`<span class="sign">— ${MQ.esc(st.from)}</span>`:''}`;
@@ -35,10 +38,10 @@ document.addEventListener('click',e=>{let el;
   else if(el=e.target.closest('[data-pk]')){const sz=O.sizes[st.size];if(st.items.length>=sz.slots){MQ.toast('Hộp đã đầy — bỏ bớt một ngăn hoặc chọn hộp lớn hơn');return}st.items.push(el.dataset.pk);draw()}
   else if(el=e.target.closest('[data-unslot]')){st.items.splice(+el.dataset.unslot,1);draw()}
   else if(e.target.closest('[data-b-clear]')){st.items=[];draw()}
-  else if(e.target.closest('[data-b-auto]')){const n=O.sizes[st.size].slots,pool=[...picks].sort((a,b)=>b.sold-a.sold);st.items=Array.from({length:n},(_,i)=>pool[i%pool.length].id);draw()}
+  else if(e.target.closest('[data-b-auto]')){const n=O.sizes[st.size].slots,pool=[...picks];st.items=Array.from({length:n},(_,i)=>pool[i%pool.length].id);draw()}
   else if(el=e.target.closest('[data-b-wishes] .chip')){st.msg=el.textContent;msg.value=st.msg;draw()}
   else if(e.target.closest('[data-b-add]')){const sz=O.sizes[st.size],col=O.colors.find(c=>c.id===st.color);
-    const names=st.items.map(id=>MQ.byId(id).name.split(' ').slice(0,2).join(' '));
+    const names=st.items.map(id=>MQ.byId(id).name.replace(/ sấy.*$/,''));
     MQ.cart.add({key:'custom|'+Date.now(),id:'custom-box',name:'Hộp quà tự thiết kế',w:sz.name,meta:col.name+' · '+[...new Set(names)].join(', ')+(st.msg?' · có thiệp':''),price:sz.fee+st.items.reduce((s,id)=>s+unit(MQ.byId(id)),0),img:null,box:col.box,ribbon:col.ribbon,card:st.msg,cardTo:st.to,cardFrom:st.from},1);
     MQ.toast('Đã thêm <b>Hộp quà tự thiết kế</b> vào giỏ');MQ.bump();setTimeout(MQ.openCart,300)}
 });

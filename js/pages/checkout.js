@@ -3,7 +3,7 @@ const MQ=window.MQ,{$,$$}=MQ;
 const f=$('[data-co]');
 if(!MQ.cart.items().length){f.hidden=true;$('[data-empty]').hidden=false;return}
 $('[data-prov]').innerHTML='<option value="">— Chọn tỉnh/thành —</option>'+MQ.provOptions();
-$('[data-ships]').innerHTML=MQ.SHIP_METHODS.map((m,i)=>`<label class="radio-card${i?'':' is-on'}"><input type="radio" name="ship" value="${m.id}"${i?'':' checked'}><div><b>${m.name}</b><small>${m.eta}${m.freeOver?' · miễn phí cho đơn từ 500.000đ':''} · <span data-eta-${m.id}></span></small></div><span class="fee" data-fee-${m.id}>${MQ.fmt(m.fee)}</span></label>`).join('');
+$('[data-ships]').innerHTML=MQ.SHIP_METHODS.map((m,i)=>`<label class="radio-card${i?'':' is-on'}"><input type="radio" name="ship" value="${m.id}"${i?'':' checked'}><div><b>${m.name}</b><small>${m.eta}${m.freeOver?' · miễn phí cho đơn từ '+MQ.fmt(MQ.FREE_SHIP):''} · <span data-eta-${m.id}></span></small></div><span class="fee" data-fee-${m.id}>${MQ.fmt(m.fee)}</span></label>`).join('');
 const cIn=$('[data-coupon]');cIn.value=MQ.store.get('coupon','')||'';f.note.value=MQ.store.get('note','');
 /* QR placeholder */
 (function(){let s='';const n=25,c=8;let seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;

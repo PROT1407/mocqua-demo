@@ -33,3 +33,9 @@ Website bán hàng **mô phỏng**, nhiều trang, HTML/CSS/JS thuần, không c
 
 ## Dữ liệu cần thay trước khi chạy thật
 Giá (giá demo), hotline/Zalo 0909 000 000, email, địa chỉ showroom, thông tin ngân hàng, mã QR, nhận xét (mẫu), số liệu bán, dinh dưỡng, hành trình lô, nội dung chính sách, ảnh sản phẩm thật. Form chưa nối backend; thanh toán chưa nối cổng thanh toán.
+
+## Danh mục sản phẩm thật (cập nhật 10/2026)
+- Dữ liệu: `js/data.js` — `MQ.PRODUCTS[].variants` (SKU `MQ-<cách sấy><quả>-<gram>-<dòng>`), `MQ.MAKERS` (Viza Food; `mocqua` dành cho dòng tự đóng gói sau này), `MQ.LINES` (GoodGood, Fresh & Healthy, Cheers+, KITA, Yummy, Mộc Quả tuyển chọn).
+- Giá bán lẻ = giá nhà cung cấp × 3; `p:null` hiển thị "Liên hệ báo giá".
+- Ảnh sản phẩm: `assets/products/<mã>.jpg` (1200×1200) và `<mã>-45.jpg` (1200×1500), tách nền từ ảnh chủ cửa hàng cung cấp; `zip-*.jpg` là ảnh minh hoạ túi zip Mộc Quả (sắp ra mắt); `ph-*.jpg` là ảnh chờ.
+- CSS nguồn: `css/src/*.css` → ghép thành `css/style.css`.

@@ -1,61 +1,96 @@
 (function(){
 const MQ=window.MQ,{$,$$}=MQ,q=MQ.qs;
-const TAGS={nosugar:'Không thêm đường',sale:'Đang ưu đãi',new:'Mới về',gift:'Hợp làm quà'};
-const st={cat:new Set(q('cat')?[q('cat')]:[]),region:new Set(q('region')?[q('region')]:[]),tag:new Set(q('tag')?[q('tag')]:[]),q:q('q')||'',max:700000,soon:false,sort:q('sort')||'best',view:'grid',page:1};
-if(st.cat.size&&MQ.CATS[[...st.cat][0]]?.soon)st.soon=true;
-const PER=9;
+const TAGS={small:'Gói nhỏ (≤ 100g)',mid:'Túi vừa (120 – 300g)',big:'Túi lớn (≥ 350g)'};
+const MAXP=300000;
+const set=k=>new Set(q(k)?q(k).split(','):[]);
+const st={cat:set('cat'),fruit:set('fruit'),flavour:set('flavour'),line:set('line'),tag:set('tag'),q:q('q')||'',max:MAXP,priced:false,soon:false,sort:q('sort')||'best',view:'grid',page:1};
+if(st.cat.has('soon')){st.cat.delete('soon');st.soon=true;st.onlySoon=true}
+if(st.line.has('mq')){st.soon=true}
+const PER=12;
+const all=MQ.PRODUCTS, live=all.filter(p=>!p.soon);
 const opt=(name,k,label,n)=>`<label class="fopt"><input type="checkbox" data-${name}="${k}"${st[name].has(k)?' checked':''}><span>${label}</span><em>${n}</em></label>`;
-const all=MQ.PRODUCTS;
-$('[data-f-cat]').innerHTML=Object.entries(MQ.CATS).map(([k,c])=>opt('cat',k,c.name+(c.soon?' <em class="soon-tag">Sắp có</em>':''),all.filter(p=>p.cat===k).length)).join('');
-$('[data-f-region]').innerHTML=Object.entries(MQ.REGIONS).map(([k,r])=>opt('region',k,r.name,all.filter(p=>p.region===k&&!p.soon).length)).join('');
-const hasTag=(p,t)=>t==='nosugar'?!!p.noSugar||p.cat==='tra':t==='sale'?p.sizes.some(s=>s.old):t==='new'?!!p.isNew:t==='gift'?(p.cat==='mix'||['hong-treo-gio','long-nhan','set-tra-cam-que'].includes(p.id)):false;
-$('[data-f-tag]').innerHTML=Object.entries(TAGS).map(([k,l])=>opt('tag',k,l,all.filter(p=>!p.soon&&hasTag(p,k)).length)).join('');
-const qIn=$('[data-f-q]'),pr=$('[data-f-price]'),sort=$('[data-sort]'),soon=$('[data-f-soon]');
+const gs=v=>v.g||0;
+const hasTag=(p,t)=>MQ.vars(p).some(v=>t==='small'?gs(v)>0&&gs(v)<=100:t==='mid'?gs(v)>100&&gs(v)<=300:t==='big'?gs(v)>=350:false);
+$('[data-f-cat]').innerHTML=Object.entries(MQ.CATS).filter(([k,c])=>!c.soon).map(([k,c])=>opt('cat',k,c.name,live.filter(p=>p.cat===k).length)).join('');
+$('[data-f-fruit]').innerHTML=Object.entries(MQ.FRUITS).map(([k,f])=>[k,f,live.filter(p=>p.fruit===k).length]).filter(x=>x[2]).map(([k,f,n])=>opt('fruit',k,f.name,n)).join('');
+$('[data-f-flavour]').innerHTML=Object.entries(MQ.FLAVOURS).map(([k,f])=>opt('flavour',k,f.name,live.filter(p=>p.flavour===k).length)).join('');
+$('[data-f-line]').innerHTML=Object.entries(MQ.LINES).map(([k,l])=>l.soon?opt('line',k,l.name+' <em class="soon-tag soon-tag--gold">Sắp ra mắt</em>',all.filter(p=>p.lines&&p.lines.includes(k)).length):opt('line',k,l.name,live.filter(p=>p.lines.includes(k)).length)).join('');
+$('[data-f-tag]').innerHTML=Object.entries(TAGS).map(([k,l])=>opt('tag',k,l,live.filter(p=>hasTag(p,k)).length)).join('');
+/* ô danh mục có ảnh (kiểu "tile" dễ bấm) */
+const TILES=[
+ {k:'all',name:'Tất cả',sub:`${live.length} sản phẩm`,img:'products/dx200',on:()=>!st.cat.size&&!st.flavour.size&&!st.tag.size&&!st.onlySoon},
+ ...Object.entries(MQ.CATS).filter(([k,c])=>!c.soon).map(([k,c])=>({k:'cat:'+k,name:c.short,sub:`${live.filter(p=>p.cat===k).length} sản phẩm`,img:c.img.replace('-45.jpg',''),on:()=>st.cat.size===1&&st.cat.has(k)})),
+ {k:'flavour:muoiot',name:'Vị muối ớt',sub:'Mặn – cay – ngọt',img:'products/dxmogn',on:()=>st.flavour.size===1&&st.flavour.has('muoiot')},
+ {k:'tag:small',name:'Gói nhỏ 80g',sub:'Từ 60.000đ',img:'products/th080',on:()=>st.tag.size===1&&st.tag.has('small')},
+ {k:'own',name:'Mộc Quả tuyển chọn',sub:'Túi zip · sắp ra mắt',img:'products/zip-xoai',own:true,on:()=>st.line.has('mq')}
+];
+const drawTiles=()=>{$('[data-cattiles]').innerHTML=TILES.map(t=>`<button class="ctile${t.on()?' is-on':''}${t.own?' ctile--own':''}" data-tile="${t.k}"><span class="ctile__img"><img src="${MQ.img(t.img,true)}" alt="" loading="lazy"></span><b>${t.name}</b><small>${t.sub}</small></button>`).join('');
+  $('[data-fruitbar]').innerHTML=`<span class="fruitbar__l">Loại quả</span>`+Object.entries(MQ.FRUITS).filter(([k])=>live.some(p=>p.fruit===k)).map(([k,f])=>`<button class="fchip${st.fruit.has(k)?' is-on':''}" data-fchip="${k}">${f.name}<em>${live.filter(p=>p.fruit===k).length}</em></button>`).join('');};
+const qIn=$('[data-f-q]'),pr=$('[data-f-price]'),sort=$('[data-sort]'),soon=$('[data-f-soon]'),pc=$('[data-f-priced]');
 qIn.value=st.q;pr.value=st.max;sort.value=st.sort;soon.checked=st.soon;
+const pz=p=>{const m=MQ.minPrice(p);return p.soon?2e9:m==null?1e9:m};
 function list(){
   const nq=MQ.norm(st.q.trim());
   let a=all.filter(p=>{
-    if(p.soon&&!st.soon&&!(st.cat.size&&[...st.cat].every(c=>MQ.CATS[c].soon)))return false;
+    if(st.onlySoon)return p.soon;
+    if(p.soon&&!st.soon)return false;
     if(st.cat.size&&!st.cat.has(p.cat))return false;
-    if(st.region.size&&!st.region.has(p.region))return false;
-    if(st.tag.size&&![...st.tag].every(t=>hasTag(p,t)))return false;
-    if(!p.soon&&p.sizes[0].p>st.max)return false;
-    if(nq&&!MQ.norm(p.name+' '+p.origin+' '+MQ.CATS[p.cat].name+' '+MQ.REGIONS[p.region].name+' '+p.short).includes(nq))return false;
+    if(st.fruit.size&&!st.fruit.has(p.fruit))return false;
+    if(st.flavour.size&&!st.flavour.has(p.flavour))return false;
+    if(st.line.size&&!(p.lines||[]).some(l=>st.line.has(l)))return false;
+    if(st.tag.size&&![...st.tag].some(t=>hasTag(p,t)))return false;
+    if(!p.soon&&st.max<MAXP){const m=MQ.minPrice(p);if(m==null||m>st.max)return false}
+    if(st.priced&&!p.soon&&MQ.minPrice(p)==null)return false;
+    if(nq&&!MQ.searchText(p).includes(nq))return false;
     return true});
-  const pz=p=>p.soon?1e9:p.sizes[0].p;
-  const S={best:(x,y)=>(y.sold||0)-(x.sold||0),new:(x,y)=>(y.isNew?1:0)-(x.isNew?1:0)||(y.sold||0)-(x.sold||0),rating:(x,y)=>(y.rating||0)-(x.rating||0),asc:(x,y)=>pz(x)-pz(y),desc:(x,y)=>(y.soon?-1:pz(y))-(x.soon?-1:pz(x)),az:(x,y)=>x.name.localeCompare(y.name,'vi')};
+  const S={best:(x,y)=>(x.rank||99)-(y.rank||99),asc:(x,y)=>pz(x)-pz(y),desc:(x,y)=>(y.soon?-1:MQ.minPrice(y)||0)-(x.soon?-1:MQ.minPrice(x)||0),az:(x,y)=>x.name.localeCompare(y.name,'vi')};
   a.sort(S[st.sort]||S.best);
   return a.sort((x,y)=>(x.soon?1:0)-(y.soon?1:0));
 }
+const NAMES={cat:k=>MQ.CATS[k].name,fruit:k=>MQ.FRUITS[k].name,flavour:k=>MQ.FLAVOURS[k].name,line:k=>MQ.LINES[k].name,tag:k=>TAGS[k]};
+const KEYS=['cat','fruit','flavour','line','tag'];
 function render(){
   const a=list(),shown=a.slice(0,st.page*PER);
   const g=$('[data-grid]');g.classList.toggle('is-list',st.view==='list');
   g.innerHTML=shown.map(p=>MQ.card(p)).join('');
   $('[data-empty]').hidden=a.length>0;
-  $('[data-count]').innerHTML=`Hiển thị <b>${shown.length}</b> / ${a.length} sản phẩm`;
-  const mw=$('[data-more-wrap]');mw.hidden=a.length<=PER&&true;mw.style.display=a.length?'':'none';
+  $('[data-count]').innerHTML=`<b>${a.length}</b> sản phẩm · ${a.reduce((s,p)=>s+MQ.vars(p).filter(v=>!st.line.size||st.line.has(v.line)).length,0)} mã SP`;
+  const mw=$('[data-more-wrap]');mw.style.display=a.length>PER?'':'none';
   $('[data-more-text]').textContent=`Bạn đã xem ${shown.length} trên ${a.length} sản phẩm`;
   $('[data-more-bar]').style.width=(a.length?shown.length/a.length*100:0)+'%';
   $('[data-more]').hidden=shown.length>=a.length;
-  $('[data-f-price-out]').textContent='≤ '+MQ.fmt(st.max);
-  const chips=[...[...st.cat].map(k=>['cat',k,MQ.CATS[k].name]),...[...st.region].map(k=>['region',k,MQ.REGIONS[k].name]),...[...st.tag].map(k=>['tag',k,TAGS[k]])];
+  $('[data-f-price-out]').textContent=st.max>=MAXP?'Tất cả mức giá':'≤ '+MQ.fmt(st.max);
+  const chips=KEYS.flatMap(n=>[...st[n]].map(k=>[n,k,NAMES[n](k)]));
   if(st.q)chips.push(['q','', '“'+st.q+'”']);
-  if(st.max<700000)chips.push(['max','','≤ '+MQ.fmt(st.max)]);
+  if(st.max<MAXP)chips.push(['max','','≤ '+MQ.fmt(st.max)]);
+  if(st.onlySoon)chips.push(['soon','','Sắp ra mắt']);
   $('[data-active]').innerHTML=chips.map(([t,k,l])=>`<button class="chip" data-unset="${t}" data-k="${k}">${MQ.esc(l)} <svg><use href="#i-close"/></svg></button>`).join('')+(chips.length?`<button class="chip" data-f-reset style="border:0;text-decoration:underline">Xoá tất cả</button>`:'');
-  const u=new URLSearchParams();if(st.cat.size===1)u.set('cat',[...st.cat][0]);if(st.region.size===1)u.set('region',[...st.region][0]);if(st.tag.size===1)u.set('tag',[...st.tag][0]);if(st.q)u.set('q',st.q);if(st.sort!=='best')u.set('sort',st.sort);
+  /* tiêu đề theo bộ lọc */
+  const c1=st.cat.size===1?MQ.CATS[[...st.cat][0]]:null;
+  $('[data-shop-title]').innerHTML=c1?`${c1.name.replace('Trái cây ','Trái cây <em>')}</em>`:st.onlySoon?'Sắp <em>ra mắt</em>':st.line.has('mq')?'Mộc Quả <em>tuyển chọn</em>':'Trái cây sấy <em>chính hãng</em>';
+  if(c1)$('[data-shop-sub]').textContent=c1.desc;
+  const u=new URLSearchParams();KEYS.forEach(n=>{if(st[n].size)u.set(n,[...st[n]].join(','))});if(st.q)u.set('q',st.q);if(st.sort!=='best')u.set('sort',st.sort);if(st.onlySoon)u.set('cat','soon');
   history.replaceState(null,'','cua-hang.html'+(u.toString()?'?'+u:''));
+  drawTiles();
+  $('[data-owncta]').innerHTML=st.onlySoon||st.line.has('mq')?'':`<div><small>Sắp ra mắt</small><h3>Mộc Quả <em>tuyển chọn</em></h3><p>Trái cây sấy chọn lọc, đóng túi zip kraft có cửa sổ nhìn rõ sản phẩm, dán nhãn Mộc Quả — nhiều trọng lượng, giá tốt cho gia đình &amp; văn phòng.</p><a class="btn btn--line btn--sm" href="cua-hang.html?line=mq">Xem trước dòng túi zip</a></div><div class="owncta__imgs">${['zip-xoai','zip-mit','zip-saurieng'].map(f=>`<img src="${MQ.img('products/'+f,true)}" alt="" loading="lazy">`).join('')}</div>`;
   MQ.reveal(g);
 }
+const clearAll=()=>{KEYS.forEach(n=>st[n].clear());st.q='';qIn.value='';st.max=MAXP;pr.value=MAXP;st.soon=false;soon.checked=false;st.onlySoon=false;st.priced=false;pc.checked=false;$$('.filters input[type=checkbox]').forEach(c=>c.checked=false)};
+const sync=()=>KEYS.forEach(n=>$$(`[data-${n}]`).forEach(c=>c.checked=st[n].has(c.dataset[n])));
 document.addEventListener('change',e=>{const t=e.target;
-  for(const n of ['cat','region','tag'])if(t.dataset[n]!==undefined){t.checked?st[n].add(t.dataset[n]):st[n].delete(t.dataset[n]);st.page=1;render();return}
-  if(t===sort){st.sort=t.value;render()} if(t===soon){st.soon=t.checked;st.page=1;render()}});
+  for(const n of KEYS)if(t.dataset[n]!==undefined){t.checked?st[n].add(t.dataset[n]):st[n].delete(t.dataset[n]);if(n==='line'&&t.dataset[n]==='mq'&&t.checked){st.soon=true;soon.checked=true}st.onlySoon=false;st.page=1;render();return}
+  if(t===sort){st.sort=t.value;render()} if(t===soon){st.soon=t.checked;st.onlySoon=false;st.page=1;render()} if(t===pc){st.priced=t.checked;st.page=1;render()}});
 pr.addEventListener('input',()=>{st.max=+pr.value;st.page=1;render()});
 let qt;qIn.addEventListener('input',()=>{clearTimeout(qt);qt=setTimeout(()=>{st.q=qIn.value;st.page=1;render()},180)});
 document.addEventListener('click',e=>{let el;
+  if(el=e.target.closest('[data-tile]')){const k=el.dataset.tile;const keepFruit=new Set(st.fruit);clearAll();st.fruit=keepFruit;
+    if(k==='own'){st.line.add('mq');st.soon=true;soon.checked=true}else if(k!=='all'){const [n,v]=k.split(':');st[n].add(v)}
+    sync();st.page=1;render();return}
+  if(el=e.target.closest('[data-fchip]')){const k=el.dataset.fchip;st.fruit.has(k)?st.fruit.delete(k):st.fruit.add(k);sync();st.page=1;render();return}
   if(el=e.target.closest('[data-view]')){st.view=el.dataset.view;$$('[data-view]').forEach(b=>b.classList.toggle('is-on',b===el));render()}
   if(e.target.closest('[data-more]')){st.page++;render()}
-  if(e.target.closest('[data-f-reset]')){['cat','region','tag'].forEach(n=>st[n].clear());st.q='';qIn.value='';st.max=700000;pr.value=700000;st.soon=false;soon.checked=false;$$('.filters input[type=checkbox]').forEach(c=>c.checked=false);st.page=1;render()}
-  if(el=e.target.closest('[data-unset]')){const t=el.dataset.unset,k=el.dataset.k;if(t==='q'){st.q='';qIn.value=''}else if(t==='max'){st.max=700000;pr.value=700000}else{st[t].delete(k);const c=$(`[data-${t}="${k}"]`);if(c)c.checked=false}render()}
+  if(e.target.closest('[data-f-reset]')){clearAll();st.page=1;render()}
+  if(el=e.target.closest('[data-unset]')){const t=el.dataset.unset,k=el.dataset.k;if(t==='q'){st.q='';qIn.value=''}else if(t==='max'){st.max=MAXP;pr.value=MAXP}else if(t==='soon'){st.onlySoon=false}else{st[t].delete(k);sync()}render()}
   if(e.target.closest('[data-filters-open]'))document.body.classList.add('filters-open');
   if(e.target.closest('[data-filters-close]')||e.target.closest('.overlay'))document.body.classList.remove('filters-open');
 });

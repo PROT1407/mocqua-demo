@@ -15,30 +15,36 @@
 </head>
 <body data-page="shop">
 <main id="main">
-<section class="phero phero--light"><div class="grain"></div><div class="phero__inner">
+<section class="phero phero--light phero--shop"><div class="grain"></div><div class="phero__inner">
 <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Trang chủ</a><span>Cửa hàng</span></nav>
-<h1>Cửa hàng <em>Mộc Quả</em></h1><p>Trái cây sấy dẻo, sấy giòn, hộp mix và trà trái cây — tuyển chọn từ sáu vùng quả. Tất cả giá trên trang là giá demo.</p></div></section>
-<div class="container"><div class="shop">
+<h1 data-shop-title>Trái cây sấy <em>chính hãng</em></h1><p data-shop-sub>Sấy dẻo · Sấy thăng hoa · Sấy giòn — hàng chính hãng Viza Food, phân loại rõ theo cách sấy, loại quả và hương vị.</p></div></section>
+<div class="container">
+  <nav class="cattiles" data-cattiles aria-label="Danh mục nhanh"></nav>
+  <div class="fruitbar" data-fruitbar aria-label="Lọc theo loại quả"></div>
+  <div class="shop">
   <aside class="filters" aria-label="Bộ lọc">
     <div class="filters__head"><h3>Bộ lọc</h3><button class="icon-btn" data-filters-close aria-label="Đóng bộ lọc"><svg><use href="#i-close"/></svg></button></div>
-    <div class="fgroup"><h4>Tìm trong cửa hàng</h4><div class="field"><input type="search" data-f-q placeholder="Tên quả, vùng…" aria-label="Tìm trong cửa hàng"></div></div>
-    <div class="fgroup"><h4>Danh mục</h4><div data-f-cat></div></div>
-    <div class="fgroup"><h4>Vùng quả</h4><div data-f-region></div></div>
-    <div class="fgroup"><h4>Đặc tính</h4><div data-f-tag></div></div>
-    <div class="fgroup range"><h4>Giá tối đa</h4><output data-f-price-out></output><input type="range" min="100000" max="700000" step="10000" data-f-price aria-label="Giá tối đa"><div class="small muted" style="display:flex;justify-content:space-between"><span>100.000đ</span><span>700.000đ</span></div></div>
-    <div class="fgroup"><label class="fopt"><input type="checkbox" data-f-soon><span>Hiện sản phẩm sắp ra mắt</span></label></div>
+    <div class="fgroup"><h4>Tìm trong cửa hàng</h4><div class="field"><input type="search" data-f-q placeholder="Tên quả, dòng SP, mã SP…" aria-label="Tìm trong cửa hàng"></div></div>
+    <div class="fgroup"><h4>Cách sấy</h4><div data-f-cat></div></div>
+    <div class="fgroup"><h4>Loại quả</h4><div data-f-fruit></div></div>
+    <div class="fgroup"><h4>Hương vị</h4><div data-f-flavour></div></div>
+    <div class="fgroup"><h4>Dòng sản phẩm <small class="muted">· Viza Food</small></h4><div data-f-line></div></div>
+    <div class="fgroup"><h4>Quy cách</h4><div data-f-tag></div></div>
+    <div class="fgroup range"><h4>Giá tối đa</h4><output data-f-price-out></output><input type="range" min="60000" max="300000" step="10000" data-f-price aria-label="Giá tối đa"><div class="small muted" style="display:flex;justify-content:space-between"><span>60.000đ</span><span>300.000đ</span></div></div>
+    <div class="fgroup"><label class="fopt"><input type="checkbox" data-f-priced><span>Chỉ hiện sản phẩm có giá</span></label><label class="fopt"><input type="checkbox" data-f-soon><span>Hiện sản phẩm sắp ra mắt</span></label></div>
     <div class="filters__apply"><button class="btn btn--line btn--sm btn--block" data-f-reset>Xoá bộ lọc</button></div>
   </aside>
   <div>
     <div class="toolbar">
       <div class="toolbar__l"><button class="btn btn--line btn--sm filter-toggle" data-filters-open><svg><use href="#i-filter"/></svg>Bộ lọc</button><span class="toolbar__count" data-count></span></div>
-      <div class="toolbar__r"><select class="sort" data-sort aria-label="Sắp xếp"><option value="best">Bán chạy nhất</option><option value="new">Mới nhất</option><option value="rating">Đánh giá cao</option><option value="asc">Giá: thấp → cao</option><option value="desc">Giá: cao → thấp</option><option value="az">Tên A → Z</option></select>
+      <div class="toolbar__r"><select class="sort" data-sort aria-label="Sắp xếp"><option value="best">Nổi bật</option><option value="asc">Giá: thấp → cao</option><option value="desc">Giá: cao → thấp</option><option value="az">Tên A → Z</option></select>
       <button class="viewbtn is-on" data-view="grid" aria-label="Dạng lưới"><svg><use href="#i-grid"/></svg></button><button class="viewbtn" data-view="list" aria-label="Dạng danh sách"><svg><use href="#i-list"/></svg></button></div>
     </div>
     <div class="active-filters" data-active></div>
     <div class="pgrid pgrid--3" data-grid></div>
     <div class="empty" data-empty hidden><svg><use href="#mark"/></svg><h3>Chưa có sản phẩm phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc tìm với từ khoá khác.</p><button class="btn btn--line" data-f-reset>Xoá bộ lọc</button></div>
     <div class="loadmore" data-more-wrap><small data-more-text></small><div class="bar"><i data-more-bar></i></div><button class="btn btn--line" data-more>Xem thêm sản phẩm</button></div>
+    <aside class="owncta" data-owncta></aside>
   </div>
 </div></div>
 <section class="section" style="padding-top:0" data-recent-wrap hidden><div class="container"><div class="sec-head"><div><h2>Bạn vừa <em>xem</em></h2></div></div><div class="hscroll" data-recent></div></div></section>
