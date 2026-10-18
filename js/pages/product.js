@@ -16,7 +16,8 @@ const maker=MQ.MAKERS[p.maker]||{};
 const flv=p.flavour?MQ.FLAVOURS[p.flavour].name:'';
 const bars=n=>Array.from({length:5},(_,i)=>`<b class="${i<n?'on':''}"></b>`).join('');
 const imgsOf=x=>[x.img,x.back].filter(Boolean);
-const allImgs=()=>[...(p.gallery&&v===vars[0]?p.gallery:imgsOf(v)),...vars.filter(x=>x!==v).flatMap(imgsOf),...(p.gallery||[]).slice(1)].filter((x,i,a)=>x&&a.indexOf(x)===i);
+const allImgs0=()=>[...(p.gallery&&v===vars[0]?p.gallery:imgsOf(v)),...vars.filter(x=>x!==v).flatMap(imgsOf),...(p.gallery||[]).slice(1)].filter((x,i,a)=>x&&a.indexOf(x)===i);
+const allImgs=()=>{const a=allImgs0();if(p.real)a.splice(1,0,p.real.img);return a};
 const best=p.packs?Math.min(...vars.filter(x=>x.p&&x.g).map(x=>x.p/x.g)):0;
 const varBtns=()=>(p.packs?MQ.sizeVars(p,v):vars).map(x=>`<button class="var${(p.packs?x.w===v.w:x===v)?' is-on':''}${x.p?'':' is-quote'}" data-sku="${x.sku}"><span>${MQ.esc(x.w)}</span>${x.line&&!p.own&&!p.packs?`<em>${MQ.lineName(x.line)}</em>`:''}<small>${soon?'—':x.p?MQ.fmt(x.p):'Liên hệ'}</small>${p.packs&&x.p&&x.g?`<i class="var__u">≈ ${MQ.per100(x)}</i>${x.p/x.g===best?'<b class="var__best">Lợi nhất</b>':''}`:''}</button>`).join('');
 /* mẫu bao bì (cùng khối lượng = cùng giá) */
@@ -27,7 +28,7 @@ const OCC=['Ăn vặt văn phòng, giờ nghỉ trưa','Mang theo khi du lịch,
 root.innerHTML=`<div class="pd">
  <div class="gallery">
   <div class="gallery__thumbs" data-thumbs></div>
-  <div class="gallery__main" data-zoom><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-main>${p.oos?'<span class="badge badge--oos">Hết hàng</span>':p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}${p.own?'':'<span class="gallery__note">Ảnh bao bì thật · di chuột để phóng to</span>'}</div>
+  <div class="gallery__main" data-zoom><img src="${MQ.img(v.img)}" alt="${MQ.esc(p.name)}" data-main>${p.oos?'<span class="badge badge--oos">Hết hàng</span>':p.badge?`<span class="badge badge--hot">${p.badge}</span>`:''}${p.own?'':'<span class="gallery__note">Ảnh bao bì thật · di chuột để phóng to</span>'}${p.real?`<span class="gallery__real" data-realcap hidden>${MQ.esc(p.real.cap)}</span>`:''}</div>
  </div>
  <div class="pinfo">
   <span class="pinfo__origin">${MQ.CATS[p.cat].name}${flv?' · '+flv:''}</span>
@@ -65,12 +66,13 @@ root.innerHTML=`<div class="pd">
 /* gallery */
 const main=$('[data-main]'),zoom=$('[data-zoom]');
 const VID=p.video?`<button class="gthumb--vid" data-vid aria-label="Xem video sản phẩm"><img src="assets/${p.video.poster}?v=${MQ.IMGV}" alt=""><i aria-hidden="true"></i></button>`:'';
-const drawThumbs=()=>{const t=allImgs().map((im,i)=>`<button class="${im===v.img?'is-on':''}" data-img="${im}" aria-label="Ảnh ${i+1}"><img src="${MQ.img(im,true)}" alt=""></button>`);if(VID)t.splice(1,0,VID);$('[data-thumbs]').innerHTML=t.join('')};
+const drawThumbs=()=>{const t=allImgs().map((im,i)=>`<button class="${im===v.img?'is-on':''}" data-img="${im}" aria-label="${p.real&&im===p.real.img?'Ảnh thật ruột sản phẩm':'Ảnh '+(i+1)}"><img src="${MQ.img(p.real&&im===p.real.img?im.replace('.webp','-t.webp'):im,true)}" alt=""></button>`);if(VID)t.splice(1,0,VID);$('[data-thumbs]').innerHTML=t.join('')};
 const hideVid=()=>{const x=zoom.querySelector('video');if(x){x.pause();x.remove()}main.hidden=false;zoom.classList.remove('has-vid')};
 const showVid=()=>{if(zoom.querySelector('video'))return;main.hidden=true;zoom.classList.add('has-vid');zoom.classList.remove('zoom');
   zoom.insertAdjacentHTML('afterbegin',`<video class="gallery__vid" controls playsinline preload="none" poster="assets/${p.video.poster}?v=${MQ.IMGV}"><source src="assets/${p.video.src}?v=${MQ.IMGV}" type="video/mp4">Trình duyệt chưa hỗ trợ video.</video>`);const x=zoom.querySelector('video');x.play&&x.play().catch(()=>{})};
+const realCap=im=>{const c=$('[data-realcap]');if(!c)return;const on=im===p.real.img;c.hidden=!on;zoom.classList.toggle('is-real',on);main.alt=on?p.real.cap+' — '+p.name:p.name};
 drawThumbs();
-$('[data-thumbs]').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-vid')){showVid();$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b));return}hideVid();main.src=MQ.img(b.dataset.img);$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b))});
+$('[data-thumbs]').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-vid')){showVid();$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b));return}hideVid();main.src=MQ.img(b.dataset.img);realCap(b.dataset.img);$$('[data-thumbs] button').forEach(x=>x.classList.toggle('is-on',x===b))});
 zoom.addEventListener('mousemove',e=>{const r=zoom.getBoundingClientRect();zoom.style.setProperty('--zx',((e.clientX-r.left)/r.width*100)+'%');zoom.style.setProperty('--zy',((e.clientY-r.top)/r.height*100)+'%')});
 zoom.addEventListener('mouseenter',()=>matchMedia('(hover:hover)').matches&&!zoom.classList.contains('has-vid')&&zoom.classList.add('zoom'));zoom.addEventListener('mouseleave',()=>zoom.classList.remove('zoom'));
 const drawSpec=()=>{$('[data-spec]').innerHTML=spec().map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')};drawSpec();
@@ -104,7 +106,7 @@ if(!soon){
      <button class="wishbig${MQ.wish.has(p.id)?' is-on':''}" data-wish="${p.id}" aria-label="Yêu thích"><svg><use href="#i-heart${MQ.wish.has(p.id)?'-f':''}"/></svg></button></div>
      <div class="pd-links"><button data-share><svg><use href="#i-share"/></svg>Sao chép liên kết</button><a href="hop-qua.html#tu-thiet-ke"><svg><use href="#i-gift"/></svg>Cho vào hộp quà tự chọn</a><a href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg>Đặt qua hotline ${MQ.HOTLINE}</a></div>`
      :MQ.quoteBox(p,v);
-   hideVid();main.src=MQ.img(v.img);drawThumbs();drawSpec();
+   hideVid();main.src=MQ.img(v.img);realCap(v.img);drawThumbs();drawSpec();
    const sb=$('[data-sticky]');sb.querySelector('[data-sp]').textContent=(v.p?MQ.fmt(v.p):'Liên hệ báo giá')+' · '+MQ.varLabel(p,v);
    if(p.oos)sb.querySelector('[data-add-pd]').outerHTML=`<button class="btn btn--gold btn--sm" data-notify="${p.id}">Báo khi có hàng</button>`;else sb.querySelector('[data-add-pd]').textContent=v.p?'Thêm vào giỏ':'Nhận báo giá';
    history.replaceState(null,'',MQ.url(p)+'&sku='+v.sku);

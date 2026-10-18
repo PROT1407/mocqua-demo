@@ -1811,3 +1811,6 @@ body{background:var(--bg)}
 .gallery__main.has-vid .gallery__note{display:none}
 .perk a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 a.deal{text-decoration:none;color:#fff8ec}
+/* ảnh thật ruột sản phẩm */
+.gallery__real{position:absolute;left:12px;bottom:12px;font-size:11px;letter-spacing:.04em;background:rgba(27,31,29,.72);color:#fff;padding:6px 10px;border-radius:2px}
+.gallery__main.is-real .gallery__note{display:none}

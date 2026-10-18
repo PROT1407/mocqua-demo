@@ -544,6 +544,13 @@ MQ.PRODUCTS = [
   const P=MQ.PRODUCTS,i=P.findIndex(p=>p.id===from),t=P.find(p=>p.id===to);if(i<0||!t)return;
   P[i].variants.forEach(v=>t.variants.push(Object.assign({},v,{w:lab(v.w)})));if(P[i].gallery)t.gallery=(t.gallery||[]).concat(P[i].gallery.filter(g=>!(t.gallery||[]).includes(g)));P.splice(i,1)});
 /* chuẩn hoá: ảnh chính = ảnh biến thể đầu tiên; sizes = biến thể (tương thích code cũ) */
+/* ảnh thật ruột sản phẩm (chủ shop chụp hàng xá tại xưởng) — hiện ở vị trí thứ 2 trong gallery */
+MQ.REAL_PHOTOS={
+ 'products/real/sau-rieng-thang-hoa.webp':['mqz-sau-rieng-ri6-thang-hoa','sau-rieng-say-thang-hoa-fh','sau-rieng-say-thang-hoa-cheers','sau-rieng-say-thang-hoa-yummy'],
+ 'products/real/xoai-thang-hoa.webp':['xoai-say-thang-hoa','mqz-xoai-thang-hoa'],
+ 'products/real/xoai-deo-muoi-ot.webp':['xoai-say-deo-muoi-ot','xoai-say-deo-muoi-ot-goodgood'],
+ 'products/real/thom-say-deo.webp':['thom-say-deo','mqz-thom-say-deo','mqz-doi-thom-say','mqz-doi-mut-muoi-ot']};
+Object.entries(MQ.REAL_PHOTOS).forEach(([img,ids])=>ids.forEach(id=>{const p=MQ.PRODUCTS.find(x=>x.id===id);if(p)p.real={img,cap:'Ảnh thật ruột sản phẩm · hàng chụp tại xưởng'}}));
 MQ.PRODUCTS.forEach(p=>{p.sizes=p.variants;if(!p.img)p.img=p.variants[0].img;else p.img=p.img;
   p.lines=[...new Set(p.variants.map(v=>v.line).filter(Boolean))];if(p.cat==='set')p.isSet=true;});
 MQ.GIFTS = [
