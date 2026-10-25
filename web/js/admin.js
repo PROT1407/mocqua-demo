@@ -147,6 +147,58 @@ async function enter() {
   await Promise.all([loadOrders(), loadPrices(), loadPromo()]);
 }
 
+const restoreForm = document.querySelector('#restore-form');
+restoreForm.addEventListener('change', (event) => {
+  if (event.target.name !== 'mode') return;
+  const confirmRow = document.querySelector('#replace-confirm');
+  const replacing = event.target.value === 'replace';
+  confirmRow.hidden = !replacing;
+  if (!replacing) confirmRow.querySelector('input').checked = false;
+});
+
+restoreForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const msg = document.querySelector('#restore-msg');
+  const button = form.querySelector('button');
+  msg.textContent = '';
+  const file = form.file.files[0];
+  if (!file) return;
+  const mode = new FormData(form).get('mode');
+  if (mode === 'replace' && !form.confirm.checked) {
+    msg.textContent = 'Tick xác nhận trước khi thay toàn bộ đơn.';
+    return;
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(await file.text());
+  } catch {
+    msg.textContent = 'File không phải JSON. Dùng file Xuất tất cả (JSON) để nhập lại.';
+    return;
+  }
+  const params = new URLSearchParams({ mode });
+  if (mode === 'replace') params.set('confirm', 'THAY-HET');
+  if (form.restoreShop.checked) params.set('restoreShop', '1');
+  button.disabled = true;
+  try {
+    const result = await api('/api/admin/backup?' + params.toString(), {
+      method: 'POST',
+      body: JSON.stringify(parsed),
+    });
+    const shop = result.restoredShop
+      ? ' Đã khôi phục giá và mức quà.'
+      : (form.restoreShop.checked ? ' File không có giá hoặc mức quà để khôi phục.' : '');
+    msg.textContent = mode === 'replace'
+      ? `Đã thay bằng file: ${result.added} đơn.${shop}`
+      : `Đã thêm ${result.added} đơn, bỏ qua ${result.skipped} đơn đã có.${shop}`;
+    await loadOrders();
+  } catch (error) {
+    msg.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
 document.querySelector('#login-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   loginErr.textContent = '';

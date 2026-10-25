@@ -595,6 +595,24 @@ export function adminPage() {
         <button class="btn btn--ghost btn--small" type="button" id="logout">Thoát</button>
       </div>
       <p class="notice" id="bank-warn" hidden>Chưa cấu hình BANK_BIN, ACCOUNT_NO, ACCOUNT_NAME. Khách đặt chuyển khoản vẫn có mã đơn và số tiền, nhưng chưa thấy QR.</p>
+      <div class="backup">
+        <h2>Sao lưu đơn</h2>
+        <p class="notice" id="backup-note">Gói miễn phí không giữ file. Đơn mất khi deploy, khi máy chủ khởi động lại, và khi máy ngủ khoảng 15 phút không có khách rồi tỉnh lại. Xuất JSON sau mỗi đợt đơn, và luôn xuất trước khi deploy. Danh sách dưới đây là 200 đơn mới nhất. File xuất gồm mọi đơn.</p>
+        <div class="backup-actions">
+          <a class="btn btn--small" href="/api/admin/backup.json">Xuất tất cả (JSON)</a>
+          <a class="btn btn--small btn--ghost" href="/api/admin/backup.csv">Xuất đơn (CSV)</a>
+        </div>
+        <form id="restore-form" class="fields">
+          <p class="fine">JSON để nhập lại. CSV chỉ để mở bằng Excel. Thêm đơn còn thiếu: giữ đơn đang có, chỉ thêm mã chưa có. Thay toàn bộ: xoá đơn hiện tại rồi ghi đúng file.</p>
+          <label class="field">File JSON đã xuất <input type="file" name="file" accept="application/json,.json" required></label>
+          <label class="check"><input type="radio" name="mode" value="merge" checked> Thêm đơn còn thiếu</label>
+          <label class="check"><input type="radio" name="mode" value="replace"> Thay toàn bộ đơn bằng file</label>
+          <label class="check" id="replace-confirm" hidden><input type="checkbox" name="confirm"> Tôi hiểu: đơn hiện tại sẽ bị xoá và thay bằng file này.</label>
+          <label class="check"><input type="checkbox" name="restoreShop"> Khôi phục luôn giá đã sửa và mức quà trong file</label>
+          <button class="btn btn--small" type="submit">Nhập bản sao</button>
+          <p class="fine" id="restore-msg" role="status"></p>
+        </form>
+      </div>
       <div class="tabs" role="tablist">
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
         <button type="button" data-tab="prices">Giá bán</button>

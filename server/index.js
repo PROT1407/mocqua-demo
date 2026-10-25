@@ -7,9 +7,10 @@ import { problem } from './format.js';
 import { getShopCatalog, getProductPage, adminProducts, skuExists } from './catalog.js';
 import { priceItems } from './promo.js';
 import { placeOrder, readCustomer } from './orders.js';
-import { getOrder, getSettings, isStatus, listOrders, saveSettings, setProductOverride, setVariantPrice, STATUSES, updateOrderStatus } from './db.js';
+import { applyBackup, getOrder, getSettings, isStatus, listAllOrders, listOrders, listProductOverrideRows, listVariantPriceRows, saveSettings, setProductOverride, setVariantPrice, STATUSES, updateOrderStatus } from './db.js';
+import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.js';
 import { bankConfig, vietqrFor } from './vietqr.js';
-import { checkPassword, isAdmin, loginCookie, logoutCookie, passwordConfigured, requireAdmin } from './auth.js';
+import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, orderPage, productPage, shopPage, trackPage } from './pages.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
@@ -59,11 +60,36 @@ function intField(value, { min, max, label }) {
   return n;
 }
 
+function buildBackup() {
+  return {
+    version: BACKUP_VERSION,
+    shop: 'Mộc Quả',
+    exportedAt: new Date().toISOString(),
+    note: 'Bản sao đơn Mộc Quả. Nhập lại ở /admin. Thêm đơn còn thiếu thì giữ đơn đang có. Thay toàn bộ thì xoá đơn hiện tại rồi ghi file này.',
+    orders: listAllOrders(),
+    settings: getSettings(),
+    variantPrices: listVariantPriceRows(),
+    productOverrides: listProductOverrideRows(),
+  };
+}
+
+function sendBackup(res, body, filename, type) {
+  res.set('Cache-Control', 'no-store');
+  res.set('Content-Disposition', `attachment; filename="${filename}"`);
+  res.type(type);
+  res.send(body);
+}
+
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
-  app.use(express.json({ limit: '200kb' }));
+  const parseJson = express.json({ limit: '200kb' });
+  const parseBackupBody = express.json({ limit: '8mb' });
+  app.use((req, res, next) => {
+    if (req.method === 'POST' && req.path === '/api/admin/backup') return next();
+    return parseJson(req, res, next);
+  });
   app.use((req, res, next) => {
     res.set('X-Content-Type-Options', 'nosniff');
     res.set('Referrer-Policy', 'same-origin');
@@ -110,15 +136,21 @@ export function createApp() {
     });
   }));
 
-  app.post('/api/admin/login', limiter(8, 15 * 60 * 1000), (req, res) => {
+  app.post('/api/admin/login', (req, res) => {
     if (!passwordConfigured()) {
       res.status(503).json({ error: 'Chưa đặt ADMIN_PASSWORD trên máy chủ.' });
       return;
     }
+    if (loginBlocked(req)) {
+      res.status(429).json({ error: 'Nhập sai quá nhiều lần. Đợi khoảng 15 phút rồi thử lại.' });
+      return;
+    }
     if (!checkPassword(req.body?.password || '')) {
+      recordLoginFailure(req);
       res.status(401).json({ error: 'Mật khẩu chưa đúng.' });
       return;
     }
+    clearLoginFailures(req);
     res.set('Set-Cookie', loginCookie(req)).json({ ok: true });
   });
 
@@ -138,6 +170,29 @@ export function createApp() {
   app.get('/api/admin/orders', requireAdmin, (req, res) => {
     res.json({ statuses: STATUSES, orders: listOrders() });
   });
+
+  app.get('/api/admin/backup.json', requireAdmin, (req, res) => {
+    const body = JSON.stringify(buildBackup(), null, 2);
+    sendBackup(res, body, `mocqua-backup-${backupStamp()}.json`, 'application/json; charset=utf-8');
+  });
+
+  app.get('/api/admin/backup.csv', requireAdmin, (req, res) => {
+    sendBackup(res, ordersToCsv(listAllOrders()), `mocqua-orders-${backupStamp()}.csv`, 'text/csv; charset=utf-8');
+  });
+
+  app.post('/api/admin/backup', requireAdmin, parseBackupBody, wrap((req, res) => {
+    const mode = String(req.query.mode || '');
+    if (mode !== 'merge' && mode !== 'replace') {
+      throw problem(400, 'Chọn thêm đơn còn thiếu, hoặc thay toàn bộ đơn.');
+    }
+    if (mode === 'replace' && req.query.confirm !== 'THAY-HET') {
+      throw problem(400, 'Muốn thay toàn bộ đơn thì cần xác nhận. Tick ô xác nhận trên trang quản trị rồi nhập lại.');
+    }
+    const restoreShop = req.query.restoreShop === '1' || req.query.restoreShop === 'true';
+    const data = parseBackup(req.body, { restoreShop });
+    const result = applyBackup(data, { mode, restoreShop });
+    res.json({ ok: true, mode, ...result });
+  }));
 
   app.patch('/api/admin/orders/:code', requireAdmin, wrap((req, res) => {
     const code = String(req.params.code || '').toUpperCase();
@@ -286,7 +341,9 @@ export function createApp() {
   app.use((err, req, res, next) => {
     const status = err.status || 500;
     if (status >= 500) console.error(err);
-    const message = err.expose ? err.message : 'Có lỗi trên máy chủ. Bạn thử lại giúp.';
+    let message = err.expose ? err.message : 'Có lỗi trên máy chủ. Bạn thử lại giúp.';
+    if (status === 413) message = 'Dữ liệu gửi lên quá lớn.';
+    if (err.type === 'entity.parse.failed') message = 'Không đọc được JSON. Dùng file Xuất tất cả (JSON) để nhập lại.';
     if (req.path.startsWith('/api/') || req.headers.accept?.includes('application/json')) {
       res.status(status).json({ error: message });
       return;
@@ -300,8 +357,16 @@ export function createApp() {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 if (isMain) {
+  const issue = adminPasswordIssue();
+  if (issue) {
+    console.error(issue);
+    process.exit(1);
+  }
+  if (!process.env.ADMIN_SECRET) {
+    console.warn('ADMIN_SECRET đang trống, cookie quản trị ký bằng ADMIN_PASSWORD. Nên đặt ADMIN_SECRET riêng trên Render.');
+  }
   const port = Number(process.env.PORT) || 3000;
-  createApp().listen(port, () => {
+  createApp().listen(port, '0.0.0.0', () => {
     console.log(`Mộc Quả đang chạy tại http://localhost:${port}`);
   });
 }

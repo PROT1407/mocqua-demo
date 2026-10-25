@@ -306,6 +306,9 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
 .varrow { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line); }
 .check { display: flex; gap: 8px; align-items: center; }
 .notice { background: #F3E2C4; border-radius: 14px; padding: 10px 12px; }
+.backup { display: grid; gap: 10px; margin: 8px 0 18px; }
+.backup h2 { font-size: 18px; margin: 0; }
+.backup-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .foot { border-top: 1px solid var(--line); margin-top: 28px; padding: 28px 0 40px; }
 .foot__in { display: grid; gap: 16px; }

@@ -122,22 +122,41 @@ export function setProductOverride(id, patch) {
   `).run(id, next.hidden ? 1 : 0, next.short, now);
 }
 
-export function insertOrder(order) {
-  getDb().prepare(`
-    INSERT INTO orders (code, status, pay_method, customer_json, items_json, gifts_json, summary_json, note, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
+const INSERT_ORDER = `
+  INSERT INTO orders (code, status, pay_method, customer_json, items_json, gifts_json, summary_json, note, created_at, updated_at)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
+
+function orderParams(order) {
+  return [
     order.code,
     order.status,
     order.payMethod,
     JSON.stringify(order.customer),
     JSON.stringify(order.items),
-    JSON.stringify(order.gifts),
+    JSON.stringify(order.gifts || []),
     JSON.stringify(order.summary),
     order.note || '',
     order.createdAt,
     order.updatedAt,
-  );
+  ];
+}
+
+export function insertOrder(order) {
+  getDb().prepare(INSERT_ORDER).run(...orderParams(order));
+}
+
+export function withTransaction(fn) {
+  const database = getDb();
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    const result = fn(database);
+    database.exec('COMMIT');
+    return result;
+  } catch (error) {
+    try { database.exec('ROLLBACK'); } catch { /* transaction already closed */ }
+    throw error;
+  }
 }
 
 function mapOrder(row) {
@@ -162,6 +181,78 @@ export function getOrder(code) {
 
 export function listOrders(limit = 200) {
   return getDb().prepare(`SELECT * FROM orders ORDER BY created_at DESC LIMIT ?`).all(limit).map(mapOrder);
+}
+
+export function listAllOrders() {
+  return getDb().prepare(`SELECT * FROM orders ORDER BY created_at ASC, code ASC`).all().map(mapOrder);
+}
+
+export function listVariantPriceRows() {
+  return getDb().prepare(`SELECT sku, price, updated_at FROM variant_overrides ORDER BY sku`).all().map((row) => ({
+    sku: row.sku,
+    price: row.price,
+    updatedAt: row.updated_at,
+  }));
+}
+
+export function listProductOverrideRows() {
+  return getDb().prepare(`SELECT id, hidden, short, updated_at FROM product_overrides ORDER BY id`).all().map((row) => ({
+    id: row.id,
+    hidden: !!row.hidden,
+    short: row.short || null,
+    updatedAt: row.updated_at,
+  }));
+}
+
+export function applyBackup(payload, { mode, restoreShop }) {
+  return withTransaction((database) => {
+    let added = 0;
+    let skipped = 0;
+    if (mode === 'replace') database.prepare(`DELETE FROM orders`).run();
+    const insert = database.prepare(INSERT_ORDER);
+    const has = database.prepare(`SELECT 1 AS ok FROM orders WHERE code = ?`);
+    for (const order of payload.orders) {
+      if (mode === 'merge' && has.get(order.code)) {
+        skipped += 1;
+        continue;
+      }
+      insert.run(...orderParams(order));
+      added += 1;
+    }
+    let restoredShop = false;
+    if (restoreShop && payload.settings) {
+      const merged = { ...DEFAULT_SETTINGS, ...payload.settings };
+      database.prepare(`UPDATE settings SET value = ? WHERE key = 'shop'`).run(JSON.stringify(merged));
+      restoredShop = true;
+    }
+    if (restoreShop && payload.variantPrices) {
+      if (mode === 'replace') database.prepare(`DELETE FROM variant_overrides`).run();
+      const upsert = database.prepare(`
+        INSERT INTO variant_overrides (sku, price, updated_at) VALUES (?, ?, ?)
+        ON CONFLICT(sku) DO UPDATE SET price = excluded.price, updated_at = excluded.updated_at
+      `);
+      for (const row of payload.variantPrices) upsert.run(row.sku, row.price, row.updatedAt);
+      restoredShop = true;
+    }
+    if (restoreShop && payload.productOverrides) {
+      if (mode === 'replace') database.prepare(`DELETE FROM product_overrides`).run();
+      const upsert = database.prepare(`
+        INSERT INTO product_overrides (id, hidden, short, updated_at) VALUES (?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET hidden = excluded.hidden, short = excluded.short, updated_at = excluded.updated_at
+      `);
+      const remove = database.prepare(`DELETE FROM product_overrides WHERE id = ?`);
+      for (const row of payload.productOverrides) {
+        if (!row.hidden && !row.short) {
+          remove.run(row.id);
+          continue;
+        }
+        upsert.run(row.id, row.hidden ? 1 : 0, row.short, row.updatedAt);
+      }
+      restoredShop = true;
+    }
+    const orders = database.prepare(`SELECT COUNT(*) AS n FROM orders`).get().n;
+    return { added, skipped, orders, restoredShop };
+  });
 }
 
 export function updateOrderStatus(code, status) {
