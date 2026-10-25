@@ -1,41 +1,92 @@
-# Mộc Quả — website demo (mocqua.com)
+# Mộc Quả
 
-Website bán hàng **mô phỏng**, nhiều trang, HTML/CSS/JS thuần, không cần build và không có backend. Giỏ hàng, yêu thích, đơn hàng, điểm thưởng đều lưu trong `localStorage` của trình duyệt. Có `noindex` và `robots.txt` chặn công cụ tìm kiếm.
+Cửa hàng trái cây sấy. Khách xem hàng theo cách sấy, cho vào giỏ, đặt một trang, nhận mã chuyển khoản VietQR. Chủ shop đăng nhập để xem đơn, đổi trạng thái và sửa giá.
 
-## Trang
-| Trang | Tệp |
+Danh mục vẫn lấy từ `js/data.js` (pipeline trong `research/` giữ nguyên). Giá sửa trên trang quản trị được ghi đè trong SQLite, không sửa file danh mục.
+
+Trang tĩnh cũ (`cau-chuyen.html`, `chinh-sach.html`, `hop-qua.html`…) vẫn được phục vụ. Trang mua hàng mới nằm ở `/`, `/cua-hang`, `/san-pham/...`, `/gio-hang`, `/thanh-toan`.
+
+## Chạy trên máy
+
+Cần Node.js 22.13 trở lên (dùng SQLite gắn sẵn trong Node).
+
+```bash
+cp .env.example .env
+# Sửa ADMIN_PASSWORD trong .env
+npm install
+npm start
+```
+
+Mở http://localhost:3000
+
+Kiểm tra tự động:
+
+```bash
+npm run check
+```
+
+`npm run dev` tự khởi động lại khi sửa file máy chủ.
+
+## Biến môi trường
+
+Xem `.env.example`.
+
+| Biến | Việc |
 |---|---|
-| Trang chủ | `index.html` |
-| Cửa hàng (lọc danh mục/vùng/đặc tính/giá, sắp xếp, tìm kiếm, lưới/danh sách, xem thêm) | `cua-hang.html` |
-| Chi tiết sản phẩm (`?id=`) | `san-pham.html` |
-| Hộp quà: hộp sẵn, tự thiết kế, gợi ý chọn quà, quà doanh nghiệp | `hop-qua.html` |
-| Giỏ hàng | `gio-hang.html` |
-| Thanh toán | `thanh-toan.html` |
-| Đặt hàng thành công | `dat-hang-thanh-cong.html` |
-| Tra cứu đơn (mã mẫu `MQ-DEMO-2026`, SĐT `0909000000`) | `tra-cuu-don.html` |
-| Yêu thích | `yeu-thich.html` |
-| Tài khoản / hội viên Hạt Mộc | `tai-khoan.html` |
-| Câu chuyện | `cau-chuyen.html` |
-| Góc ẩm thực + bài viết (`?slug=`) | `goc-am-thuc.html`, `bai-viet.html` |
-| Liên hệ | `lien-he.html` |
-| Chính sách (hướng dẫn, thanh toán, giao hàng, đổi trả, bảo mật) | `chinh-sach.html` |
-| 404 | `404.html` |
+| `PORT` | Cổng, mặc định 3000 |
+| `ADMIN_PASSWORD` | Mật khẩu trang `/admin`. Để trống thì không đăng nhập được |
+| `ADMIN_SECRET` | Khoá ký cookie. Bỏ trống thì dùng tạm mật khẩu admin |
+| `BANK_BIN` | Mã NAPAS 6 số của ngân hàng nhận tiền |
+| `BANK_NAME` | Tên ngân hàng hiện cạnh mã QR. Không bắt buộc |
+| `ACCOUNT_NO` | Số tài khoản |
+| `ACCOUNT_NAME` | Tên chủ tài khoản, đúng như ngân hàng in |
+| `DB_PATH` | File SQLite. Mặc định `data/mocqua.sqlite` |
 
-## Cấu trúc
-- `js/data.js` — dữ liệu mẫu: sản phẩm, hộp quà, mã giảm giá, tỉnh thành, bài viết, nhận xét, lịch mùa vụ.
-- `js/app.js` — header/mega menu, tìm kiếm trực tiếp, ngăn kéo giỏ hàng, yêu thích, xem nhanh, nút nổi, thanh dưới trên mobile.
-- `js/ui.js` — các khối dùng chung (thẻ hộp quà, lịch mùa, ước tính ngày giao, trạng thái đơn).
-- `js/pages/*.js` — mã riêng cho từng trang.
-- `css/src/*.css` — nguồn CSS; `css/style.css` là bản ghép (`cat css/src/*.css > css/style.css`).
+Chưa điền đủ `BANK_BIN`, `ACCOUNT_NO`, `ACCOUNT_NAME` thì đơn vẫn được ghi, trang đơn hiện số tiền và mã đơn, nhưng chưa có ảnh QR. Không ghi số tài khoản mẫu vào git.
 
-## Mã giảm giá demo
-`MOCQUA10` (−10%, tối đa 200k) · `TET2027` (−100k cho đơn từ 1 triệu) · `FREESHIP`.
+Mã QR lấy từ địa chỉ ảnh VietQR chuẩn:
 
-## Dữ liệu cần thay trước khi chạy thật
-Giá (giá demo), hotline/Zalo 0909 000 000, email, địa chỉ showroom, thông tin ngân hàng, mã QR, nhận xét (mẫu), số liệu bán, dinh dưỡng, hành trình lô, nội dung chính sách, ảnh sản phẩm thật. Form chưa nối backend; thanh toán chưa nối cổng thanh toán.
+`https://img.vietqr.io/image/{BANK_BIN}-{ACCOUNT_NO}-compact2.png?amount=...&addInfo={mã đơn}&accountName=...`
 
-## Danh mục sản phẩm thật (cập nhật 10/2026)
-- Dữ liệu: `js/data.js` — `MQ.PRODUCTS[].variants` (SKU `MQ-<cách sấy><quả>-<gram>-<dòng>`), `MQ.MAKERS` (Viza Food; `mocqua` dành cho dòng tự đóng gói sau này), `MQ.LINES` (GoodGood, Fresh & Healthy, Cheers+, KITA, Yummy, Mộc Quả tuyển chọn).
-- Giá bán lẻ = giá nhà cung cấp × 3; `p:null` hiển thị "Liên hệ báo giá".
-- Ảnh sản phẩm: `assets/products/<mã>.jpg` (1200×1200) và `<mã>-45.jpg` (1200×1500), tách nền từ ảnh chủ cửa hàng cung cấp; `zip-*.jpg` là ảnh minh hoạ túi zip Mộc Quả (sắp ra mắt); `ph-*.jpg` là ảnh chờ.
-- CSS nguồn: `css/src/*.css` → ghép thành `css/style.css`.
+Nội dung chuyển khoản là mã đơn, ví dụ `MQ261024-K7MQ2X`.
+
+## Thử mua hàng
+
+1. Vào cửa hàng, chọn Sấy dẻo → Xoài → một hãng.
+2. Trên trang món, chọn khối lượng (và màu túi nếu có), cho vào giỏ.
+3. Giỏ tự thêm dòng quà 0đ khi đơn từ mức tặng, hoặc khi đủ số túi xoài từ khối lượng quy định. Mức mặc định: đơn từ 199.000đ hoặc 2 túi xoài từ 200g, lấy mức nhiều hơn, tối đa 3 gói. Gói quà là xoài muối ớt GoodGood 50–100g.
+4. Đặt hàng, điền tên, điện thoại, địa chỉ. Chọn chuyển khoản để sang trang có QR. Trả khi nhận hàng là lựa chọn phụ.
+5. Vào `/admin`, đăng nhập, thấy đơn mới, đổi trạng thái: Chờ CK → Đã nhận → Đang giao → Xong. Sửa một giá ở tab Giá bán rồi tải lại trang món.
+
+Hotline `0909 000 000` trên các trang tĩnh cũ là số mẫu từ bản demo, chưa phải số shop.
+
+## Dữ liệu sản phẩm
+
+- Nguồn: `js/data.js`, sinh từ `research/` (`gen_data.py`, `pricing.py`, …).
+- Máy chủ đọc file này lúc khởi động. Sửa danh mục xong thì chạy lại `npm start`.
+- Giá và câu ngắn sửa trong `/admin` nằm ở SQLite, đè lên file. Bấm "Về giá gốc" để bỏ phần đè.
+- Ảnh dùng lại thư mục `assets/`.
+
+## Đưa lên mạng
+
+GitHub Pages chỉ phục vụ file tĩnh, không chạy được đơn hàng và trang quản trị. Cần một máy Node 22, một volume giữ file SQLite, và các biến môi trường ở trên.
+
+Ví dụ với Docker:
+
+```bash
+docker build -t mocqua .
+docker run -p 3000:3000 \
+  -e ADMIN_PASSWORD='mật khẩu dài' \
+  -e ADMIN_SECRET='một chuỗi ngẫu nhiên khác' \
+  -e BANK_BIN='......' \
+  -e ACCOUNT_NO='......' \
+  -e ACCOUNT_NAME='TEN CHU TAI KHOAN' \
+  -v mocqua-data:/app/data \
+  mocqua
+```
+
+Trên Railway, Render, Fly.io hoặc VPS: chọn Node 22, lệnh `npm start`, gắn đĩa vào `data/` để đơn không mất khi khởi động lại. Đặt biến môi trường trong bảng điều khiển của chỗ chạy, không ghi vào repo.
+
+Khi tên miền mocqua.com trỏ tới máy này, nhớ bỏ `noindex` trong `server/pages.js` nếu muốn công cụ tìm kiếm thấy trang.
+
+Ảnh biên lai chuyển khoản chưa có chỗ tải lên. Khách giữ trang đơn; shop đối soát bằng mã đơn trong nội dung chuyển khoản.

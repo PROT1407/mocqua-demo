@@ -1,0 +1,18 @@
+{
+  "name": "mocqua",
+  "private": true,
+  "type": "module",
+  "description": "Mộc Quả — cửa hàng trái cây sấy (trang bán + quản trị đơn).",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "check": "node --disable-warning=ExperimentalWarning --test server/selfcheck.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2"
+  }
+}
