@@ -1,6 +1,7 @@
 import { esc, vnd } from './format.js';
 import { brandOrder } from './catalog.js';
 import { STATUSES } from './db.js';
+import { shopContact } from './contact.js';
 import { bankConfig } from './vietqr.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
@@ -49,17 +50,32 @@ function header(page) {
 }
 
 function footer() {
+  const bank = bankConfig();
+  const phones = shopContact.phones
+    .map((p) => `<a href="tel:${esc(p.tel)}">${esc(p.display)}</a>`)
+    .join(' · ');
+  const zalos = shopContact.phones
+    .map((p) => `<a href="https://zalo.me/${esc(p.tel)}" target="_blank" rel="noopener">Zalo ${esc(p.display)}</a>`)
+    .join('');
+  const bankLine = bank.ready
+    ? `<p>Chuyển khoản: ${esc(bank.bankName || 'Ngân hàng')} · STK ${esc(bank.accountNo)} · ${esc(bank.accountName)}</p>`
+    : '';
   return `<footer class="foot">
   <div class="wrap foot__in">
     <div>
       <b>Mộc Quả</b>
-      <p>Trái cây sấy, để nguyên túi. mocqua.com chưa mua tên miền — đây là cửa hàng đang dựng.</p>
+      <p>${esc(shopContact.address)}</p>
+      <p>${phones}<br><a href="mailto:${esc(shopContact.email)}">${esc(shopContact.email)}</a><br>${esc(shopContact.hours)}</p>
+      ${bankLine}
     </div>
     <nav aria-label="Chân trang">
       <a href="/cua-hang">Cửa hàng</a>
       <a href="/cau-chuyen.html">Câu chuyện</a>
       <a href="/chinh-sach.html">Chính sách</a>
       <a href="/lien-he.html">Liên hệ</a>
+      <a href="${esc(shopContact.facebook)}" target="_blank" rel="noopener">Facebook</a>
+      <a href="${esc(shopContact.tiktok)}" target="_blank" rel="noopener">TikTok</a>
+      ${zalos}
       <a href="/admin">Quản lý đơn</a>
     </nav>
   </div>
@@ -429,6 +445,10 @@ export function cartPage() {
 
 export function checkoutPage(catalog) {
   const provinces = catalog.provinces.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+  const bank = bankConfig();
+  const bankLine = bank.ready
+    ? `Chuyển khoản ${esc(bank.bankName || 'ngân hàng')} · STK ${esc(bank.accountNo)} · ${esc(bank.accountName)}. Mã QR hiện sau khi đặt, đúng số tiền, nội dung là mã đơn.`
+    : 'Shop chưa gắn tài khoản nhận tiền. Bạn vẫn đặt được; shop gửi số tài khoản sau.';
   const cod = catalog.settings.codEnabled
     ? `<label class="radio"><input type="radio" name="pay" value="cod"><span><b>Trả khi nhận hàng</b><small>Shipper thu tiền mặt. Shop gọi xác nhận trước khi gửi.</small></span></label>`
     : '';
@@ -458,7 +478,7 @@ export function checkoutPage(catalog) {
       <section>
         <h2>Thanh toán</h2>
         <div class="radios">
-          <label class="radio"><input type="radio" name="pay" value="vietqr" checked><span><b>Chuyển khoản VietQR</b><small>Hiện mã QR đúng số tiền, nội dung là mã đơn.</small></span></label>
+          <label class="radio"><input type="radio" name="pay" value="vietqr" checked><span><b>Chuyển khoản VietQR</b><small>${bankLine}</small></span></label>
           ${cod}
         </div>
       </section>

@@ -4,7 +4,16 @@ const MQ=window.MQ;
 const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
 MQ.$=$; MQ.$$=$$;
 MQ.fmt=n=>Math.round(n).toLocaleString('vi-VN')+'đ';
-MQ.HOTLINE='0909 000 000'; MQ.TEL='0909000000';
+MQ.PHONES=[{tel:'0931330248',show:'0931 330 248'},{tel:'0919997283',show:'0919 997 283'}];
+MQ.TEL=MQ.PHONES[0].tel; MQ.HOTLINE=MQ.PHONES[0].show;
+MQ.TEL2=MQ.PHONES[1].tel; MQ.HOTLINE2=MQ.PHONES[1].show;
+MQ.EMAIL='huydaigia1407@gmail.com';
+MQ.ADDRESS='376/15 Nguyễn Đình Chiểu, Quận 3, TP. Hồ Chí Minh';
+MQ.MAPS='https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh';
+MQ.FACEBOOK='https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr';
+MQ.TIKTOK='https://www.tiktok.com/@mocqua79';
+MQ.BANK={name:'Techcombank',bin:'970407',accountNo:'19029781376018',accountName:'Nguyen Ngoc Huy',accountNameQr:'NGUYEN NGOC HUY'};
+MQ.vietqrUrl=(amount,info)=>{const p=new URLSearchParams();p.set('amount',String(Math.max(0,Math.round(Number(amount)||0))));p.set('addInfo',String(info||'Moc Qua'));p.set('accountName',MQ.BANK.accountNameQr);return `https://img.vietqr.io/image/${MQ.BANK.bin}-${MQ.BANK.accountNo}-compact2.png?${p}`};
 MQ.FREE_SHIP=300000;
 MQ.norm=s=>(s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
 MQ.esc=s=>(s||'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -246,7 +255,7 @@ function header(){
   return `
 <div class="tbar"><div class="wrap tbar__in">
   <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g<i>·</i>Đơn 199k tặng gói xoài muối ớt</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
-  <span class="tbar__msg tbar__demo">Website demo — đặt hàng thử, chưa thanh toán thật</span>
+  <span class="tbar__msg tbar__demo">Hotline &amp; Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>
 <header class="hd"><div class="wrap hd__in">
@@ -254,7 +263,7 @@ function header(){
   <a href="index.html" class="brand" aria-label="Mộc Quả — trang chủ">${MQ.mark('brand__mark')}<span class="brand__text"><b>Mộc Quả</b><small>Quả ngon · Quà trọn</small></span></a>
   <div class="hd__promise"><b>Quả ngon tuyển chọn <span>·</span> <em>Đóng gói chuẩn quà</em></b><small>Trái cây sấy · ô mai · set quà Tết — Mộc Quả &amp; Viza Food chính hãng</small></div>
   <form class="hd__search" action="cua-hang.html" role="search"><input name="q" type="search" placeholder="Tìm xoài, sầu riêng, xí muội…" aria-label="Tìm sản phẩm" autocomplete="off" data-search-open><button type="submit" aria-label="Tìm"><svg><use href="#i-search"/></svg></button></form>
-  <a class="hd__hot" href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg><span><small>Hotline đặt hàng</small>${MQ.HOTLINE}</span></a>
+  <a class="hd__hot" href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg><span><small>Zalo ${MQ.HOTLINE2}</small>${MQ.HOTLINE}</span></a>
   <button class="hd__cart" data-cart-open aria-label="Giỏ hàng"><span class="hd__cicon"><svg><use href="#i-cart"/></svg><span class="cart-count" data-cart-count>0</span></span><span class="hd__cl"><small>Giỏ hàng</small><b data-cart-sum>0đ</b></span></button>
 </div></header>
 <nav class="mbar" aria-label="Menu chính"><div class="wrap mbar__in">
@@ -276,7 +285,7 @@ function header(){
     <div class="dd"><div class="dd__col"><h6>Hàng chính hãng Viza Food</h6>${Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>dl('cua-hang.html?line='+k,l.name,cnt(p=>p.lines.includes(k)))).join('')}</div></div></div>
   <div class="mbar__item"><a href="goc-am-thuc.html"${act('blog')}>Góc ẩm thực</a></div>
   <div class="mbar__item"><a href="lien-he.html"${act('contact')}>Liên hệ</a></div>
-  <div class="mbar__extra"><a href="cau-chuyen.html">Câu chuyện Mộc Quả</a><a href="tra-cuu-don.html">Tra cứu đơn hàng</a><a href="yeu-thich.html">Danh sách yêu thích</a><a href="tai-khoan.html">Tài khoản</a><a href="chinh-sach.html">Chính sách</a><a href="tel:${MQ.TEL}" class="mbar__hot"><svg><use href="#i-phone"/></svg> Hotline ${MQ.HOTLINE}</a></div>
+  <div class="mbar__extra"><a href="cau-chuyen.html">Câu chuyện Mộc Quả</a><a href="tra-cuu-don.html">Tra cứu đơn hàng</a><a href="yeu-thich.html">Danh sách yêu thích</a><a href="tai-khoan.html">Tài khoản</a><a href="chinh-sach.html">Chính sách</a><a href="tel:${MQ.TEL}" class="mbar__hot"><svg><use href="#i-phone"/></svg> Hotline ${MQ.HOTLINE}</a><a href="tel:${MQ.TEL2}" class="mbar__hot"><svg><use href="#i-phone"/></svg> Hotline ${MQ.HOTLINE2}</a></div>
 </div></nav>
 <div class="search" aria-hidden="true"><div class="search__panel">
   <form class="search__form" action="cua-hang.html"><svg><use href="#i-search"/></svg><input name="q" type="search" placeholder="Tìm xoài sấy dẻo, xí muội, mã SP…" autocomplete="off" aria-label="Tìm kiếm"><button type="button" class="icon-btn" data-search-close aria-label="Đóng"><svg><use href="#i-close"/></svg></button></form>
@@ -284,7 +293,7 @@ function header(){
 </div></div>`;
 }
 /* sidebar dùng chung: danh mục dạng cây + hỗ trợ + tin tức */
-MQ.sideHelp=()=>`<section class="sbox sbox--help"><h3 class="sbox__t">Hỗ trợ đặt hàng</h3><div class="sbox__b"><a class="shot" href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg><span><small>Hotline · 8:00 – 21:00</small>${MQ.HOTLINE}</span></a><a class="szalo" href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener"><svg><use href="#i-zalo"/></svg>Chat Zalo đặt hàng</a><p>Tư vấn chọn quà, báo giá sỉ &amp; quà doanh nghiệp.</p></div></section>`;
+MQ.sideHelp=()=>`<section class="sbox sbox--help"><h3 class="sbox__t">Hỗ trợ đặt hàng</h3><div class="sbox__b"><a class="shot" href="tel:${MQ.TEL}"><svg><use href="#i-phone"/></svg><span><small>Hotline · Zalo · 8:00 – 21:00</small>${MQ.HOTLINE}</span></a><a class="shot" href="tel:${MQ.TEL2}"><svg><use href="#i-phone"/></svg><span><small>Hotline · Zalo</small>${MQ.HOTLINE2}</span></a><a class="szalo" href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener"><svg><use href="#i-zalo"/></svg>Chat Zalo đặt hàng</a><p>Tư vấn chọn quà, báo giá sỉ &amp; quà doanh nghiệp. Email ${MQ.EMAIL}.</p></div></section>`;
 MQ.sideNews=()=>`<section class="sbox"><h3 class="sbox__t">Tin tức · Góc ẩm thực</h3><div class="sbox__b snews">${MQ.POSTS.slice(0,4).map(a=>`<a href="bai-viet.html?slug=${a.slug}"><img src="${MQ.img(a.img,true)}" alt="" loading="lazy"><span>${a.title}</span></a>`).join('')}<a class="snews__all" href="goc-am-thuc.html">Tất cả bài viết →</a></div></section>`;
 MQ.sideGift=()=>`<a class="sbanner" href="hop-qua.html#tu-thiet-ke">${MQ.giftSvg('#7a2e22','#d8b878')}<span><small>Quà Tết 2027</small><b>Tự thiết kế hộp quà</b><em>Chọn vị · chọn hộp · viết thiệp →</em></span></a>`;
 MQ.side=()=>{const cc=k=>cnt(p=>p.cat===k);const L=(h,t,n)=>`<li><a href="${h}">${t}${n!=null?`<em>${n}</em>`:''}</a></li>`;
@@ -310,14 +319,14 @@ function footer(){
       <div class="footer__pay"><span>COD</span><span>VietQR</span><span>Ví điện tử</span><span>Thẻ ATM/Visa</span></div></div>
     <div><h5>Cửa hàng</h5><a href="cua-hang.html?cat=deo">Trái cây sấy dẻo</a><a href="cua-hang.html?cat=thanghoa">Trái cây sấy thăng hoa</a><a href="cua-hang.html?cat=gion">Trái cây sấy giòn</a><a href="cua-hang.html?cat=omai">Ô mai &amp; xí muội</a><a href="cua-hang.html?cat=hat">Hạt dinh dưỡng</a><a href="cua-hang.html?line=mq">Thương hiệu Mộc Quả</a><a href="hop-qua.html">Hộp quà Tết</a><a href="hop-qua.html#tu-thiet-ke">Tự thiết kế hộp quà</a></div>
     <div><h5>Hỗ trợ</h5><a href="chinh-sach.html#huong-dan">Hướng dẫn mua hàng</a><a href="chinh-sach.html#thanh-toan">Hình thức thanh toán</a><a href="chinh-sach.html#giao-hang">Giao hàng &amp; vận chuyển</a><a href="chinh-sach.html#doi-tra">Đổi trả &amp; hoàn tiền</a><a href="chinh-sach.html#bao-mat">Bảo mật thông tin</a><a href="tra-cuu-don.html">Tra cứu đơn hàng</a></div>
-    <div><h5>Liên hệ</h5><a href="tel:${MQ.TEL}">Hotline: ${MQ.HOTLINE}</a><a href="mailto:hello@mocqua.com">hello@mocqua.com</a><a href="lien-he.html">[Địa chỉ showroom đang cập nhật]</a><span>8:00 – 21:00, tất cả các ngày</span><div class="footer__social"><a href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener" aria-label="Zalo"><svg><use href="#i-zalo"/></svg></a><a href="https://m.me/" target="_blank" rel="noopener" aria-label="Messenger"><svg><use href="#i-msg"/></svg></a></div></div>
+    <div><h5>Liên hệ</h5><a href="tel:${MQ.TEL}">Hotline · Zalo: ${MQ.HOTLINE}</a><a href="tel:${MQ.TEL2}">Hotline · Zalo: ${MQ.HOTLINE2}</a><a href="mailto:${MQ.EMAIL}">${MQ.EMAIL}</a><a href="lien-he.html">${MQ.ADDRESS}</a><span>8:00 – 21:00, tất cả các ngày</span><span>Techcombank · STK ${MQ.BANK.accountNo} · ${MQ.BANK.accountName}</span><a href="${MQ.FACEBOOK}" target="_blank" rel="noopener">Facebook</a><a href="${MQ.TIKTOK}" target="_blank" rel="noopener">TikTok</a><div class="footer__social"><a href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener" aria-label="Zalo ${MQ.HOTLINE}"><svg><use href="#i-zalo"/></svg></a><a href="https://zalo.me/${MQ.TEL2}" target="_blank" rel="noopener" aria-label="Zalo ${MQ.HOTLINE2}"><svg><use href="#i-zalo"/></svg></a><a href="${MQ.FACEBOOK}" target="_blank" rel="noopener" aria-label="Facebook">f</a><a href="${MQ.TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok">♪</a></div></div>
   </div>
-  <div class="container footer__bottom"><span>© 2026 Mộc Quả · mocqua.com</span><span>Website demo giao diện — đánh giá, thông tin liên hệ là dữ liệu mẫu</span></div>
+  <div class="container footer__bottom"><span>© 2026 Mộc Quả · mocqua.com</span><span>${MQ.ADDRESS}</span></div>
   <div class="footer__word" aria-hidden="true">Mộc Quả</div>
 </footer>
 <div class="float">
   <a href="https://zalo.me/${MQ.TEL}" target="_blank" rel="noopener" class="float__btn float__btn--zalo" aria-label="Chat Zalo"><svg><use href="#i-zalo"/></svg></a>
-  <a href="https://m.me/" target="_blank" rel="noopener" class="float__btn float__btn--msg" aria-label="Messenger"><svg><use href="#i-msg"/></svg></a>
+  <a href="${MQ.FACEBOOK}" target="_blank" rel="noopener" class="float__btn float__btn--fb" aria-label="Facebook">f</a>
   <a href="tel:${MQ.TEL}" class="float__btn float__btn--phone" aria-label="Gọi hotline"><svg><use href="#i-phone"/></svg></a>
   <button class="float__btn float__btn--top" data-top aria-label="Lên đầu trang"><svg><use href="#i-up"/></svg></button>
 </div>
@@ -340,7 +349,7 @@ function footer(){
     <div class="drawer__row drawer__row--total" data-dr-totrow hidden><span>Sau ưu đãi</span><b data-dr-total></b></div>
     <p class="drawer__note">Ưu đãi &amp; quà tặng tự áp dụng · phí giao hàng tính ở bước thanh toán.</p>
     <div class="drawer__btns"><a href="gio-hang.html" class="btn btn--line">Xem giỏ hàng</a><a href="thanh-toan.html" class="btn btn--gold">Thanh toán</a></div>
-    <p class="drawer__demo">Website demo · Chưa phát sinh thanh toán thật</p>
+    <p class="drawer__demo">Tư vấn qua Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</p>
   </footer>
 </aside>
 <dialog class="qv" id="qv"><button class="icon-btn qv__close" data-qv-close aria-label="Đóng"><svg><use href="#i-close"/></svg></button><div class="qv__body"></div></dialog>

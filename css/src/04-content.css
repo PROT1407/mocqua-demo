@@ -127,7 +127,7 @@
 .float__btn{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 10px 24px -10px rgba(0,0,0,.45);transition:transform .3s var(--ease)}
 .float__btn:hover{transform:translateY(-3px)}
 .float__btn svg{width:22px;height:22px}
-.float__btn--zalo{background:#0068ff} .float__btn--msg{background:linear-gradient(135deg,#00b2ff,#a033ff)} .float__btn--phone{background:var(--clay)}
+.float__btn--zalo{background:#0068ff} .float__btn--msg{background:linear-gradient(135deg,#00b2ff,#a033ff)} .float__btn--fb{background:#1877f2;font-weight:700;font-size:22px} .float__btn--phone{background:var(--clay)}
 .float__btn--phone::after{content:"";position:absolute;width:50px;height:50px;border-radius:50%;border:2px solid var(--clay);animation:pulse 2s infinite}
 .float__btn--top{background:var(--ink);opacity:0;pointer-events:none;transform:translateY(10px)}
 body.scrolled .float__btn--top{opacity:1;pointer-events:auto;transform:none}

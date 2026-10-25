@@ -1,12 +1,18 @@
+import { bankDefaults } from './contact.js';
+
 function clean(value) {
   return String(value ?? '').trim();
 }
 
+function pick(value, fallback) {
+  return clean(value) || fallback;
+}
+
 export function bankConfig() {
-  const bin = clean(process.env.BANK_BIN);
-  const accountNo = clean(process.env.ACCOUNT_NO);
-  const accountName = clean(process.env.ACCOUNT_NAME);
-  const bankName = clean(process.env.BANK_NAME);
+  const bin = pick(process.env.BANK_BIN, bankDefaults.bin);
+  const accountNo = pick(process.env.ACCOUNT_NO, bankDefaults.accountNo);
+  const accountName = pick(process.env.ACCOUNT_NAME, bankDefaults.accountName);
+  const bankName = pick(process.env.BANK_NAME, bankDefaults.bankName);
   const ready = /^\d{6}$/.test(bin) && /^\d{6,20}$/.test(accountNo) && accountName.length >= 2;
   return { bin, accountNo, accountName, bankName, ready };
 }
