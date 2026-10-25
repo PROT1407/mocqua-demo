@@ -7,9 +7,9 @@ const c=o.customer;
 el.innerHTML=`<div class="confirm__seal"><svg><use href="#i-check"/></svg></div>
 <p class="eyebrow" style="justify-content:center"><span class="line"></span>Cảm ơn ${MQ.esc(c.name)}<span class="line"></span></p>
 <h1>Đặt hàng <em>thành công</em></h1>
-<p>Mộc Quả đã nhận đơn của bạn${c.email?' và gửi xác nhận tới '+MQ.esc(c.email):''}. Đây là đơn hàng demo — không có giao dịch thật.</p>
+<p>Mộc Quả đã ghi đơn của bạn${c.email?' và sẽ liên hệ qua '+MQ.esc(c.email):''}. Đơn được lưu trên trình duyệt này để bạn tra cứu.</p>
 <div class="code"><span>Mã đơn hàng</span><b data-code>${o.code}</b><button class="btn btn--line btn--sm" data-copy>Sao chép</button></div>
-${o.pay==='bank'?`<p class="notice" style="max-width:620px;margin:0 auto">Vui lòng chuyển khoản <b>${MQ.fmt(o.sum.total)}</b> với nội dung <b>${o.code}</b> (thông tin tài khoản đang cập nhật — demo).</p>`:''}
+${o.pay==='bank'?`<div class="notice" style="max-width:640px;margin:0 auto 18px"><p>Chuyển khoản <b>${MQ.fmt(o.sum.total)}</b>, nội dung <b>${MQ.esc(o.code)}</b>.</p><p>Ngân hàng: <b>${MQ.BANK.name}</b><br>Số tài khoản: <b>${MQ.BANK.accountNo}</b><br>Chủ tài khoản: <b>${MQ.BANK.accountName}</b></p><p><img src="${MQ.esc(MQ.vietqrUrl(o.sum.total,o.code))}" alt="Mã VietQR ${MQ.esc(o.code)}" width="220" height="220"></p></div>`:''}
 <div class="confirm__box">
  <div><h4>Giao đến</h4><p>${o.gift?`<b>${MQ.esc(o.gift.name||'Người nhận')}</b> · ${MQ.esc(o.gift.phone||'')}<br>`:`<b>${MQ.esc(c.name)}</b> · ${MQ.esc(c.phone)}<br>`}${MQ.esc(c.addr)}, ${MQ.esc(c.ward)}, ${MQ.esc(c.prov)}</p>
   <h4 style="margin-top:20px">Giao hàng &amp; thanh toán</h4><p>${o.ship.name} — dự kiến ${o.ship.date||o.ship.eta}<br>${MQ.payName[o.pay]}</p>${o.gift?`<p style="margin-top:10px">🎁 Gửi tặng${o.gift.hide?' · ẩn giá':''}${o.gift.card?` · Thiệp: “${MQ.esc(o.gift.card)}”`:''}</p>`:''}</div>

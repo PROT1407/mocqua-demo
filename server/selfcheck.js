@@ -49,6 +49,10 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.equal((await fetch(base + '/static/css/shop.css')).status, 200);
     assert.equal((await fetch(base + '/static/js/store.js')).status, 200);
     assert.equal((await fetch(base + '/static/js/product.js')).status, 200);
+    assert.match(home, /0931330248/);
+    assert.match(home, /0919997283/);
+    assert.match(home, /huydaigia1407@gmail.com/);
+    assert.match(home, /Nguyễn Đình Chiểu/);
     assert.match(home, /Bốn cách sấy/);
     assert.match(home, /viza-ke-05/);
     assert.match(home, /xoai-deo-muoi-ot/);
@@ -124,6 +128,25 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.ok(order.vietqr.url.includes('addInfo=' + encodeURIComponent(order.code)));
     assert.match(order.vietqr.url, /img\.vietqr\.io\/image\/000000-0000000000-compact2\.png/);
 
+    const contactPage = await (await fetch(base + '/lien-he.html')).text();
+    assert.match(contactPage, /0931330248/);
+    assert.match(contactPage, /0919997283/);
+    assert.match(contactPage, /huydaigia1407@gmail.com/);
+    assert.match(contactPage, /19029781376018/);
+    assert.match(contactPage, /Techcombank/);
+    assert.match(contactPage, /@mocqua79/);
+    assert.doesNotMatch(contactPage, /0909000000|hello@mocqua\.com|CÔNG TY MỘC QUẢ/);
+
+    const checkout = await (await fetch(base + '/thanh-toan')).text();
+    assert.match(checkout, /0000000000/);
+    assert.match(checkout, /Ngan hang thu/);
+    assert.match(checkout, /MOC QUA TEST/);
+
+    const story = await (await fetch(base + '/cau-chuyen.html')).text();
+    assert.match(story, /0931330248/);
+    assert.match(story, /huydaigia1407@gmail.com/);
+    assert.match(story, /Nguyễn Đình Chiểu/);
+
     const receipt = await (await fetch(base + '/don/' + order.code)).text();
     assert.match(receipt, new RegExp(order.code));
     assert.match(receipt, new RegExp(`amount=${order.total}`));
@@ -191,7 +214,71 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
       body: JSON.stringify({ hidden: false }),
     });
     assert.equal((await fetch(base + '/san-pham/' + side.id)).status, 200);
+
+    const savedBank = {
+      BANK_BIN: process.env.BANK_BIN,
+      BANK_NAME: process.env.BANK_NAME,
+      ACCOUNT_NO: process.env.ACCOUNT_NO,
+      ACCOUNT_NAME: process.env.ACCOUNT_NAME,
+    };
+    delete process.env.BANK_BIN;
+    delete process.env.BANK_NAME;
+    delete process.env.ACCOUNT_NO;
+    delete process.env.ACCOUNT_NAME;
+    try {
+      const { bankConfig, vietqrFor } = await import('./vietqr.js');
+      const { checkoutPage } = await import('./pages.js');
+      const { getShopCatalog: catalogNow } = await import('./catalog.js');
+      const bank = bankConfig();
+      assert.equal(bank.ready, true);
+      assert.equal(bank.bin, '970407');
+      assert.equal(bank.bankName, 'Techcombank');
+      assert.equal(bank.accountNo, '19029781376018');
+      assert.equal(bank.accountName, 'NGUYEN NGOC HUY');
+      const qr = vietqrFor(125000, 'MQ251025-TEST01');
+      assert.match(qr.url, /img\.vietqr\.io\/image\/970407-19029781376018-compact2\.png/);
+      assert.match(qr.url, /amount=125000/);
+      assert.match(qr.url, /accountName=NGUYEN\+NGOC\+HUY/);
+      const bare = checkoutPage(catalogNow());
+      assert.match(bare, /19029781376018/);
+      assert.match(bare, /Techcombank/);
+      assert.match(bare, /NGUYEN NGOC HUY/);
+      assert.match(bare, /0931330248/);
+    } finally {
+      for (const [key, value] of Object.entries(savedBank)) process.env[key] = value;
+    }
   } finally {
     await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
   }
+});
+
+test('trang tĩnh không còn số và email mẫu của shop', async () => {
+  const { ROOT } = await import('./paths.js');
+  const { shopContact, bankDefaults } = await import('./contact.js');
+  const read = (name) => fs.readFileSync(path.join(ROOT, name), 'utf8');
+  const phones = shopContact.phones.map((p) => p.tel);
+  const shared = [...phones, shopContact.email, 'Nguyễn Đình Chiểu', shopContact.facebook, shopContact.tiktok];
+  const bankBits = ['Techcombank', bankDefaults.accountNo];
+  const expect = {
+    'js/app.js': [...shared, ...bankBits, '970407', 'Nguyen Ngoc Huy', 'img.vietqr.io'],
+    'lien-he.html': [...shared, ...bankBits, 'Nguyen Ngoc Huy'],
+    'cau-chuyen.html': shared,
+    'chinh-sach.html': [...phones, ...bankBits, 'Nguyen Ngoc Huy'],
+    'index.html': phones,
+    'thanh-toan.html': [...bankBits, 'Nguyen Ngoc Huy'],
+    'js/pages/checkout.js': ['vietqrUrl', 'Techcombank'],
+    'js/pages/confirm.js': ['vietqrUrl', 'MQ.BANK'],
+    '.env.example': [...bankBits, bankDefaults.accountName],
+    'README.md': [shopContact.phones[0].display, shopContact.phones[1].display, shopContact.email, 'Nguyễn Đình Chiểu', ...bankBits, '970407', bankDefaults.accountName],
+  };
+  const banned = ['0909 000 000', 'hello@mocqua.com', 'CÔNG TY MỘC QUẢ', 'https://m.me/', '[Đang cập nhật]'];
+  for (const [name, bits] of Object.entries(expect)) {
+    const text = read(name);
+    for (const bit of bits) assert.ok(text.includes(bit), `${name} thiếu ${bit}`);
+    for (const bit of banned) assert.equal(text.includes(bit), false, `${name} còn ${bit}`);
+    if (name !== 'README.md') assert.equal(text.includes('0909000000'), false, `${name} còn 0909000000`);
+  }
+  const sampleOnly = read('tra-cuu-don.html') + read('js/ui.js');
+  assert.match(sampleOnly, /0909000000/);
+  assert.doesNotMatch(sampleOnly, /hello@mocqua\.com/);
 });

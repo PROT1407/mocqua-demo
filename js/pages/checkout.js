@@ -5,11 +5,10 @@ if(!MQ.cart.items().length){f.hidden=true;$('[data-empty]').hidden=false;return}
 $('[data-prov]').innerHTML='<option value="">— Chọn tỉnh/thành —</option>'+MQ.provOptions();
 $('[data-ships]').innerHTML=MQ.SHIP_METHODS.map((m,i)=>`<label class="radio-card${i?'':' is-on'}"><input type="radio" name="ship" value="${m.id}"${i?'':' checked'}><div><b>${m.name}</b><small>${m.eta}${m.freeOver?' · miễn phí cho đơn từ '+MQ.fmt(MQ.FREE_SHIP):''} · <span data-eta-${m.id}></span></small></div><span class="fee" data-fee-${m.id}>${MQ.fmt(m.fee)}</span></label>`).join('');
 const cIn=$('[data-coupon]');cIn.value=MQ.store.get('coupon','')||'';f.note.value=MQ.store.get('note','');
-/* QR placeholder */
-(function(){let s='';const n=25,c=8;let seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
- const fin=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#0f2a22"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#0f2a22"/>`;
- for(let y=0;y<n;y++)for(let x=0;x<n;x++){if((x<8&&y<8)||(x>16&&y<8)||(x<8&&y>16))continue;if(rnd()>.52)s+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#0f2a22"/>`}
- $('[data-qr]').innerHTML=`<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges">${s}${fin(0,0)}${fin(18,0)}${fin(0,18)}<rect x="10" y="10" width="5" height="5" fill="#b08d57"/></svg>`})();
+const qrImg=document.createElement('img');
+qrImg.alt='Mã VietQR Techcombank';
+qrImg.width=220; qrImg.height=220;
+$('[data-qr]').replaceChildren(qrImg);
 const val=()=>{const fd=new FormData(f);return Object.fromEntries(fd.entries())};
 function draw(){const v=val(),items=MQ.cart.items(),r=MQ.calc(items,cIn.value.trim(),v.ship);
   $('[data-cnt]').textContent=`(${MQ.cart.count()} sản phẩm)`;
@@ -20,7 +19,9 @@ function draw(){const v=val(),items=MQ.cart.items(),r=MQ.calc(items,cIn.value.tr
   const m=$('[data-cmsg]');if(cIn.value.trim()){if(r.coupon&&!r.msg){m.className='coupon-msg ok';m.textContent='Đã áp dụng: '+r.coupon.desc}else{m.className='coupon-msg err';m.textContent=r.msg||'Mã không hợp lệ'}}else m.textContent='';
   $('[data-drows]').innerHTML=MQ.discRowsHtml(r);const pn=$('[data-pnote]');pn.hidden=!r.note;pn.textContent=r.note;
   $('[data-total]').textContent=MQ.fmt(r.total);$('[data-pts]').textContent=r.points;
-  $('[data-memo]').textContent='MQ '+(v.phone||'SĐT')+' '+MQ.fmt(r.total).replace(/\./g,'');
+  const memo=v.phone?('MQ '+v.phone):'Moc Qua';
+  $('[data-memo]').textContent=v.phone?('MQ '+v.phone):'Mã đơn sau khi đặt';
+  qrImg.src=MQ.vietqrUrl(r.total,memo);
   $$('.radio-card').forEach(c=>c.classList.toggle('is-on',c.querySelector('input').checked));
   $('[data-giftopts]').classList.toggle('is-on',!!v.isgift);$('[data-sched]').hidden=v.ship!=='gift';$('[data-vatbox]').hidden=!v.vat;
   MQ.store.set('coupon',r.coupon&&!r.msg?r.coupon.code:'');return r;

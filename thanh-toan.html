@@ -15,7 +15,7 @@
 </head>
 <body data-page="checkout">
 <main id="main">
-<div class="container"><div class="steps"><b>1. Giỏ hàng</b><i></i><b>2. Thông tin &amp; thanh toán</b><i></i><span>3. Hoàn tất</span></div><h1 style="font-size:clamp(40px,5vw,64px);color:var(--ink)">Thanh toán</h1><p class="notice" style="margin-top:14px">Đây là trang thanh toán <b>demo</b>: không có giao dịch thật, thông tin chỉ lưu trên trình duyệt của bạn để minh hoạ tra cứu đơn.</p></div>
+<div class="container"><div class="steps"><b>1. Giỏ hàng</b><i></i><b>2. Thông tin &amp; thanh toán</b><i></i><span>3. Hoàn tất</span></div><h1 style="font-size:clamp(40px,5vw,64px);color:var(--ink)">Thanh toán</h1><p class="notice" style="margin-top:14px">Chuyển khoản vào tài khoản Techcombank của Mộc Quả. Giữ đúng số tiền và nội dung để shop đối soát. Đơn trên trang này được lưu trong trình duyệt để bạn tra cứu.</p></div>
 <div class="container"><form class="checkout" data-co novalidate>
  <div>
   <div class="cstep"><h3><span>1</span>Thông tin người mua</h3>
@@ -37,7 +37,7 @@
   <div class="cstep"><h3><span>4</span>Phương thức thanh toán</h3><div style="display:grid;gap:12px">
    <label class="radio-card is-on"><input type="radio" name="pay" value="cod" checked><div><b>Thanh toán khi nhận hàng (COD)</b><small>Trả tiền mặt hoặc chuyển khoản cho nhân viên giao hàng.</small></div></label>
    <label class="radio-card"><input type="radio" name="pay" value="bank"><div><b>Chuyển khoản ngân hàng · VietQR</b><small>Quét mã QR, đơn được xác nhận tự động.</small></div>
-    <div class="paybox"><div class="qr" data-qr></div><div><p><b>Ngân hàng:</b> [Đang cập nhật]<br><b>Số tài khoản:</b> [Đang cập nhật]<br><b>Chủ tài khoản:</b> CÔNG TY MỘC QUẢ<br><b>Nội dung:</b> <span data-memo></span></p><p class="small" style="color:var(--clay);margin-top:8px">Mã QR minh hoạ — không dùng để chuyển tiền.</p></div></div></label>
+    <div class="paybox"><div class="qr" data-qr></div><div><p><b>Ngân hàng:</b> Techcombank<br><b>Số tài khoản:</b> 19029781376018<br><b>Chủ tài khoản:</b> Nguyen Ngoc Huy<br><b>Nội dung:</b> <span data-memo></span></p><p class="small" style="margin-top:8px">Quét mã VietQR hoặc chuyển đúng số tài khoản, đúng số tiền và đúng nội dung.</p></div></div></label>
    <label class="radio-card"><input type="radio" name="pay" value="wallet"><div><b>Ví điện tử</b><small>Chuyển hướng đến ví để thanh toán (demo).</small><div class="wallets"><span>MoMo</span><span>ZaloPay</span><span>VNPay</span><span>ShopeePay</span></div></div></label>
   </div>
   <label class="check"><input type="checkbox" name="vat" data-vat> Xuất hoá đơn VAT (công ty)</label>
@@ -57,7 +57,7 @@
   <div class="points"><svg><use href="#i-gift"/></svg><span>Nhận <b data-pts>0</b> Hạt Mộc sau khi hoàn tất đơn.</span></div>
   <label class="check" style="margin:6px 0 16px"><input type="checkbox" required name="agree" checked> <span class="small">Tôi đồng ý với <a href="chinh-sach.html#doi-tra" style="text-decoration:underline">chính sách đổi trả</a> và <a href="chinh-sach.html#bao-mat" style="text-decoration:underline">bảo mật</a>.</span></label>
   <button class="btn btn--gold btn--block" type="submit" data-place>Đặt hàng</button>
-  <p class="drawer__demo">Website demo · Không phát sinh thanh toán thật</p>
+  <p class="drawer__demo">VietQR Techcombank · STK 19029781376018 · Nguyen Ngoc Huy</p>
   <a href="gio-hang.html" class="small muted" style="display:block;text-align:center;margin-top:10px;text-decoration:underline">← Quay lại giỏ hàng</a>
  </aside>
 </form>
