@@ -397,6 +397,133 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.equal(cleanedList.orders.some((item) => item.code === 'MQ261025-EXTRA1'), false);
     assert.ok(cleanedList.orders.some((item) => item.code === order.code));
 
+    const homeRes = await fetch(base + '/');
+    const csp = homeRes.headers.get('content-security-policy') || '';
+    assert.equal(homeRes.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(homeRes.headers.get('x-frame-options'), 'DENY');
+    assert.equal(homeRes.headers.get('referrer-policy'), 'same-origin');
+    assert.match(homeRes.headers.get('permissions-policy') || '', /camera=\(\)/);
+    assert.match(csp, /frame-ancestors 'none'/);
+    assert.match(csp, /img\.vietqr\.io/);
+    assert.match(csp, /script-src 'self'/);
+    assert.match(csp, /fonts\.googleapis\.com/);
+    assert.doesNotMatch(csp, /unsafe-eval/);
+    assert.equal(homeRes.headers.get('strict-transport-security'), null);
+    const homeHtml = await homeRes.text();
+    assert.match(homeHtml, /rel="manifest"/);
+    assert.match(homeHtml, /apple-touch-icon/);
+    assert.match(homeHtml, /apple-mobile-web-app-title/);
+    assert.match(homeHtml, /name="theme-color" content="#F7F1E8"/);
+    assert.match(homeHtml, /\/static\/js\/pwa\.js/);
+    assert.doesNotMatch(homeHtml, /test-pass|test-secret/);
+
+    const secureHealth = await fetch(base + '/api/health', { headers: { 'x-forwarded-proto': 'https' } });
+    assert.match(secureHealth.headers.get('strict-transport-security') || '', /max-age=15552000/);
+
+    const manifestRes = await fetch(base + '/manifest.webmanifest');
+    assert.equal(manifestRes.status, 200);
+    assert.match(manifestRes.headers.get('content-type') || '', /manifest\+json/);
+    const manifest = await manifestRes.json();
+    assert.equal(manifest.display, 'standalone');
+    assert.equal(manifest.start_url, '/');
+    assert.equal(manifest.scope, '/');
+    assert.match(manifest.name, /Mộc Quả/);
+    assert.equal(manifest.theme_color, '#F7F1E8');
+    assert.ok(manifest.icons.some((icon) => icon.sizes === '192x192' && icon.type === 'image/png'));
+    assert.ok(manifest.icons.some((icon) => icon.sizes === '512x512' && icon.purpose === 'maskable'));
+
+    const swRes = await fetch(base + '/sw.js');
+    assert.equal(swRes.status, 200);
+    assert.match(swRes.headers.get('content-type') || '', /javascript/);
+    assert.match(swRes.headers.get('cache-control') || '', /no-cache/);
+    const sw = await swRes.text();
+    assert.match(sw, /addEventListener\('fetch'/);
+    assert.match(sw, /\/api\//);
+    assert.match(sw, /request\.method !== 'GET'/);
+    assert.match(sw, /url\.origin !== self\.location\.origin/);
+    assert.doesNotMatch(sw, /test-pass|ADMIN_PASSWORD|ADMIN_SECRET/);
+
+    for (const [file, size] of [['/icons/icon-192.png', 192], ['/icons/icon-512.png', 512], ['/icons/apple-touch-icon.png', 180]]) {
+      const iconRes = await fetch(base + file);
+      assert.equal(iconRes.status, 200, file);
+      const png = Buffer.from(await iconRes.arrayBuffer());
+      assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', file);
+      assert.equal(png.readUInt32BE(16), size, file);
+      assert.equal(png.readUInt32BE(20), size, file);
+    }
+
+    const offline = await (await fetch(base + '/offline')).text();
+    assert.match(offline, /Đang không có mạng/);
+    assert.match(offline, /Giỏ vẫn nằm trên máy/);
+
+    const payPage = await (await fetch(base + '/thanh-toan')).text();
+    assert.match(payPage, /stk__no/);
+    assert.match(payPage, /Đặt và hiện mã QR/);
+    assert.match(payPage, /id="co-due"/);
+    assert.match(payPage, /Chép số tài khoản|stkcard|0000000000/);
+
+    const adminShell = await (await fetch(base + '/admin')).text();
+    assert.match(adminShell, /<details>/);
+    assert.match(adminShell, /không giữ file/);
+    const adminJs = await (await fetch(base + '/static/js/admin.js')).text();
+    assert.doesNotMatch(adminJs, /test-pass|test-secret/);
+
+    const { sameOriginState } = await import('./guard.js');
+    const fakeReq = (headers, protocol = 'https') => ({
+      protocol,
+      get(name) {
+        const found = Object.keys(headers).find((item) => item.toLowerCase() === name.toLowerCase());
+        return found ? headers[found] : undefined;
+      },
+    });
+    assert.equal(sameOriginState(fakeReq({ host: 'mocqua.onrender.com', origin: 'https://mocqua.onrender.com' })), true);
+    assert.equal(sameOriginState(fakeReq({ host: 'mocqua.onrender.com', origin: 'https://evil.example' })), false);
+    assert.equal(sameOriginState(fakeReq({ host: 'mocqua.onrender.com', origin: 'null' })), false);
+    assert.equal(sameOriginState(fakeReq({ host: '127.0.0.1:3000', 'sec-fetch-site': 'cross-site' }, 'http')), false);
+    assert.equal(sameOriginState(fakeReq({ host: '127.0.0.1:3000', 'sec-fetch-site': 'same-origin' }, 'http')), true);
+    assert.equal(sameOriginState(fakeReq({ host: 'mocqua.onrender.com', referer: 'https://evil.example/x' })), false);
+    assert.equal(sameOriginState(fakeReq({ host: '127.0.0.1:3000' }, 'http')), true);
+
+    const openQuote = await fetch(base + '/api/quote', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: 'https://evil.example' },
+      body: JSON.stringify({ items: [] }),
+    });
+    assert.equal(openQuote.status, 200);
+
+    const evilLogin = await fetch(base + '/api/admin/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: 'https://evil.example' },
+      body: JSON.stringify({ password: 'test-pass' }),
+    });
+    assert.equal(evilLogin.status, 403);
+    const blockedLogout = await fetch(base + '/api/admin/logout', {
+      method: 'POST',
+      headers: { cookie, origin: 'https://evil.example', 'content-type': 'application/json' },
+      body: '{}',
+    });
+    assert.equal(blockedLogout.status, 403);
+    assert.equal((await fetch(base + '/api/admin/me', { headers: { cookie } })).status, 200);
+    const crossSite = await fetch(base + '/api/admin/orders/' + order.code, {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json', 'sec-fetch-site': 'cross-site' },
+      body: JSON.stringify({ status: 'xong' }),
+    });
+    assert.equal(crossSite.status, 403);
+    assert.equal((await (await fetch(base + '/api/orders/' + order.code)).json()).status, 'dang_giao');
+    const referred = await fetch(base + '/api/admin/settings', {
+      method: 'PUT',
+      headers: { cookie, 'content-type': 'application/json', referer: 'https://evil.example/admin' },
+      body: '{}',
+    });
+    assert.equal(referred.status, 403);
+    const sameLogout = await fetch(base + '/api/admin/logout', {
+      method: 'POST',
+      headers: { cookie, origin: base, 'content-type': 'application/json' },
+      body: '{}',
+    });
+    assert.equal(sameLogout.status, 200);
+
     const { LOGIN_FAIL_MAX, resetLoginFailures } = await import('./auth.js');
     resetLoginFailures();
     for (let i = 0; i < LOGIN_FAIL_MAX; i += 1) {

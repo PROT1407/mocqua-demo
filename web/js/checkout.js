@@ -18,24 +18,46 @@ function rows(data) {
     <p class="sumrow sumrow--due"><span>Cần trả</span><b>${money(data.total)}</b></p>`;
 }
 
+function ctaLabel() {
+  const pay = form.querySelector('input[name="pay"]:checked');
+  return pay && pay.value === 'cod' ? 'Đặt hàng' : 'Đặt và hiện mã QR';
+}
+
 async function load() {
   const items = read();
+  const due = document.querySelector('#co-due');
   if (!items.length) {
     form.innerHTML = `<div class="empty"><h2>Giỏ đang trống.</h2><p>Chọn món trước khi đặt.</p><a class="btn" href="/cua-hang">Vào cửa hàng</a></div>`;
     return;
   }
-  const res = await fetch('/api/quote', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ items }),
-  });
+  let res;
+  try {
+    res = await fetch('/api/quote', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items }),
+    });
+  } catch {
+    summary.innerHTML = '<p class="formerr">Chưa có mạng. Giỏ vẫn còn. Khi có mạng, tải lại trang để tính tiền.</p>';
+    if (due) due.textContent = 'Cần mạng';
+    return;
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     summary.innerHTML = `<p class="formerr">${data.error || 'Chưa tính được giỏ.'}</p>`;
     return;
   }
   summary.innerHTML = rows(data);
+  if (due) due.textContent = money(data.total);
+  const button = document.querySelector('#co-submit');
+  if (button) button.textContent = ctaLabel();
 }
+
+form.addEventListener('change', (event) => {
+  if (event.target.name !== 'pay') return;
+  const button = document.querySelector('#co-submit');
+  if (button) button.textContent = ctaLabel();
+});
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -43,6 +65,7 @@ form.addEventListener('submit', async (event) => {
   const body = Object.fromEntries(new FormData(form).entries());
   body.items = read();
   const button = form.querySelector('[type="submit"]');
+  if (!button) return;
   button.disabled = true;
   button.textContent = 'Đang ghi đơn…';
   try {
@@ -56,9 +79,10 @@ form.addEventListener('submit', async (event) => {
     clearCart();
     location.href = data.url;
   } catch (error) {
-    err.textContent = error.message;
+    const lost = error.name === 'TypeError' || error.message === 'Failed to fetch';
+    err.textContent = lost ? 'Chưa có mạng. Giỏ vẫn còn. Khi có mạng, bấm đặt lại.' : error.message;
     button.disabled = false;
-    button.textContent = 'Đặt hàng';
+    button.textContent = ctaLabel();
   }
 });
 

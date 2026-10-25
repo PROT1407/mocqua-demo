@@ -29,11 +29,18 @@ async function draw() {
     root.innerHTML = `<div class="empty"><h2>Giỏ đang trống.</h2><p>Bạn chọn cách sấy, rồi cho túi vào giỏ.</p><a class="btn" href="/cua-hang">Vào cửa hàng</a></div>`;
     return;
   }
-  const res = await fetch('/api/quote', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ items }),
-  });
+  let res;
+  try {
+    res = await fetch('/api/quote', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items }),
+    });
+  } catch {
+    root.innerHTML = `<div class="empty"><h2>Chưa có mạng.</h2><p>Giỏ vẫn còn ${items.length} món trên máy. Có mạng thì bấm thử lại để tính tiền.</p><button class="btn" type="button" id="cart-retry">Thử lại</button></div>`;
+    document.querySelector('#cart-retry')?.addEventListener('click', () => draw());
+    return;
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     root.innerHTML = `<div class="empty"><h2>Giỏ chưa tính được.</h2><p>${data.error || 'Bạn thử lại giúp.'}</p><button class="btn" type="button" id="cart-clear">Xoá giỏ và chọn lại</button></div>`;
