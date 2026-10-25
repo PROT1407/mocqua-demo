@@ -79,7 +79,16 @@ Thói quen của chủ shop: sau mỗi đợt đơn, và luôn trước khi bấ
 - **Thay toàn bộ đơn** xoá đơn hiện tại rồi ghi đúng file. Phải tick xác nhận.
 - Tick **Khôi phục luôn giá đã sửa và mức quà** khi muốn lấy lại phần đó trong file JSON.
 
-Cookie quản trị có `HttpOnly`, `SameSite=Lax`, và `Secure` khi trang chạy HTTPS. Phiên hết hạn sau 7 ngày. Nhập sai mật khẩu 5 lần từ cùng một địa chỉ thì khoá khoảng 15 phút. Bộ đếm nằm trong bộ nhớ của một máy chủ.
+Cookie quản trị có `HttpOnly`, `SameSite=Lax`, và `Secure` khi trang chạy HTTPS. Phiên hết hạn sau 7 ngày. Nhập sai mật khẩu 5 lần từ cùng một địa chỉ thì khoá khoảng 15 phút. Bộ đếm nằm trong bộ nhớ của một máy chủ. Thao tác quản trị (đăng nhập, sửa đơn, nhập bản sao) chỉ nhận khi trình duyệt gửi từ chính trang này.
+
+## Cài lên màn hình điện thoại
+
+Mở https://mocqua.onrender.com bằng Chrome hoặc Safari, đúng địa chỉ có khoá HTTPS.
+
+- Android: menu trình duyệt → **Cài đặt ứng dụng** hoặc **Thêm vào Màn hình chính**.
+- iPhone: nút Chia sẻ → **Thêm vào Màn hình chính**.
+
+Icon Mộc Quả hiện trên màn hình. Bấm vào là vào cửa hàng. Giỏ vẫn nằm trên máy khi mất mạng. Đặt hàng, mã VietQR và trang quản trị cần có mạng.
 
 ## Đưa lên mạng
 

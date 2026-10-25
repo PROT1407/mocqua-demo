@@ -9,7 +9,10 @@ document.querySelectorAll('[data-copy]').forEach((button) => {
         button.textContent = old;
       }, 1600);
     } catch {
-      button.textContent = value;
+      button.textContent = 'Chưa chép được';
+      setTimeout(() => {
+        button.textContent = old;
+      }, 1600);
     }
   });
 });

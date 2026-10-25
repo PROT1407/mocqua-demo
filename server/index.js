@@ -11,7 +11,8 @@ import { applyBackup, getOrder, getSettings, isStatus, listAllOrders, listOrders
 import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.js';
 import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
-import { adminPage, cartPage, checkoutPage, errorPage, homePage, orderPage, productPage, shopPage, trackPage } from './pages.js';
+import { adminSameOrigin, securityHeaders } from './guard.js';
+import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage } from './pages.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
 
@@ -90,11 +91,20 @@ export function createApp() {
     if (req.method === 'POST' && req.path === '/api/admin/backup') return next();
     return parseJson(req, res, next);
   });
-  app.use((req, res, next) => {
-    res.set('X-Content-Type-Options', 'nosniff');
-    res.set('Referrer-Policy', 'same-origin');
-    next();
+  app.use(securityHeaders);
+  app.use(adminSameOrigin);
+
+  app.get('/manifest.webmanifest', (req, res) => {
+    res.set('Cache-Control', 'no-cache');
+    res.type('application/manifest+json');
+    res.sendFile(path.join(ROOT, 'web', 'manifest.webmanifest'));
   });
+  app.get('/sw.js', (req, res) => {
+    res.set('Cache-Control', 'no-cache');
+    res.type('application/javascript; charset=utf-8');
+    res.sendFile(path.join(ROOT, 'web', 'sw.js'));
+  });
+  app.use('/icons', express.static(path.join(ROOT, 'web', 'icons'), { index: false, maxAge: '7d' }));
 
   app.get('/api/health', (req, res) => {
     res.json({ ok: true, bankReady: bankConfig().ready });
@@ -316,6 +326,9 @@ export function createApp() {
   });
   app.get('/admin', (req, res) => {
     html(res, 200, adminPage());
+  });
+  app.get('/offline', (req, res) => {
+    html(res, 200, offlinePage());
   });
   app.get('/index.html', (req, res) => res.redirect(302, '/'));
 

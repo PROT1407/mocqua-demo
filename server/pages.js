@@ -8,7 +8,7 @@ const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 const EXTRA = ['omai', 'set', 'hat'];
 
 function layout({ title, description, page, body, scripts = [] }) {
-  const tags = ['/static/js/store.js', ...scripts]
+  const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
     .map((src) => `<script type="module" src="${src}"></script>`)
     .join('');
   return `<!doctype html>
@@ -18,9 +18,15 @@ function layout({ title, description, page, body, scripts = [] }) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F7F1E8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mộc Quả">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
+<link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
@@ -443,22 +449,29 @@ export function cartPage() {
   });
 }
 
+function stkCard(bank) {
+  if (!bank.ready) return '';
+  return `<div class="stkcard">
+    <p class="stk__bank">${esc(bank.bankName || 'Ngân hàng')}</p>
+    <p class="stk__no">${esc(bank.accountNo)}</p>
+    <p class="stk__name">${esc(bank.accountName)}</p>
+    <p class="fine">Số này để bạn biết trước. Mã QR đúng số tiền nằm ở trang sau.</p>
+  </div>`;
+}
+
 export function checkoutPage(catalog) {
   const provinces = catalog.provinces.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
   const bank = bankConfig();
   const bankLine = bank.ready
-    ? `Chuyển khoản ${esc(bank.bankName || 'ngân hàng')} · STK ${esc(bank.accountNo)} · ${esc(bank.accountName)}. Mã QR hiện sau khi đặt, đúng số tiền, nội dung là mã đơn.`
+    ? 'Mã QR hiện ngay sau khi đặt, đúng số tiền. Nội dung là mã đơn — giữ nguyên.'
     : 'Shop chưa gắn tài khoản nhận tiền. Bạn vẫn đặt được; shop gửi số tài khoản sau.';
   const cod = catalog.settings.codEnabled
     ? `<label class="radio"><input type="radio" name="pay" value="cod"><span><b>Trả khi nhận hàng</b><small>Shipper thu tiền mặt. Shop gọi xác nhận trước khi gửi.</small></span></label>`
     : '';
-  const body = `<main id="main" class="wrap narrow">
+  const body = `<main id="main" class="wrap narrow page-checkout">
+    <p class="kicker">Một bước</p>
     <h1>Đặt hàng</h1>
     <form id="co-form" novalidate>
-      <section>
-        <h2>Đơn của bạn</h2>
-        <div id="co-summary"><p>Đang tính tiền…</p></div>
-      </section>
       <section>
         <h2>Người nhận</h2>
         <div class="fields">
@@ -478,12 +491,20 @@ export function checkoutPage(catalog) {
       <section>
         <h2>Thanh toán</h2>
         <div class="radios">
-          <label class="radio"><input type="radio" name="pay" value="vietqr" checked><span><b>Chuyển khoản VietQR</b><small>${bankLine}</small></span></label>
+          <label class="radio"><input type="radio" name="pay" value="vietqr" checked><span><b>Chuyển khoản</b><small>${bankLine}</small></span></label>
+          ${stkCard(bank)}
           ${cod}
         </div>
       </section>
+      <section>
+        <h2>Đơn của bạn</h2>
+        <div id="co-summary"><p>Đang tính tiền…</p></div>
+      </section>
       <p class="formerr" id="co-err" role="alert"></p>
-      <button class="btn btn--wide" type="submit">Đặt hàng</button>
+      <div class="paybar">
+        <p class="paybar__due"><span>Cần trả</span><b id="co-due">…</b></p>
+        <button class="btn" type="submit" id="co-submit">Đặt và hiện mã QR</button>
+      </div>
     </form>
   </main>`;
   return layout({
@@ -497,9 +518,25 @@ export function checkoutPage(catalog) {
 
 const STATUS_LABEL = Object.fromEntries(STATUSES);
 
+function customerStatus(order) {
+  if (order.payMethod === 'cod' && order.status === 'da_nhan') return 'Trả khi nhận hàng';
+  const labels = {
+    cho_ck: 'Chờ chuyển khoản',
+    da_nhan: 'Đã nhận tiền',
+    dang_giao: 'Đang giao',
+    xong: 'Đã giao',
+  };
+  return labels[order.status] || STATUS_LABEL[order.status] || order.status;
+}
+
+function copyButton(value, label) {
+  return `<button type="button" class="btn btn--small btn--ghost" data-copy="${esc(value)}">${esc(label)}</button>`;
+}
+
 export function orderPage(order, qr) {
   const lines = order.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small></span><b>${vnd(item.line)}</b></li>`).join('');
   const gifts = (order.gifts || []).map((g) => `<li class="giftline"><span><b>${esc(g.name)}</b><small>${esc(g.w)} · × ${g.qty}${g.retail ? ' · giá bán ' + vnd(g.retail) : ''}</small></span><b>0đ</b></li>`).join('');
+  const due = `<p class="due"><span>Cần trả</span><b data-amount="${order.summary.total}">${vnd(order.summary.total)}</b></p>`;
   let pay = '';
   if (order.payMethod === 'cod') {
     pay = `<section class="paybox"><h2>Trả khi nhận hàng</h2><p>Bạn không cần chuyển khoản. Shop gọi xác nhận rồi gửi hàng, shipper thu ${vnd(order.summary.total)}.</p></section>`;
@@ -507,34 +544,47 @@ export function orderPage(order, qr) {
     const bankLabel = qr.bankName || `Ngân hàng BIN ${qr.bin}`;
     pay = `<section class="paybox">
       <h2>Chuyển khoản</h2>
-      <p>Quét mã, hoặc chuyển theo số bên cạnh. Giữ nguyên số tiền và nội dung.</p>
+      <ol class="paysteps">
+        <li>Quét mã bằng app ngân hàng.</li>
+        <li>Kiểm tra số tiền và nội dung. Giữ nguyên nội dung.</li>
+        <li>Giữ trang này. Shop đối soát theo mã đơn.</li>
+      </ol>
+      ${due}
       <div class="paybox__grid">
-        <div class="qr"><img src="${esc(qr.url)}" alt="Mã VietQR ${esc(vnd(order.summary.total))}, nội dung ${esc(order.code)}" width="320" height="320"></div>
-        <dl class="bank">
-          <dt>Ngân hàng</dt><dd>${esc(bankLabel)}</dd>
-          <dt>Số tài khoản</dt><dd>${esc(qr.accountNo)} <button type="button" class="textbtn" data-copy="${esc(qr.accountNo)}">Chép</button></dd>
-          <dt>Chủ tài khoản</dt><dd>${esc(qr.accountName)}</dd>
-          <dt>Số tiền</dt><dd>${vnd(order.summary.total)} <button type="button" class="textbtn" data-copy="${order.summary.total}">Chép</button></dd>
-          <dt>Nội dung</dt><dd><code>${esc(order.code)}</code> <button type="button" class="textbtn" data-copy="${esc(order.code)}">Chép</button></dd>
-        </dl>
+        <div class="qr"><img src="${esc(qr.url)}" alt="Mã VietQR ${esc(vnd(order.summary.total))}, nội dung ${esc(order.code)}" width="360" height="360"></div>
+        <div class="stkcard">
+          <p class="fine">Ngân hàng</p>
+          <p class="stk__bank">${esc(bankLabel)}</p>
+          <p class="fine">Số tài khoản</p>
+          <p class="stk__no">${esc(qr.accountNo)}</p>
+          ${copyButton(qr.accountNo, 'Chép số tài khoản')}
+          <p class="fine">Chủ tài khoản</p>
+          <p class="stk__name">${esc(qr.accountName)}</p>
+          <p class="fine">Nội dung chuyển khoản</p>
+          <p class="stk__code"><code>${esc(order.code)}</code></p>
+          ${copyButton(order.code, 'Chép nội dung')}
+          ${copyButton(String(order.summary.total), 'Chép số tiền')}
+        </div>
       </div>
-      <p class="fine">Ảnh biên lai: bạn có thể gửi sau cho shop khi cần đối soát. Phần tải ảnh lên web sẽ gắn sau.</p>
+      <p class="fine">Biên lai gửi shop khi cần. Chưa có chỗ tải ảnh lên web.</p>
     </section>`;
   } else {
     pay = `<section class="paybox">
       <h2>Chờ số tài khoản</h2>
-      <p>Đơn đã ghi nhận. Shop chưa gắn tài khoản ngân hàng trên web, nên mã QR chưa hiện. Bạn giữ mã đơn và số tiền — khi shop gửi số tài khoản, chuyển khoản với đúng nội dung là mã đơn.</p>
-      <dl class="bank">
-        <dt>Số tiền</dt><dd>${vnd(order.summary.total)}</dd>
-        <dt>Nội dung</dt><dd><code>${esc(order.code)}</code> <button type="button" class="textbtn" data-copy="${esc(order.code)}">Chép</button></dd>
-      </dl>
+      <p>Đơn đã ghi. Shop chưa gắn tài khoản trên web, nên mã QR chưa hiện. Giữ mã đơn và số tiền — khi shop gửi số, chuyển đúng nội dung là mã đơn.</p>
+      ${due}
+      <div class="stkcard">
+        <p class="fine">Nội dung chuyển khoản</p>
+        <p class="stk__code"><code>${esc(order.code)}</code></p>
+        ${copyButton(order.code, 'Chép nội dung')}
+      </div>
     </section>`;
   }
   const body = `<main id="main" class="wrap narrow">
-    <p class="kicker">${esc(STATUS_LABEL[order.status] || order.status)}</p>
+    <p class="status status--${esc(order.status)}">${esc(customerStatus(order))}</p>
     <h1>Đơn ${esc(order.code)}</h1>
-    <p class="lead lead--left">Cảm ơn ${esc(order.customer.name)}. Bạn giữ trang này để đối chiếu khi shop nhắn lại.</p>
-    <p class="due"><span>Cần trả</span><b data-amount="${order.summary.total}">${vnd(order.summary.total)}</b></p>
+    <p class="lead lead--left">Cảm ơn ${esc(order.customer.name)}.</p>
+    ${order.payMethod === 'cod' ? due : ''}
     ${pay}
     <section>
       <h2>Trong đơn</h2>
@@ -595,24 +645,27 @@ export function adminPage() {
         <button class="btn btn--ghost btn--small" type="button" id="logout">Thoát</button>
       </div>
       <p class="notice" id="bank-warn" hidden>Chưa cấu hình BANK_BIN, ACCOUNT_NO, ACCOUNT_NAME. Khách đặt chuyển khoản vẫn có mã đơn và số tiền, nhưng chưa thấy QR.</p>
-      <div class="backup">
-        <h2>Sao lưu đơn</h2>
-        <p class="notice" id="backup-note">Gói miễn phí không giữ file. Đơn mất khi deploy, khi máy chủ khởi động lại, và khi máy ngủ khoảng 15 phút không có khách rồi tỉnh lại. Xuất JSON sau mỗi đợt đơn, và luôn xuất trước khi deploy. Danh sách dưới đây là 200 đơn mới nhất. File xuất gồm mọi đơn.</p>
+      <section class="backup">
+        <h2>Bản sao đơn</h2>
+        <p class="fine" id="backup-note">Gói miễn phí không giữ file. Sau mỗi đợt đơn, và trước khi deploy, xuất JSON rồi cất trên máy. Danh sách bên dưới là 200 đơn mới. File xuất gồm mọi đơn.</p>
         <div class="backup-actions">
           <a class="btn btn--small" href="/api/admin/backup.json">Xuất tất cả (JSON)</a>
           <a class="btn btn--small btn--ghost" href="/api/admin/backup.csv">Xuất đơn (CSV)</a>
         </div>
-        <form id="restore-form" class="fields">
-          <p class="fine">JSON để nhập lại. CSV chỉ để mở bằng Excel. Thêm đơn còn thiếu: giữ đơn đang có, chỉ thêm mã chưa có. Thay toàn bộ: xoá đơn hiện tại rồi ghi đúng file.</p>
-          <label class="field">File JSON đã xuất <input type="file" name="file" accept="application/json,.json" required></label>
-          <label class="check"><input type="radio" name="mode" value="merge" checked> Thêm đơn còn thiếu</label>
-          <label class="check"><input type="radio" name="mode" value="replace"> Thay toàn bộ đơn bằng file</label>
-          <label class="check" id="replace-confirm" hidden><input type="checkbox" name="confirm"> Tôi hiểu: đơn hiện tại sẽ bị xoá và thay bằng file này.</label>
-          <label class="check"><input type="checkbox" name="restoreShop"> Khôi phục luôn giá đã sửa và mức quà trong file</label>
-          <button class="btn btn--small" type="submit">Nhập bản sao</button>
-          <p class="fine" id="restore-msg" role="status"></p>
-        </form>
-      </div>
+        <p class="fine">JSON để nhập lại. CSV chỉ để mở bằng Excel.</p>
+        <details>
+          <summary>Nhập lại từ file JSON</summary>
+          <form id="restore-form" class="fields">
+            <label class="field">File JSON đã xuất <input type="file" name="file" accept="application/json,.json" required></label>
+            <label class="check"><input type="radio" name="mode" value="merge" checked> Thêm đơn còn thiếu</label>
+            <label class="check"><input type="radio" name="mode" value="replace"> Thay toàn bộ đơn bằng file</label>
+            <label class="check" id="replace-confirm" hidden><input type="checkbox" name="confirm"> Tôi hiểu: đơn hiện tại sẽ bị xoá và thay bằng file này.</label>
+            <label class="check"><input type="checkbox" name="restoreShop"> Khôi phục luôn giá đã sửa và mức quà trong file</label>
+            <button class="btn btn--small" type="submit">Nhập bản sao</button>
+            <p class="fine" id="restore-msg" role="status"></p>
+          </form>
+        </details>
+      </section>
       <div class="tabs" role="tablist">
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
         <button type="button" data-tab="prices">Giá bán</button>
@@ -629,6 +682,21 @@ export function adminPage() {
     page: 'admin',
     body,
     scripts: ['/static/js/admin.js'],
+  });
+}
+
+export function offlinePage() {
+  const body = `<main id="main" class="wrap narrow">
+    <p class="kicker">Mộc Quả</p>
+    <h1>Đang không có mạng</h1>
+    <p class="lead lead--left">Giỏ vẫn nằm trên máy. Khi có mạng, mở lại cửa hàng để tính tiền và đặt. Mã chuyển khoản cần mạng.</p>
+    <p><a class="btn" href="/">Thử lại</a></p>
+  </main>`;
+  return layout({
+    title: 'Không có mạng | Mộc Quả',
+    description: 'Mộc Quả cần mạng để đặt hàng.',
+    page: 'offline',
+    body,
   });
 }
 
