@@ -18,6 +18,11 @@ function cookieOf(res) {
   return (list.find(Boolean) || '').split(';')[0];
 }
 
+function setCookieHeader(res) {
+  if (typeof res.headers.getSetCookie === 'function') return res.headers.getSetCookie().join('\n');
+  return res.headers.get('set-cookie') || '';
+}
+
 test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng thái', async () => {
   const { createApp } = await import('./index.js');
   const { getShopCatalog } = await import('./catalog.js');
@@ -168,6 +173,22 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.equal(login.status, 200);
     const cookie = cookieOf(login);
     assert.match(cookie, /^mq_admin=/);
+    const { SESSION_TTL_SECONDS } = await import('./auth.js');
+    const sessionCookie = setCookieHeader(login);
+    assert.match(sessionCookie, /HttpOnly/);
+    assert.match(sessionCookie, /SameSite=Lax/);
+    assert.match(sessionCookie, new RegExp(`Max-Age=${SESSION_TTL_SECONDS}`));
+    assert.doesNotMatch(sessionCookie, /Secure/);
+    const secureLogin = await fetch(base + '/api/admin/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-forwarded-proto': 'https' },
+      body: JSON.stringify({ password: 'test-pass' }),
+    });
+    assert.equal(secureLogin.status, 200);
+    const secureCookie = setCookieHeader(secureLogin);
+    assert.match(secureCookie, /HttpOnly/);
+    assert.match(secureCookie, /SameSite=Lax/);
+    assert.match(secureCookie, /Secure/);
     const auth = { cookie, 'content-type': 'application/json' };
 
     const orders = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
@@ -247,6 +268,158 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     } finally {
       for (const [key, value] of Object.entries(savedBank)) process.env[key] = value;
     }
+
+    const adminHtml = await (await fetch(base + '/admin')).text();
+    assert.match(adminHtml, /Xuất tất cả \(JSON\)/);
+    assert.match(adminHtml, /Xuất đơn \(CSV\)/);
+    assert.match(adminHtml, /không giữ file/);
+    assert.match(adminHtml, /Thêm đơn còn thiếu/);
+    assert.match(adminHtml, /Thay toàn bộ đơn bằng file/);
+
+    assert.equal((await fetch(base + '/api/admin/backup.json')).status, 401);
+    assert.equal((await fetch(base + '/api/admin/backup.csv')).status, 401);
+    const anonImport = await fetch(base + '/api/admin/backup?mode=merge', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{}',
+    });
+    assert.equal(anonImport.status, 401);
+
+    const jsonRes = await fetch(base + '/api/admin/backup.json', { headers: auth });
+    assert.equal(jsonRes.status, 200);
+    assert.match(jsonRes.headers.get('content-type') || '', /application\/json/);
+    assert.match(jsonRes.headers.get('content-disposition') || '', /attachment; filename="mocqua-backup-\d{8}-\d{4}\.json"/);
+    assert.equal(jsonRes.headers.get('cache-control'), 'no-store');
+    const backup = await jsonRes.json();
+    assert.equal(backup.version, 1);
+    const savedOrder = backup.orders.find((item) => item.code === order.code);
+    assert.ok(savedOrder, 'bản sao phải có đơn vừa đặt');
+    assert.equal(savedOrder.customer.phone, '0909123456');
+    assert.equal(savedOrder.status, 'dang_giao');
+    assert.ok(savedOrder.items.length >= 1);
+    assert.ok(savedOrder.gifts.length >= 1);
+    assert.equal(typeof backup.settings.giftMin, 'number');
+
+    const csvRes = await fetch(base + '/api/admin/backup.csv', { headers: auth });
+    assert.equal(csvRes.status, 200);
+    assert.match(csvRes.headers.get('content-type') || '', /text\/csv/);
+    assert.match(csvRes.headers.get('content-disposition') || '', /attachment; filename="mocqua-orders-/);
+    const csvBytes = Buffer.from(await csvRes.arrayBuffer());
+    assert.equal(csvBytes.subarray(0, 3).toString('hex'), 'efbbbf');
+    const csv = csvBytes.toString('utf8');
+    assert.match(csv, new RegExp(order.code));
+    assert.match(csv, /0909123456/);
+    assert.match(csv, /Quà/);
+
+    const mergeRes = await fetch(base + '/api/admin/backup?mode=merge', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify(backup),
+    });
+    const mergeBody = await mergeRes.json();
+    assert.equal(mergeRes.status, 200, JSON.stringify(mergeBody));
+    assert.equal(mergeBody.added, 0);
+    assert.equal(mergeBody.skipped, backup.orders.length);
+
+    const blockedReplace = await fetch(base + '/api/admin/backup?mode=replace', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify(backup),
+    });
+    assert.equal(blockedReplace.status, 400);
+    assert.equal((await (await fetch(base + '/api/orders/' + order.code)).json()).status, 'dang_giao');
+
+    const extraBackup = structuredClone(backup);
+    extraBackup.orders.push({
+      ...savedOrder,
+      code: 'MQ261025-EXTRA1',
+      customer: { ...savedOrder.customer, name: '=1+1' },
+      note: 'don phu',
+    });
+    const replaced = await fetch(base + '/api/admin/backup?mode=replace&confirm=THAY-HET', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify(extraBackup),
+    });
+    const replacedBody = await replaced.json();
+    assert.equal(replaced.status, 200, JSON.stringify(replacedBody));
+    assert.equal(replacedBody.added, extraBackup.orders.length);
+    const dangerCsv = await (await fetch(base + '/api/admin/backup.csv', { headers: auth })).text();
+    assert.match(dangerCsv, /'=1\+1/);
+    assert.doesNotMatch(dangerCsv, /(^|,)=1\+1(,|$)/m);
+
+    const keepRes = await fetch(base + '/api/admin/backup?mode=merge', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify(backup),
+    });
+    const keepBody = await keepRes.json();
+    assert.equal(keepRes.status, 200, JSON.stringify(keepBody));
+    assert.equal(keepBody.added, 0);
+    const listed = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
+    assert.ok(listed.orders.some((item) => item.code === 'MQ261025-EXTRA1'));
+
+    const badImport = await fetch(base + '/api/admin/backup?mode=merge', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify({ version: 1, orders: [{ code: 'nope' }] }),
+    });
+    assert.equal(badImport.status, 400);
+    const afterBad = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
+    assert.ok(afterBad.orders.some((item) => item.code === 'MQ261025-EXTRA1'));
+
+    const settingsNow = await (await fetch(base + '/api/admin/settings', { headers: auth })).json();
+    const tweaked = { ...settingsNow.settings, giftMin: settingsNow.settings.giftMin + 1000 };
+    const tweakRes = await fetch(base + '/api/admin/settings', {
+      method: 'PUT',
+      headers: auth,
+      body: JSON.stringify(tweaked),
+    });
+    assert.equal(tweakRes.status, 200, JSON.stringify(await tweakRes.clone().json()));
+    const restoreShop = await fetch(base + '/api/admin/backup?mode=merge&restoreShop=1', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify(backup),
+    });
+    const restoreBody = await restoreShop.json();
+    assert.equal(restoreShop.status, 200, JSON.stringify(restoreBody));
+    assert.equal(restoreBody.restoredShop, true);
+    const settingsBack = await (await fetch(base + '/api/admin/settings', { headers: auth })).json();
+    assert.equal(settingsBack.settings.giftMin, backup.settings.giftMin);
+
+    const cleaned = await fetch(base + '/api/admin/backup?mode=replace&confirm=THAY-HET', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify(backup),
+    });
+    assert.equal(cleaned.status, 200);
+    const cleanedList = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
+    assert.equal(cleanedList.orders.some((item) => item.code === 'MQ261025-EXTRA1'), false);
+    assert.ok(cleanedList.orders.some((item) => item.code === order.code));
+
+    const { LOGIN_FAIL_MAX, resetLoginFailures } = await import('./auth.js');
+    resetLoginFailures();
+    for (let i = 0; i < LOGIN_FAIL_MAX; i += 1) {
+      const missed = await fetch(base + '/api/admin/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: 'sai-lan-' + i }),
+      });
+      assert.equal(missed.status, 401);
+    }
+    const locked = await fetch(base + '/api/admin/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ password: 'test-pass' }),
+    });
+    assert.equal(locked.status, 429);
+    resetLoginFailures();
+    const unlocked = await fetch(base + '/api/admin/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ password: 'test-pass' }),
+    });
+    assert.equal(unlocked.status, 200);
   } finally {
     await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
   }
@@ -281,4 +454,31 @@ test('trang tĩnh không còn số và email mẫu của shop', async () => {
   const sampleOnly = read('tra-cuu-don.html') + read('js/ui.js');
   assert.match(sampleOnly, /0909000000/);
   assert.doesNotMatch(sampleOnly, /hello@mocqua\.com/);
+});
+
+test('máy chủ không khởi động khi mật khẩu admin yếu', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const { adminPasswordIssue } = await import('./auth.js');
+  const { ROOT } = await import('./paths.js');
+  assert.match(adminPasswordIssue(''), /ADMIN_PASSWORD/);
+  assert.match(adminPasswordIssue('admin'), /yếu/);
+  assert.match(adminPasswordIssue('1234567890'), /yếu/);
+  assert.match(adminPasswordIssue('aaaaaaaaaa'), /yếu/);
+  assert.match(adminPasswordIssue('test-pass'), /10/);
+  assert.equal(adminPasswordIssue('moc-qua-shop-2026'), '');
+
+  const result = spawnSync(process.execPath, ['--disable-warning=ExperimentalWarning', path.join(ROOT, 'server/index.js')], {
+    cwd: ROOT,
+    env: {
+      ...process.env,
+      ADMIN_PASSWORD: 'admin',
+      ADMIN_SECRET: 'not-the-password',
+      DB_PATH: path.join(os.tmpdir(), 'mocqua-boot-reject.sqlite'),
+      PORT: '3999',
+    },
+    encoding: 'utf8',
+    timeout: 20000,
+  });
+  assert.equal(result.status, 1, result.stderr || result.stdout);
+  assert.match(result.stderr || '', /ADMIN_PASSWORD quá yếu/);
 });
