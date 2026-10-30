@@ -802,36 +802,6 @@
    ]
   },
   {
-   "id": "vz-gg-srs",
-   "brand": "viza-food",
-   "label": "Good Good",
-   "name": "Sầu riêng sấy (túi vàng)",
-   "cat": "thanghoa",
-   "type": "sau-rieng-thang-hoa",
-   "pack": "",
-   "images": [
-    {
-     "src": "/assets/catalog/vz-gg-srs.webp",
-     "thumb": "/assets/catalog/vz-gg-srs-sm.webp",
-     "w": 645,
-     "h": 750,
-     "alt": "Túi vàng sầu riêng sấy",
-     "kind": "hero"
-    }
-   ],
-   "verify": false,
-   "note": "",
-   "variants": [
-    {
-     "code": "VZ-GG-SRS-100",
-     "weightG": 100,
-     "weightLabel": "100g",
-     "verify": false,
-     "note": ""
-    }
-   ]
-  },
-  {
    "id": "vz-gg-kf",
    "brand": "viza-food",
    "label": "Good Good",
@@ -1081,6 +1051,36 @@
      "code": "VZ-GG-CB2XC-200",
      "weightG": 200,
      "weightLabel": "2 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-cb-srm",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Combo sầu riêng sấy túi vàng + mít Hoa Hậu túi tím",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-cb-srm.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-srm-sm.webp",
+     "w": 645,
+     "h": 750,
+     "alt": "Túi vàng sầu riêng sấy 100g cạnh túi tím mít sấy Hoa Hậu",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-CB2SRM-350",
+     "weightG": 350,
+     "weightLabel": "100g + 250g",
      "verify": false,
      "note": ""
     }
@@ -2227,5 +2227,42 @@
    "note": "Cùng kiểu đĩa với ảnh đã xác nhận. Cần kiểm tra."
   }
  ],
- "codeScheme": "Mộc Quả: MQZ-<SP>-<gram>. Đối thủ: VZ-<NHÃN>-<SP>-<gram>; XX = chưa rõ khối lượng."
+ "codeScheme": "Mộc Quả: MQZ-<SP>-<gram>. Đối thủ: VZ-<NHÃN>-<SP>-<gram>; XX = chưa rõ khối lượng.",
+ "parked": [
+  {
+   "id": "vz-gg-srs",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Sầu riêng sấy (túi vàng)",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-srs.webp",
+     "thumb": "/assets/catalog/vz-gg-srs-sm.webp",
+     "w": 645,
+     "h": 750,
+     "alt": "Túi vàng sầu riêng sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-SRS-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ],
+   "parked": {
+    "date": "2026-10-30",
+    "mergedInto": "VZ-GG-CB2SRM-350",
+    "reason": "Ảnh duy nhất có cả túi tím mít Hoa Hậu bên trái, nên dùng làm ảnh chính cho combo VZ-GG-CB2SRM-350. Chưa có ảnh riêng một túi sầu riêng; khi có thì đưa lại vào products."
+   }
+  }
+ ]
 }
