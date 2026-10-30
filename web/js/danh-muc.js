@@ -12,7 +12,7 @@ const money = (n) => (n == null ? '—' : new Intl.NumberFormat('vi-VN').format(
 const dateVi = (d) => (d ? d.split('-').reverse().join('/') : '');
 const needsCheck = (p) => p.verify || p.variants.some((v) => v.verify);
 const isOwn = (p) => brands.get(p.brand)?.kind === 'own';
-const KIND = { hero: 'Ảnh chính', 'nen-trang': 'Nền trắng', 'nen-den': 'Nền đen', 'thuc-te': 'Ảnh thực tế', 'lo-hang': 'Lô hàng', 'phoi-canh': 'Phối cảnh', 'dia-trung-bay': 'Đĩa trưng bày', 'mau-bao-bi-2': 'Mẫu bao bì khác', phu: 'Ảnh phụ' };
+const KIND = { hero: 'Ảnh chính', 'nen-trang': 'Nền trắng', 'nen-den': 'Nền đen', 'thuc-te': 'Ảnh thực tế', 'lo-hang': 'Lô hàng', 'phoi-canh': 'Phối cảnh', 'dia-trung-bay': 'Đĩa trưng bày', 'mau-bao-bi-2': 'Mẫu bao bì khác', combo: 'Combo:', phu: 'Ảnh phụ' };
 const thumbOf = (im) => im.thumb || im.src;
 
 function readUrl() {

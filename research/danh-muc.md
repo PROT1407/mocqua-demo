@@ -13,7 +13,7 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 - Mộc Quả: `MQZ-<SP>-<gram>`, ví dụ `MQZ-HMC-500`. Mã chưa rõ khối lượng giữ nguyên như chủ shop đặt (`MQZ-DDY`, `MQZ-THXO`, `MQZ-XXX`, `MQZ-SETH6`).
 - Đối thủ: `VZ-<NHÃN>-<SP>-<gram>`; `XX` = chưa rõ khối lượng.
   - Nhãn: `GF` GoodFood, `GG` Good Good, `CH` Cheers+, `YM` Yummy, `PS` Premium Shrinking Dried Durian, `FH` Fresh & Healthy, `KT` Kita, `VZ` Viza Food (hộp), `YC` YC Nuts & Seeds.
-  - Sản phẩm: `XD` xoài sấy dẻo (`XDV` túi vàng, `XDH` túi hồng cam, `XDL` túi lá, `XDR` túi băng đỏ, `XDT` túi tròn), `XDMO` xoài dẻo muối ớt, `XTH` xoài thăng hoa, `SRTH` sầu riêng thăng hoa, `SRS` sầu riêng sấy, `KF` King Fruit, `MT` Monthong, `GD/RY/YD` Golden/Royal/Yummy Durian, `MHH` mít Hoa Hậu, `MIT`/`MITV` mít sấy, `THOM`, `COC`, `ME`, `TL` thanh long, `MC` mãng cầu, `CARI`, `HDI` điều, `HMC` macca, `HDC` dẻ cười, `HSE` hạt sen, `DUA` dừa; combo `CB…` (ví dụ `CB2DM` = combo 2 điều + macca, `CB4SV` = Tết Sum Vầy, `CB2SRM` = combo 2 túi sầu riêng sấy + mít Hoa Hậu; gram ở cuối là tổng khối lượng).
+  - Sản phẩm: `XD` xoài sấy dẻo (`XDV` túi vàng, `XDH` túi hồng cam, `XDL` túi lá, `XDR` túi băng đỏ, `XDT` túi tròn), `XDMO` xoài dẻo muối ớt, `XTH` xoài thăng hoa, `SRTH` sầu riêng thăng hoa, `SRS` sầu riêng sấy, `KF` King Fruit, `MT` Monthong, `GD/RY/YD` Golden/Royal/Yummy Durian, `MHH` mít Hoa Hậu, `MIT`/`MITV` mít sấy, `THOM`, `COC`, `ME`, `TL` thanh long, `MC` mãng cầu, `CARI`, `HDI` điều, `HMC` macca, `HDC` dẻ cười, `HSE` hạt sen, `DUA` dừa; combo `CB…` (ví dụ `CB2DM` = combo 2 điều + macca, `CB4SV` = Tết Sum Vầy, `CB2SRM` = combo 2 túi sầu riêng sấy + mít Hoa Hậu, đang tạm gác; gram ở cuối là tổng khối lượng).
 
 ## Danh sách mã và ảnh chính
 
@@ -39,7 +39,7 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 | Viza Food | Good Good | Xoài sấy dẻo (túi trắng) | `VZ-GG-XD-200` (200g) |  | vz-gg-xd.webp |  |
 | Viza Food | Good Good | Xoài sấy dẻo (túi vàng lớn) | `VZ-GG-XDV-XX` (Chưa rõ) | có | — (khung giữ chỗ) |  |
 | Viza Food | Good Good | Mít sấy Hoa Hậu | `VZ-GG-MHH-250` (250g (tạm)) | có | vz-gg-mhh.webp |  |
-| Viza Food | Good Good | King Fruit sầu riêng sấy thăng hoa | `VZ-GG-KF-100` (100g (3.53oz)) |  | vz-gg-kf.webp | vz-gg-kf-2.webp (phối cảnh), vz-gg-kf-3.webp (phối cảnh), vz-gg-kf-4.webp (phối cảnh) |
+| Viza Food | Good Good | King Fruit sầu riêng sấy thăng hoa | `VZ-GG-KF-100` (100g (3.53oz)) |  | vz-gg-kf.webp | vz-gg-kf-2.webp (phối cảnh), vz-gg-kf-3.webp (phối cảnh), vz-gg-kf-4.webp (phối cảnh), vz-gg-cb-srm.webp (khung combo: mít Hoa Hậu + sầu riêng sấy túi vàng Good Good) |
 | Viza Food | Good Good | Me sấy dẻo muối ớt | `VZ-GG-ME-100` (100g) |  | — (khung giữ chỗ) |  |
 | Viza Food | Good Good | Thơm sấy dẻo | `VZ-GG-THOM-80` (80g (in trên bao)) |  | vz-gg-thom.webp |  |
 | Viza Food | Good Good | Cóc sấy dẻo muối ớt | `VZ-GG-COC-100` (100g) |  | vz-gg-coc.webp |  |
@@ -47,7 +47,6 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 | Viza Food | Good Good | Mãng cầu sấy dẻo | `VZ-GG-MC-100` (100g) | có | vz-gg-mc.webp |  |
 | Viza Food | Good Good | Bột cari Ngon (hũ) | `VZ-GG-CARI-100` (100g) |  | vz-gg-cari.webp |  |
 | Viza Food | Good Good | Combo xoài muối ớt + cóc muối ớt | `VZ-GG-CB2XC-200` (2 × 100g) |  | vz-gg-cb-xc.webp |  |
-| Viza Food | Good Good | Combo sầu riêng sấy túi vàng + mít Hoa Hậu túi tím | `VZ-GG-CB2SRM-350` (100g + 250g) |  | vz-gg-cb-srm.webp |  |
 | Viza Food | Cheers+ | Xoài sấy thăng hoa | `VZ-CH-XTH-120` (120g) |  | vz-ch-xth.webp | vz-ch-xth-2.webp (mẫu bao bì khác) |
 | Viza Food | Cheers+ | Sầu riêng sấy thăng hoa | `VZ-CH-SRTH-100` (100g · 3 gói nhỏ) |  | vz-ch-srth.webp | vz-ch-srth-2.webp (nền trắng) |
 | Viza Food | Cheers+ | Xoài sấy dẻo (túi lá xoài) | `VZ-CH-XDL-200` (200g (250–300g)) | có | vz-ch-xdl.webp | vz-ch-xdl-2.webp (phối cảnh) |
@@ -84,12 +83,15 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 
 Ảnh đĩa trưng bày (không gắn mã): trung-bay-sau-rieng.webp = Sầu riêng sấy thăng hoa (đĩa chân vàng) (cần kiểm tra); trung-bay-sapoche-1.webp = Sapoche sấy thăng hoa; trung-bay-sapoche-2.webp = Sapoche sấy thăng hoa (một lát) (cần kiểm tra)
 
+Khung combo trong thư viện ảnh: ảnh có `kind: "combo"` hiện chú thích "Combo: …" (theo `alt`) trong thư viện ảnh của thẻ, không phải mã riêng.
+
 ## Mã tạm gác (không hiện trên lưới)
 
 Lưu trong `parked` của `server/data/danh-muc.json`, giữ nguyên dữ liệu và file ảnh. Trang `/danh-muc`, bảng so sánh và tab admin chỉ đọc `products`, nên mã tạm gác không hiện và không nhận giá.
 
 | Mã | Sản phẩm | Ngày | Lý do |
 |---|---|---|---|
-| `VZ-GG-SRS-100` | Good Good sầu riêng sấy (túi vàng) 100g | 2026-10-30 | Ảnh duy nhất (vz-gg-srs.webp) có cả túi tím mít Hoa Hậu bên trái. Chủ shop muốn dùng ảnh này cho combo `VZ-GG-CB2SRM-350` (ảnh chép thành vz-gg-cb-srm.webp). Khi có ảnh riêng một túi sầu riêng thì chuyển lại vào `products`. |
+| `VZ-GG-SRS-100` | Good Good sầu riêng sấy (túi vàng) 100g | 2026-10-30, sửa 2026-10-31 | Ảnh duy nhất (vz-gg-srs.webp) có cả túi tím mít Hoa Hậu bên trái. Ảnh này (bản chép vz-gg-cb-srm.webp) nay là khung combo trong thư viện ảnh của thẻ sầu riêng Good Good `VZ-GG-KF-100`. Khi có ảnh riêng một túi sầu riêng thì chuyển lại vào `products`. |
+| `VZ-GG-CB2SRM-350` | Combo sầu riêng sấy túi vàng + mít Hoa Hậu túi tím (100g + 250g) | 2026-10-31 | Chủ shop muốn để combo thành một khung trong thư viện ảnh của thẻ sầu riêng Good Good, không tách thẻ riêng. Ảnh vz-gg-cb-srm.webp là ảnh thứ 5 của `VZ-GG-KF-100`, chú thích "Combo: mít Hoa Hậu + sầu riêng sấy túi vàng Good Good" (loại ảnh `combo`). |
 
 `VZ-GG-MHH-250` (mít Hoa Hậu túi tím) vẫn bán riêng với ảnh một túi của nó (vz-gg-mhh.webp).
