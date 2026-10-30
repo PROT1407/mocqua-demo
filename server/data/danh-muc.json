@@ -841,6 +841,14 @@
      "h": 1000,
      "alt": "Cặp túi King Fruit nền tối sang trọng",
      "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-gg-cb-srm.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-srm-sm.webp",
+     "w": 645,
+     "h": 750,
+     "alt": "mít Hoa Hậu + sầu riêng sấy túi vàng Good Good",
+     "kind": "combo"
     }
    ],
    "verify": false,
@@ -1051,36 +1059,6 @@
      "code": "VZ-GG-CB2XC-200",
      "weightG": 200,
      "weightLabel": "2 × 100g",
-     "verify": false,
-     "note": ""
-    }
-   ]
-  },
-  {
-   "id": "vz-gg-cb-srm",
-   "brand": "viza-food",
-   "label": "Good Good",
-   "name": "Combo sầu riêng sấy túi vàng + mít Hoa Hậu túi tím",
-   "cat": "combo",
-   "type": "combo-trai-cay",
-   "pack": "",
-   "images": [
-    {
-     "src": "/assets/catalog/vz-gg-cb-srm.webp",
-     "thumb": "/assets/catalog/vz-gg-cb-srm-sm.webp",
-     "w": 645,
-     "h": 750,
-     "alt": "Túi vàng sầu riêng sấy 100g cạnh túi tím mít sấy Hoa Hậu",
-     "kind": "hero"
-    }
-   ],
-   "verify": false,
-   "note": "",
-   "variants": [
-    {
-     "code": "VZ-GG-CB2SRM-350",
-     "weightG": 350,
-     "weightLabel": "100g + 250g",
      "verify": false,
      "note": ""
     }
@@ -2259,9 +2237,47 @@
     }
    ],
    "parked": {
-    "date": "2026-10-30",
-    "mergedInto": "VZ-GG-CB2SRM-350",
-    "reason": "Ảnh duy nhất có cả túi tím mít Hoa Hậu bên trái, nên dùng làm ảnh chính cho combo VZ-GG-CB2SRM-350. Chưa có ảnh riêng một túi sầu riêng; khi có thì đưa lại vào products."
+    "date": "2026-10-31",
+    "mergedInto": "VZ-GG-KF-100",
+    "reason": "Ảnh duy nhất có cả túi tím mít Hoa Hậu bên trái. Ảnh này (chép thành vz-gg-cb-srm.webp) nay là khung combo trong thư viện ảnh của thẻ sầu riêng Good Good (VZ-GG-KF-100). Chưa có ảnh riêng một túi sầu riêng; khi có thì đưa lại vào products.",
+    "history": [
+     "2026-10-30: tạm gác, ảnh chuyển sang combo VZ-GG-CB2SRM-350."
+    ]
+   }
+  },
+  {
+   "id": "vz-gg-cb-srm",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Combo sầu riêng sấy túi vàng + mít Hoa Hậu túi tím",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-cb-srm.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-srm-sm.webp",
+     "w": 645,
+     "h": 750,
+     "alt": "Túi vàng sầu riêng sấy 100g cạnh túi tím mít sấy Hoa Hậu",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-CB2SRM-350",
+     "weightG": 350,
+     "weightLabel": "100g + 250g",
+     "verify": false,
+     "note": ""
+    }
+   ],
+   "parked": {
+    "date": "2026-10-31",
+    "mergedInto": "VZ-GG-KF-100",
+    "reason": "Chủ shop muốn để combo thành một khung trong thư viện ảnh của thẻ sầu riêng Good Good (VZ-GG-KF-100), không tách thẻ riêng. Ảnh vz-gg-cb-srm.webp nay là ảnh thứ 5 của thẻ đó."
    }
   }
  ]
