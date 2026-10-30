@@ -5,7 +5,7 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 - Dữ liệu sản phẩm: `server/data/danh-muc.json` (sửa tay, có trong git).
 - Giá bán lẻ, nguồn giá, ngày kiểm theo từng mã: bảng SQLite `catalog_prices`, sửa ở `/admin` → tab **Danh mục**. Có nút xuất/nhập JSON (Render gói miễn phí không giữ ổ đĩa, nên xuất trước khi deploy).
 - API: `GET /api/danh-muc`, `PUT /api/admin/catalog-prices/:code`, `GET /api/admin/catalog-prices.json`, `POST /api/admin/catalog-prices/import`.
-- Ảnh: `assets/catalog/*.webp`, cạnh dài tối đa 1000px, mỗi ảnh chỉ dùng một lần. Sản phẩm chưa có ảnh rõ hiện khung giữ chỗ.
+- Ảnh: `assets/catalog/<slug>.webp` (cạnh dài tối đa 1000px, mở trong thư viện ảnh) và `<slug>-sm.webp` (480px, dùng cho thẻ, ảnh nhỏ, bảng so sánh), tải lười (lazy-load). Mỗi mã có **một ảnh chính** trên lưới; ảnh cùng sản phẩm nhưng khác phong cách (nền trắng/đen, cầm tay, lô hàng, phối cảnh, đĩa trưng bày) được giữ làm ảnh phụ trong thư viện. Chỉ bỏ ảnh trùng hoặc gần như giống hệt (cùng bố cục, chỉ khác tông màu). Sản phẩm chưa có ảnh rõ hiện khung giữ chỗ.
 - Viza Food (Công ty CP Viza Food) là **đối thủ / tham khảo**, không bán tại Mộc Quả. Không ghi giá khuyến mãi trên tem (36k/37k).
 
 ## Quy tắc mã
@@ -20,27 +20,27 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 | Thương hiệu | Nhãn | Sản phẩm | Mã (khối lượng) | Cần kiểm tra | Ảnh chính | Ảnh phụ |
 |---|---|---|---|---|---|---|
 | Mộc Quả | Mộc Quả | Hạt mắc ca nứt vỏ | `MQZ-HMC-500` (500g) |  | mqz-hmc.webp |  |
-| Mộc Quả | Mộc Quả | Hạt điều rang muối | `MQZ-HDI-500` (500g) |  | mqz-hdi.webp | mqz-hdi-2.webp |
-| Mộc Quả | Mộc Quả | Dâu tây sấy thăng hoa | `MQZ-THDT-100` (100g) |  | mqz-thdt.webp | mqz-thdt-2.webp |
+| Mộc Quả | Mộc Quả | Hạt điều rang muối | `MQZ-HDI-500` (500g) |  | mqz-hdi.webp | mqz-hdi-2.webp (nền đen), mqz-hdi-3.webp (thực tế) |
+| Mộc Quả | Mộc Quả | Dâu tây sấy thăng hoa | `MQZ-THDT-100` (100g) |  | mqz-thdt.webp | mqz-thdt-2.webp (nền trắng), mqz-thdt-3.webp (thực tế), mqz-thdt-4.webp (lô hàng) |
 | Mộc Quả | Mộc Quả | Dâu tây sấy (hũ thiếc) | `MQZ-DDY` (Chưa rõ) | có | mqz-ddy.webp |  |
 | Mộc Quả | Mộc Quả | Xoài sấy thăng hoa (hũ thiếc) | `MQZ-THXO` (Chưa rõ) | có | mqz-thxo.webp |  |
-| Mộc Quả | Mộc Quả | Trái cây sấy (chưa rõ loại) | `MQZ-XXX` (Chưa rõ) | có | mqz-xxx.webp | mqz-xxx-2.webp |
-| Mộc Quả | Mộc Quả | Xoài sấy dẻo | `MQZ-DXO-500` (500g) |  | mqz-dxo.webp | mqz-dxo-2.webp |
-| Mộc Quả | Mộc Quả | Mít sấy giòn | `MQZ-GMI-500` (500g) |  | mqz-gmi.webp |  |
-| Mộc Quả | Mộc Quả | Long nhãn sấy | `MQZ-LN-250` (~250g) | có | mqz-ln.webp | mqz-ln-2.webp |
+| Mộc Quả | Mộc Quả | Trái cây sấy (chưa rõ loại) | `MQZ-XXX` (Chưa rõ) | có | mqz-xxx.webp | mqz-xxx-2.webp (đĩa trưng bày) |
+| Mộc Quả | Mộc Quả | Xoài sấy dẻo | `MQZ-DXO-500` (500g) |  | mqz-dxo.webp | mqz-dxo-2.webp (đĩa trưng bày) |
+| Mộc Quả | Mộc Quả | Mít sấy giòn | `MQZ-GMI-500` (500g) |  | mqz-gmi.webp | mqz-gmi-2.webp (thực tế) |
+| Mộc Quả | Mộc Quả | Long nhãn sấy | `MQZ-LN-250` (~250g) | có | mqz-ln.webp | mqz-ln-2.webp (nền đen), mqz-ln-3.webp (lô hàng) |
 | Mộc Quả | Mộc Quả | Long nhãn ôm sen | `MQZ-LNOS-250` (~250g) | có | mqz-lnos.webp |  |
-| Mộc Quả | Mộc Quả | Hạt dinh dưỡng | `MQZ-HDD-500` (~500g) | có | mqz-hdd.webp |  |
-| Mộc Quả | Mộc Quả | Mix hạt cao cấp | `MQZ-MIX-500` (~500g) | có | mqz-mix.webp |  |
-| Mộc Quả | Mộc Quả | Bánh đồng tiền mix hạt | `MQZ-BDT-300` (~300g) | có | mqz-bdt.webp | mqz-bdt-2.webp |
-| Mộc Quả | Mộc Quả | Hộp quà Tết 2027 · 6 hũ thủy tinh | `MQZ-SETH6` (6 hũ) | có | mqz-seth6.webp | mqz-seth6-2.webp |
-| Viza Food | GoodFood | Thơm sấy dẻo | `VZ-GF-THOM-100` (100g) |  | vz-gf-thom.webp | vz-gf-thom-2.webp |
+| Mộc Quả | Mộc Quả | Hạt dinh dưỡng | `MQZ-HDD-500` (~500g) | có | mqz-hdd.webp | mqz-hdd-2.webp (thực tế) |
+| Mộc Quả | Mộc Quả | Mix hạt cao cấp | `MQZ-MIX-500` (~500g) | có | mqz-mix.webp | mqz-mix-2.webp (thực tế) |
+| Mộc Quả | Mộc Quả | Bánh đồng tiền mix hạt | `MQZ-BDT-300` (~300g) | có | mqz-bdt.webp | mqz-bdt-2.webp (thực tế) |
+| Mộc Quả | Mộc Quả | Hộp quà Tết 2027 · 6 hũ thủy tinh | `MQZ-SETH6` (6 hũ) | có | mqz-seth6.webp | mqz-seth6-2.webp (phối cảnh) |
+| Viza Food | GoodFood | Thơm sấy dẻo | `VZ-GF-THOM-100` (100g) |  | vz-gf-thom.webp | vz-gf-thom-2.webp (phối cảnh) |
 | Viza Food | GoodFood | Cóc sấy dẻo muối ớt | `VZ-GF-COC-100` (100g) |  | vz-gf-coc.webp |  |
 | Viza Food | Good Good | Xoài sấy dẻo muối ớt | `VZ-GG-XDMO-100` (100g), `VZ-GG-XDMO-200` (200g) | có | vz-gg-xdmo.webp |  |
 | Viza Food | Good Good | Xoài sấy dẻo (túi trắng) | `VZ-GG-XD-200` (200g) |  | vz-gg-xd.webp |  |
 | Viza Food | Good Good | Xoài sấy dẻo (túi vàng lớn) | `VZ-GG-XDV-XX` (Chưa rõ) | có | — (khung giữ chỗ) |  |
 | Viza Food | Good Good | Mít sấy Hoa Hậu | `VZ-GG-MHH-250` (250g (tạm)) | có | vz-gg-mhh.webp |  |
 | Viza Food | Good Good | Sầu riêng sấy (túi vàng) | `VZ-GG-SRS-100` (100g) |  | vz-gg-srs.webp |  |
-| Viza Food | Good Good | King Fruit sầu riêng sấy thăng hoa | `VZ-GG-KF-100` (100g (3.53oz)) |  | vz-gg-kf.webp | vz-gg-kf-2.webp |
+| Viza Food | Good Good | King Fruit sầu riêng sấy thăng hoa | `VZ-GG-KF-100` (100g (3.53oz)) |  | vz-gg-kf.webp | vz-gg-kf-2.webp (phối cảnh), vz-gg-kf-3.webp (phối cảnh), vz-gg-kf-4.webp (phối cảnh) |
 | Viza Food | Good Good | Me sấy dẻo muối ớt | `VZ-GG-ME-100` (100g) |  | — (khung giữ chỗ) |  |
 | Viza Food | Good Good | Thơm sấy dẻo | `VZ-GG-THOM-80` (80g (in trên bao)) |  | vz-gg-thom.webp |  |
 | Viza Food | Good Good | Cóc sấy dẻo muối ớt | `VZ-GG-COC-100` (100g) |  | vz-gg-coc.webp |  |
@@ -48,26 +48,26 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 | Viza Food | Good Good | Mãng cầu sấy dẻo | `VZ-GG-MC-100` (100g) | có | vz-gg-mc.webp |  |
 | Viza Food | Good Good | Bột cari Ngon (hũ) | `VZ-GG-CARI-100` (100g) |  | vz-gg-cari.webp |  |
 | Viza Food | Good Good | Combo xoài muối ớt + cóc muối ớt | `VZ-GG-CB2XC-200` (2 × 100g) |  | vz-gg-cb-xc.webp |  |
-| Viza Food | Cheers+ | Xoài sấy thăng hoa | `VZ-CH-XTH-120` (120g) |  | vz-ch-xth.webp | vz-ch-xth-2.webp |
-| Viza Food | Cheers+ | Sầu riêng sấy thăng hoa | `VZ-CH-SRTH-100` (100g · 3 gói nhỏ) |  | vz-ch-srth.webp |  |
-| Viza Food | Cheers+ | Xoài sấy dẻo (túi lá xoài) | `VZ-CH-XDL-200` (200g (250–300g)) | có | vz-ch-xdl.webp |  |
+| Viza Food | Cheers+ | Xoài sấy thăng hoa | `VZ-CH-XTH-120` (120g) |  | vz-ch-xth.webp | vz-ch-xth-2.webp (mẫu bao bì khác) |
+| Viza Food | Cheers+ | Sầu riêng sấy thăng hoa | `VZ-CH-SRTH-100` (100g · 3 gói nhỏ) |  | vz-ch-srth.webp | vz-ch-srth-2.webp (nền trắng) |
+| Viza Food | Cheers+ | Xoài sấy dẻo (túi lá xoài) | `VZ-CH-XDL-200` (200g (250–300g)) | có | vz-ch-xdl.webp | vz-ch-xdl-2.webp (phối cảnh) |
 | Viza Food | Cheers+ | Xoài sấy dẻo (túi băng đỏ) | `VZ-CH-XDR-200` (200g (250–300g, tạm)) | có | vz-ch-xdr.webp |  |
-| Viza Food | Cheers+ | Xoài sấy dẻo (túi tròn áo dài) | `VZ-CH-XDT-200` (200g) |  | vz-ch-xdt.webp | vz-ch-xdt-2.webp |
+| Viza Food | Cheers+ | Xoài sấy dẻo (túi tròn áo dài) | `VZ-CH-XDT-200` (200g) |  | vz-ch-xdt.webp | vz-ch-xdt-2.webp (nền trắng), vz-ch-xdt-3.webp (phối cảnh), vz-ch-xdt-4.webp (thực tế) |
 | Viza Food | Cheers+ | Combo 3 xoài sấy dẻo + tặng me Good Good 100g | `VZ-CH-CB3X-600` (3 × 200g + me 100g) | có | vz-ch-cb3x.webp |  |
 | Viza Food | Yummy | Sầu riêng sấy thăng hoa | `VZ-YM-SRTH-100` (100g) |  | vz-ym-srth.webp |  |
 | Viza Food | Yummy | Yummy Monthong sầu riêng sấy thăng hoa | `VZ-YM-MT-100` (100g (tạm)) | có | vz-ym-mt.webp |  |
 | Viza Food | Premium Shrinking Dried Durian | Golden Durian sầu riêng sấy thăng hoa | `VZ-PS-GD-100` (100g (100g – 150g – 200g)) |  | vz-ps-gd.webp |  |
 | Viza Food | Premium Shrinking Dried Durian | Royal Durian sầu riêng sấy thăng hoa | `VZ-PS-RY-100` (100g (100g – 150g – 200g)) |  | vz-ps-ry.webp |  |
 | Viza Food | Premium Shrinking Dried Durian | Yummy Durian sầu riêng sấy thăng hoa | `VZ-PS-YD-100` (100g (100g – 150g – 200g)) |  | vz-ps-yd.webp |  |
-| Viza Food | Fresh & Healthy | Xoài sấy dẻo (túi trắng xanh) | `VZ-FH-XD-100` (100g), `VZ-FH-XD-250` (250g), `VZ-FH-XD-500` (500g) |  | vz-fh-xd.webp | vz-fh-xd-2.webp |
+| Viza Food | Fresh & Healthy | Xoài sấy dẻo (túi trắng xanh) | `VZ-FH-XD-100` (100g), `VZ-FH-XD-250` (250g), `VZ-FH-XD-500` (500g) |  | vz-fh-xd.webp | vz-fh-xd-2.webp (phối cảnh), vz-fh-xd-3.webp (nền trắng) |
 | Viza Food | Fresh & Healthy | Xoài sấy dẻo (túi hồng cam) | `VZ-FH-XDH-100` (100g) |  | vz-fh-xdh.webp |  |
 | Viza Food | Fresh & Healthy | Xoài sấy dẻo (túi vàng) | `VZ-FH-XDV-100` (100g) |  | vz-fh-xdv.webp |  |
 | Viza Food | Fresh & Healthy | Combo xoài sấy dẻo 100g + 250g | `VZ-FH-CB-350` (100g + 250g = 350g) |  | vz-fh-cb350.webp |  |
-| Viza Food | Fresh & Healthy | Mít sấy | `VZ-FH-MIT-300` (300g (200–300g)) |  | vz-fh-mit.webp | vz-fh-mit-2.webp |
+| Viza Food | Fresh & Healthy | Mít sấy | `VZ-FH-MIT-300` (300g (200–300g)) |  | vz-fh-mit.webp | vz-fh-mit-2.webp (phối cảnh), vz-fh-mit-3.webp (phối cảnh), vz-fh-mit-4.webp (phối cảnh) |
 | Viza Food | Fresh & Healthy | Mít sấy (túi vàng có cửa sổ) | `VZ-FH-MITV-XX` (Chưa rõ) | có | — (khung giữ chỗ) |  |
 | Viza Food | Fresh & Healthy | Xoài sấy dẻo muối ớt (túi đỏ) | `VZ-FH-XDMO-XX` (Chưa rõ) | có | vz-fh-xdmo.webp |  |
-| Viza Food | Fresh & Healthy | Sầu riêng sấy thăng hoa | `VZ-FH-SRTH-XX` (Chưa rõ) | có | vz-fh-srth.webp | vz-fh-srth-2.webp |
-| Viza Food | Kita | Sầu riêng sấy thăng hoa | `VZ-KT-SRTH-100` (100g · 3 gói nhỏ) |  | vz-kt-srth.webp | vz-kt-srth-2.webp |
+| Viza Food | Fresh & Healthy | Sầu riêng sấy thăng hoa | `VZ-FH-SRTH-XX` (Chưa rõ) | có | vz-fh-srth.webp | vz-fh-srth-2.webp (phối cảnh) |
+| Viza Food | Kita | Sầu riêng sấy thăng hoa | `VZ-KT-SRTH-100` (100g · 3 gói nhỏ) |  | vz-kt-srth.webp | vz-kt-srth-2.webp (phối cảnh) |
 | Viza Food | Viza Food | Hạt điều rang muối (hộp) | `VZ-VZ-HDI-100` (100g) |  | vz-vz-hdi.webp |  |
 | Viza Food | Viza Food | Hạt macca sấy nứt vỏ (hộp) | `VZ-VZ-HMC-100` (100g) |  | vz-vz-hmc.webp |  |
 | Viza Food | Viza Food | Hạt dẻ cười (hộp) | `VZ-VZ-HDC-100` (100g) |  | vz-vz-hdc.webp |  |

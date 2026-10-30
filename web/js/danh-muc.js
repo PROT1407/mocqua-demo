@@ -12,6 +12,8 @@ const money = (n) => (n == null ? '—' : new Intl.NumberFormat('vi-VN').format(
 const dateVi = (d) => (d ? d.split('-').reverse().join('/') : '');
 const needsCheck = (p) => p.verify || p.variants.some((v) => v.verify);
 const isOwn = (p) => brands.get(p.brand)?.kind === 'own';
+const KIND = { hero: 'Ảnh chính', 'nen-trang': 'Nền trắng', 'nen-den': 'Nền đen', 'thuc-te': 'Ảnh thực tế', 'lo-hang': 'Lô hàng', 'phoi-canh': 'Phối cảnh', 'dia-trung-bay': 'Đĩa trưng bày', 'mau-bao-bi-2': 'Mẫu bao bì khác', phu: 'Ảnh phụ' };
+const thumbOf = (im) => im.thumb || im.src;
 
 function readUrl() {
   const u = new URLSearchParams(location.search);
@@ -72,10 +74,10 @@ function card(p) {
   const check = needsCheck(p);
   return `<article class="dm-card${isOwn(p) ? ' dm-card--own' : ''}" id="sp-${esc(p.id)}">
     <div class="dm-card__media">
-      ${hero ? `<button type="button" class="dm-card__img" data-zoom="${esc(hero.src)}" aria-label="Phóng to ảnh ${esc(p.name)}"><img src="${esc(hero.src)}" alt="${esc(hero.alt)}" loading="lazy" width="800" height="1000" data-hero></button>` : placeholder(p)}
+      ${hero ? `<button type="button" class="dm-card__img" data-gal="${esc(p.id)}" aria-label="Xem ${p.images.length > 1 ? `${p.images.length} ảnh` : 'ảnh'} ${esc(p.name)}"><img src="${esc(thumbOf(hero))}" srcset="${esc(thumbOf(hero))} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 520px) 50vw, 300px" alt="${esc(hero.alt)}" loading="lazy" decoding="async" width="480" height="600"></button>` : placeholder(p)}
       <span class="dm-tag dm-tag--cat">${esc(cats.get(p.cat)?.name || '')}</span>
       ${check ? '<span class="dm-tag dm-tag--warn" title="Thông tin chưa xác nhận">Cần kiểm tra</span>' : ''}
-      ${extra.length ? `<div class="dm-thumbs">${[hero, ...extra].map((im, i) => `<button type="button" class="dm-thumb${i === 0 ? ' is-on' : ''}" data-swap="${esc(im.src)}" data-alt="${esc(im.alt)}" aria-label="Xem ảnh ${i + 1}"><img src="${esc(im.src)}" alt="" loading="lazy" width="40" height="50"></button>`).join('')}</div>` : ''}
+      ${extra.length ? `<span class="dm-galdot" aria-hidden="true"><i class="is-on"></i>${extra.map(() => '<i></i>').join('')}<b>${p.images.length} ảnh</b></span>` : ''}
     </div>
     <div class="dm-card__body">
       <p class="dm-card__label">${p.label === brands.get(p.brand)?.name ? `<span>${esc(p.label)}</span>` : `<span>${esc(brands.get(p.brand)?.name)}</span> · ${esc(p.label)}`}</p>
@@ -145,7 +147,7 @@ function renderCompare(list) {
         const src = v.priceSource ? (/^https?:\/\//.test(v.priceSource) ? `<a href="${esc(v.priceSource)}" target="_blank" rel="noopener nofollow">${esc(new URL(v.priceSource).hostname.replace(/^www\./, ''))}</a>` : esc(v.priceSource)) : '—';
         const hero = p.images[0];
         return `<tr class="${isOwn(p) ? 'is-own' : ''}">
-          <th scope="row"><div class="dm-cmp__p">${hero ? `<img src="${esc(hero.src)}" alt="" width="44" height="55" loading="lazy">` : '<span class="dm-cmp__ph"></span>'}
+          <th scope="row"><div class="dm-cmp__p">${hero ? `<img src="${esc(thumbOf(hero))}" alt="" width="44" height="55" loading="lazy">` : '<span class="dm-cmp__ph"></span>'}
             <div><small>${esc(brands.get(p.brand)?.name)} · ${esc(p.label)}${isOwn(p) ? ' <i>★ của shop</i>' : ''}</small><b>${esc(p.name)}</b>${needsCheck(p) ? '<span class="dm-mini-warn">Cần kiểm tra</span>' : ''}</div></div></th>
           <td><span class="dm-wchip${v.verify ? ' dm-wchip--warn' : ''}">${esc(v.weightLabel)}</span></td>
           <td><code>${esc(v.code)}</code></td>
@@ -161,7 +163,7 @@ function renderCompare(list) {
 function renderGallery() {
   if (!data.gallery?.length) return;
   $('#dm-gallery').innerHTML = `<h2 id="dm-gallery-title">Ảnh đĩa trưng bày</h2><p class="fine">Ảnh phụ để chụp bài, chưa gắn mã bán.</p>
-    <div class="dm-gal">${data.gallery.map((g) => `<figure class="dm-gal__it"><button type="button" class="dm-card__img" data-zoom="${esc(g.img.src)}" aria-label="Phóng to ảnh ${esc(g.title)}"><img src="${esc(g.img.src)}" alt="${esc(g.img.alt)}" loading="lazy" width="800" height="800"></button>
+    <div class="dm-gal">${data.gallery.map((g) => `<figure class="dm-gal__it"><button type="button" class="dm-card__img" data-plate="${esc(g.img.src)}" aria-label="Phóng to ảnh ${esc(g.title)}"><img src="${esc(thumbOf(g.img))}" alt="${esc(g.img.alt)}" loading="lazy" decoding="async" width="480" height="480"></button>
       <figcaption><b>${esc(g.title)}</b>${g.verify ? ' <span class="dm-mini-warn">Cần kiểm tra</span>' : ''}<small>${esc(g.note)}</small></figcaption></figure>`).join('')}</div>`;
 }
 
@@ -194,20 +196,60 @@ document.addEventListener('click', (e) => {
     $('#dm-q').value = '';
     render();
     $('#dm-compare').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (t.dataset.swap) {
-    const box = t.closest('.dm-card__media');
-    const img = box.querySelector('[data-hero]');
-    img.src = t.dataset.swap; img.alt = t.dataset.alt;
-    box.querySelector('.dm-card__img').dataset.zoom = t.dataset.swap;
-    box.querySelectorAll('.dm-thumb').forEach((x) => x.classList.toggle('is-on', x === t));
-  } else if (t.dataset.zoom) {
-    $('#dm-zoom-img').src = t.dataset.zoom;
-    $('#dm-zoom-img').alt = t.querySelector('img')?.alt || '';
-    $('#dm-zoom').showModal();
-  } else if (t.id === 'dm-zoom-x') $('#dm-zoom').close();
+  } else if (t.dataset.gal) {
+    const p = data.products.find((x) => x.id === t.dataset.gal);
+    if (p) openGallery(p.images, p.name, [...new Set([brands.get(p.brand)?.name, p.label])].join(' · ') + ' · ' + p.variants.map((v) => v.code).join(', '));
+  } else if (t.dataset.plate) {
+    const g = data.gallery.find((x) => x.img.src === t.dataset.plate);
+    if (g) openGallery([g.img], g.title, 'Ảnh đĩa trưng bày');
+  } else if (t.dataset.go) goTo(Number(t.dataset.go));
+  else if (t.id === 'dm-lb-prev') goTo(lb.i - 1);
+  else if (t.id === 'dm-lb-next') goTo(lb.i + 1);
+  else if (t.id === 'dm-lb-x') $('#dm-lb').close();
+});
+
+// Thư viện ảnh: vuốt ngang (scroll-snap), nút trước/sau, phím mũi tên, ảnh nhỏ bên dưới.
+const lb = { imgs: [], i: 0 };
+function openGallery(imgs, title, sub) {
+  lb.imgs = imgs; lb.i = 0;
+  $('#dm-lb-title').textContent = title;
+  $('#dm-lb-sub').textContent = sub;
+  $('#dm-lb-track').innerHTML = imgs.map((im, i) => `<figure class="dm-lb__slide"><img src="${esc(i === 0 ? im.src : thumbOf(im))}" data-full="${esc(im.src)}" alt="${esc(im.alt)}" decoding="async"${i ? ' loading="lazy"' : ''}></figure>`).join('');
+  $('#dm-lb-thumbs').innerHTML = imgs.length > 1 ? imgs.map((im, i) => `<button type="button" class="dm-lb__th" data-go="${i}" aria-label="Ảnh ${i + 1}: ${esc(KIND[im.kind] || '')}"><img src="${esc(thumbOf(im))}" alt="" loading="lazy" width="56" height="70"></button>`).join('') : '';
+  $('#dm-lb').classList.toggle('is-single', imgs.length < 2);
+  $('#dm-lb').showModal();
+  $('#dm-lb-track').scrollLeft = 0;
+  sync(0);
+}
+function sync(i) {
+  lb.i = i;
+  const im = lb.imgs[i];
+  if (!im) return;
+  const slide = $('#dm-lb-track').children[i]?.querySelector('img');
+  if (slide && slide.getAttribute('src') !== slide.dataset.full) slide.src = slide.dataset.full;
+  $('#dm-lb-count').textContent = lb.imgs.length > 1 ? `${i + 1} / ${lb.imgs.length}` : '';
+  $('#dm-lb-cap').innerHTML = `<b>${esc(KIND[im.kind] || 'Ảnh')}</b> ${esc(im.alt)}`;
+  document.querySelectorAll('.dm-lb__th').forEach((b, k) => b.classList.toggle('is-on', k === i));
+  $('#dm-lb-prev').disabled = i === 0;
+  $('#dm-lb-next').disabled = i === lb.imgs.length - 1;
+}
+function goTo(i) {
+  if (i < 0 || i >= lb.imgs.length) return;
+  const tr = $('#dm-lb-track');
+  tr.scrollTo({ left: i * tr.clientWidth, behavior: 'smooth' });
+  sync(i);
+}
+let scrollT;
+$('#dm-lb-track').addEventListener('scroll', (e) => {
+  clearTimeout(scrollT);
+  scrollT = setTimeout(() => { const tr = e.target; const i = Math.round(tr.scrollLeft / tr.clientWidth); if (i !== lb.i) sync(i); }, 80);
+});
+$('#dm-lb').addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(lb.i + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(lb.i - 1); }
 });
 document.addEventListener('change', (e) => { if (e.target.id === 'dm-type') { state.type = e.target.value; state.weight = 'all'; render(); } });
-$('#dm-zoom').addEventListener('click', (e) => { if (e.target.id === 'dm-zoom') e.target.close(); });
+$('#dm-lb').addEventListener('click', (e) => { if (e.target.id === 'dm-lb') e.target.close(); });
 
 readUrl();
 renderGallery();

@@ -780,7 +780,16 @@ export function catalogPage(data) {
       <section class="dm-gallery" id="dm-gallery" aria-labelledby="dm-gallery-title"></section>
       <p class="dm-foot">Viza Food (Công ty CP Viza Food) chỉ để tham khảo, không bán tại Mộc Quả. Không ghi giá khuyến mãi trên tem. Giá đối thủ sẽ so chủ yếu với các trang dacsancaocap. Mã: ${esc(data.codeScheme)}</p>
     </section>
-    <dialog class="dm-zoom" id="dm-zoom"><img alt="" id="dm-zoom-img"><button type="button" class="dm-zoom__x" id="dm-zoom-x">Đóng</button></dialog>
+    <dialog class="dm-lb" id="dm-lb" aria-labelledby="dm-lb-title">
+      <div class="dm-lb__head"><div><small id="dm-lb-sub"></small><h2 id="dm-lb-title"></h2></div><span class="dm-lb__count" id="dm-lb-count" aria-live="polite"></span><button type="button" class="dm-lb__x" id="dm-lb-x">Đóng</button></div>
+      <div class="dm-lb__stage">
+        <div class="dm-lb__track" id="dm-lb-track" tabindex="0" aria-label="Ảnh sản phẩm, vuốt ngang để xem tiếp"></div>
+        <button type="button" class="dm-lb__nav dm-lb__nav--prev" id="dm-lb-prev" aria-label="Ảnh trước">‹</button>
+        <button type="button" class="dm-lb__nav dm-lb__nav--next" id="dm-lb-next" aria-label="Ảnh sau">›</button>
+      </div>
+      <p class="dm-lb__cap" id="dm-lb-cap"></p>
+      <div class="dm-lb__thumbs" id="dm-lb-thumbs"></div>
+    </dialog>
     ${jsonScript('dm-data', data)}
   </main>`;
   return layout({
