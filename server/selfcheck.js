@@ -552,6 +552,95 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
   }
 });
 
+test('bảng so sánh giá: thương hiệu, nhãn, khối lượng, admin sửa và nhập/xuất', async () => {
+  const { createApp } = await import('./index.js');
+  const { PRICE_SEED } = await import('./price-seed.js');
+  const app = createApp();
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    for (const row of PRICE_SEED) {
+      assert.ok(row.brand && row.product, 'dòng seed cần thương hiệu và sản phẩm');
+      if (row.brand === 'Mộc Quả') {
+        assert.equal(row.isEstimate, true, `${row.code} phải đánh dấu ước lượng`);
+        assert.equal(row.price, null, `${row.code} chưa có giá thật`);
+        assert.match(row.code, /^MQZ-[A-Z]+-\d+$/);
+        assert.ok(row.code.endsWith('-' + row.weightG), `${row.code} khớp khối lượng`);
+      } else {
+        assert.match(row.sourceUrl, /^https:\/\//, `${row.product} cần link nguồn`);
+        assert.match(row.checkedAt, /^\d{4}-\d{2}-\d{2}$/);
+        assert.equal(Boolean(row.isExample), false);
+      }
+    }
+    const page = await fetch(base + '/so-sanh');
+    assert.equal(page.status, 200);
+    const html = await page.text();
+    assert.match(html, /Thương hiệu → Nhãn → Khối lượng/);
+    assert.match(html, /\/static\/js\/compare\.js/);
+    assert.match(html, /id="price-refs-data"/);
+    assert.match(html, /href="\/so-sanh" aria-current="page"/);
+    assert.equal((await fetch(base + '/static/js/compare.js')).status, 200);
+    const pub = await (await fetch(base + '/api/price-refs')).json();
+    assert.equal(pub.rows.length, PRICE_SEED.length);
+    assert.equal(pub.rows[0].brand, 'Mộc Quả');
+    assert.ok(pub.rows.some((r) => r.brand === 'Viza Food' && r.label === 'GoodGood'));
+    assert.ok(pub.rows.some((r) => r.label === 'Yummy'));
+
+    assert.equal((await fetch(base + '/api/admin/price-refs')).status, 401);
+    const anon = await fetch(base + '/api/admin/price-refs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+    assert.ok(anon.status === 401 || anon.status === 403);
+    const login = await fetch(base + '/api/admin/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: 'test-pass' }) });
+    assert.equal(login.status, 200);
+    const auth = { cookie: cookieOf(login), 'content-type': 'application/json' };
+    const evil = await fetch(base + '/api/admin/price-refs', { method: 'POST', headers: { ...auth, origin: 'https://evil.example' }, body: JSON.stringify({ brand: 'X', product: 'Y' }) });
+    assert.equal(evil.status, 403);
+
+    const bad = await fetch(base + '/api/admin/price-refs', { method: 'POST', headers: auth, body: JSON.stringify({ brand: 'A', product: 'B', sourceUrl: 'javascript:alert(1)' }) });
+    assert.equal(bad.status, 400);
+    const created = await fetch(base + '/api/admin/price-refs', {
+      method: 'POST', headers: auth,
+      body: JSON.stringify({ brand: '<b>Thử</b>', label: 'Nhãn thử', product: '=SUM(A1)', fruit: 'Xoài', weightG: 200, price: null, sourceUrl: 'https://example.com/x', checkedAt: '2026-10-30', isExample: true }),
+    });
+    assert.equal(created.status, 201);
+    const row = (await created.json()).row;
+    assert.equal(row.price, null);
+    assert.equal(row.isExample, true);
+    const html2 = await (await fetch(base + '/so-sanh')).text();
+    assert.doesNotMatch(html2, /<b>Thử<\/b>/);
+    const put = await fetch(base + '/api/admin/price-refs/' + row.id, { method: 'PUT', headers: auth, body: JSON.stringify({ price: 90000 }) });
+    assert.equal((await put.json()).row.price, 90000);
+
+    const csv = await (await fetch(base + '/api/admin/price-refs.csv', { headers: { cookie: auth.cookie } })).text();
+    assert.match(csv, /thuong_hieu,nhan,san_pham/);
+    assert.match(csv, /'=SUM\(A1\)/);
+    const json = await (await fetch(base + '/api/admin/price-refs.json', { headers: { cookie: auth.cookie } })).json();
+    assert.equal(json.kind, 'mocqua-price-refs');
+    const total = json.rows.length;
+
+    const noConfirm = await fetch(base + '/api/admin/price-refs/import?mode=replace', { method: 'POST', headers: auth, body: JSON.stringify(json) });
+    assert.equal(noConfirm.status, 400);
+    const merged = await (await fetch(base + '/api/admin/price-refs/import?mode=merge', { method: 'POST', headers: auth, body: JSON.stringify({ csv }) })).json();
+    assert.equal(merged.updated, total);
+    assert.equal(merged.added, 0);
+    const restored = await (await fetch(base + '/api/admin/price-refs/' + row.id, { method: 'PUT', headers: auth, body: '{}' })).json();
+    assert.equal(restored.row.product, '=SUM(A1)');
+
+    const del = await fetch(base + '/api/admin/price-refs/' + row.id, { method: 'DELETE', headers: auth });
+    assert.equal(del.status, 200);
+    const replaced = await (await fetch(base + '/api/admin/price-refs/import?mode=replace&confirm=THAY-HET', { method: 'POST', headers: auth, body: JSON.stringify(json) })).json();
+    assert.equal(replaced.added, total);
+    const after = await (await fetch(base + '/api/price-refs')).json();
+    assert.equal(after.rows.length, total);
+    assert.ok(after.rows.some((r) => r.id === row.id));
+
+    const admin = await (await fetch(base + '/admin')).text();
+    assert.match(admin, /data-tab="refs"/);
+    assert.match(admin, /id="panel-refs"/);
+  } finally {
+    await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+  }
+});
+
 test('trang tĩnh không còn số và email mẫu của shop', async () => {
   const { ROOT } = await import('./paths.js');
   const { shopContact, bankDefaults } = await import('./contact.js');

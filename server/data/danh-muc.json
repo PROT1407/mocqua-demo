@@ -1,0 +1,2231 @@
+{
+ "version": 1,
+ "updated": "2026-10-30",
+ "brands": [
+  {
+   "id": "moc-qua",
+   "name": "Mộc Quả",
+   "kind": "own",
+   "kindLabel": "Thương hiệu của shop",
+   "owner": "Mộc Quả"
+  },
+  {
+   "id": "viza-food",
+   "name": "Viza Food",
+   "kind": "competitor",
+   "kindLabel": "Đối thủ / tham khảo",
+   "owner": "Công ty CP Viza Food"
+  }
+ ],
+ "labels": [
+  "Mộc Quả",
+  "GoodFood",
+  "Good Good",
+  "Cheers+",
+  "Yummy",
+  "Premium Shrinking Dried Durian",
+  "Fresh & Healthy",
+  "Kita",
+  "Viza Food",
+  "YC Nuts & Seeds"
+ ],
+ "categories": [
+  {
+   "id": "deo",
+   "name": "Trái cây sấy dẻo"
+  },
+  {
+   "id": "thanghoa",
+   "name": "Sấy thăng hoa"
+  },
+  {
+   "id": "gion",
+   "name": "Sấy giòn & sấy khô"
+  },
+  {
+   "id": "hat",
+   "name": "Hạt"
+  },
+  {
+   "id": "combo",
+   "name": "Combo / quà"
+  },
+  {
+   "id": "giavi",
+   "name": "Gia vị"
+  }
+ ],
+ "types": {
+  "macca": "Mắc ca",
+  "hat-dieu": "Hạt điều",
+  "dau-tay-thang-hoa": "Dâu tây sấy thăng hoa",
+  "xoai-thang-hoa": "Xoài sấy thăng hoa",
+  "trai-cay-khac": "Trái cây sấy khác",
+  "xoai-deo": "Xoài sấy dẻo",
+  "mit-say": "Mít sấy",
+  "long-nhan": "Long nhãn sấy",
+  "long-nhan-om-sen": "Long nhãn ôm sen",
+  "hat-mix": "Hạt mix / dinh dưỡng",
+  "banh-hat": "Bánh hạt",
+  "hop-qua": "Hộp quà",
+  "thom-deo": "Thơm sấy dẻo",
+  "coc-deo-muoi-ot": "Cóc sấy dẻo muối ớt",
+  "xoai-deo-muoi-ot": "Xoài sấy dẻo muối ớt",
+  "sau-rieng-thang-hoa": "Sầu riêng sấy thăng hoa",
+  "me-deo-muoi-ot": "Me sấy dẻo muối ớt",
+  "thanh-long-deo": "Thanh long sấy dẻo",
+  "mang-cau-deo": "Mãng cầu sấy dẻo",
+  "bot-cari": "Bột cari",
+  "combo-trai-cay": "Combo trái cây sấy",
+  "combo-hat": "Combo hạt",
+  "de-cuoi": "Hạt dẻ cười",
+  "hat-sen": "Hạt sen sấy",
+  "dua-say": "Dừa sấy giòn"
+ },
+ "products": [
+  {
+   "id": "mqz-hmc",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hạt mắc ca nứt vỏ",
+   "cat": "hat",
+   "type": "macca",
+   "pack": "Hũ PET tròn, nhãn logo B",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-hmc.webp",
+     "thumb": "/assets/catalog/mqz-hmc-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ mắc ca nứt vỏ Mộc Quả nhãn logo B",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-HMC-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-hdi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hạt điều rang muối",
+   "cat": "hat",
+   "type": "hat-dieu",
+   "pack": "Hũ PET tròn, nhãn logo B",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-hdi.webp",
+     "thumb": "/assets/catalog/mqz-hdi-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ hạt điều rang muối Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-hdi-2.webp",
+     "thumb": "/assets/catalog/mqz-hdi-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ hạt điều cầm tay trên nền đen",
+     "kind": "nen-den"
+    },
+    {
+     "src": "/assets/catalog/mqz-hdi-3.webp",
+     "thumb": "/assets/catalog/mqz-hdi-3-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ hạt điều cầm tay cạnh thùng hàng",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-HDI-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-thdt",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dâu tây sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "dau-tay-thang-hoa",
+   "pack": "Hũ PET tròn",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-thdt.webp",
+     "thumb": "/assets/catalog/mqz-thdt-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hai hũ dâu tây sấy thăng hoa Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-thdt-2.webp",
+     "thumb": "/assets/catalog/mqz-thdt-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Chồng hũ dâu tây sấy thăng hoa trên nền trắng",
+     "kind": "nen-trang"
+    },
+    {
+     "src": "/assets/catalog/mqz-thdt-3.webp",
+     "thumb": "/assets/catalog/mqz-thdt-3-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hũ dâu tây cầm tay ở chợ, cạnh rổ dâu",
+     "kind": "thuc-te"
+    },
+    {
+     "src": "/assets/catalog/mqz-thdt-4.webp",
+     "thumb": "/assets/catalog/mqz-thdt-4-sm.webp",
+     "w": 1000,
+     "h": 750,
+     "alt": "Lô hũ dâu tây sấy thăng hoa xếp chồng",
+     "kind": "lo-hang"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THDT-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-ddy",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dâu tây sấy (hũ thiếc)",
+   "cat": "thanghoa",
+   "type": "dau-tay-thang-hoa",
+   "pack": "Hũ nắp thiếc",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-ddy.webp",
+     "thumb": "/assets/catalog/mqz-ddy-sm.webp",
+     "w": 495,
+     "h": 990,
+     "alt": "Hũ nắp thiếc dâu tây sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Chưa rõ có gộp vào MQZ-THDT-100 hay là sản phẩm riêng. Chờ anh Huy xác nhận.",
+   "variants": [
+    {
+     "code": "MQZ-DDY",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-thxo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xoài sấy thăng hoa (hũ thiếc)",
+   "cat": "thanghoa",
+   "type": "xoai-thang-hoa",
+   "pack": "Hũ nắp thiếc",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-thxo.webp",
+     "thumb": "/assets/catalog/mqz-thxo-sm.webp",
+     "w": 555,
+     "h": 990,
+     "alt": "Hũ nắp thiếc xoài sấy thăng hoa",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Khối lượng chưa rõ.",
+   "variants": [
+    {
+     "code": "MQZ-THXO",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-xxx",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Trái cây sấy (chưa rõ loại)",
+   "cat": "thanghoa",
+   "type": "trai-cay-khac",
+   "pack": "Hũ nắp thiếc",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-xxx.webp",
+     "thumb": "/assets/catalog/mqz-xxx-sm.webp",
+     "w": 555,
+     "h": 990,
+     "alt": "Hũ nắp thiếc trái cây sấy",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-xxx-2.webp",
+     "thumb": "/assets/catalog/mqz-xxx-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Đĩa trưng bày miếng trái cây sấy, chưa rõ loại",
+     "kind": "dia-trung-bay"
+    }
+   ],
+   "verify": true,
+   "note": "Nhìn giống mít hoặc dừa sấy thăng hoa. Chưa rõ loại và khối lượng.",
+   "variants": [
+    {
+     "code": "MQZ-XXX",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-dxo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xoài sấy dẻo",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "Túi đỏ có cửa sổ",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-dxo.webp",
+     "thumb": "/assets/catalog/mqz-dxo-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi đỏ xoài sấy dẻo Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-dxo-2.webp",
+     "thumb": "/assets/catalog/mqz-dxo-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Đĩa trưng bày một lát xoài sấy dẻo",
+     "kind": "dia-trung-bay"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DXO-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-gmi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Mít sấy giòn",
+   "cat": "gion",
+   "type": "mit-say",
+   "pack": "Túi trong, nhãn tròn",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-gmi.webp",
+     "thumb": "/assets/catalog/mqz-gmi-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi mít sấy giòn Mộc Quả trên nia tre",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-gmi-2.webp",
+     "thumb": "/assets/catalog/mqz-gmi-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi mít sấy giòn cầm tay cạnh thùng hàng",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-GMI-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "mqz-ln",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Long nhãn sấy",
+   "cat": "gion",
+   "type": "long-nhan",
+   "pack": "Hũ PET vuông",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-ln.webp",
+     "thumb": "/assets/catalog/mqz-ln-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ long nhãn sấy Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-ln-2.webp",
+     "thumb": "/assets/catalog/mqz-ln-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ long nhãn sấy cầm tay trên nền đen",
+     "kind": "nen-den"
+    },
+    {
+     "src": "/assets/catalog/mqz-ln-3.webp",
+     "thumb": "/assets/catalog/mqz-ln-3-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ long nhãn sấy trước lô hàng",
+     "kind": "lo-hang"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-LN-250",
+     "weightG": 250,
+     "weightLabel": "~250g",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "mqz-lnos",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Long nhãn ôm sen",
+   "cat": "gion",
+   "type": "long-nhan-om-sen",
+   "pack": "Hũ PET vuông",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-lnos.webp",
+     "thumb": "/assets/catalog/mqz-lnos-sm.webp",
+     "w": 1000,
+     "h": 750,
+     "alt": "Lô hũ long nhãn ôm sen Mộc Quả",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-LNOS-250",
+     "weightG": 250,
+     "weightLabel": "~250g",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "mqz-hdd",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hạt dinh dưỡng",
+   "cat": "hat",
+   "type": "hat-mix",
+   "pack": "Hũ PET tròn cao",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-hdd.webp",
+     "thumb": "/assets/catalog/mqz-hdd-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ hạt dinh dưỡng Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-hdd-2.webp",
+     "thumb": "/assets/catalog/mqz-hdd-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ hạt dinh dưỡng cầm tay (ảnh trước khi dán nhãn)",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-HDD-500",
+     "weightG": 500,
+     "weightLabel": "~500g",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "mqz-mix",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Mix hạt cao cấp",
+   "cat": "hat",
+   "type": "hat-mix",
+   "pack": "Hũ PET tròn cao",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-mix.webp",
+     "thumb": "/assets/catalog/mqz-mix-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hai hũ mix hạt cao cấp Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-mix-2.webp",
+     "thumb": "/assets/catalog/mqz-mix-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hai hũ mix hạt cầm tay (ảnh trước khi dán nhãn)",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-MIX-500",
+     "weightG": 500,
+     "weightLabel": "~500g",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "mqz-bdt",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Bánh đồng tiền mix hạt",
+   "cat": "hat",
+   "type": "banh-hat",
+   "pack": "Hũ PET nắp vàng",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-bdt.webp",
+     "thumb": "/assets/catalog/mqz-bdt-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ bánh đồng tiền mix hạt Mộc Quả",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-bdt-2.webp",
+     "thumb": "/assets/catalog/mqz-bdt-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Hũ bánh đồng tiền cầm tay",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-BDT-300",
+     "weightG": 300,
+     "weightLabel": "~300g",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "mqz-seth6",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hộp quà Tết 2027 · 6 hũ thủy tinh",
+   "cat": "combo",
+   "type": "hop-qua",
+   "pack": "Hộp quà + 6 hũ thủy tinh",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-seth6.webp",
+     "thumb": "/assets/catalog/mqz-seth6-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hộp quà Tết 2027 với 6 hũ thủy tinh",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/mqz-seth6-2.webp",
+     "thumb": "/assets/catalog/mqz-seth6-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Bộ quà Tết Mộc Quả",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": true,
+   "note": "Chưa rõ bên trong hũ (có thể hạt sen hoặc chè). Khối lượng chưa rõ.",
+   "variants": [
+    {
+     "code": "MQZ-SETH6",
+     "weightG": null,
+     "weightLabel": "6 hũ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gf-thom",
+   "brand": "viza-food",
+   "label": "GoodFood",
+   "name": "Thơm sấy dẻo",
+   "cat": "deo",
+   "type": "thom-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gf-thom.webp",
+     "thumb": "/assets/catalog/vz-gf-thom-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi GoodFood thơm sấy dẻo 100g, ảnh chụp thật",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-gf-thom-2.webp",
+     "thumb": "/assets/catalog/vz-gf-thom-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi thơm sấy dẻo trên đế vàng",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GF-THOM-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gf-coc",
+   "brand": "viza-food",
+   "label": "GoodFood",
+   "name": "Cóc sấy dẻo muối ớt",
+   "cat": "deo",
+   "type": "coc-deo-muoi-ot",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gf-coc.webp",
+     "thumb": "/assets/catalog/vz-gf-coc-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi cóc sấy dẻo muối ớt GoodFood",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GF-COC-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-xdmo",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Xoài sấy dẻo muối ớt",
+   "cat": "deo",
+   "type": "xoai-deo-muoi-ot",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-xdmo.webp",
+     "thumb": "/assets/catalog/vz-gg-xdmo-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi xoài sấy dẻo muối ớt",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Chưa có ảnh túi cam 200g.",
+   "variants": [
+    {
+     "code": "VZ-GG-XDMO-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    },
+    {
+     "code": "VZ-GG-XDMO-200",
+     "weightG": 200,
+     "weightLabel": "200g",
+     "verify": false,
+     "note": "Túi cam in 200g."
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-xd",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Xoài sấy dẻo (túi trắng)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-xd.webp",
+     "thumb": "/assets/catalog/vz-gg-xd-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hai túi trắng xoài sấy dẻo",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-XD-200",
+     "weightG": 200,
+     "weightLabel": "200g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-xdv",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Xoài sấy dẻo (túi vàng lớn)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [],
+   "verify": true,
+   "note": "Chưa có ảnh rõ và chưa rõ khối lượng.",
+   "variants": [
+    {
+     "code": "VZ-GG-XDV-XX",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-mhh",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Mít sấy Hoa Hậu",
+   "cat": "gion",
+   "type": "mit-say",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-mhh.webp",
+     "thumb": "/assets/catalog/vz-gg-mhh-sm.webp",
+     "w": 525,
+     "h": 750,
+     "alt": "Túi tím mít sấy Hoa Hậu",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-MHH-250",
+     "weightG": 250,
+     "weightLabel": "250g (tạm)",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-srs",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Sầu riêng sấy (túi vàng)",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-srs.webp",
+     "thumb": "/assets/catalog/vz-gg-srs-sm.webp",
+     "w": 645,
+     "h": 750,
+     "alt": "Túi vàng sầu riêng sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-SRS-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-kf",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "King Fruit sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-kf.webp",
+     "thumb": "/assets/catalog/vz-gg-kf-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi King Fruit sầu riêng sấy thăng hoa",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-gg-kf-2.webp",
+     "thumb": "/assets/catalog/vz-gg-kf-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi King Fruit trong giỏ quà",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-gg-kf-3.webp",
+     "thumb": "/assets/catalog/vz-gg-kf-3-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi King Fruit cạnh bình hoa vàng",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-gg-kf-4.webp",
+     "thumb": "/assets/catalog/vz-gg-kf-4-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Cặp túi King Fruit nền tối sang trọng",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-KF-100",
+     "weightG": 100,
+     "weightLabel": "100g (3.53oz)",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-me",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Me sấy dẻo muối ớt",
+   "cat": "deo",
+   "type": "me-deo-muoi-ot",
+   "pack": "",
+   "images": [],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-ME-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-thom",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Thơm sấy dẻo",
+   "cat": "deo",
+   "type": "thom-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-thom.webp",
+     "thumb": "/assets/catalog/vz-gg-thom-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Good Good thơm sấy dẻo (bên phải)",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-THOM-80",
+     "weightG": 80,
+     "weightLabel": "80g (in trên bao)",
+     "verify": false,
+     "note": "Anh Huy xác nhận 80g."
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-coc",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Cóc sấy dẻo muối ớt",
+   "cat": "deo",
+   "type": "coc-deo-muoi-ot",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-coc.webp",
+     "thumb": "/assets/catalog/vz-gg-coc-sm.webp",
+     "w": 625,
+     "h": 1000,
+     "alt": "Túi Good Good cóc sấy dẻo muối ớt",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-COC-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-tl",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Thanh long sấy dẻo",
+   "cat": "deo",
+   "type": "thanh-long-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-tl.webp",
+     "thumb": "/assets/catalog/vz-gg-tl-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi thanh long sấy dẻo",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn.",
+   "variants": [
+    {
+     "code": "VZ-GG-TL-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-mc",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Mãng cầu sấy dẻo",
+   "cat": "deo",
+   "type": "mang-cau-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-mc.webp",
+     "thumb": "/assets/catalog/vz-gg-mc-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi mãng cầu sấy dẻo",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn.",
+   "variants": [
+    {
+     "code": "VZ-GG-MC-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-cari",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Bột cari Ngon (hũ)",
+   "cat": "giavi",
+   "type": "bot-cari",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-cari.webp",
+     "thumb": "/assets/catalog/vz-gg-cari-sm.webp",
+     "w": 667,
+     "h": 1000,
+     "alt": "Hũ bột cari Ngon",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-CARI-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-cb-xc",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Combo xoài muối ớt + cóc muối ớt",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-cb-xc.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-xc-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 100g xoài và cóc sấy dẻo muối ớt",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-CB2XC-200",
+     "weightG": 200,
+     "weightLabel": "2 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ch-xth",
+   "brand": "viza-food",
+   "label": "Cheers+",
+   "name": "Xoài sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "xoai-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ch-xth.webp",
+     "thumb": "/assets/catalog/vz-ch-xth-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Cheers+ xoài sấy thăng hoa (mẫu rừng xanh)",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-xth-2.webp",
+     "thumb": "/assets/catalog/vz-ch-xth-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Cheers+ xoài sấy thăng hoa (mẫu áo dài)",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "Có 2 mẫu túi.",
+   "variants": [
+    {
+     "code": "VZ-CH-XTH-120",
+     "weightG": 120,
+     "weightLabel": "120g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ch-srth",
+   "brand": "viza-food",
+   "label": "Cheers+",
+   "name": "Sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ch-srth.webp",
+     "thumb": "/assets/catalog/vz-ch-srth-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Cheers+ sầu riêng sấy thăng hoa",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-srth-2.webp",
+     "thumb": "/assets/catalog/vz-ch-srth-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Cheers+ sầu riêng trên nền trắng",
+     "kind": "nen-trang"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-CH-SRTH-100",
+     "weightG": 100,
+     "weightLabel": "100g · 3 gói nhỏ",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ch-xdl",
+   "brand": "viza-food",
+   "label": "Cheers+",
+   "name": "Xoài sấy dẻo (túi lá xoài)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ch-xdl.webp",
+     "thumb": "/assets/catalog/vz-ch-xdl-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Cheers+ xoài sấy dẻo mặt trước và sau",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-xdl-2.webp",
+     "thumb": "/assets/catalog/vz-ch-xdl-2-sm.webp",
+     "w": 1000,
+     "h": 500,
+     "alt": "Túi Cheers+ xoài sấy dẻo trên nền cam",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-CH-XDL-200",
+     "weightG": 200,
+     "weightLabel": "200g (250–300g)",
+     "verify": true,
+     "note": "Khoảng 250–300g, cần kiểm tra."
+    }
+   ]
+  },
+  {
+   "id": "vz-ch-xdr",
+   "brand": "viza-food",
+   "label": "Cheers+",
+   "name": "Xoài sấy dẻo (túi băng đỏ)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ch-xdr.webp",
+     "thumb": "/assets/catalog/vz-ch-xdr-sm.webp",
+     "w": 500,
+     "h": 1000,
+     "alt": "Túi Cheers+ xoài sấy dẻo băng đỏ",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Có thể trùng mẫu túi lá xoài. Cần kiểm tra.",
+   "variants": [
+    {
+     "code": "VZ-CH-XDR-200",
+     "weightG": 200,
+     "weightLabel": "200g (250–300g, tạm)",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "vz-ch-xdt",
+   "brand": "viza-food",
+   "label": "Cheers+",
+   "name": "Xoài sấy dẻo (túi tròn áo dài)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ch-xdt.webp",
+     "thumb": "/assets/catalog/vz-ch-xdt-sm.webp",
+     "w": 749,
+     "h": 1000,
+     "alt": "Túi tròn Cheers+ xoài sấy dẻo cô gái áo dài",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-xdt-2.webp",
+     "thumb": "/assets/catalog/vz-ch-xdt-2-sm.webp",
+     "w": 749,
+     "h": 1000,
+     "alt": "Túi tròn Cheers+ trên nền trắng",
+     "kind": "nen-trang"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-xdt-3.webp",
+     "thumb": "/assets/catalog/vz-ch-xdt-3-sm.webp",
+     "w": 1000,
+     "h": 559,
+     "alt": "Ba túi tròn Cheers+ cạnh đĩa xoài",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-xdt-4.webp",
+     "thumb": "/assets/catalog/vz-ch-xdt-4-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi tròn chụp ngoài trời",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-CH-XDT-200",
+     "weightG": 200,
+     "weightLabel": "200g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ch-cb3x",
+   "brand": "viza-food",
+   "label": "Cheers+",
+   "name": "Combo 3 xoài sấy dẻo + tặng me Good Good 100g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 túi xoài Cheers+ tặng me sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-CH-CB3X-600",
+     "weightG": 600,
+     "weightLabel": "3 × 200g + me 100g",
+     "verify": true,
+     "note": "Tổng khối lượng tạm tính."
+    }
+   ]
+  },
+  {
+   "id": "vz-ym-srth",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ym-srth.webp",
+     "thumb": "/assets/catalog/vz-ym-srth-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Yummy sầu riêng sấy thăng hoa",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-YM-SRTH-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ym-mt",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Yummy Monthong sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ym-mt.webp",
+     "thumb": "/assets/catalog/vz-ym-mt-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Yummy và Yummy Monthong",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-YM-MT-100",
+     "weightG": 100,
+     "weightLabel": "100g (tạm)",
+     "verify": true,
+     "note": "Khối lượng tạm."
+    }
+   ]
+  },
+  {
+   "id": "vz-ps-gd",
+   "brand": "viza-food",
+   "label": "Premium Shrinking Dried Durian",
+   "name": "Golden Durian sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ps-gd.webp",
+     "thumb": "/assets/catalog/vz-ps-gd-sm.webp",
+     "w": 493,
+     "h": 1000,
+     "alt": "Túi Golden Durian",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-PS-GD-100",
+     "weightG": 100,
+     "weightLabel": "100g (100g – 150g – 200g)",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ps-ry",
+   "brand": "viza-food",
+   "label": "Premium Shrinking Dried Durian",
+   "name": "Royal Durian sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ps-ry.webp",
+     "thumb": "/assets/catalog/vz-ps-ry-sm.webp",
+     "w": 478,
+     "h": 1000,
+     "alt": "Túi Royal Durian",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-PS-RY-100",
+     "weightG": 100,
+     "weightLabel": "100g (100g – 150g – 200g)",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-ps-yd",
+   "brand": "viza-food",
+   "label": "Premium Shrinking Dried Durian",
+   "name": "Yummy Durian sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ps-yd.webp",
+     "thumb": "/assets/catalog/vz-ps-yd-sm.webp",
+     "w": 493,
+     "h": 1000,
+     "alt": "Túi Yummy Durian",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-PS-YD-100",
+     "weightG": 100,
+     "weightLabel": "100g (100g – 150g – 200g)",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-xd",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Xoài sấy dẻo (túi trắng xanh)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-xd.webp",
+     "thumb": "/assets/catalog/vz-fh-xd-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Fresh & Healthy xoài sấy dẻo trắng xanh",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-xd-2.webp",
+     "thumb": "/assets/catalog/vz-fh-xd-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi xoài sấy dẻo trên đế vàng",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-xd-3.webp",
+     "thumb": "/assets/catalog/vz-fh-xd-3-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi xoài sấy dẻo trên nền trắng",
+     "kind": "nen-trang"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-FH-XD-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    },
+    {
+     "code": "VZ-FH-XD-250",
+     "weightG": 250,
+     "weightLabel": "250g",
+     "verify": false,
+     "note": ""
+    },
+    {
+     "code": "VZ-FH-XD-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-xdh",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Xoài sấy dẻo (túi hồng cam)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-xdh.webp",
+     "thumb": "/assets/catalog/vz-fh-xdh-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi hồng cam xoài sấy dẻo",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-FH-XDH-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-xdv",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Xoài sấy dẻo (túi vàng)",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-xdv.webp",
+     "thumb": "/assets/catalog/vz-fh-xdv-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi vàng xoài sấy dẻo 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-FH-XDV-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-cb350",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Combo xoài sấy dẻo 100g + 250g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-cb350.webp",
+     "thumb": "/assets/catalog/vz-fh-cb350-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hai túi xoài sấy dẻo 100g và 250g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-FH-CB-350",
+     "weightG": 350,
+     "weightLabel": "100g + 250g = 350g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-mit",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Mít sấy",
+   "cat": "gion",
+   "type": "mit-say",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-mit.webp",
+     "thumb": "/assets/catalog/vz-fh-mit-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Fresh & Healthy mít sấy",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-mit-2.webp",
+     "thumb": "/assets/catalog/vz-fh-mit-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi mít sấy phối cảnh quảng cáo",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-mit-3.webp",
+     "thumb": "/assets/catalog/vz-fh-mit-3-sm.webp",
+     "w": 1000,
+     "h": 500,
+     "alt": "Túi mít sấy mặt trước và sau trên nền xanh",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-mit-4.webp",
+     "thumb": "/assets/catalog/vz-fh-mit-4-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi mít sấy trong bộ sản phẩm Fresh & Healthy",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-FH-MIT-300",
+     "weightG": 300,
+     "weightLabel": "300g (200–300g)",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-mitv",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Mít sấy (túi vàng có cửa sổ)",
+   "cat": "gion",
+   "type": "mit-say",
+   "pack": "",
+   "images": [],
+   "verify": true,
+   "note": "Chưa có ảnh rõ, chưa rõ khối lượng.",
+   "variants": [
+    {
+     "code": "VZ-FH-MITV-XX",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-xdmo",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Xoài sấy dẻo muối ớt (túi đỏ)",
+   "cat": "deo",
+   "type": "xoai-deo-muoi-ot",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-xdmo.webp",
+     "thumb": "/assets/catalog/vz-fh-xdmo-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi đỏ xoài muối ớt cạnh túi vàng",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Khối lượng chưa rõ.",
+   "variants": [
+    {
+     "code": "VZ-FH-XDMO-XX",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-fh-srth",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-fh-srth.webp",
+     "thumb": "/assets/catalog/vz-fh-srth-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi in \"new\" và túi zip trong có tem",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-srth-2.webp",
+     "thumb": "/assets/catalog/vz-fh-srth-2-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Bộ túi Fresh & Healthy",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": true,
+   "note": "Có 2 kiểu: túi in \"new\" và túi zip trong dán tem. Khối lượng chưa rõ.",
+   "variants": [
+    {
+     "code": "VZ-FH-SRTH-XX",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-kt-srth",
+   "brand": "viza-food",
+   "label": "Kita",
+   "name": "Sầu riêng sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-kt-srth.webp",
+     "thumb": "/assets/catalog/vz-kt-srth-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Kita sầu riêng sấy",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-kt-srth-2.webp",
+     "thumb": "/assets/catalog/vz-kt-srth-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Kita cạnh đĩa sầu riêng",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-KT-SRTH-100",
+     "weightG": 100,
+     "weightLabel": "100g · 3 gói nhỏ",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-hdi",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Hạt điều rang muối (hộp)",
+   "cat": "hat",
+   "type": "hat-dieu",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-hdi.webp",
+     "thumb": "/assets/catalog/vz-vz-hdi-sm.webp",
+     "w": 344,
+     "h": 570,
+     "alt": "Hộp Viza hạt điều rang muối",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Ảnh cắt từ ảnh combo.",
+   "variants": [
+    {
+     "code": "VZ-VZ-HDI-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-hmc",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Hạt macca sấy nứt vỏ (hộp)",
+   "cat": "hat",
+   "type": "macca",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-hmc.webp",
+     "thumb": "/assets/catalog/vz-vz-hmc-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hộp Viza hạt macca sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-HMC-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-hdc",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Hạt dẻ cười (hộp)",
+   "cat": "hat",
+   "type": "de-cuoi",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-hdc.webp",
+     "thumb": "/assets/catalog/vz-vz-hdc-sm.webp",
+     "w": 390,
+     "h": 570,
+     "alt": "Hộp Viza hạt dẻ cười",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Ảnh cắt từ ảnh combo.",
+   "variants": [
+    {
+     "code": "VZ-VZ-HDC-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-hse",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Hạt sen sấy (hộp)",
+   "cat": "hat",
+   "type": "hat-sen",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-hse.webp",
+     "thumb": "/assets/catalog/vz-vz-hse-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hộp Viza hạt sen sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-HSE-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-dua",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Dừa sấy giòn (hộp)",
+   "cat": "gion",
+   "type": "dua-say",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-dua.webp",
+     "thumb": "/assets/catalog/vz-vz-dua-sm.webp",
+     "w": 390,
+     "h": 555,
+     "alt": "Hộp Viza dừa sấy giòn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Ảnh cắt từ ảnh combo.",
+   "variants": [
+    {
+     "code": "VZ-VZ-DUA-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb2dm",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 2: hạt điều + macca",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb2dm.webp",
+     "thumb": "/assets/catalog/vz-vz-cb2dm-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 2 hộp điều và macca",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB2DM-200",
+     "weightG": 200,
+     "weightLabel": "2 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb2sk",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 2 \"Sức Khỏe & Thanh Mát\" (dẻ cười + hạt sen)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb2sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb2sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo Sức Khỏe & Thanh Mát",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB2SK-200",
+     "weightG": 200,
+     "weightLabel": "2 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb3dd",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb3dd.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3dd-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 hộp Hạt Dinh Dưỡng",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB3DD-300",
+     "weightG": 300,
+     "weightLabel": "3 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb3al",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb3al.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3al-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hộp quà Tết Trọn Vị An Lành",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB3AL-300",
+     "weightG": 300,
+     "weightLabel": "3 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb4sk",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb4sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 hộp Sức Khỏe Tự Nhiên",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB4SK-400",
+     "weightG": 400,
+     "weightLabel": "4 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb4sv",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb4sv.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sv-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hộp quà Tết Sum Vầy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB4SV-400",
+     "weightG": 400,
+     "weightLabel": "4 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-vz-cb5",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-cb5.webp",
+     "thumb": "/assets/catalog/vz-vz-cb5-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 5 hộp hạt Viza",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-VZ-CB5-500",
+     "weightG": 500,
+     "weightLabel": "5 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "vz-yc-cb4",
+   "brand": "viza-food",
+   "label": "YC Nuts & Seeds",
+   "name": "Combo 4 Hạt Dinh Dưỡng (dẻ cười, hạt sen, điều, macca)",
+   "cat": "combo",
+   "type": "combo-hat",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-yc-cb4.webp",
+     "thumb": "/assets/catalog/vz-yc-cb4-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Hộp quà YC Combo 4 Hạt Dinh Dưỡng",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-YC-CB4-400",
+     "weightG": 400,
+     "weightLabel": "4 × 100g",
+     "verify": false,
+     "note": ""
+    }
+   ]
+  }
+ ],
+ "gallery": [
+  {
+   "img": {
+    "src": "/assets/catalog/trung-bay-sau-rieng.webp",
+    "thumb": "/assets/catalog/trung-bay-sau-rieng-sm.webp",
+    "w": 1000,
+    "h": 1000,
+    "alt": "Đĩa chân vàng chất đầy miếng trái cây sấy",
+    "kind": "dia-trung-bay"
+   },
+   "title": "Sầu riêng sấy thăng hoa (đĩa chân vàng)",
+   "verify": true,
+   "note": "Có khả năng là sầu riêng sấy thăng hoa. Cần kiểm tra."
+  },
+  {
+   "img": {
+    "src": "/assets/catalog/trung-bay-sapoche-1.webp",
+    "thumb": "/assets/catalog/trung-bay-sapoche-1-sm.webp",
+    "w": 1000,
+    "h": 1000,
+    "alt": "Đĩa viền vàng với hoa trắng và lát sapoche sấy",
+    "kind": "dia-trung-bay"
+   },
+   "title": "Sapoche sấy thăng hoa",
+   "verify": false,
+   "note": "Anh Huy xác nhận là sapoche (hồng xiêm) sấy thăng hoa."
+  },
+  {
+   "img": {
+    "src": "/assets/catalog/trung-bay-sapoche-2.webp",
+    "thumb": "/assets/catalog/trung-bay-sapoche-2-sm.webp",
+    "w": 1000,
+    "h": 1000,
+    "alt": "Đĩa viền vàng với hoa trắng và một lát sapoche sấy",
+    "kind": "dia-trung-bay"
+   },
+   "title": "Sapoche sấy thăng hoa (một lát)",
+   "verify": true,
+   "note": "Cùng kiểu đĩa với ảnh đã xác nhận. Cần kiểm tra."
+  }
+ ],
+ "codeScheme": "Mộc Quả: MQZ-<SP>-<gram>. Đối thủ: VZ-<NHÃN>-<SP>-<gram>; XX = chưa rõ khối lượng."
+}

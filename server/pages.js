@@ -7,7 +7,7 @@ import { bankConfig } from './vietqr.js';
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 const EXTRA = ['omai', 'set', 'hat'];
 
-function layout({ title, description, page, body, scripts = [] }) {
+function layout({ title, description, page, body, scripts = [], styles = [] }) {
   const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
     .map((src) => `<script type="module" src="${src}"></script>`)
     .join('');
@@ -30,7 +30,7 @@ function layout({ title, description, page, body, scripts = [] }) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/shop.css">
+<link rel="stylesheet" href="/static/css/shop.css">${styles.map((href) => `<link rel="stylesheet" href="${esc(href)}">`).join('')}
 </head>
 <body class="page-${esc(page)}">
 <a class="skip" href="#main">Tới nội dung</a>
@@ -48,6 +48,8 @@ function header(page) {
     <a class="logo" href="/">Mộc Quả <small>trái cây sấy</small></a>
     <nav class="top__nav" aria-label="Điều hướng">
       <a href="/cua-hang"${page === 'shop' ? ' aria-current="page"' : ''}>Cửa hàng</a>
+      <a href="/danh-muc"${page === 'catalog' ? ' aria-current="page"' : ''}>Danh mục</a>
+      <a href="/so-sanh"${page === 'compare' ? ' aria-current="page"' : ''}>So sánh</a>
       <a href="/tra-cuu"${page === 'track' ? ' aria-current="page"' : ''}>Tra cứu</a>
     </nav>
     <a class="cartbtn" href="/gio-hang">Giỏ <span data-cart-count>0</span></a>
@@ -670,10 +672,14 @@ export function adminPage() {
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
         <button type="button" data-tab="prices">Giá bán</button>
         <button type="button" data-tab="promo">Quà tặng</button>
+        <button type="button" data-tab="refs">So sánh giá</button>
+        <button type="button" data-tab="catalog">Danh mục</button>
       </div>
       <div id="panel-orders"></div>
       <div id="panel-prices" hidden></div>
       <div id="panel-promo" hidden></div>
+      <div id="panel-refs" hidden></div>
+      <div id="panel-catalog" hidden></div>
     </section>
   </main>`;
   return layout({
@@ -682,6 +688,117 @@ export function adminPage() {
     page: 'admin',
     body,
     scripts: ['/static/js/admin.js'],
+  });
+}
+
+export function comparePage(rows) {
+  const brands = new Set(rows.map((r) => r.brand)).size;
+  const priced = rows.filter((r) => r.price != null && r.weightG).length;
+  const dates = rows.map((r) => r.checkedAt).filter(Boolean).sort();
+  const last = dates.length ? dates[dates.length - 1].split('-').reverse().join('/') : '';
+  const body = `<main id="main" class="cmp">
+    <section class="cmp-hero">
+      <div class="wrap">
+        <p class="cmp-kicker">Bảng tham chiếu giá</p>
+        <h1>Thương hiệu → Nhãn → Khối lượng</h1>
+        <p class="cmp-lead">${esc(brands)} thương hiệu · ${esc(rows.length)} quy cách · ${esc(priced)} có giá${last ? ` · kiểm ${esc(last)}` : ''}. Giá là giá niêm yết trên trang nguồn. Mỗi ô có link và ngày xem.</p>
+        <p class="cmp-warn">Khối lượng Mộc Quả là <b>ước lượng</b> theo kích thước hũ, chưa cân thật.</p>
+      </div>
+    </section>
+    <section class="wrap cmp-body">
+      <div class="cmp-filters" id="cmp-filters" aria-label="Bộ lọc"></div>
+      <p class="cmp-count" id="cmp-count" role="status"></p>
+      <div id="cmp-tree" class="cmp-tree"><p class="fine">Đang tải bảng…</p></div>
+    </section>
+    <div class="cmp-tray" id="cmp-tray" hidden>
+      <div class="wrap cmp-tray__in">
+        <div class="cmp-tray__items" id="cmp-tray-items"></div>
+        <button type="button" class="cmp-btn" id="cmp-open">So sánh</button>
+        <button type="button" class="cmp-btn cmp-btn--ghost" id="cmp-clear" aria-label="Bỏ chọn tất cả">Bỏ</button>
+      </div>
+    </div>
+    <dialog class="cmp-dialog" id="cmp-dialog" aria-labelledby="cmp-dialog-title">
+      <div class="cmp-dialog__head">
+        <h2 id="cmp-dialog-title">So sánh giá / 100g</h2>
+        <button type="button" class="cmp-btn cmp-btn--ghost" id="cmp-close">Đóng</button>
+      </div>
+      <div id="cmp-table"></div>
+    </dialog>
+    ${jsonScript('price-refs-data', rows)}
+  </main>`;
+  return layout({
+    title: 'So sánh giá theo thương hiệu | Mộc Quả',
+    description: 'Bảng so sánh giá trái cây sấy, hạt theo thương hiệu, nhãn và khối lượng.',
+    page: 'compare',
+    body,
+    scripts: ['/static/js/compare.js'],
+  });
+}
+
+export function catalogPage(data) {
+  const variants = data.products.flatMap((p) => p.variants);
+  const own = data.products.filter((p) => data.brands.find((b) => b.id === p.brand)?.kind === 'own').length;
+  const verify = data.products.filter((p) => p.verify || p.variants.some((v) => v.verify)).length;
+  const labels = new Set(data.products.map((p) => p.label)).size;
+  const body = `<main id="main" class="dm">
+    <section class="dm-hero">
+      <div class="wrap dm-hero__in">
+        <div>
+          <p class="dm-kicker">Danh mục tra cứu</p>
+          <h1>Thương hiệu <i>→</i> Nhãn <i>→</i> Sản phẩm <i>→</i> Khối lượng</h1>
+          <p class="dm-slogan">Quả của đất · Quà của tình</p>
+        </div>
+        <dl class="dm-stats">
+          <div><dt>Sản phẩm</dt><dd>${esc(data.products.length)}</dd></div>
+          <div><dt>Mã khối lượng</dt><dd>${esc(variants.length)}</dd></div>
+          <div><dt>Nhãn</dt><dd>${esc(labels)}</dd></div>
+          <div><dt>Mộc Quả</dt><dd>${esc(own)}</dd></div>
+          <div class="is-warn"><dt>Cần kiểm tra</dt><dd>${esc(verify)}</dd></div>
+        </dl>
+      </div>
+    </section>
+    <section class="dm-bar" aria-label="Tìm và lọc">
+      <div class="wrap">
+        <div class="dm-bar__row">
+          <label class="dm-search"><span class="sr">Tìm sản phẩm</span>
+            <input id="dm-q" type="search" placeholder="Tìm tên, nhãn hoặc mã (vd: xoài, VZ-GG, 100g)" autocomplete="off">
+          </label>
+          <div class="dm-view" role="tablist" aria-label="Kiểu xem">
+            <button type="button" role="tab" data-view="grid" class="is-on" aria-selected="true">Danh mục</button>
+            <button type="button" role="tab" data-view="compare" aria-selected="false">So sánh</button>
+          </div>
+        </div>
+        <div class="dm-chips" id="dm-brand" aria-label="Thương hiệu"></div>
+        <div class="dm-chips" id="dm-cat" aria-label="Nhóm sản phẩm"></div>
+        <div class="dm-chips dm-chips--labels" id="dm-label" aria-label="Nhãn"></div>
+      </div>
+    </section>
+    <section class="wrap dm-body">
+      <p class="dm-count" id="dm-count" role="status"></p>
+      <div id="dm-grid"><p class="fine">Đang tải danh mục…</p></div>
+      <div id="dm-compare" hidden></div>
+      <section class="dm-gallery" id="dm-gallery" aria-labelledby="dm-gallery-title"></section>
+      <p class="dm-foot">Viza Food (Công ty CP Viza Food) chỉ để tham khảo, không bán tại Mộc Quả. Không ghi giá khuyến mãi trên tem. Giá đối thủ sẽ so chủ yếu với các trang dacsancaocap. Mã: ${esc(data.codeScheme)}</p>
+    </section>
+    <dialog class="dm-lb" id="dm-lb" aria-labelledby="dm-lb-title">
+      <div class="dm-lb__head"><div><small id="dm-lb-sub"></small><h2 id="dm-lb-title"></h2></div><span class="dm-lb__count" id="dm-lb-count" aria-live="polite"></span><button type="button" class="dm-lb__x" id="dm-lb-x">Đóng</button></div>
+      <div class="dm-lb__stage">
+        <div class="dm-lb__track" id="dm-lb-track" tabindex="0" aria-label="Ảnh sản phẩm, vuốt ngang để xem tiếp"></div>
+        <button type="button" class="dm-lb__nav dm-lb__nav--prev" id="dm-lb-prev" aria-label="Ảnh trước">‹</button>
+        <button type="button" class="dm-lb__nav dm-lb__nav--next" id="dm-lb-next" aria-label="Ảnh sau">›</button>
+      </div>
+      <p class="dm-lb__cap" id="dm-lb-cap"></p>
+      <div class="dm-lb__thumbs" id="dm-lb-thumbs"></div>
+    </dialog>
+    ${jsonScript('dm-data', data)}
+  </main>`;
+  return layout({
+    title: 'Danh mục tra cứu | Mộc Quả',
+    description: 'Tra cứu sản phẩm Mộc Quả và nhãn tham khảo theo thương hiệu, nhãn, sản phẩm, khối lượng.',
+    page: 'catalog',
+    body,
+    scripts: ['/static/js/danh-muc.js'],
+    styles: ['/static/css/danh-muc.css'],
   });
 }
 
