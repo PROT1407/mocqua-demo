@@ -1,6 +1,7 @@
 // Danh mục tra cứu: Thương hiệu → Nhãn → Sản phẩm → Khối lượng.
 // Dữ liệu sản phẩm nằm trong server/data/danh-muc.json (sửa bằng tay, có trong git).
-// Giá bán lẻ, nguồn giá và ngày kiểm theo từng mã lưu trong SQLite (bảng catalog_prices), sửa ở /admin.
+// Giá mặc định theo mã nằm luôn trong danh-muc.json (price, priceSource, priceCheckedAt) để không mất khi Render xoá SQLite.
+// Giá sửa ở /admin lưu trong SQLite (bảng catalog_prices) và đè lên giá mặc định.
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './paths.js';
@@ -36,13 +37,13 @@ export function catalogWithPrices() {
     ...p,
     variants: p.variants.map((v) => {
       const pr = prices.get(v.code);
-      const price = pr?.price ?? null;
+      const price = pr ? pr.price ?? null : v.price ?? null;
       return {
         ...v,
         price,
         per100g: price != null && v.weightG ? Math.round((price * 100) / v.weightG) : null,
-        priceSource: pr?.source || '',
-        priceCheckedAt: pr?.checkedAt || '',
+        priceSource: pr ? pr.source || '' : v.priceSource || '',
+        priceCheckedAt: pr ? pr.checkedAt || '' : v.priceCheckedAt || '',
       };
     }),
   }));

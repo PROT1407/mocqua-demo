@@ -157,7 +157,7 @@ function renderCompare(list) {
         </tr>`;
       }).join('')}</tbody>
     </table></div>
-    <p class="fine dm-cmp__hint">Chưa nhập giá nên cột giá đang trống. Chủ shop nhập giá, nguồn và ngày kiểm ở trang quản trị (tab Danh mục). Giá/100g tự tính; ô viền vàng là rẻ nhất trên 100g.</p>`;
+    <p class="fine dm-cmp__hint">${rows.some((r) => r.v.price != null) ? 'Ô trống là mã chưa có giá.' : 'Chưa nhập giá nên cột giá đang trống.'} Chủ shop sửa giá, nguồn và ngày kiểm ở trang quản trị (tab Danh mục). Giá/100g tự tính; ô viền vàng là rẻ nhất trên 100g.</p>`;
 }
 
 function renderGallery() {

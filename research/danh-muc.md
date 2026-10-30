@@ -3,7 +3,8 @@
 Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm → Khối lượng**: tìm kiếm, chip lọc theo thương hiệu, nhóm, nhãn, chip *Cần kiểm tra*, và chế độ **So sánh** (cùng loại sản phẩm, cùng khối lượng; cột giá bán lẻ, giá/100g, nguồn · ngày).
 
 - Dữ liệu sản phẩm: `server/data/danh-muc.json` (sửa tay, có trong git).
-- Giá bán lẻ, nguồn giá, ngày kiểm theo từng mã: bảng SQLite `catalog_prices`, sửa ở `/admin` → tab **Danh mục**. Có nút xuất/nhập JSON (Render gói miễn phí không giữ ổ đĩa, nên xuất trước khi deploy).
+- Giá mặc định của mã Mộc Quả (MQZ) nằm trong `server/data/danh-muc.json` (`price`, `priceSource`, `priceCheckedAt`), nên không mất khi deploy. Combo 2/3 ghi ở dòng `note` của thẻ. THXO, DDY, XXX, SETH6 là giá tạm tính.
+- Giá sửa ở `/admin` → tab **Danh mục** lưu trong bảng SQLite `catalog_prices` và đè lên giá mặc định. Có nút xuất/nhập JSON (Render gói miễn phí không giữ ổ đĩa, nên xuất trước khi deploy).
 - API: `GET /api/danh-muc`, `PUT /api/admin/catalog-prices/:code`, `GET /api/admin/catalog-prices.json`, `POST /api/admin/catalog-prices/import`.
 - Ảnh: `assets/catalog/<slug>.webp` (cạnh dài tối đa 1000px, mở trong thư viện ảnh) và `<slug>-sm.webp` (480px, dùng cho thẻ, ảnh nhỏ, bảng so sánh), tải lười (lazy-load). Mỗi mã có **một ảnh chính** trên lưới; ảnh cùng sản phẩm nhưng khác phong cách (nền trắng/đen, cầm tay, lô hàng, phối cảnh, đĩa trưng bày) được giữ làm ảnh phụ trong thư viện. Chỉ bỏ ảnh trùng hoặc gần như giống hệt (cùng bố cục, chỉ khác tông màu). Sản phẩm chưa có ảnh rõ hiện khung giữ chỗ.
 - Viza Food (Công ty CP Viza Food) là **đối thủ / tham khảo**, không bán tại Mộc Quả. Không ghi giá khuyến mãi trên tem (36k/37k).
