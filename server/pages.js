@@ -48,6 +48,7 @@ function header(page) {
     <a class="logo" href="/">Mộc Quả <small>trái cây sấy</small></a>
     <nav class="top__nav" aria-label="Điều hướng">
       <a href="/cua-hang"${page === 'shop' ? ' aria-current="page"' : ''}>Cửa hàng</a>
+      <a href="/so-sanh"${page === 'compare' ? ' aria-current="page"' : ''}>So sánh</a>
       <a href="/tra-cuu"${page === 'track' ? ' aria-current="page"' : ''}>Tra cứu</a>
     </nav>
     <a class="cartbtn" href="/gio-hang">Giỏ <span data-cart-count>0</span></a>
@@ -670,10 +671,12 @@ export function adminPage() {
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
         <button type="button" data-tab="prices">Giá bán</button>
         <button type="button" data-tab="promo">Quà tặng</button>
+        <button type="button" data-tab="refs">So sánh giá</button>
       </div>
       <div id="panel-orders"></div>
       <div id="panel-prices" hidden></div>
       <div id="panel-promo" hidden></div>
+      <div id="panel-refs" hidden></div>
     </section>
   </main>`;
   return layout({
@@ -682,6 +685,50 @@ export function adminPage() {
     page: 'admin',
     body,
     scripts: ['/static/js/admin.js'],
+  });
+}
+
+export function comparePage(rows) {
+  const brands = new Set(rows.map((r) => r.brand)).size;
+  const priced = rows.filter((r) => r.price != null && r.weightG).length;
+  const dates = rows.map((r) => r.checkedAt).filter(Boolean).sort();
+  const last = dates.length ? dates[dates.length - 1].split('-').reverse().join('/') : '';
+  const body = `<main id="main" class="cmp">
+    <section class="cmp-hero">
+      <div class="wrap">
+        <p class="cmp-kicker">Bảng tham chiếu giá</p>
+        <h1>Thương hiệu → Nhãn → Khối lượng</h1>
+        <p class="cmp-lead">${esc(brands)} thương hiệu · ${esc(rows.length)} quy cách · ${esc(priced)} có giá${last ? ` · kiểm ${esc(last)}` : ''}. Giá là giá niêm yết trên trang nguồn. Mỗi ô có link và ngày xem.</p>
+        <p class="cmp-warn">Khối lượng Mộc Quả là <b>ước lượng</b> theo kích thước hũ, chưa cân thật.</p>
+      </div>
+    </section>
+    <section class="wrap cmp-body">
+      <div class="cmp-filters" id="cmp-filters" aria-label="Bộ lọc"></div>
+      <p class="cmp-count" id="cmp-count" role="status"></p>
+      <div id="cmp-tree" class="cmp-tree"><p class="fine">Đang tải bảng…</p></div>
+    </section>
+    <div class="cmp-tray" id="cmp-tray" hidden>
+      <div class="wrap cmp-tray__in">
+        <div class="cmp-tray__items" id="cmp-tray-items"></div>
+        <button type="button" class="cmp-btn" id="cmp-open">So sánh</button>
+        <button type="button" class="cmp-btn cmp-btn--ghost" id="cmp-clear" aria-label="Bỏ chọn tất cả">Bỏ</button>
+      </div>
+    </div>
+    <dialog class="cmp-dialog" id="cmp-dialog" aria-labelledby="cmp-dialog-title">
+      <div class="cmp-dialog__head">
+        <h2 id="cmp-dialog-title">So sánh giá / 100g</h2>
+        <button type="button" class="cmp-btn cmp-btn--ghost" id="cmp-close">Đóng</button>
+      </div>
+      <div id="cmp-table"></div>
+    </dialog>
+    ${jsonScript('price-refs-data', rows)}
+  </main>`;
+  return layout({
+    title: 'So sánh giá theo thương hiệu | Mộc Quả',
+    description: 'Bảng so sánh giá trái cây sấy, hạt theo thương hiệu, nhãn và khối lượng.',
+    page: 'compare',
+    body,
+    scripts: ['/static/js/compare.js'],
   });
 }
 

@@ -61,6 +61,23 @@ export function getDb() {
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS price_refs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      brand TEXT NOT NULL,
+      label TEXT NOT NULL DEFAULT '',
+      product TEXT NOT NULL,
+      fruit TEXT NOT NULL DEFAULT '',
+      weight_g INTEGER,
+      price INTEGER,
+      pack TEXT NOT NULL DEFAULT '',
+      code TEXT NOT NULL DEFAULT '',
+      source_url TEXT NOT NULL DEFAULT '',
+      checked_at TEXT NOT NULL DEFAULT '',
+      is_estimate INTEGER NOT NULL DEFAULT 0,
+      is_example INTEGER NOT NULL DEFAULT 0,
+      note TEXT NOT NULL DEFAULT '',
+      updated_at TEXT NOT NULL
+    );
   `);
   const existing = db.prepare(`SELECT value FROM settings WHERE key = 'shop'`).get();
   if (!existing) {

@@ -6,6 +6,7 @@ const panels = {
   orders: document.querySelector('#panel-orders'),
   prices: document.querySelector('#panel-prices'),
   promo: document.querySelector('#panel-promo'),
+  refs: document.querySelector('#panel-refs'),
 };
 
 function esc(s) {
@@ -144,7 +145,7 @@ async function enter() {
   loginPanel.hidden = true;
   dash.hidden = false;
   bankWarn.hidden = me.bankReady;
-  await Promise.all([loadOrders(), loadPrices(), loadPromo()]);
+  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs()]);
 }
 
 const restoreForm = document.querySelector('#restore-form');
@@ -273,6 +274,147 @@ panels.prices.addEventListener('click', async (event) => {
     }
   } catch (error) {
     alert(error.message);
+  }
+});
+
+// ---------- Tab So sánh giá ----------
+const REF_FIELDS = [
+  ['brand', 'Thương hiệu *', 'text'], ['label', 'Nhãn', 'text'], ['product', 'Sản phẩm *', 'text'], ['fruit', 'Loại (xoài, macca…)', 'text'],
+  ['weightG', 'Khối lượng (g)', 'number'], ['price', 'Giá (đ, để trống nếu chưa biết)', 'number'], ['pack', 'Bao bì', 'text'], ['code', 'Mã', 'text'],
+  ['sourceUrl', 'Link nguồn (https://…)', 'url'], ['checkedAt', 'Ngày kiểm', 'date'], ['note', 'Ghi chú', 'text'],
+];
+let refRows = [];
+
+function refForm(r = {}) {
+  const inputs = REF_FIELDS.map(([key, label, type]) => `<label class="field">${esc(label)} <input name="${key}" type="${type}" value="${esc(r[key] ?? '')}"${type === 'number' ? ' min="0" step="1" inputmode="numeric"' : ''}></label>`).join('');
+  return `<form id="ref-form" class="refs-form" data-id="${esc(r.id ?? '')}">
+    ${inputs}
+    <label class="check"><input type="checkbox" name="isEstimate"${r.isEstimate ? ' checked' : ''}> Ước lượng</label>
+    <label class="check"><input type="checkbox" name="isExample"${r.isExample ? ' checked' : ''}> Dữ liệu mẫu</label>
+    <button class="btn btn--small" type="submit">${r.id ? 'Lưu dòng #' + esc(r.id) : 'Thêm dòng'}</button>
+    ${r.id ? '<button class="btn btn--small btn--ghost" type="button" data-ref-cancel>Huỷ sửa</button>' : ''}
+    <p class="fine" id="ref-msg" role="status"></p>
+  </form>`;
+}
+
+async function loadRefs(editing = null) {
+  const data = await api('/api/admin/price-refs');
+  refRows = data.rows;
+  const list = refRows.map((r) => `<tr>
+    <td>${esc(r.brand)}<br><small>${esc(r.label)}</small></td>
+    <td>${esc(r.product)}${r.code ? `<br><code>${esc(r.code)}</code>` : ''}</td>
+    <td>${r.weightG ? esc(r.weightG) + 'g' : '—'}${r.isEstimate ? '<br><small>ước lượng</small>' : ''}${r.isExample ? '<br><small>dữ liệu mẫu</small>' : ''}</td>
+    <td>${esc(money(r.price))}</td>
+    <td>${/^https?:\/\//i.test(r.sourceUrl) ? `<a href="${esc(r.sourceUrl)}" target="_blank" rel="noopener nofollow noreferrer">Nguồn</a>` : '—'}<br><small>${esc(r.checkedAt)}</small></td>
+    <td><button class="btn btn--small btn--ghost" type="button" data-ref-edit="${esc(r.id)}">Sửa</button> <button class="btn btn--small btn--ghost" type="button" data-ref-del="${esc(r.id)}">Xoá</button></td>
+  </tr>`).join('');
+  panels.refs.innerHTML = `
+    <p class="fine">Bảng hiện ở trang <a href="/so-sanh" target="_blank" rel="noopener">/so-sanh</a>. Chỉ ghi số đã thấy trên trang thật, kèm link và ngày. Chưa biết giá thì để trống.</p>
+    <div class="refs-tools">
+      <a class="btn btn--small" href="/api/admin/price-refs.json">Xuất bảng (JSON)</a>
+      <a class="btn btn--small btn--ghost" href="/api/admin/price-refs.csv">Xuất bảng (CSV)</a>
+    </div>
+    <details>
+      <summary>Nhập bảng từ file JSON hoặc CSV</summary>
+      <form id="refs-import" class="fields">
+        <label class="field">File JSON hoặc CSV đã xuất <input type="file" name="file" accept=".json,.csv,application/json,text/csv" required></label>
+        <label class="check"><input type="radio" name="mode" value="merge" checked> Gộp: dòng cùng id thì cập nhật, còn lại thêm mới</label>
+        <label class="check"><input type="radio" name="mode" value="replace"> Thay toàn bộ bảng bằng file</label>
+        <label class="check" data-refs-confirm hidden><input type="checkbox" name="confirm"> Tôi hiểu: bảng hiện tại sẽ bị xoá và thay bằng file này.</label>
+        <button class="btn btn--small" type="submit">Nhập</button>
+        <p class="fine" id="refs-import-msg" role="status"></p>
+      </form>
+    </details>
+    <h3>${editing ? 'Sửa dòng' : 'Thêm dòng'}</h3>
+    ${refForm(editing || {})}
+    <p class="fine">${esc(refRows.length)} dòng.</p>
+    <div class="refs-wrap"><table class="refs-table">
+      <thead><tr><th>Thương hiệu / Nhãn</th><th>Sản phẩm</th><th>KL</th><th>Giá</th><th>Nguồn</th><th></th></tr></thead>
+      <tbody>${list}</tbody>
+    </table></div>`;
+}
+
+panels.refs.addEventListener('change', (event) => {
+  if (event.target.name !== 'mode' || !event.target.closest('#refs-import')) return;
+  const row = panels.refs.querySelector('[data-refs-confirm]');
+  row.hidden = event.target.value !== 'replace';
+  if (row.hidden) row.querySelector('input').checked = false;
+});
+
+panels.refs.addEventListener('click', async (event) => {
+  const edit = event.target.closest('[data-ref-edit]');
+  const del = event.target.closest('[data-ref-del]');
+  const cancel = event.target.closest('[data-ref-cancel]');
+  try {
+    if (edit) {
+      const row = refRows.find((r) => String(r.id) === edit.dataset.refEdit);
+      await loadRefs(row);
+      panels.refs.querySelector('#ref-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (cancel) await loadRefs();
+    if (del) {
+      const row = refRows.find((r) => String(r.id) === del.dataset.refDel);
+      if (!row || !confirm(`Xoá dòng "${row.brand} · ${row.product} ${row.weightG ?? ''}g"?`)) return;
+      await api('/api/admin/price-refs/' + encodeURIComponent(row.id), { method: 'DELETE' });
+      await loadRefs();
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+panels.refs.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  if (form.id === 'ref-form') {
+    const msg = form.querySelector('#ref-msg');
+    const data = Object.fromEntries(REF_FIELDS.map(([key]) => [key, form.elements[key].value.trim()]));
+    data.weightG = data.weightG === '' ? null : Number(data.weightG);
+    data.price = data.price === '' ? null : Number(data.price);
+    data.isEstimate = form.elements.isEstimate.checked;
+    data.isExample = form.elements.isExample.checked;
+    const id = form.dataset.id;
+    try {
+      await api('/api/admin/price-refs' + (id ? '/' + encodeURIComponent(id) : ''), {
+        method: id ? 'PUT' : 'POST',
+        body: JSON.stringify(data),
+      });
+      await loadRefs();
+      panels.refs.querySelector('#ref-msg').textContent = id ? 'Đã lưu.' : 'Đã thêm.';
+    } catch (error) {
+      msg.textContent = error.message;
+    }
+    return;
+  }
+  if (form.id === 'refs-import') {
+    const msg = form.querySelector('#refs-import-msg');
+    const file = form.file.files[0];
+    if (!file) return;
+    const mode = new FormData(form).get('mode');
+    if (mode === 'replace' && !form.confirm.checked) {
+      msg.textContent = 'Tick xác nhận trước khi thay toàn bộ bảng.';
+      return;
+    }
+    const raw = await file.text();
+    let body;
+    if (/\.csv$/i.test(file.name) || file.type === 'text/csv') body = { csv: raw };
+    else {
+      try {
+        body = JSON.parse(raw);
+      } catch {
+        msg.textContent = 'File không đọc được. Dùng file Xuất bảng (JSON hoặc CSV).';
+        return;
+      }
+    }
+    const params = new URLSearchParams({ mode });
+    if (mode === 'replace') params.set('confirm', 'THAY-HET');
+    try {
+      const result = await api('/api/admin/price-refs/import?' + params.toString(), { method: 'POST', body: JSON.stringify(body) });
+      await loadRefs();
+      panels.refs.querySelector('#refs-import-msg').textContent = `Đã thêm ${result.added} dòng, cập nhật ${result.updated} dòng.`;
+    } catch (error) {
+      msg.textContent = error.message;
+    }
   }
 });
 

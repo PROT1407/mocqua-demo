@@ -11,8 +11,9 @@ import { applyBackup, getOrder, getSettings, isStatus, listAllOrders, listOrders
 import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.js';
 import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
+import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
-import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage } from './pages.js';
+import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage } from './pages.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
 
@@ -88,7 +89,7 @@ export function createApp() {
   const parseJson = express.json({ limit: '200kb' });
   const parseBackupBody = express.json({ limit: '8mb' });
   app.use((req, res, next) => {
-    if (req.method === 'POST' && req.path === '/api/admin/backup') return next();
+    if (req.method === 'POST' && (req.path === '/api/admin/backup' || req.path === '/api/admin/price-refs/import')) return next();
     return parseJson(req, res, next);
   });
   app.use(securityHeaders);
@@ -203,6 +204,50 @@ export function createApp() {
     const result = applyBackup(data, { mode, restoreShop });
     res.json({ ok: true, mode, ...result });
   }));
+
+  // Bảng so sánh giá: Thương hiệu → Nhãn → Khối lượng
+  const refId = (req) => intField(req.params.id, { min: 1, max: 1e9, label: 'Mã dòng' });
+  app.get('/api/price-refs', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.json({ rows: listPriceRefs() });
+  });
+  app.get('/api/admin/price-refs', requireAdmin, (req, res) => {
+    res.json({ rows: listPriceRefs() });
+  });
+  app.get('/api/admin/price-refs.json', requireAdmin, (req, res) => {
+    const body = JSON.stringify({ kind: 'mocqua-price-refs', version: 1, exportedAt: new Date().toISOString(), rows: listPriceRefs() }, null, 2);
+    sendBackup(res, body, `mocqua-so-sanh-gia-${backupStamp()}.json`, 'application/json; charset=utf-8');
+  });
+  app.get('/api/admin/price-refs.csv', requireAdmin, (req, res) => {
+    sendBackup(res, priceRefsToCsv(listPriceRefs()), `mocqua-so-sanh-gia-${backupStamp()}.csv`, 'text/csv; charset=utf-8');
+  });
+  app.post('/api/admin/price-refs/import', requireAdmin, parseBackupBody, wrap((req, res) => {
+    const mode = String(req.query.mode || '');
+    if (mode !== 'merge' && mode !== 'replace') throw problem(400, 'Chọn gộp vào bảng, hoặc thay toàn bộ bảng.');
+    if (mode === 'replace' && req.query.confirm !== 'THAY-HET') {
+      throw problem(400, 'Muốn thay toàn bộ bảng thì cần tick ô xác nhận.');
+    }
+    const body = req.body || {};
+    const rows = typeof body.csv === 'string' ? parseCsv(body.csv) : (Array.isArray(body) ? body : body.rows);
+    const result = importPriceRefs(rows, mode);
+    res.json({ ok: true, mode, ...result });
+  }));
+  app.post('/api/admin/price-refs', requireAdmin, wrap((req, res) => {
+    res.status(201).json({ row: createPriceRef(req.body) });
+  }));
+  app.put('/api/admin/price-refs/:id', requireAdmin, wrap((req, res) => {
+    res.json({ row: updatePriceRef(refId(req), req.body) });
+  }));
+  app.patch('/api/admin/price-refs/:id', requireAdmin, wrap((req, res) => {
+    res.json({ row: updatePriceRef(refId(req), req.body) });
+  }));
+  app.delete('/api/admin/price-refs/:id', requireAdmin, wrap((req, res) => {
+    deletePriceRef(refId(req));
+    res.json({ ok: true });
+  }));
+  app.get(['/so-sanh', '/so-sanh.html'], (req, res) => {
+    html(res, 200, comparePage(listPriceRefs()));
+  });
 
   app.patch('/api/admin/orders/:code', requireAdmin, wrap((req, res) => {
     const code = String(req.params.code || '').toUpperCase();
