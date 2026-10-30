@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated": "2026-10-30",
+ "updated": "2026-10-31",
  "brands": [
   {
    "id": "moc-qua",
@@ -102,14 +102,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 279.000đ · Combo 3: 399.000đ.",
    "variants": [
     {
      "code": "MQZ-HMC-500",
      "weightG": 500,
      "weightLabel": "500g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -148,14 +151,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 409.000đ · Combo 3: 589.000đ.",
    "variants": [
     {
      "code": "MQZ-HDI-500",
      "weightG": 500,
      "weightLabel": "500g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 219000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -202,14 +208,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 225.000đ · Combo 3: 319.000đ.",
    "variants": [
     {
      "code": "MQZ-THDT-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 119000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -232,14 +241,17 @@
     }
    ],
    "verify": true,
-   "note": "Chưa rõ có gộp vào MQZ-THDT-100 hay là sản phẩm riêng. Chờ anh Huy xác nhận.",
+   "note": "Chưa rõ có gộp vào MQZ-THDT-100 hay là sản phẩm riêng. Chờ anh Huy xác nhận. Giá tạm tính. Combo 2: 239.000đ · Combo 3: 345.000đ.",
    "variants": [
     {
      "code": "MQZ-DDY",
      "weightG": null,
      "weightLabel": "Chưa rõ",
      "verify": true,
-     "note": ""
+     "note": "",
+     "price": 129000,
+     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -262,14 +274,17 @@
     }
    ],
    "verify": true,
-   "note": "Khối lượng chưa rõ.",
+   "note": "Khối lượng chưa rõ. Giá tạm tính. Combo 2: 355.000đ · Combo 3: 509.000đ.",
    "variants": [
     {
      "code": "MQZ-THXO",
      "weightG": null,
      "weightLabel": "Chưa rõ",
      "verify": true,
-     "note": ""
+     "note": "",
+     "price": 189000,
+     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -300,14 +315,17 @@
     }
    ],
    "verify": true,
-   "note": "Nhìn giống mít hoặc dừa sấy thăng hoa. Chưa rõ loại và khối lượng.",
+   "note": "Nhìn giống mít hoặc dừa sấy thăng hoa. Chưa rõ loại và khối lượng. Giá tạm tính. Combo 2: 225.000đ · Combo 3: 319.000đ.",
    "variants": [
     {
      "code": "MQZ-XXX",
      "weightG": null,
      "weightLabel": "Chưa rõ",
      "verify": true,
-     "note": ""
+     "note": "",
+     "price": 119000,
+     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -338,14 +356,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
    "variants": [
     {
      "code": "MQZ-DXO-500",
      "weightG": 500,
      "weightLabel": "500g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 199000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -376,14 +397,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 299.000đ · Combo 3: 425.000đ.",
    "variants": [
     {
      "code": "MQZ-GMI-500",
      "weightG": 500,
      "weightLabel": "500g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 159000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -422,14 +446,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 185.000đ · Combo 3: 265.000đ.",
    "variants": [
     {
      "code": "MQZ-LN-250",
      "weightG": 250,
      "weightLabel": "~250g",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 99000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -452,14 +479,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 239.000đ · Combo 3: 345.000đ.",
    "variants": [
     {
      "code": "MQZ-LNOS-250",
      "weightG": 250,
      "weightLabel": "~250g",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 129000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -490,14 +520,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 429.000đ · Combo 3: 615.000đ.",
    "variants": [
     {
      "code": "MQZ-HDD-500",
      "weightG": 500,
      "weightLabel": "~500g",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 229000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -528,14 +561,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 485.000đ · Combo 3: 695.000đ.",
    "variants": [
     {
      "code": "MQZ-MIX-500",
      "weightG": 500,
      "weightLabel": "~500g",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 259000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -566,14 +602,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 165.000đ · Combo 3: 239.000đ.",
    "variants": [
     {
      "code": "MQZ-BDT-300",
      "weightG": 300,
      "weightLabel": "~300g",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 89000,
+     "priceSource": "Giá niêm yết Mộc Quả",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -604,14 +643,17 @@
     }
    ],
    "verify": true,
-   "note": "Chưa rõ bên trong hũ (có thể hạt sen hoặc chè). Khối lượng chưa rõ.",
+   "note": "Chưa rõ bên trong hũ (có thể hạt sen hoặc chè). Khối lượng chưa rõ. Giá tạm tính.",
    "variants": [
     {
      "code": "MQZ-SETH6",
      "weightG": null,
      "weightLabel": "6 hũ",
      "verify": true,
-     "note": ""
+     "note": "",
+     "price": 299000,
+     "priceSource": "Giá tạm tính Mộc Quả (giả định ~480g trong 6 hũ), chờ xác nhận",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
