@@ -12,8 +12,9 @@ import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.
 import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
+import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
-import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage } from './pages.js';
+import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage } from './pages.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
 
@@ -89,7 +90,7 @@ export function createApp() {
   const parseJson = express.json({ limit: '200kb' });
   const parseBackupBody = express.json({ limit: '8mb' });
   app.use((req, res, next) => {
-    if (req.method === 'POST' && (req.path === '/api/admin/backup' || req.path === '/api/admin/price-refs/import')) return next();
+    if (req.method === 'POST' && (req.path === '/api/admin/backup' || req.path === '/api/admin/price-refs/import' || req.path === '/api/admin/catalog-prices/import')) return next();
     return parseJson(req, res, next);
   });
   app.use(securityHeaders);
@@ -247,6 +248,26 @@ export function createApp() {
   }));
   app.get(['/so-sanh', '/so-sanh.html'], (req, res) => {
     html(res, 200, comparePage(listPriceRefs()));
+  });
+
+  // Danh mục tra cứu sản phẩm: Thương hiệu → Nhãn → Sản phẩm → Khối lượng
+  app.get('/api/danh-muc', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.json(catalogWithPrices());
+  });
+  app.get('/api/admin/catalog-prices.json', requireAdmin, (req, res) => {
+    const body = JSON.stringify({ kind: 'mocqua-catalog-prices', version: 1, exportedAt: new Date().toISOString(), rows: listCatalogPrices() }, null, 2);
+    sendBackup(res, body, `mocqua-gia-danh-muc-${backupStamp()}.json`, 'application/json; charset=utf-8');
+  });
+  app.post('/api/admin/catalog-prices/import', requireAdmin, parseBackupBody, wrap((req, res) => {
+    const body = req.body || {};
+    res.json({ ok: true, ...importCatalogPrices(Array.isArray(body) ? body : body.rows) });
+  }));
+  app.put('/api/admin/catalog-prices/:code', requireAdmin, wrap((req, res) => {
+    res.json({ row: setCatalogPrice(req.params.code, req.body) });
+  }));
+  app.get(['/danh-muc', '/danh-muc.html'], (req, res) => {
+    html(res, 200, catalogPage(catalogWithPrices()));
   });
 
   app.patch('/api/admin/orders/:code', requireAdmin, wrap((req, res) => {

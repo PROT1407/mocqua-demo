@@ -60,6 +60,10 @@ Nội dung chuyển khoản là mã đơn, ví dụ `MQ261024-K7MQ2X`.
 
 Liên hệ shop: hotline và Zalo `0931 330 248`, `0919 997 283`, email `huydaigia1407@gmail.com`, địa chỉ 376/15 Nguyễn Đình Chiểu, Quận 3, TP. Hồ Chí Minh. Facebook và TikTok ghi trong chân trang và trang Liên hệ. Số `0909000000` chỉ dùng cho đơn mẫu `MQ-DEMO-2026` trên trang tra cứu tĩnh, không phải số shop.
 
+## Danh mục tra cứu
+
+Trang `/danh-muc`: tra cứu Thương hiệu → Nhãn → Sản phẩm → Khối lượng, có so sánh giá/100g. Chi tiết, quy tắc mã và danh sách ảnh: `research/danh-muc.md`.
+
 ## Dữ liệu sản phẩm
 
 - Nguồn: `js/data.js`, sinh từ `research/` (`gen_data.py`, `pricing.py`, …).

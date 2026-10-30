@@ -61,6 +61,13 @@ export function getDb() {
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS catalog_prices (
+      code TEXT PRIMARY KEY,
+      price INTEGER,
+      source TEXT NOT NULL DEFAULT '',
+      checked_at TEXT NOT NULL DEFAULT '',
+      updated_at TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS price_refs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       brand TEXT NOT NULL,

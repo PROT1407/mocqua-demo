@@ -7,6 +7,7 @@ const panels = {
   prices: document.querySelector('#panel-prices'),
   promo: document.querySelector('#panel-promo'),
   refs: document.querySelector('#panel-refs'),
+  catalog: document.querySelector('#panel-catalog'),
 };
 
 function esc(s) {
@@ -145,7 +146,7 @@ async function enter() {
   loginPanel.hidden = true;
   dash.hidden = false;
   bankWarn.hidden = me.bankReady;
-  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs()]);
+  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog()]);
 }
 
 const restoreForm = document.querySelector('#restore-form');
@@ -419,3 +420,66 @@ panels.refs.addEventListener('submit', async (event) => {
 });
 
 api('/api/admin/me').then(enter).catch(() => {});
+
+// Danh mục tra cứu: giá bán lẻ, nguồn giá, ngày kiểm theo từng mã khối lượng.
+async function loadCatalog() {
+  const data = await api('/api/danh-muc');
+  const rows = data.products.flatMap((p) => p.variants.map((v) => ({ p, v })));
+  const brandName = new Map(data.brands.map((b) => [b.id, b.name]));
+  const today = new Date().toISOString().slice(0, 10);
+  panels.catalog.innerHTML = `<p class="fine">Giá hiện ở trang <a href="/danh-muc" target="_blank" rel="noopener">/danh-muc</a> (xem So sánh). Nhập giá bán lẻ thường, không nhập giá khuyến mãi trên tem. Nguồn có thể là link hoặc ghi chú ngắn. Để trống cả 3 ô rồi Lưu là xoá giá.</p>
+    <div class="backup-actions">
+      <a class="btn btn--small" href="/api/admin/catalog-prices.json">Xuất giá danh mục (JSON)</a>
+      <label class="btn btn--small btn--ghost">Nhập lại file giá <input type="file" id="cat-import" accept="application/json,.json" hidden></label>
+    </div>
+    <p class="fine" id="cat-msg" role="status"></p>
+    <label class="field">Tìm <input id="cat-q" placeholder="Tên, nhãn hoặc mã"></label>
+    <div class="refs-wrap"><table class="refs-table">
+      <thead><tr><th>Mã</th><th>Sản phẩm</th><th>KL</th><th>Giá bán lẻ (đ)</th><th>Nguồn giá</th><th>Ngày kiểm</th><th></th></tr></thead>
+      <tbody>${rows.map(({ p, v }) => `<tr data-code="${esc(v.code)}" data-hay="${esc((v.code + ' ' + p.name + ' ' + p.label + ' ' + brandName.get(p.brand)).toLowerCase())}">
+        <td><code>${esc(v.code)}</code></td>
+        <td><small>${esc(brandName.get(p.brand))} · ${esc(p.label)}</small><br>${esc(p.name)}</td>
+        <td>${esc(v.weightLabel)}</td>
+        <td><input name="price" inputmode="numeric" value="${v.price ?? ''}" size="9" aria-label="Giá ${esc(v.code)}"></td>
+        <td><input name="source" value="${esc(v.priceSource)}" placeholder="https://…" aria-label="Nguồn giá ${esc(v.code)}"></td>
+        <td><input name="checkedAt" type="date" value="${esc(v.priceCheckedAt)}" aria-label="Ngày kiểm ${esc(v.code)}"></td>
+        <td><button class="btn btn--small" type="button" data-save-cat>Lưu</button> <span class="fine" data-cat-ok hidden>Đã lưu</span></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  panels.catalog.querySelector('#cat-q').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    panels.catalog.querySelectorAll('tbody tr').forEach((tr) => { tr.hidden = q && !tr.dataset.hay.includes(q); });
+  });
+  panels.catalog.querySelector('#cat-import').addEventListener('change', async (e) => {
+    const msg = panels.catalog.querySelector('#cat-msg');
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const body = JSON.parse(await file.text());
+      const r = await api('/api/admin/catalog-prices/import', { method: 'POST', body: JSON.stringify(body) });
+      msg.textContent = `Đã nhập ${r.saved} mã, bỏ qua ${r.skipped} mã không còn trong danh mục.`;
+      await loadCatalog();
+    } catch (error) {
+      msg.textContent = error.message;
+    }
+  });
+  panels.catalog.onclick = async (e) => {
+    const btn = e.target.closest('[data-save-cat]');
+    if (!btn) return;
+    const tr = btn.closest('tr');
+    const get = (n) => tr.querySelector(`[name="${n}"]`);
+    if (get('price').value && !get('checkedAt').value) get('checkedAt').value = today;
+    btn.disabled = true;
+    try {
+      await api('/api/admin/catalog-prices/' + encodeURIComponent(tr.dataset.code), {
+        method: 'PUT',
+        body: JSON.stringify({ price: get('price').value, source: get('source').value, checkedAt: get('checkedAt').value }),
+      });
+      tr.querySelector('[data-cat-ok]').hidden = false;
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+}
