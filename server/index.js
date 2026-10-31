@@ -13,6 +13,7 @@ import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
 import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
+import { catalogBuyMap } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage } from './pages.js';
 
@@ -267,7 +268,8 @@ export function createApp() {
     res.json({ row: setCatalogPrice(req.params.code, req.body) });
   }));
   app.get(['/danh-muc', '/danh-muc.html'], (req, res) => {
-    html(res, 200, catalogPage(catalogWithPrices()));
+    const data = catalogWithPrices();
+    html(res, 200, catalogPage({ ...data, buy: catalogBuyMap(data) }));
   });
 
   app.patch('/api/admin/orders/:code', requireAdmin, wrap((req, res) => {
