@@ -676,7 +676,7 @@
     }
    ],
    "verify": false,
-   "note": "Cùng túi với thẻ cóc muối ớt GoodGood 80g trong cửa hàng. Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Cùng túi với thẻ cóc muối ớt GoodGood 80g trong cửa hàng. Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
      "code": "VZ-GF-COC-100",
@@ -684,8 +684,8 @@
      "weightLabel": "80g (bao không in KL, ghi mặc định 80g)",
      "verify": false,
      "note": "Mã giữ đuôi -100 cho ổn định; túi nhỏ vuông Good Good 80g.",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 45000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -717,7 +717,7 @@
     }
    ],
    "verify": false,
-   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 75.000đ · Combo 3: 105.000đ | 200g: Combo 2: 129.000đ · Combo 3: 185.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 75.000đ (VZ-GG-CB2XC-200).",
+   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 200g: Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 95.000đ (VZ-GG-CB2XC-200).",
    "variants": [
     {
      "code": "VZ-GG-XDMO-100",
@@ -725,8 +725,8 @@
      "weightLabel": "100g (in trên bao: KL:100G)",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 49000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     },
     {
@@ -735,8 +735,8 @@
      "weightLabel": "200g",
      "verify": false,
      "note": "Túi cam in 200g.",
-     "price": 69000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXM-200-GG)",
+     "price": 89000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -760,7 +760,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 129.000đ · Combo 3: 185.000đ.",
+   "note": "Combo 2: 169.000đ · Combo 3: 239.000đ.",
    "variants": [
     {
      "code": "VZ-GG-XD-200",
@@ -768,8 +768,8 @@
      "weightLabel": "200g",
      "verify": false,
      "note": "",
-     "price": 69000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXO-200-GG)",
+     "price": 89000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -870,7 +870,7 @@
    "pack": "",
    "images": [],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
      "code": "VZ-GG-ME-100",
@@ -878,8 +878,8 @@
      "weightLabel": "100g",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá tạm tính Mộc Quả – ít dữ liệu, theo giá me GG 80g 30k của shop",
+     "price": 45000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -919,7 +919,7 @@
     }
    ],
    "verify": false,
-   "note": "Có 2 mẫu túi nhãn Good Good (túi xanh vàng và túi trắng vàng), 80g. Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Có 2 mẫu túi nhãn Good Good (túi xanh vàng và túi trắng vàng), 80g. Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
      "code": "VZ-GG-THOM-80",
@@ -927,8 +927,8 @@
      "weightLabel": "80g (in trên bao)",
      "verify": false,
      "note": "Anh Huy xác nhận 80g.",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 45000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -960,7 +960,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 75.000đ (VZ-GG-CB2XC-200).",
+   "note": "Combo 2: 95.000đ · Combo 3: 129.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 95.000đ (VZ-GG-CB2XC-200).",
    "variants": [
     {
      "code": "VZ-GG-COC-100",
@@ -968,8 +968,8 @@
      "weightLabel": "100g (in trên bao: KL:100G)",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 49000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -993,7 +993,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
      "code": "VZ-GG-TL-100",
@@ -1001,8 +1001,8 @@
      "weightLabel": "80g (bao không in KL, ghi mặc định 80g)",
      "verify": false,
      "note": "Mã giữ đuôi -100 cho ổn định; túi nhỏ vuông Good Good 80g.",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 45000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1026,7 +1026,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
      "code": "VZ-GG-MC-100",
@@ -1034,8 +1034,8 @@
      "weightLabel": "80g (bao không in KL, ghi mặc định 80g)",
      "verify": false,
      "note": "Mã giữ đuôi -100 cho ổn định; túi nhỏ vuông Good Good 80g.",
-     "price": 39000,
-     "priceSource": "Giá cân đối Mộc Quả (MQ-DMC-080 hạ 55k→39k) – thị trường ~48.000đ/100g",
+     "price": 45000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1100,8 +1100,8 @@
      "weightLabel": "2 × 100g",
      "verify": false,
      "note": "",
-     "price": 75000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 95000,
+     "priceSource": "Combo = tổng giá lẻ −6% (giá thị trường 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1613,7 +1613,7 @@
     }
    ],
    "verify": false,
-   "note": "100g: Combo 2: 75.000đ · Combo 3: 105.000đ | 250g: Combo 2: 159.000đ · Combo 3: 225.000đ | 500g: Combo 2: 279.000đ · Combo 3: 399.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 115.000đ (VZ-FH-CB-350).",
+   "note": "100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 250g: Combo 2: 159.000đ · Combo 3: 225.000đ | 500g: Combo 2: 279.000đ · Combo 3: 399.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 125.000đ (VZ-FH-CB-350).",
    "variants": [
     {
      "code": "VZ-FH-XD-100",
@@ -1621,8 +1621,8 @@
      "weightLabel": "100g",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 49000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     },
     {
@@ -1666,7 +1666,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Combo 2: 95.000đ · Combo 3: 129.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XDH-100",
@@ -1674,8 +1674,8 @@
      "weightLabel": "100g",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 49000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1699,7 +1699,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Combo 2: 95.000đ · Combo 3: 129.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XDV-100",
@@ -1707,8 +1707,8 @@
      "weightLabel": "100g",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
+     "price": 49000,
+     "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1740,8 +1740,8 @@
      "weightLabel": "100g + 250g = 350g",
      "verify": false,
      "note": "",
-     "price": 115000,
-     "priceSource": "Combo = tổng giá lẻ 124.000đ (F&H 100g + 250g) −6%",
+     "price": 125000,
+     "priceSource": "Combo = tổng giá lẻ 134.000đ (F&H 100g + 250g) −6%",
      "priceCheckedAt": "2026-10-31"
     }
    ]

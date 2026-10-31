@@ -121,3 +121,45 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 **VZ-VZ-CB2DM-200** (và mã cùng loại):
 - NuNuts combo 4 hũ 250g (lớn hơn, tham khảo): 355.000đ – https://vinmart.co/combo-4-hu-hanh-nhan-tu-nhien-macca-con-vo-hat-dieu-con-vo-lua-hat-de-cuoi-nunuts-loai-250g-t74498619.html
 - Anfarm dẻ cười 100g 90k + điều 100g 50k: 140.000đ – https://anfarm.com.vn/hat-dinh-duong/
+
+## Đợt giá 31/10/2026 khuya — túi nhỏ Good Good / Viza theo giá thị trường (đã áp dụng)
+
+Chủ shop duyệt: "bám theo giá thị trường". Cùng khối lượng + cùng dòng = cùng giá, không phân biệt mẫu túi. Túi 80g = 45k; túi 100g = 49k; túi 200g (Good Good, F&H) = 89k. Combo 2 ≈ −6%, combo 3 ≈ −11%, làm tròn đuôi 5k/9k. Combo 6 túi 100g = 6 × 49k −11% ≈ 259k. Cheers+ 200g giữ 75k (dòng xoài chín cây, KL thực 250–300g, không cùng dòng).
+
+| Mã | Sản phẩm | KL | Trước | Sau | Combo 2 / 3 | Nơi |
+|---|---|---|---|---|---|---|
+| `MQ-DTH-080-GG` | Thơm (dứa) sấy dẻo | 80g | 39k | **45k** | 85k / 119k | cửa hàng |
+| `MQ-DCM-080-GG` | Cóc sấy dẻo muối ớt GoodGood | 80g · túi xanh | 39k | **45k** | 85k / 119k | cửa hàng |
+| `MQ-DMC-080` | Mãng cầu sấy dẻo | 80g | 39k | **45k** | 85k / 119k | cửa hàng |
+| `MQ-DME-080-GG` | Me sấy dẻo muối ớt GoodGood | 80g | 39k | **45k** | 85k / 119k | cửa hàng |
+| `MQ-DTL-080-GG` | Thanh long sấy dẻo | 80g | 39k | **45k** | 85k / 119k | cửa hàng |
+| `MQ-DDU-080-GG` | Đu đủ sấy dẻo GoodGood | 80g | 39k | **45k** | 85k / 119k | cửa hàng |
+| `MQ-DXO-100-FHX` | Xoài sấy dẻo Fresh & Healthy | 100g | 39k | **49k** | 95k / 129k | cửa hàng |
+| `MQ-DXO-100-FHG` | Xoài sấy dẻo Fresh & Healthy | 100g | 39k | **49k** | 95k / 129k | cửa hàng |
+| `MQ-DXM-100-FHR` | Xoài sấy dẻo muối ớt Fresh & Healthy | 100g | 39k | **49k** | 95k / 129k | cửa hàng |
+| `MQ-DXO-100-GG` | Xoài sấy dẻo GoodGood | 100g | 39k | **49k** | 95k / 129k | cửa hàng |
+| `VZ-GG-COC-100` | Good Good – Cóc sấy dẻo muối ớt | 100g (in trên bao: KL:100G) | 39k | **49k** | 95k / 129k | cửa hàng, danh mục |
+| `VZ-GG-XDMO-100` | Good Good – Xoài sấy dẻo muối ớt | 100g (in trên bao: KL:100G) | 39k | **49k** | 95k / 129k | cửa hàng, danh mục |
+| `MQ-DXO-200-FHX` | Xoài sấy dẻo Fresh & Healthy | 200g | 69k | **89k** | 169k / 239k | cửa hàng |
+| `MQ-DXO-200-FHG` | Xoài sấy dẻo Fresh & Healthy | 200g | 69k | **89k** | 169k / 239k | cửa hàng |
+| `MQ-DXO-200-FHT` | Xoài sấy dẻo Fresh & Healthy | 200g | 69k | **89k** | 169k / 239k | cửa hàng |
+| `MQ-DXM-200-FHR` | Xoài sấy dẻo muối ớt Fresh & Healthy | 200g | 69k | **89k** | 169k / 239k | cửa hàng |
+| `MQ-DXO-200-GG` | Xoài sấy dẻo GoodGood | 200g | 69k | **89k** | 169k / 239k | cửa hàng |
+| `MQ-DXM-200-GG` | Xoài sấy dẻo muối ớt GoodGood | 200g | 69k | **89k** | 169k / 239k | cửa hàng |
+| `VZ-GG-CB2XC-200` | Good Good – Combo xoài muối ớt + cóc muối ớt | 2 × 100g | 75k | **95k** | — | cửa hàng, danh mục |
+| `MQ-CBX-100-GG` | Combo 6 túi xoài sấy dẻo 100g | Combo 6 túi 100g | 209k | **259k** | — | cửa hàng |
+| `MQ-CBX-100-FH` | Combo 6 túi xoài sấy dẻo 100g | Combo 6 túi 100g | 209k | **259k** | — | cửa hàng |
+| `MQ-CBX-100-MIX` | Combo 6 túi xoài sấy dẻo 100g | Combo 6 túi 100g | 209k | **259k** | — | cửa hàng |
+| `VZ-GF-COC-100` | Good Good – Cóc sấy dẻo muối ớt | 80g (bao không in KL, ghi mặc định 80g) | 39k | **45k** | 85k / 119k | danh mục |
+| `VZ-GG-XDMO-200` | Good Good – Xoài sấy dẻo muối ớt | 200g | 69k | **89k** | 169k / 239k | danh mục |
+| `VZ-GG-XD-200` | Good Good – Xoài sấy dẻo (túi trắng) | 200g | 69k | **89k** | 169k / 239k | danh mục |
+| `VZ-GG-ME-100` | Good Good – Me sấy dẻo muối ớt | 100g (danh mục ghi 100g; nối với túi 80g MQ-DME-080-GG nên theo giá 80g) | 39k | **45k** | 85k / 119k | danh mục |
+| `VZ-GG-THOM-80` | Good Good – Thơm sấy dẻo | 80g (in trên bao) | 39k | **45k** | 85k / 119k | danh mục |
+| `VZ-GG-TL-100` | Good Good – Thanh long sấy dẻo | 80g (bao không in KL, ghi mặc định 80g) | 39k | **45k** | 85k / 119k | danh mục |
+| `VZ-GG-MC-100` | Good Good – Mãng cầu sấy dẻo | 80g (bao không in KL, ghi mặc định 80g) | 39k | **45k** | 85k / 119k | danh mục |
+| `VZ-FH-XD-100` | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 100g | 39k | **49k** | 95k / 129k | danh mục |
+| `VZ-FH-XDH-100` | Fresh & Healthy – Xoài sấy dẻo (túi hồng cam) | 100g | 39k | **49k** | 95k / 129k | danh mục |
+| `VZ-FH-XDV-100` | Fresh & Healthy – Xoài sấy dẻo (túi vàng) | 100g | 39k | **49k** | 95k / 129k | danh mục |
+| `VZ-FH-CB-350` | Fresh & Healthy – Combo xoài sấy dẻo Fresh & Healthy 100g + 250g | 100g + 250g = 350g | 115k | **125k** | — | cửa hàng, danh mục |
+
+Chưa đổi, cần chủ shop xem: F&H xoài 250g (`VZ-FH-XD-250`) còn 85k, thấp hơn túi 200g 89k; Cheers+ 200g 75k nay thấp hơn Good Good 200g 89k; `MQ-DXM-300-GG` 300g 99k; `MQ-DXM-S-GG` gói nhỏ 50–100g 29k; Yummy hũ 150g / Viza hộp giấy 150g 55k; các hộp quà (An Nhiên, Sum Vầy, Phú Quý, Thịnh Vượng) giữ giá.
