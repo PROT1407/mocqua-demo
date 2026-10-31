@@ -1,6 +1,7 @@
 import { esc, vnd } from './format.js';
 import { brandOrder } from './catalog.js';
-import { STATUSES } from './db.js';
+import { STATUSES, getSettings } from './db.js';
+import { bannerText, ORDER_TIERS, isComboProduct } from './promo.js';
 import { shopContact } from './contact.js';
 import { bankConfig } from './vietqr.js';
 
@@ -42,8 +43,19 @@ ${tags}
 </html>`;
 }
 
+function promoBar(page) {
+  if (page === 'admin') return '';
+  let text;
+  try {
+    text = bannerText(getSettings());
+  } catch {
+    text = 'Miễn phí giao từ 300k · Giảm 5% đơn từ 500k · Giảm 8% đơn từ 1 triệu';
+  }
+  return `<div class="promobar" role="note"><div class="wrap"><b>${esc(text)}</b> <small>Combo đã có giá riêng, không giảm thêm.</small></div></div>`;
+}
+
 function header(page) {
-  return `<header class="top">
+  return `${promoBar(page)}<header class="top">
   <div class="wrap top__in">
     <a class="logo" href="/">Mộc Quả <small>trái cây sấy</small></a>
     <nav class="top__nav" aria-label="Điều hướng">
@@ -167,10 +179,10 @@ export function productCard(product) {
   </article>`;
 }
 
-function giftCopy(catalog) {
+function tierCopy(catalog) {
   const s = catalog.settings;
-  const retail = catalog.giftRetail ? ` Gói đó bán lẻ ${vnd(catalog.giftRetail)}.` : '';
-  return `Đơn từ ${vnd(s.giftMin)}, hoặc mua ${s.giftPair} túi xoài từ ${s.giftMinG}g, được tặng gói nhỏ xoài muối ớt. Hai cách không cộng dồn, lấy mức nhiều hơn, tối đa ${s.giftMax} gói.${retail}`;
+  const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
+  return `Tiền hàng từ ${vnd(s.freeShip)} được miễn phí giao. ${tiers.map((t) => `Từ ${vnd(t.min)} giảm ${t.pct}%`).join(', ')} — tự trừ trong giỏ. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn.`;
 }
 
 export function homePage(catalog) {
@@ -230,9 +242,9 @@ export function homePage(catalog) {
   </section>
   <section class="wrap giftband">
     <div>
-      <p class="kicker">Quà kèm</p>
-      <h2>Gói nhỏ xoài muối ớt, tính 0đ</h2>
-      <p>${esc(giftCopy(catalog))}</p>
+      <p class="kicker">Ưu đãi theo đơn</p>
+      <h2>Đơn càng lớn, giá càng mềm</h2>
+      <p>${esc(tierCopy(catalog))}</p>
     </div>
   </section>
   <section class="wrap shelfsec" id="tren-ke">
@@ -407,9 +419,9 @@ export function productPage(product, catalog) {
     product.own ? 'Đóng túi Mộc Quả, nhìn rõ quả qua cửa sổ' : 'Nguyên bao bì nhà sản xuất, không san chiết',
     'Đổi trong 7 ngày nếu ẩm, mốc hoặc giao sai',
     `Giao toàn quốc · miễn phí từ ${vnd(catalog.settings.freeShip)}`,
-    product.fruit === 'xoai'
-      ? `Túi từ ${catalog.settings.giftMinG}g: mua ${catalog.settings.giftPair} túi tặng gói nhỏ xoài muối ớt`
-      : giftCopy(catalog),
+    isComboProduct(product)
+      ? 'Combo đã có giá riêng, không giảm thêm — vẫn được tính vào mức giảm của đơn'
+      : 'Đơn từ 500.000đ giảm 5%, từ 1.000.000đ giảm 8% (tự trừ trong giỏ)',
   ];
   const sections = [
     product.intro ? `<section><h2>Người bán nói</h2><p>${esc(product.intro)}</p></section>` : '',
@@ -635,7 +647,9 @@ export function orderPage(order, qr) {
       <h2>Trong đơn</h2>
       <ul class="lines">${lines}${gifts}</ul>
       <p class="sumrow"><span>Tiền hàng</span><b>${vnd(order.summary.subtotal)}</b></p>
+      ${order.summary.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${order.summary.discountPct ? order.summary.discountPct + '% ' : ''}theo đơn<small> (không áp cho combo)</small></span><b>−${vnd(order.summary.discount)}</b></p>` : ''}
       <p class="sumrow"><span>Giao hàng</span><b>${order.summary.ship ? vnd(order.summary.ship) : 'Miễn phí'}</b></p>
+      <p class="sumrow sumrow--total"><span>Tổng</span><b>${vnd(order.summary.total)}</b></p>
     </section>
     <section>
       <h2>Giao tới</h2>
@@ -705,7 +719,7 @@ export function adminPage() {
             <label class="check"><input type="radio" name="mode" value="merge" checked> Thêm đơn còn thiếu</label>
             <label class="check"><input type="radio" name="mode" value="replace"> Thay toàn bộ đơn bằng file</label>
             <label class="check" id="replace-confirm" hidden><input type="checkbox" name="confirm"> Tôi hiểu: đơn hiện tại sẽ bị xoá và thay bằng file này.</label>
-            <label class="check"><input type="checkbox" name="restoreShop"> Khôi phục luôn giá đã sửa và mức quà trong file</label>
+            <label class="check"><input type="checkbox" name="restoreShop"> Khôi phục luôn giá đã sửa và cài đặt giao hàng trong file</label>
             <button class="btn btn--small" type="submit">Nhập bản sao</button>
             <p class="fine" id="restore-msg" role="status"></p>
           </form>
@@ -714,7 +728,7 @@ export function adminPage() {
       <div class="tabs" role="tablist">
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
         <button type="button" data-tab="prices">Giá bán</button>
-        <button type="button" data-tab="promo">Quà tặng</button>
+        <button type="button" data-tab="promo">Giao hàng &amp; ưu đãi</button>
         <button type="button" data-tab="refs">So sánh giá</button>
         <button type="button" data-tab="catalog">Danh mục</button>
       </div>

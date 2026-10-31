@@ -9,11 +9,12 @@ function esc(s) {
 }
 
 function rows(data) {
-  const items = data.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small></span><b>${money(item.line)}</b></li>`).join('');
+  const items = data.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}${item.combo ? ' · combo' : ''}</small></span><b>${money(item.line)}</b></li>`).join('');
   const gifts = (data.gifts || []).map((item) => `<li class="giftline"><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small></span><b>0đ</b></li>`).join('');
   return `<ul class="lines">${items}${gifts}</ul>
     <p class="hint">${data.hint || ''}</p>
     <p class="sumrow"><span>Tiền hàng</span><b>${money(data.subtotal)}</b></p>
+    ${data.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(không áp cho combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
     <p class="sumrow"><span>Giao hàng</span><b>${data.ship ? money(data.ship) : 'Miễn phí'}</b></p>
     <p class="sumrow sumrow--due"><span>Cần trả</span><b>${money(data.total)}</b></p>`;
 }

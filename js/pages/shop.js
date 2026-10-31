@@ -82,7 +82,7 @@ function render(){
       if(p._g!==last)h+=`<h3 class="pgh">${gTitle(p,cntG[p._g])}</h3>`;last=p._g;lastP=pc}
     return h+(giftOn?giftCard(p):MQ.card(p))}).join('');
   const tb=$('[data-tet]');tb.hidden=!giftOn;
-  if(giftOn)tb.innerHTML=`<div class="tetbar__t"><small>Bộ sưu tập</small><b>Quà Tết 2027</b><span>Hộp mứt · khay nắp trong · giỏ quà Mộc Quả — mỗi set <em>tặng 1 túi 100g</em>, kèm túi xách &amp; thiệp.</span></div><div class="tetbar__r"><span>Đơn từ ${MQ.fmt(MQ.TIERS[1].min)} −${MQ.TIERS[1].pct}% · tặng túi quà &amp; thiệp</span><a href="hop-qua.html">Hộp quà tự chọn →</a></div>`;
+  if(giftOn)tb.innerHTML=`<div class="tetbar__t"><small>Bộ sưu tập</small><b>Quà Tết 2027</b><span>Hộp mứt · khay nắp trong · giỏ quà Mộc Quả — đơn từ 500k <em>giảm 5%</em>, từ 1 triệu <em>giảm 8%</em>.</span></div><div class="tetbar__r"><span>Đơn từ ${MQ.fmt(MQ.TIERS[1].min)} −${MQ.TIERS[1].pct}% · tặng túi quà &amp; thiệp</span><a href="hop-qua.html">Hộp quà tự chọn →</a></div>`;
   $('[data-empty]').hidden=a.length>0;
   $('[data-count]').innerHTML=`<b>${a.length}</b> sản phẩm · ${a.reduce((s,p)=>s+MQ.vars(p).filter(v=>!st.line.size||st.line.has(v.line)).length,0)} mã SP`;
   const mw=$('[data-more-wrap]');mw.style.display=pages>1?'':'none';

@@ -89,13 +89,11 @@ if(!soon){
  const n=()=>{const q=$('[data-qty]');return q?Math.max(1,Math.min(99,+q.value||1)):1};
  const upd=()=>{
    $('[data-pricebox]').innerHTML=v.p?`<small>Giá bán</small><b>${MQ.fmt(v.p)}</b>${v.g?`<span class="pinfo__unit">≈ ${MQ.fmt(Math.round(v.p/v.g*100/100)*100)} / 100g</span>`:''}`:`<small>Giá</small><b class="is-quote">Liên hệ báo giá</b>`;
-   const zipV=p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(v.w),T=MQ.TIERS;
+   const T=MQ.TIERS;
    $('[data-perks]').innerHTML=v.p?[
-     p.own&&(p.cat==='set'||p.giftbox)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Quà tặng kèm:</b> mỗi ${p.giftbox?'hộp quà':'set'} tặng 1 túi 100g — Xoài cát sấy dẻo, Dâu tây sấy dẻo hoặc Xí muội đỏ (chọn trong giỏ hàng).</span></li>`:'',
-     p.combo?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b><a href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label)}</a></b> — chọn nhãn vàng GoodGood, xanh Fresh &amp; Healthy hoặc trộn. Mua lẻ đủ 5 túi 100g, giỏ hàng cũng tự tính giá combo.</span></li>`:'',
-     p.bundle?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Khuyến mãi: ${MQ.esc(p.bundle.label)}</b> — giỏ hàng tự thêm quà 0đ (${MQ.esc((MQ.byId(p.bundle.gid)||p).name)} · ${MQ.esc((MQ.findVar(MQ.byId(p.bundle.gid)||p,p.bundle.gsku)||{}).w||'')}) cho mỗi ${p.bundle.buy} ${p.bundle.buy>1?'hộp/gói':'combo'}.</span></li>`:'',
-     zipV?`<li class="perk"><svg><use href="#i-cart"/></svg><span><b>Mua nhiều túi zip:</b> từ 3 túi Mộc Quả (cộng mọi vị) giảm 5%, từ 6 túi giảm 8%.</span></li>`:'',
-     `<li class="perk"><svg><use href="#i-truck"/></svg><span>Đơn từ ${MQ.fmt(T[2].min)} <b>−${T[2].pct}%</b> · từ ${MQ.fmt(T[1].min)} <b>−${T[1].pct}%</b> · từ ${MQ.fmt(T[0].min)} <b>−${T[0].pct}%</b> · miễn phí giao từ ${MQ.fmt(MQ.FREE_SHIP)} — tự áp dụng trong giỏ. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
+     MQ.isComboP(p)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Combo giá riêng</b> — không giảm thêm theo đơn, nhưng vẫn được tính vào mức giảm.</span></li>`:'',
+     p.combo?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b><a href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label)}</a></b> — chọn nhãn vàng GoodGood, xanh Fresh &amp; Healthy hoặc trộn.</span></li>`:'',
+     `<li class="perk"><svg><use href="#i-truck"/></svg><span>Đơn từ ${MQ.fmt(T[1].min)} <b>−${T[1].pct}%</b> · từ ${MQ.fmt(T[0].min)} <b>−${T[0].pct}%</b> · miễn phí giao từ ${MQ.fmt(MQ.FREE_SHIP)} — tự áp dụng trong giỏ, combo không giảm thêm. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
    ].join(''):'';
    $('[data-wlabel]').textContent=MQ.varLabel(p,v);
    if(p.packs){$('[data-vars]').innerHTML=varBtns();$('[data-packs]').innerHTML=packBtns();$('[data-pklabel]').textContent=p.packs[v.pk].name}else
