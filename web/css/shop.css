@@ -138,13 +138,20 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .tile small { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 22px; }
-.card { display: grid; align-content: start; gap: 8px; }
-.card__img { position: relative; display: block; }
-.card__img img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 18px; background: var(--paper); }
-.card__body { display: grid; gap: 4px; }
-.card__brand, .card__meta { color: var(--muted); font-size: 13px; }
+/* Thẻ sản phẩm: khung ảnh 4:5 + object-fit cover như /danh-muc, thẻ cùng cao, tên và giá thẳng hàng */
+.grid { align-items: stretch; }
+.card { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card__img { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 18px; background: var(--paper); }
+.card__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.card:hover .card__img img { transform: scale(1.03); }
+.card__body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.card__brand, .card__meta { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card__body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(2em * 1.35); }
 .card__body h3 a { text-decoration: none; }
 .card__price { font-weight: 600; }
+.card__body > .btn, .card__body > .textlink { margin-top: auto; align-self: stretch; }
+.card__body > .textlink { align-self: start; }
+@media (max-width: 719px) { .card__body h3 { font-size: 15px; } }
 .badge {
   display: inline-flex; align-items: center; border-radius: 999px;
   background: var(--paper); color: var(--brown); font-size: 12px; font-weight: 600;

@@ -1,4 +1,5 @@
 // Danh mục tra cứu: lọc, tìm, xem lưới theo Thương hiệu → Nhãn, và bảng so sánh cùng loại, cùng khối lượng.
+import { add, refresh, toast } from './store.js';
 const data = JSON.parse(document.querySelector('#dm-data').textContent);
 const $ = (s) => document.querySelector(s);
 const brands = new Map(data.brands.map((b) => [b.id, b]));
@@ -68,6 +69,34 @@ function placeholder(p) {
   return `<div class="dm-ph" role="img" aria-label="Chưa có ảnh ${esc(p.name)}"><b>${esc(initials)}</b><span>Chưa có ảnh</span></div>`;
 }
 
+// Nút mua: data.buy nối mã danh mục với mã bán ở cửa hàng (server/dm-buy.js). Không nối được thì hiện "Liên hệ".
+function buyOptions(p) {
+  const sellable = p.variants.filter((v) => data.buy?.[v.code]);
+  const seen = new Set();
+  const out = [];
+  for (const v of sellable) {
+    for (const o of data.buy[v.code].options) {
+      if (seen.has(o.sku)) continue;
+      seen.add(o.sku);
+      out.push({ ...o, label: sellable.length > 1 && o.label === 'Lẻ' ? `Lẻ ${v.weightLabel}` : o.label });
+    }
+  }
+  return out;
+}
+
+function buyBlock(p) {
+  const opts = buyOptions(p);
+  if (!opts.length) {
+    const why = p.variants.every((v) => v.price == null) ? 'Chưa có giá' : 'Chưa bán online';
+    return `<div class="dm-buy dm-buy--ask"><a class="dm-buy__ask" href="${esc(data.contact)}" target="_blank" rel="noopener">Liên hệ</a><span>${why}</span></div>`;
+  }
+  const first = opts[0];
+  return `<div class="dm-buy" data-buy-card="${esc(p.id)}">
+    ${opts.length > 1 ? `<div class="dm-buy__opts" role="radiogroup" aria-label="Chọn lẻ hoặc combo">${opts.map((o, i) => `<label class="dm-buy__opt" title="${esc(o.title)}"><input type="radio" name="buy-${esc(p.id)}" value="${esc(o.sku)}" data-price="${esc(o.price)}" data-title="${esc(o.title)}"${i ? '' : ' checked'}><span>${esc(o.label)}<em>${money(o.price)}</em></span></label>`).join('')}</div>` : ''}
+    <button type="button" class="dm-buy__add" data-add="${esc(first.sku)}" data-title="${esc(first.title)}">Thêm vào giỏ<b>${money(first.price)}</b></button>
+  </div>`;
+}
+
 function card(p) {
   const hero = p.images[0];
   const extra = p.images.slice(1);
@@ -91,6 +120,7 @@ function card(p) {
           </button></li>`).join('')}
       </ul>
       ${p.note ? `<p class="dm-card__note">${esc(p.note)}</p>` : ''}
+      ${buyBlock(p)}
     </div>
   </article>`;
 }
@@ -185,6 +215,11 @@ $('#dm-q').addEventListener('input', (e) => { clearTimeout(timer); timer = setTi
 document.addEventListener('click', (e) => {
   const t = e.target.closest('button');
   if (!t) return;
+  if (t.dataset.add) {
+    add(t.dataset.add, 1);
+    toast(`Đã cho vào giỏ: ${t.dataset.title}`, { href: '/gio-hang', label: 'Xem giỏ' });
+    return;
+  }
   if (t.dataset.brand) { state.brand = t.dataset.brand; state.label = 'all'; render(); }
   else if (t.dataset.cat) { state.cat = t.dataset.cat; render(); }
   else if (t.dataset.label) { state.label = t.dataset.label; render(); }
@@ -248,6 +283,15 @@ $('#dm-lb').addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') { e.preventDefault(); goTo(lb.i + 1); }
   if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(lb.i - 1); }
 });
+document.addEventListener('change', (e) => {
+  const r = e.target.closest('.dm-buy__opts input');
+  if (!r) return;
+  const btn = r.closest('.dm-buy').querySelector('.dm-buy__add');
+  btn.dataset.add = r.value;
+  btn.dataset.title = r.dataset.title;
+  btn.querySelector('b').textContent = money(Number(r.dataset.price));
+});
+refresh();
 document.addEventListener('change', (e) => { if (e.target.id === 'dm-type') { state.type = e.target.value; state.weight = 'all'; render(); } });
 $('#dm-lb').addEventListener('click', (e) => { if (e.target.id === 'dm-lb') e.target.close(); });
 

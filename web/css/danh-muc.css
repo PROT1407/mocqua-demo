@@ -169,3 +169,25 @@
   .dm-lb__slide { height: 62dvh; }
   .dm-lb__nav { display: none; }
 }
+
+/* Mua ngay ở danh mục: chọn Lẻ / Combo rồi thêm vào giỏ chung */
+.dm-buy { margin-top: auto; padding-top: 6px; display: grid; gap: 8px; }
+.dm-buy__opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.dm-buy__opt { position: relative; flex: 1 1 auto; cursor: pointer; }
+.dm-buy__opt input { position: absolute; opacity: 0; pointer-events: none; }
+.dm-buy__opt span { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 8px; border: 1px solid #E2D9C6; border-radius: 12px; background: var(--ivory); font-size: 12px; font-weight: 600; color: var(--g); text-align: center; line-height: 1.25; transition: border-color .15s, background .15s; }
+.dm-buy__opt em { font-style: normal; font-weight: 500; font-size: 11.5px; color: var(--ink2); }
+.dm-buy__opt input:checked + span { border-color: var(--g); background: #EEF3EF; box-shadow: inset 0 0 0 1px var(--g); }
+.dm-buy__opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+.dm-buy__add { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 42px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--g); color: var(--ivory); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s; }
+.dm-buy__add:hover { background: var(--g2); }
+.dm-buy__add b { font-weight: 600; color: var(--gold2); }
+.dm-buy--ask { grid-template-columns: auto 1fr; align-items: center; }
+.dm-buy__ask { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 18px; border: 1px solid var(--g); border-radius: 999px; color: var(--g); font-size: 14px; font-weight: 600; text-decoration: none; }
+.dm-buy__ask:hover { background: #EEF3EF; }
+.dm-buy--ask span { font-size: 12px; color: var(--ink2); }
+@media (max-width: 520px) {
+  .dm-buy__add { flex-direction: column; justify-content: center; gap: 0; padding: 6px 10px; font-size: 13px; line-height: 1.25; border-radius: 16px; }
+  .dm-buy--ask { grid-template-columns: 1fr; }
+  .dm-buy__opt span { padding: 5px 6px; font-size: 11.5px; }
+}

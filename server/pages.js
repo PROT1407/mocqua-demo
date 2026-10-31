@@ -3,6 +3,7 @@ import { brandOrder } from './catalog.js';
 import { STATUSES, getSettings } from './db.js';
 import { bannerText, ORDER_TIERS, isComboProduct } from './promo.js';
 import { shopContact } from './contact.js';
+import { catalogHeroBySku } from './dm-buy.js';
 import { bankConfig } from './vietqr.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
@@ -159,11 +160,15 @@ function kemBlock(product, kem) {
 
 export function productCard(product) {
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
-  const img = product.cardImg || '/assets/img/xoai.jpg';
+  const own = product.cardImg || '/assets/img/xoai.jpg';
+  // Ảnh 4:5 dựng sẵn (-45.jpg) giữ nguyên; ảnh khác tỉ lệ thì dùng ảnh chính ở /danh-muc (cùng ảnh, có bản nhỏ) nếu có.
+  const hero = /-45\.jpg$/.test(own) ? null : (product.variants || []).map((v) => catalogHeroBySku().get(v.sku)).find(Boolean);
+  const img = hero?.src || own;
+  const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
   const canBuy = product.defaultSku && product.priceFrom > 0 && !product.oos;
   return `<article class="card">
     <a class="card__img" href="${href}">
-      <img src="${esc(img)}" alt="${esc(product.name)}" loading="lazy" width="800" height="800">
+      <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="lazy" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
       ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : ''}
     </a>
@@ -835,7 +840,7 @@ export function catalogPage(data) {
       <div id="dm-grid"><p class="fine">Đang tải danh mục…</p></div>
       <div id="dm-compare" hidden></div>
       <section class="dm-gallery" id="dm-gallery" aria-labelledby="dm-gallery-title"></section>
-      <p class="dm-foot">Viza Food (Công ty CP Viza Food) chỉ để tham khảo, không bán tại Mộc Quả. Không ghi giá khuyến mãi trên tem. Giá đối thủ sẽ so chủ yếu với các trang dacsancaocap. Mã: ${esc(data.codeScheme)}</p>
+      <p class="dm-foot">Nút “Thêm vào giỏ” dùng giá bán ở cửa hàng và giỏ hàng chung; mã hiện “Liên hệ” chưa bán online (chưa có giá hoặc chưa có trong cửa hàng), nhắn Zalo để hỏi. Không ghi giá khuyến mãi trên tem. Giá đối thủ sẽ so chủ yếu với các trang dacsancaocap. Mã: ${esc(data.codeScheme)}</p>
     </section>
     <dialog class="dm-lb" id="dm-lb" aria-labelledby="dm-lb-title">
       <div class="dm-lb__head"><div><small id="dm-lb-sub"></small><h2 id="dm-lb-title"></h2></div><span class="dm-lb__count" id="dm-lb-count" aria-live="polite"></span><button type="button" class="dm-lb__x" id="dm-lb-x">Đóng</button></div>
@@ -847,7 +852,7 @@ export function catalogPage(data) {
       <p class="dm-lb__cap" id="dm-lb-cap"></p>
       <div class="dm-lb__thumbs" id="dm-lb-thumbs"></div>
     </dialog>
-    ${jsonScript('dm-data', data)}
+    ${jsonScript('dm-data', { ...data, contact: `https://zalo.me/${shopContact.phones[0]?.tel || ''}` })}
   </main>`;
   return layout({
     title: 'Danh mục tra cứu | Mộc Quả',

@@ -709,6 +709,47 @@ test('bảng so sánh giá: thương hiệu, nhãn, khối lượng, admin sửa
   }
 });
 
+test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng dùng khung ảnh 4:5', async () => {
+  const { createApp } = await import('./index.js');
+  const app = createApp();
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    const page = await (await fetch(base + '/danh-muc')).text();
+    const raw = page.match(/<script type="application\/json" id="dm-data">([\s\S]*?)<\/script>/);
+    assert.ok(raw, 'có dữ liệu danh mục');
+    const data = JSON.parse(raw[1].replace(/\\u003c/g, '<'));
+    assert.match(data.contact, /^https:\/\/zalo\.me\/\d+/);
+    const buy = data.buy;
+    // Mỗi lựa chọn mua phải là mã bán được, giá khớp /api/quote.
+    const skus = [...new Set(Object.values(buy).flatMap((b) => b.options.map((o) => o.sku)))];
+    assert.ok(skus.length > 40, 'đủ mã bán');
+    for (const b of Object.values(buy)) for (const o of b.options) {
+      const q = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: o.sku, qty: 1 }] }) })).json();
+      assert.equal(q.items.length, 1, o.sku);
+      assert.equal(q.items[0].price, o.price, o.sku);
+    }
+    // Mã trùng mã cửa hàng, mã nối tay, combo 3 Cheers+, lựa chọn 2/3 vị Premium Shrinking.
+    assert.equal(buy['VZ-PS-GD-100'].sku, 'VZ-PS-GD-100');
+    assert.deepEqual(buy['VZ-PS-GD-100'].options.map((o) => o.label), ['Lẻ', 'Combo 2 vị', 'Combo 3 vị']);
+    assert.equal(buy['VZ-CH-XDT-200'].sku, 'MQ-DXC-200-CHA');
+    assert.ok(buy['VZ-CH-XDT-200'].options.some((o) => o.sku === 'VZ-CH-CB3X-600'));
+    assert.equal(buy['VZ-VZ-HDI-100'].sku, 'MQ-HDR-100-VZ');
+    // Chưa có giá hoặc chưa bán online thì không có nút mua.
+    for (const code of ['VZ-GG-XDV-XX', 'VZ-FH-MITV-XX', 'VZ-FH-XDMO-XX', 'MQZ-DDY', 'VZ-GG-CARI-100']) assert.equal(buy[code], undefined, code);
+    for (const p of data.products) for (const v of p.variants) if (v.price == null) assert.equal(buy[v.code], undefined, v.code);
+
+    const shop = await (await fetch(base + '/cua-hang')).text();
+    assert.match(shop, /class="card__img"[^>]*>\s*<img [^>]*loading="lazy"[^>]*width="480" height="600"/);
+    const css = await (await fetch(base + '/static/css/shop.css')).text();
+    assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
+    const sw = await (await fetch(base + '/sw.js')).text();
+    assert.match(sw, /mocqua-shell-v13/);
+  } finally {
+    server.close();
+  }
+});
+
 test('trang tĩnh không còn số và email mẫu của shop', async () => {
   const { ROOT } = await import('./paths.js');
   const { shopContact, bankDefaults } = await import('./contact.js');
