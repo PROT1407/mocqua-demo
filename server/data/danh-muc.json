@@ -1115,20 +1115,20 @@
    "pack": "",
    "images": [
     {
-     "src": "/assets/catalog/vz-ch-xth.webp",
-     "thumb": "/assets/catalog/vz-ch-xth-sm.webp",
-     "w": 1000,
-     "h": 1000,
-     "alt": "Túi Cheers+ xoài sấy thăng hoa (mẫu rừng xanh)",
-     "kind": "hero"
-    },
-    {
      "src": "/assets/catalog/vz-ch-xth-2.webp",
      "thumb": "/assets/catalog/vz-ch-xth-2-sm.webp",
      "w": 1000,
      "h": 1000,
-     "alt": "Túi Cheers+ xoài sấy thăng hoa (mẫu áo dài)",
-     "kind": "mau-bao-bi-2"
+     "alt": "Túi Cheers+ xoài sấy thăng hoa, mặt trước (mẫu áo dài)",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-xth.webp",
+     "thumb": "/assets/catalog/vz-ch-xth-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Cheers+ xoài sấy thăng hoa, mặt sau – thông tin dinh dưỡng (mẫu rừng xanh)",
+     "kind": "mat-sau"
     }
    ],
    "verify": false,
@@ -1213,6 +1213,14 @@
      "kind": "phoi-canh"
     },
     {
+     "src": "/assets/catalog/vz-ch-xdr.webp",
+     "thumb": "/assets/catalog/vz-ch-xdr-sm.webp",
+     "w": 500,
+     "h": 1000,
+     "alt": "Túi Cheers+ xoài sấy dẻo lá xoài (băng chữ đỏ), mặt trước",
+     "kind": "nen-trang"
+    },
+    {
      "src": "/assets/catalog/vz-ch-cb3x.webp",
      "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
      "w": 1000,
@@ -1244,26 +1252,9 @@
    "cat": "deo",
    "type": "xoai-deo",
    "pack": "",
-   "images": [
-    {
-     "src": "/assets/catalog/vz-ch-xdr.webp",
-     "thumb": "/assets/catalog/vz-ch-xdr-sm.webp",
-     "w": 500,
-     "h": 1000,
-     "alt": "Túi Cheers+ xoài sấy dẻo băng đỏ",
-     "kind": "hero"
-    },
-    {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
-     "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
-     "kind": "combo"
-    }
-   ],
+   "images": [],
    "verify": true,
-   "note": "Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
+   "note": "Chưa có ảnh riêng túi băng đỏ (ảnh cũ là túi lá xoài, đã chuyển sang VZ-CH-XDL-200 ngày 31/10). Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDR-200",
@@ -1274,6 +1265,20 @@
      "price": 73000,
      "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – cùng giá Cheers+ 200g, khác túi (tạm tính)",
      "priceCheckedAt": "2026-10-31"
+    }
+   ],
+   "parkedImages": [
+    {
+     "src": "/assets/catalog/vz-ch-xdr.webp",
+     "date": "2026-10-31",
+     "movedTo": "VZ-CH-XDL-200",
+     "reason": "Chủ shop: ảnh này là túi lá xoài, chuyển sang thẻ VZ-CH-XDL-200 (ảnh thứ 3). File ảnh giữ nguyên."
+    },
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "date": "2026-10-31",
+     "movedTo": null,
+     "reason": "Chủ shop: bỏ khung combo 'mango combo 200gr' khỏi thẻ này. Khung combo vẫn ở VZ-CH-XDL-200, VZ-CH-XDT-200, thẻ combo VZ-CH-CB3X-600 và sản phẩm combo cửa hàng."
     }
    ]
   },
