@@ -6,6 +6,7 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 - Túi nhỏ vuông Good Good: ghi khối lượng in trên bao, không đọc được thì 80g. Giá cân đối: 80g thơm/cóc 30k, mãng cầu 39k, thanh long 45k; túi 100g (xoài muối ớt, cóc túi đỏ) 35k.
 - Gác VZ-GF-THOM-100 (trùng VZ-GG-THOM-80) và VZ-GG-MHH-250 (chủ shop yêu cầu gỡ).
 - Premium Shrinking: 3 túi ghi 100g theo NET WT trên bao. Combo khác vị: 2 vị 375k, 3 vị (Golden + Royal + Yummy) 535k. Thêm ảnh combo 3 vị vào thư viện ảnh 3 thẻ. Cửa hàng có thẻ combo VZ-PS-CB3-300 / VZ-PS-CB2-200.
+- Combo khác mã có ảnh chung (Viza hộp 2/3/4/5, Good Good xoài muối ớt + cóc): thêm khung ảnh combo và dòng "Có trong combo" lên thẻ lẻ, giữ nguyên giá combo đang bán. Trang sản phẩm có khối "Thường mua kèm".
 
 | Mã | Tên | KL | Giá | Combo 2 | Combo 3 | /100g | Tạm tính | Nguồn giá | Cửa hàng |
 |---|---|---|---|---|---|---|---|---|---|

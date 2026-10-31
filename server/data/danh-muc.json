@@ -705,10 +705,18 @@
      "h": 1000,
      "alt": "Túi xoài sấy dẻo muối ớt",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-gg-cb-xc.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-xc-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo xoài muối ớt + cóc muối ớt",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 65.000đ · Combo 3: 95.000đ | 200g: Combo 2: 129.000đ · Combo 3: 185.000đ.",
+   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 65.000đ · Combo 3: 95.000đ | 200g: Combo 2: 129.000đ · Combo 3: 185.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 65.000đ (VZ-GG-CB2XC-200).",
    "variants": [
     {
      "code": "VZ-GG-XDMO-100",
@@ -940,10 +948,18 @@
      "h": 1000,
      "alt": "Túi Good Good cóc sấy dẻo muối ớt",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-gg-cb-xc.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-xc-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo xoài muối ớt + cóc muối ớt",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 65.000đ · Combo 3: 95.000đ.",
+   "note": "Combo 2: 65.000đ · Combo 3: 95.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 65.000đ (VZ-GG-CB2XC-200).",
    "variants": [
     {
      "code": "VZ-GG-COC-100",
@@ -1898,10 +1914,58 @@
      "h": 570,
      "alt": "Hộp Viza hạt điều rang muối",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb2dm.webp",
+     "thumb": "/assets/catalog/vz-vz-cb2dm-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 2: hạt điều + macca",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb3dd.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3dd-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb3al.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3al-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sv.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sv-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb5.webp",
+     "thumb": "/assets/catalog/vz-vz-cb5-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Ảnh cắt từ ảnh combo. Combo 2: 95.000đ · Combo 3: 129.000đ.",
+   "note": "Ảnh cắt từ ảnh combo. Combo 2: 95.000đ · Combo 3: 129.000đ. Có trong combo: Combo 2: hạt điều + macca 95.000đ (VZ-VZ-CB2DM-200); Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười) 219.000đ (VZ-VZ-CB3DD-300); Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen) 239.000đ (VZ-VZ-CB3AL-300); Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười) 289.000đ (VZ-VZ-CB4SK-400); Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều) 289.000đ (VZ-VZ-CB4SV-400); Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều) 339.000đ (VZ-VZ-CB5-500).",
    "variants": [
     {
      "code": "VZ-VZ-HDI-100",
@@ -1931,10 +1995,42 @@
      "h": 1000,
      "alt": "Hộp Viza hạt macca sấy",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb2dm.webp",
+     "thumb": "/assets/catalog/vz-vz-cb2dm-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 2: hạt điều + macca",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb3dd.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3dd-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sv.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sv-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb5.webp",
+     "thumb": "/assets/catalog/vz-vz-cb5-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 99.000đ · Combo 3: 145.000đ.",
+   "note": "Combo 2: 99.000đ · Combo 3: 145.000đ. Có trong combo: Combo 2: hạt điều + macca 95.000đ (VZ-VZ-CB2DM-200); Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười) 219.000đ (VZ-VZ-CB3DD-300); Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều) 289.000đ (VZ-VZ-CB4SV-400); Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều) 339.000đ (VZ-VZ-CB5-500).",
    "variants": [
     {
      "code": "VZ-VZ-HMC-100",
@@ -1964,10 +2060,58 @@
      "h": 570,
      "alt": "Hộp Viza hạt dẻ cười",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb2sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb2sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 2 \"Sức Khỏe & Thanh Mát\" (dẻ cười + hạt sen)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb3dd.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3dd-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb3al.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3al-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sv.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sv-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb5.webp",
+     "thumb": "/assets/catalog/vz-vz-cb5-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Ảnh cắt từ ảnh combo. Combo 2: 245.000đ · Combo 3: 349.000đ.",
+   "note": "Ảnh cắt từ ảnh combo. Combo 2: 245.000đ · Combo 3: 349.000đ. Có trong combo: Combo 2 \"Sức Khỏe & Thanh Mát\" (dẻ cười + hạt sen) 195.000đ (VZ-VZ-CB2SK-200); Combo 3 \"Hạt Dinh Dưỡng\" (macca, điều, dẻ cười) 219.000đ (VZ-VZ-CB3DD-300); Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen) 239.000đ (VZ-VZ-CB3AL-300); Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười) 289.000đ (VZ-VZ-CB4SK-400); Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều) 289.000đ (VZ-VZ-CB4SV-400); Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều) 339.000đ (VZ-VZ-CB5-500).",
    "variants": [
     {
      "code": "VZ-VZ-HDC-100",
@@ -1997,10 +2141,50 @@
      "h": 1000,
      "alt": "Hộp Viza hạt sen sấy",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb2sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb2sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 2 \"Sức Khỏe & Thanh Mát\" (dẻ cười + hạt sen)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb3al.webp",
+     "thumb": "/assets/catalog/vz-vz-cb3al-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sv.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sv-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb5.webp",
+     "thumb": "/assets/catalog/vz-vz-cb5-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 139.000đ · Combo 3: 199.000đ.",
+   "note": "Combo 2: 139.000đ · Combo 3: 199.000đ. Có trong combo: Combo 2 \"Sức Khỏe & Thanh Mát\" (dẻ cười + hạt sen) 195.000đ (VZ-VZ-CB2SK-200); Combo 3 Tết \"Trọn Vị An Lành\" (điều, dẻ cười, hạt sen) 239.000đ (VZ-VZ-CB3AL-300); Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười) 289.000đ (VZ-VZ-CB4SK-400); Combo 4 Tết \"Tết Sum Vầy\" (macca, dẻ cười, hạt sen, điều) 289.000đ (VZ-VZ-CB4SV-400); Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều) 339.000đ (VZ-VZ-CB5-500).",
    "variants": [
     {
      "code": "VZ-VZ-HSE-100",
@@ -2030,10 +2214,26 @@
      "h": 555,
      "alt": "Hộp Viza dừa sấy giòn",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb4sk.webp",
+     "thumb": "/assets/catalog/vz-vz-cb4sk-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười)",
+     "kind": "combo"
+    },
+    {
+     "src": "/assets/catalog/vz-vz-cb5.webp",
+     "thumb": "/assets/catalog/vz-vz-cb5-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều)",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Ảnh cắt từ ảnh combo. Combo 2: 99.000đ · Combo 3: 139.000đ.",
+   "note": "Ảnh cắt từ ảnh combo. Combo 2: 99.000đ · Combo 3: 139.000đ. Có trong combo: Combo 4 \"Sức Khỏe Tự Nhiên\" (hạt sen, dừa, điều, dẻ cười) 289.000đ (VZ-VZ-CB4SK-400); Combo 5 hạt (macca, dừa, dẻ cười, hạt sen, điều) 339.000đ (VZ-VZ-CB5-500).",
    "variants": [
     {
      "code": "VZ-VZ-DUA-100",

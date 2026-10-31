@@ -99,6 +99,52 @@ function priceLabel(product) {
   return (product.priceVaries ? 'từ ' : '') + vnd(product.priceFrom);
 }
 
+// "Thường mua kèm": combo chứa món này trước, rồi cùng dòng + cùng loại, rồi cùng loại, rồi quà dễ tặng.
+function crossSell(product, catalog) {
+  const live = catalog.products.filter((p) => p.id !== product.id && p.priceFrom > 0 && !p.oos && !p.hidden && p.defaultSku);
+  const skus = new Set(product.variants.map((v) => v.sku));
+  const priceOf = new Map(catalog.products.flatMap((p) => p.variants.map((v) => [v.sku, v.price])));
+  const out = [];
+  const comboInfo = (p) => {
+    if (!p.comboOf.length) return null;
+    const def = p.variants.find((v) => v.sku === p.defaultSku);
+    const sum = p.comboOf.reduce((t, sku) => t + (priceOf.get(sku) || 0), 0);
+    return { save: def && p.comboOf.every((sku) => priceOf.get(sku) > 0) && def.price < sum ? sum - def.price : 0 };
+  };
+  const push = (p) => { if (p && out.length < 4 && !out.some((o) => o.p.id === p.id)) out.push({ p, combo: comboInfo(p) }); };
+  const byKey = (key) => live.find((p) => p.id === key || p.variants.some((v) => v.sku === key));
+  (product.kem || []).forEach((key) => push(byKey(key)));
+  const combos = live.filter((p) => p.comboOf.some((sku) => skus.has(sku)));
+  combos.sort((a, b) => a.comboOf.length - b.comboOf.length || a.rank - b.rank).slice(0, 2).forEach((p) => push(p));
+  if (product.comboOf.length) product.comboOf.forEach((sku) => push(byKey(sku)));
+  (product.related || []).forEach((id) => push(byKey(id)));
+  const rank = (a, b) => a.rank - b.rank || a.name.localeCompare(b.name, 'vi');
+  live.filter((p) => p.brandKey === product.brandKey && p.cat === product.cat).sort(rank).forEach((p) => push(p));
+  live.filter((p) => p.cat === product.cat).sort((a, b) => (b.fruit === product.fruit) - (a.fruit === product.fruit) || rank(a, b)).forEach((p) => push(p));
+  live.filter((p) => p.cat === 'hat' || p.fruit === 'xoai').sort(rank).forEach((p) => push(p));
+  return out;
+}
+
+function kemBlock(product, kem) {
+  if (!kem.length) return '';
+  const k = (n) => Math.round(n / 1000) + 'k';
+  const items = kem.map(({ p, combo }) => {
+    const href = `/san-pham/${encodeURIComponent(p.id)}`;
+    const def = p.variants.find((v) => v.sku === p.defaultSku);
+    const price = def?.price || p.priceFrom;
+    return `<li class="kem__it${combo ? ' kem__it--combo' : ''}">
+      <a class="kem__img" href="${href}"><img src="${esc(p.cardImg || '/assets/img/xoai.jpg')}" alt="" loading="lazy" width="160" height="160"></a>
+      <div class="kem__body">
+        ${combo ? `<p class="kem__tag">Combo${combo.save ? ` · Tiết kiệm ${k(combo.save)}` : ''}</p>` : ''}
+        <a class="kem__name" href="${href}">${esc(p.name)}</a>
+        <p class="kem__meta">${esc(def?.w || p.weightLabel)} · <b>${esc(vnd(price))}</b></p>
+      </div>
+      <button type="button" class="btn btn--small kem__add" data-add-sku="${esc(p.defaultSku)}" aria-label="Thêm ${esc(p.name)} vào giỏ">${combo ? '+ Thêm combo' : '+ Thêm'}</button>
+    </li>`;
+  }).join('');
+  return `<section class="related kem" aria-labelledby="kem-h"><h2 id="kem-h">Thường mua kèm</h2>${product.relatedNote ? `<p class="lead lead--left">${esc(product.relatedNote)}</p>` : ''}<ul class="kem__list">${items}</ul></section>`;
+}
+
 export function productCard(product) {
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
   const img = product.cardImg || '/assets/img/xoai.jpg';
@@ -370,11 +416,7 @@ export function productPage(product, catalog) {
     ...(product.sections || []).map((s) => `<section><h2>${esc(s.h)}</h2>${(s.p || []).map((p) => `<p>${esc(p)}</p>`).join('')}${s.li ? `<ul>${s.li.map((li) => `<li>${esc(li)}</li>`).join('')}</ul>` : ''}${specTable(s.spec)}</section>`),
     !product.intro && product.long ? `<section><h2>Mô tả</h2><p>${esc(product.long)}</p></section>` : '',
   ].join('');
-  const picked = (product.related || []).map((id) => catalog.products.find((p) => p.id === id && p.priceFrom > 0)).filter(Boolean);
-  const related = [...picked, ...catalog.products
-    .filter((p) => p.id !== product.id && p.priceFrom > 0 && !picked.includes(p))
-    .sort((a, b) => (b.fruit === product.fruit) - (a.fruit === product.fruit) || (b.cat === product.cat) - (a.cat === product.cat) || a.rank - b.rank)]
-    .slice(0, 4);
+  const kem = crossSell(product, catalog);
   const client = {
     id: product.id,
     name: product.name,
@@ -422,7 +464,7 @@ export function productPage(product, catalog) {
       </div>
     </article>
     <div class="prose">${sections}</div>
-    ${related.length ? `<section class="related"><h2>${picked.length ? 'Thường mua kèm' : 'Cùng kệ'}</h2>${product.relatedNote ? `<p class="lead lead--left">${esc(product.relatedNote)}</p>` : ''}<div class="grid">${related.map(productCard).join('')}</div></section>` : ''}
+    ${kemBlock(product, kem)}
     <div class="buysticky">
       <div><b id="pdp-sticky-price"></b><span id="pdp-sticky-label"></span></div>
       <button class="btn" type="button" id="pdp-add-2" data-add>${product.oos ? 'Hết hàng' : 'Cho vào giỏ'}</button>

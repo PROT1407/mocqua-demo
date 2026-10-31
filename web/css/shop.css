@@ -497,3 +497,16 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
 .refs-form { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); align-items: end; margin: 10px 0 16px; }
 .refs-form .field { margin: 0; }
 .refs-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+
+/* Thường mua kèm */
+.kem__list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.kem__it { display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: center; padding: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; }
+.kem__it--combo { border-color: var(--brown, #5B3A22); box-shadow: 0 0 0 1px var(--brown, #5B3A22) inset; }
+.kem__img img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; display: block; }
+.kem__body { min-width: 0; }
+.kem__tag { margin: 0 0 2px; font-size: 12px; font-weight: 600; color: var(--brown, #5B3A22); }
+.kem__name { display: block; font-weight: 600; font-size: 14px; line-height: 1.3; color: var(--ink); text-decoration: none; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.kem__meta { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+.kem__meta b { color: var(--ink); }
+.kem__add { white-space: nowrap; }
+@media (max-width: 420px) { .kem__it { grid-template-columns: 60px 1fr; } .kem__img img { width: 60px; height: 60px; } .kem__add { grid-column: 1 / -1; } }
