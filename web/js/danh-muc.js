@@ -52,7 +52,7 @@ function chip(group, value, text, count, on) {
 function renderChips() {
   const byBrand = (id) => data.products.filter((p) => (id === 'all' || p.brand === id) && matches(p, { skip: 'brand' })).length;
   $('#dm-brand').innerHTML = `<span class="dm-chips__k">Thương hiệu</span>` + chip('brand', 'all', 'Tất cả', byBrand('all'), state.brand === 'all')
-    + data.brands.map((b) => chip('brand', b.id, b.kind === 'own' ? `${b.name} ★` : `${b.name} · tham khảo`, byBrand(b.id), state.brand === b.id)).join('')
+    + data.brands.map((b) => chip('brand', b.id, b.kind === 'own' ? `${b.name} ★` : `${b.name} · đối tác`, byBrand(b.id), state.brand === b.id)).join('')
     + `<button type="button" class="dm-chip dm-chip--warn${state.onlyVerify ? ' is-on' : ''}" data-verify aria-pressed="${state.onlyVerify}">Cần kiểm tra</button>`;
   const byCat = (id) => data.products.filter((p) => (id === 'all' || p.cat === id) && matches(p, { skip: 'cat' })).length;
   $('#dm-cat').innerHTML = `<span class="dm-chips__k">Nhóm</span>` + chip('cat', 'all', 'Tất cả', byCat('all'), state.cat === 'all')
@@ -134,7 +134,7 @@ function renderGrid(list) {
     out.push(`<section class="dm-brand dm-brand--${esc(b.kind)}">
       <header class="dm-brand__head">
         <div class="dm-brand__mark">${b.kind === 'own' ? 'MQ' : 'VZ'}</div>
-        <div><p class="dm-brand__kind">${esc(b.kindLabel)}</p><h2>${esc(b.name)}</h2><p class="dm-brand__owner">${esc(b.owner)} · ${inBrand.length} sản phẩm · ${labels.length} nhãn</p></div>
+        <div><p class="dm-brand__kind">${esc(b.kindLabel)}</p><h2>${esc(b.name)}</h2><p class="dm-brand__owner">${esc(b.owner)} · ${inBrand.length} sản phẩm · ${labels.length} nhãn</p>${b.partnerNote ? `<p class="dm-brand__partner">${esc(b.partnerNote)}</p>` : ''}</div>
       </header>
       ${labels.map((l) => {
         const items = inBrand.filter((p) => p.label === l);

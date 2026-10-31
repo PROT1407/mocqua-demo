@@ -7,12 +7,12 @@ Trang công khai để tra cứu **Thương hiệu → Nhãn → Sản phẩm �
 - Giá sửa ở `/admin` → tab **Danh mục** lưu trong bảng SQLite `catalog_prices` và đè lên giá mặc định. Có nút xuất/nhập JSON (Render gói miễn phí không giữ ổ đĩa, nên xuất trước khi deploy).
 - API: `GET /api/danh-muc`, `PUT /api/admin/catalog-prices/:code`, `GET /api/admin/catalog-prices.json`, `POST /api/admin/catalog-prices/import`.
 - Ảnh: `assets/catalog/<slug>.webp` (cạnh dài tối đa 1000px, mở trong thư viện ảnh) và `<slug>-sm.webp` (480px, dùng cho thẻ, ảnh nhỏ, bảng so sánh), tải lười (lazy-load). Mỗi mã có **một ảnh chính** trên lưới; ảnh cùng sản phẩm nhưng khác phong cách (nền trắng/đen, cầm tay, lô hàng, phối cảnh, đĩa trưng bày) được giữ làm ảnh phụ trong thư viện. Chỉ bỏ ảnh trùng hoặc gần như giống hệt (cùng bố cục, chỉ khác tông màu). Sản phẩm chưa có ảnh rõ hiện khung giữ chỗ.
-- Viza Food (Công ty CP Viza Food) là **đối thủ / tham khảo**, không bán tại Mộc Quả. Không ghi giá khuyến mãi trên tem (36k/37k).
+- Viza Food (Công ty CP Viza Food): Mộc Quả là **đối tác phân phối độc quyền** Viza Food. Giá Viza ghi trong danh mục là giá in trên bao bì của đối tác. Không ghi giá khuyến mãi trên tem (36k/37k).
 
 ## Quy tắc mã
 
 - Mộc Quả: `MQZ-<SP>-<gram>`, ví dụ `MQZ-HMC-500`. Mã chưa rõ khối lượng giữ nguyên như chủ shop đặt (`MQZ-DDY`, `MQZ-THXO`, `MQZ-XXX`, `MQZ-SETH6`).
-- Đối thủ: `VZ-<NHÃN>-<SP>-<gram>`; `XX` = chưa rõ khối lượng.
+- Viza Food (đối tác phân phối độc quyền): `VZ-<NHÃN>-<SP>-<gram>`; `XX` = chưa rõ khối lượng.
   - Nhãn: `GF` GoodFood, `GG` Good Good, `CH` Cheers+, `YM` Yummy, `PS` Premium Shrinking Dried Durian, `FH` Fresh & Healthy, `KT` Kita, `VZ` Viza Food (hộp), `YC` YC Nuts & Seeds.
   - Sản phẩm: `XD` xoài sấy dẻo (`XDV` túi vàng, `XDH` túi hồng cam, `XDL` túi lá, `XDR` túi băng đỏ, `XDT` túi tròn), `XDMO` xoài dẻo muối ớt, `XTH` xoài thăng hoa, `SRTH` sầu riêng thăng hoa, `SRS` sầu riêng sấy, `KF` King Fruit, `MT` Monthong, `GD/RY/YD` Golden/Royal/Yummy Durian, `MHH` mít Hoa Hậu, `MIT`/`MITV` mít sấy, `THOM`, `COC`, `ME`, `TL` thanh long, `MC` mãng cầu, `CARI`, `HDI` điều, `HMC` macca, `HDC` dẻ cười, `HSE` hạt sen, `DUA` dừa; combo `CB…` (ví dụ `CB2DM` = combo 2 điều + macca, `CB4SV` = Tết Sum Vầy, `CB2SRM` = combo 2 túi sầu riêng sấy + mít Hoa Hậu, đang tạm gác; gram ở cuối là tổng khối lượng).
 

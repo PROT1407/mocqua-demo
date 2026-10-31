@@ -445,6 +445,8 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
 .cmp-brand__head p { margin: 0; font-size: .8rem; color: var(--ink2); }
 .cmp-avatar { flex: 0 0 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(135deg, hsl(var(--h) 38% 34%), hsl(calc(var(--h) + 40) 36% 24%)); letter-spacing: .02em; }
 .cmp-brand--own .cmp-avatar { background: linear-gradient(135deg, var(--g), var(--g2)); color: var(--gold); }
+.cmp-brand--partner { border: 1.5px solid #B9CDBE; background: linear-gradient(180deg, #F6FAF6, #fff); }
+.cmp-brand__kind { display: inline-block; margin-bottom: 2px; padding: 2px 8px; border-radius: 999px; background: #E4EEE6; color: var(--g); font-size: .68rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .cmp-label h3 { font-size: .95rem; margin: 14px 0 8px; color: var(--g); display: flex; align-items: baseline; gap: 6px; }
 .cmp-label h3 span { font-size: .66rem; text-transform: uppercase; letter-spacing: .12em; color: var(--gold); font-weight: 600; }
 .cmp-label h3 small { color: var(--ink2); font-weight: 400; }
