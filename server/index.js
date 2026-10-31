@@ -315,18 +315,21 @@ export function createApp() {
 
   app.put('/api/admin/settings', requireAdmin, wrap((req, res) => {
     const body = req.body || {};
+    // Quà tặng đã bỏ (31/10/2026): các trường gift* chỉ giữ để tương thích file sao lưu cũ; thiếu thì giữ giá trị đang lưu.
+    const cur = getSettings();
+    const pick = (key) => (body[key] === undefined || body[key] === '' ? cur[key] : body[key]);
     const next = {
-      giftMin: intField(body.giftMin, { min: 0, max: 100000000, label: 'Mức đơn tặng quà' }),
-      giftPair: intField(body.giftPair, { min: 1, max: 20, label: 'Số túi xoài để tặng 1 gói' }),
-      giftMinG: intField(body.giftMinG, { min: 1, max: 5000, label: 'Khối lượng túi tính quà' }),
-      giftMax: intField(body.giftMax, { min: 0, max: 10, label: 'Số gói quà tối đa' }),
+      giftMin: intField(pick('giftMin'), { min: 0, max: 100000000, label: 'Mức cũ (không dùng)' }),
+      giftPair: intField(pick('giftPair'), { min: 1, max: 20, label: 'Mức cũ (không dùng)' }),
+      giftMinG: intField(pick('giftMinG'), { min: 1, max: 5000, label: 'Mức cũ (không dùng)' }),
+      giftMax: intField(pick('giftMax'), { min: 0, max: 10, label: 'Mức cũ (không dùng)' }),
       freeShip: intField(body.freeShip, { min: 0, max: 100000000, label: 'Mức miễn phí giao' }),
       shipFee: intField(body.shipFee, { min: 0, max: 500000, label: 'Phí giao' }),
-      giftSku: String(body.giftSku || '').trim(),
-      giftProductId: String(body.giftProductId || '').trim(),
+      giftSku: String(pick('giftSku') || '').trim(),
+      giftProductId: String(pick('giftProductId') || '').trim(),
       codEnabled: !!body.codEnabled,
     };
-    if (!skuExists(next.giftSku)) throw problem(400, 'Không thấy mã quà trong danh mục.');
+    if (!skuExists(next.giftSku)) next.giftSku = cur.giftSku;
     res.json({ settings: saveSettings(next) });
   }));
 

@@ -2,6 +2,54 @@ import { getSettings } from './db.js';
 import { lookupSku } from './catalog.js';
 import { vnd, problem } from './format.js';
 
+// Chiết khấu theo giá trị đơn (duyệt 31/10/2026). Không còn quà tặng 0đ.
+// - Mức tính trên tiền hàng trước giảm, chưa cộng phí giao.
+// - % chỉ giảm trên món lẻ, set, hộp quà. Dòng combo đã có giá riêng: không giảm thêm, nhưng vẫn tính vào mức đơn.
+// - Tiền giảm làm tròn xuống tới nghìn đồng.
+export const ORDER_TIERS = Object.freeze([
+  Object.freeze({ min: 1000000, pct: 8 }),
+  Object.freeze({ min: 500000, pct: 5 }),
+]);
+
+export function isComboProduct(product) {
+  if (!product) return false;
+  if (Array.isArray(product.comboOf) && product.comboOf.length > 0) return true;
+  if (String(product.id || '').startsWith('combo-')) return true;
+  // Combo đóng sẵn của hãng (vd. YC Nuts Combo 4) không có comboOf nhưng tên bắt đầu bằng "Combo".
+  return /^combo\s/i.test(String(product.name || '').trim());
+}
+
+export function tierFor(subtotal, tiers = ORDER_TIERS) {
+  return tiers.find((t) => subtotal >= t.min) || null;
+}
+
+export function nextTier(subtotal, tiers = ORDER_TIERS) {
+  return [...tiers].sort((a, b) => a.min - b.min).find((t) => subtotal < t.min) || null;
+}
+
+// lines: [{ line, combo }]
+export function orderDiscount(lines, tiers = ORDER_TIERS) {
+  const subtotal = lines.reduce((sum, l) => sum + l.line, 0);
+  const base = lines.filter((l) => !l.combo).reduce((sum, l) => sum + l.line, 0);
+  const tier = tierFor(subtotal, tiers);
+  const discount = tier ? Math.floor((base * tier.pct) / 100 / 1000) * 1000 : 0;
+  return { subtotal, base, comboSubtotal: subtotal - base, pct: tier ? tier.pct : 0, discount };
+}
+
+export function shipFor(subtotal, settings) {
+  return subtotal === 0 || subtotal >= settings.freeShip ? 0 : settings.shipFee;
+}
+
+export function kfmt(n) {
+  const k = Math.ceil(n / 1000);
+  return `${k.toLocaleString('vi-VN')}k`;
+}
+
+export function bannerText(settings) {
+  const [top, low] = [...ORDER_TIERS].sort((a, b) => b.min - a.min);
+  return `Miễn phí giao từ ${kfmt(settings.freeShip)} · Giảm ${low.pct}% đơn từ ${kfmt(low.min)} · Giảm ${top.pct}% đơn từ 1 triệu`;
+}
+
 function mergeItems(items) {
   const map = new Map();
   for (const item of items) {
@@ -17,14 +65,24 @@ function mergeItems(items) {
   return [...map.entries()].map(([sku, qty]) => ({ sku, qty }));
 }
 
-function isMangoBag(hit, settings) {
-  if (hit.fruit !== 'xoai') return false;
-  if (!(hit.price > 0)) return false;
-  if (hit.sku === settings.giftSku) return false;
-  if (!(hit.g >= settings.giftMinG)) return false;
-  if (String(hit.id).startsWith('combo-')) return false;
-  if (/\+/.test(hit.w || '')) return false;
-  return true;
+function publicSettings(settings) {
+  return {
+    freeShip: settings.freeShip,
+    shipFee: settings.shipFee,
+    codEnabled: !!settings.codEnabled,
+    tiers: ORDER_TIERS.map((t) => ({ ...t })),
+  };
+}
+
+export function hintText({ settings, subtotal, pct, hasCombo, base }) {
+  if (!subtotal) return `${bannerText(settings)}. Combo đã có giá riêng, không giảm thêm.`;
+  const bits = [];
+  const next = nextTier(subtotal);
+  bits.push(subtotal < settings.freeShip ? `Thêm ${kfmt(settings.freeShip - subtotal)} để được miễn phí giao.` : 'Đơn được miễn phí giao.');
+  if (pct) bits.push(`Đang giảm ${pct}%.`);
+  bits.push(next ? `Thêm ${kfmt(next.min - subtotal)} để được giảm ${next.pct}%.` : 'Đã đạt mức giảm cao nhất.');
+  if (hasCombo) bits.push(base > 0 ? 'Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.' : 'Combo đã có giá riêng, không giảm thêm.');
+  return bits.join(' ');
 }
 
 export function priceItems(rawItems, { allowEmpty = false } = {}) {
@@ -49,55 +107,33 @@ export function priceItems(rawItems, { allowEmpty = false } = {}) {
       id: hit.id,
       name: hit.name,
       w: hit.w,
-      g: hit.g,
       qty: line.qty,
       price: hit.price,
       img: hit.img,
-      fruit: hit.fruit,
+      combo: isComboProduct(hit.product),
       line: hit.price * line.qty,
     });
   }
-  const subtotal = items.reduce((sum, item) => sum + item.line, 0);
-  const bags = items.filter((item) => isMangoBag(item, settings)).reduce((sum, item) => sum + item.qty, 0);
-  const byPair = Math.floor(bags / settings.giftPair);
-  const byOrder = subtotal >= settings.giftMin ? 1 : 0;
-  const giftQty = Math.min(settings.giftMax, Math.max(byPair, byOrder));
-  const gifts = [];
-  if (giftQty > 0) {
-    const gift = lookupSku(settings.giftSku, { allowHidden: true });
-    const why = byPair >= byOrder && byPair > 0
-      ? `Mua ${settings.giftPair} túi xoài từ ${settings.giftMinG}g tặng 1 gói nhỏ`
-      : `Đơn từ ${vnd(settings.giftMin)} tặng 1 gói nhỏ`;
-    gifts.push({
-      sku: settings.giftSku,
-      name: gift ? `${gift.name} · ${gift.w}` : 'Xoài sấy dẻo muối ớt · gói nhỏ',
-      w: why,
-      qty: giftQty,
-      price: 0,
-      retail: gift?.price || 0,
-      img: gift?.img || null,
-    });
-  }
-  const ship = subtotal === 0 || subtotal >= settings.freeShip ? 0 : settings.shipFee;
-  const total = subtotal + ship;
+  const d = orderDiscount(items);
+  const ship = shipFor(d.subtotal, settings);
+  const total = d.subtotal - d.discount + ship;
+  const next = nextTier(d.subtotal);
+  const hasCombo = items.some((i) => i.combo);
   return {
-    items: items.map(({ fruit, g, ...item }) => item),
-    gifts,
-    subtotal,
+    items,
+    gifts: [],
+    subtotal: d.subtotal,
+    discount: d.discount,
+    discountPct: d.pct,
+    discountBase: d.base,
+    comboSubtotal: d.comboSubtotal,
+    discountLabel: d.pct ? `Giảm ${d.pct}% đơn từ ${vnd(tierFor(d.subtotal).min)}${hasCombo ? ' (không áp cho combo)' : ''}` : '',
     ship,
     total,
-    giftQty,
-    bags,
-    hint: hintText({ settings, subtotal, giftQty, bags }),
-    settings: {
-      giftMin: settings.giftMin,
-      giftPair: settings.giftPair,
-      giftMinG: settings.giftMinG,
-      giftMax: settings.giftMax,
-      freeShip: settings.freeShip,
-      shipFee: settings.shipFee,
-      codEnabled: !!settings.codEnabled,
-    },
+    next: next ? { ...next, need: next.min - d.subtotal } : null,
+    hint: hintText({ settings, subtotal: d.subtotal, pct: d.pct, hasCombo, base: d.base }),
+    banner: bannerText(settings),
+    settings: publicSettings(settings),
   };
 }
 
@@ -106,34 +142,16 @@ function emptyQuote(settings) {
     items: [],
     gifts: [],
     subtotal: 0,
+    discount: 0,
+    discountPct: 0,
+    discountBase: 0,
+    comboSubtotal: 0,
+    discountLabel: '',
     ship: 0,
     total: 0,
-    giftQty: 0,
-    bags: 0,
-    hint: `Đơn từ ${vnd(settings.giftMin)}, hoặc ${settings.giftPair} túi xoài từ ${settings.giftMinG}g, được tặng gói nhỏ xoài muối ớt. Tối đa ${settings.giftMax} gói.`,
-    settings: {
-      giftMin: settings.giftMin,
-      giftPair: settings.giftPair,
-      giftMinG: settings.giftMinG,
-      giftMax: settings.giftMax,
-      freeShip: settings.freeShip,
-      shipFee: settings.shipFee,
-      codEnabled: !!settings.codEnabled,
-    },
+    next: { ...ORDER_TIERS[ORDER_TIERS.length - 1], need: ORDER_TIERS[ORDER_TIERS.length - 1].min },
+    hint: hintText({ settings, subtotal: 0 }),
+    banner: bannerText(settings),
+    settings: publicSettings(settings),
   };
-}
-
-function hintText({ settings, subtotal, giftQty, bags }) {
-  if (!subtotal) return emptyQuote(settings).hint;
-  const bits = [];
-  if (giftQty > 0) {
-    bits.push(`Đơn này được tặng ${giftQty} gói nhỏ xoài muối ớt, tính 0đ.`);
-  } else if (subtotal < settings.giftMin) {
-    const need = settings.giftMin - subtotal;
-    const bagsNeed = Math.max(1, settings.giftPair - bags);
-    bits.push(`Thêm ${vnd(need)} nữa, hoặc thêm ${bagsNeed} túi xoài từ ${settings.giftMinG}g, là được tặng gói nhỏ.`);
-  }
-  if (subtotal < settings.freeShip) bits.push(`Thêm ${vnd(settings.freeShip - subtotal)} để được miễn phí giao hàng.`);
-  else bits.push('Đơn này được miễn phí giao hàng.');
-  return bits.join(' ');
 }

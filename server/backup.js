@@ -63,6 +63,7 @@ function lineItem(item, label) {
   if (id) next.id = id;
   const img = text(item.img, 400);
   if (img) next.img = img;
+  if (item.combo === true) next.combo = true;
   if (item.retail != null) next.retail = intField(item.retail, 0, 100000000, `Giá gốc ${label}`);
   return next;
 }
@@ -104,6 +105,9 @@ function readOrder(order, index, seen) {
       ship: intField(order.summary.ship, 0, 500000, `Phí giao ${code}`),
       total: intField(order.summary.total, 0, 100000000, `Tổng ${code}`),
       giftQty: intField(order.summary.giftQty ?? 0, 0, 10, `Số quà ${code}`),
+      discount: intField(order.summary.discount ?? 0, 0, 100000000, `Giảm theo đơn ${code}`),
+      discountPct: intField(order.summary.discountPct ?? 0, 0, 100, `Mức giảm ${code}`),
+      discountBase: intField(order.summary.discountBase ?? 0, 0, 100000000, `Tiền được giảm ${code}`),
       hint: text(order.summary.hint, 400),
     },
     note: text(order.note, 400),
@@ -232,7 +236,9 @@ function csvRow(order, line, kind) {
     line?.qty ?? '',
     line?.price ?? '',
     line?.line ?? '',
+    line ? (line.combo ? 'Có' : '') : '',
     summary.subtotal ?? '',
+    summary.discount ?? 0,
     summary.ship ?? '',
     summary.total ?? '',
   ].map(csvCell).join(',');
@@ -258,7 +264,9 @@ export function ordersToCsv(orders) {
     'Số lượng',
     'Đơn giá',
     'Thành tiền dòng',
+    'Combo',
     'Tạm tính',
+    'Giảm theo đơn',
     'Phí giao',
     'Tổng đơn',
   ];
@@ -267,6 +275,11 @@ export function ordersToCsv(orders) {
     const items = order.items?.length ? order.items : [null];
     for (const item of items) rows.push(csvRow(order, item, item ? 'Hàng' : ''));
     for (const gift of order.gifts || []) rows.push(csvRow(order, gift, 'Quà'));
+    const discount = order.summary?.discount || 0;
+    if (discount > 0) {
+      const pct = order.summary.discountPct ? ` ${order.summary.discountPct}%` : '';
+      rows.push(csvRow(order, { sku: '', name: `Giảm${pct} theo đơn (không áp cho combo)`, w: '', qty: '', price: '', line: discount }, 'Giảm'));
+    }
   }
   return `\uFEFF${rows.join('\n')}\n`;
 }

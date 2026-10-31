@@ -51,6 +51,11 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .lead--left { margin-top: 12px; }
 .fine { color: var(--muted); font-size: 14px; }
 
+.promobar { background: #2f4a33; color: #fbf6ee; font-size: 13px; line-height: 1.4; text-align: center; }
+.promobar .wrap { padding-top: 6px; padding-bottom: 6px; }
+.promobar b { font-weight: 600; }
+.promobar small { opacity: .8; white-space: nowrap; }
+@media (max-width: 560px) { .promobar { font-size: 12px; } .promobar small { display: block; white-space: normal; } }
 .top {
   position: sticky; top: 0; z-index: 40;
   background: color-mix(in srgb, var(--cream) 88%, transparent);
@@ -268,7 +273,10 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
   width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--cream); cursor: pointer;
 }
 .hint { background: var(--cream-2); border-radius: 16px; padding: 12px 14px; margin: 14px 0; }
-.totals, .sumrow { display: flex; justify-content: space-between; gap: 12px; margin: 6px 0; }
+.totals__discount b, .sumrow--discount b { color: #2f6b3a; }
+.totals__discount small, .sumrow--discount small { color: var(--muted); font-weight: 400; }
+.totals { display: grid; gap: 2px; margin: 6px 0; }
+.totals p, .sumrow { display: flex; justify-content: space-between; gap: 12px; margin: 6px 0; }
 .totals__due, .sumrow--due, .due { font-size: 20px; font-weight: 600; }
 .due { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 0; }
 .due b { font-size: 32px; letter-spacing: -0.03em; }

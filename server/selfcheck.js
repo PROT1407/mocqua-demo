@@ -23,7 +23,7 @@ function setCookieHeader(res) {
   return res.headers.get('set-cookie') || '';
 }
 
-test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng thái', async () => {
+test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin sửa giá và trạng thái', async () => {
   const { createApp } = await import('./index.js');
   const { getShopCatalog } = await import('./catalog.js');
   const app = createApp();
@@ -87,29 +87,71 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     };
 
     const one = await quote([{ sku: bag.sku, qty: 1 }]);
-    assert.equal(one.giftQty, one.subtotal >= shop.settings.giftMin ? 1 : 0);
+    assert.deepEqual(one.gifts, []);
+    assert.equal(one.total, one.subtotal - one.discount + one.ship);
 
     const two = await quote([{ sku: bag.sku, qty: 2 }]);
     assert.equal(two.subtotal, bag.price * 2);
-    assert.equal(two.gifts[0].qty, 1);
-    assert.equal(two.gifts[0].price, 0);
+    assert.deepEqual(two.gifts, []);
     if (two.subtotal < shop.settings.freeShip) assert.equal(two.ship, shop.settings.shipFee);
-    assert.equal(two.total, two.subtotal + two.ship);
+    assert.equal(two.total, two.subtotal - two.discount + two.ship);
 
-    const eight = await quote([{ sku: bag.sku, qty: 8 }]);
-    assert.equal(eight.gifts[0].qty, 3);
-    if (eight.subtotal >= shop.settings.freeShip) assert.equal(eight.ship, 0);
+    // Chiết khấu theo đơn: món lẻ (không combo) để kiểm từng mức.
+    const { isComboProduct, orderDiscount, ORDER_TIERS } = await import('./promo.js');
+    assert.deepEqual(ORDER_TIERS.map((t) => [t.min, t.pct]), [[1000000, 8], [500000, 5]]);
+    const single = shop.products
+      .filter((p) => !isComboProduct(p) && !p.oos)
+      .flatMap((p) => p.variants.filter((v) => v.price > 0 && v.price <= 60000))
+      .sort((x, y) => y.price - x.price)[0];
+    assert.ok(single, 'cần một món lẻ ≤ 60k');
+    const qtyFor = (target) => Math.ceil(target / single.price);
 
-    if (big && big.price * 2 >= shop.settings.giftMin) {
-      const pair = await quote([{ sku: big.sku, qty: 2 }]);
-      assert.equal(pair.gifts[0].qty, 1);
+    const qA = Math.floor((shop.settings.freeShip - 1) / single.price);
+    const a = await quote([{ sku: single.sku, qty: qA }]);
+    assert.ok(a.subtotal < shop.settings.freeShip);
+    assert.equal(a.discount, 0);
+    assert.equal(a.ship, shop.settings.shipFee);
+    assert.equal(a.total, a.subtotal + shop.settings.shipFee);
+    assert.match(a.hint, /Thêm \d[\d.]*k để được giảm 5%/);
+
+    const b = await quote([{ sku: single.sku, qty: qtyFor(500000) }]);
+    assert.ok(b.subtotal >= 500000 && b.subtotal < 1000000, String(b.subtotal));
+    assert.equal(b.discountPct, 5);
+    assert.equal(b.discount, Math.floor((b.subtotal * 5) / 100 / 1000) * 1000);
+    assert.equal(b.ship, 0);
+    assert.equal(b.total, b.subtotal - b.discount);
+    assert.match(b.hint, /Thêm \d[\d.]*k để được giảm 8%/);
+
+    const comboProduct = shop.products.find((p) => isComboProduct(p) && !p.oos && p.variants.some((v) => v.price > 0));
+    const combo = comboProduct.variants.find((v) => v.price > 0);
+    const c = await quote([{ sku: single.sku, qty: qtyFor(1000000 - combo.price) }, { sku: combo.sku, qty: 1 }]);
+    const singlesC = c.subtotal - combo.price;
+    assert.ok(c.subtotal >= 1000000);
+    assert.equal(c.discountPct, 8);
+    assert.equal(c.discountBase, singlesC);
+    assert.equal(c.discount, Math.floor((singlesC * 8) / 100 / 1000) * 1000, 'combo không được giảm');
+    assert.equal(c.total, c.subtotal - c.discount);
+    assert.equal(c.items.find((i) => i.sku === combo.sku).combo, true);
+
+    // combo kéo đơn qua mức nhưng chỉ giảm phần món lẻ
+    const lift = await quote([{ sku: single.sku, qty: qtyFor(500000 - combo.price) }, { sku: combo.sku, qty: 1 }]);
+    if (lift.subtotal - combo.price < 500000 && lift.subtotal < 1000000) {
+      assert.equal(lift.discountPct, 5);
+      assert.equal(lift.discount, Math.floor(((lift.subtotal - combo.price) * 5) / 100 / 1000) * 1000);
     }
+    const onlyCombo = await quote([{ sku: combo.sku, qty: Math.ceil(500000 / combo.price) }]);
+    assert.ok(onlyCombo.discountPct >= 5);
+    assert.equal(onlyCombo.discount, 0);
+    assert.equal(onlyCombo.ship, 0);
 
-    const need = Math.max(0, shop.settings.giftMin - bag.price);
-    const extra = Math.ceil(need / small.price);
-    const mixed = await quote([{ sku: bag.sku, qty: 1 }, { sku: small.sku, qty: extra }]);
-    assert.ok(mixed.subtotal >= shop.settings.giftMin);
-    assert.equal(mixed.gifts[0].qty, 1);
+    // hàm thuần
+    assert.deepEqual(orderDiscount([{ line: 499000 }]), { subtotal: 499000, base: 499000, comboSubtotal: 0, pct: 0, discount: 0 });
+    assert.equal(orderDiscount([{ line: 500000 }]).discount, 25000);
+    assert.equal(orderDiscount([{ line: 520000 }]).discount, 26000);
+    assert.equal(orderDiscount([{ line: 999999 }]).discount, 49000);
+    assert.equal(orderDiscount([{ line: 1000000 }]).discount, 80000);
+    assert.equal(orderDiscount([{ line: 2500000 }]).discount, 200000, 'không có mức 2 triệu');
+    assert.deepEqual(orderDiscount([{ line: 840000 }, { line: 210000, combo: true }]), { subtotal: 1050000, base: 840000, comboSubtotal: 210000, pct: 8, discount: 67000 });
 
     const orderRes = await fetch(base + '/api/orders', {
       method: 'POST',
@@ -132,6 +174,26 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.match(order.vietqr.url, new RegExp(`amount=${order.total}`));
     assert.ok(order.vietqr.url.includes('addInfo=' + encodeURIComponent(order.code)));
     assert.match(order.vietqr.url, /img\.vietqr\.io\/image\/000000-0000000000-compact2\.png/);
+
+    const discRes = await fetch(base + '/api/orders', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        items: [{ sku: single.sku, qty: qtyFor(500000) }],
+        name: 'Trần Bình',
+        phone: '0909123457',
+        province: shop.provinces[0],
+        ward: 'Phường 2',
+        address: '34 đường Quả',
+        pay: 'vietqr',
+      }),
+    });
+    const discOrder = await discRes.json();
+    assert.equal(discRes.status, 201, JSON.stringify(discOrder));
+    assert.equal(discOrder.total, b.total);
+    assert.match(discOrder.vietqr.url, new RegExp(`amount=${b.total}(&|$)`));
+    const discPage = await (await fetch(base + '/don/' + discOrder.code)).text();
+    assert.match(discPage, /Giảm 5% theo đơn/);
 
     const contactPage = await (await fetch(base + '/lien-he.html')).text();
     assert.match(contactPage, /0931330248/);
@@ -192,8 +254,12 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     const auth = { cookie, 'content-type': 'application/json' };
 
     const orders = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
-    assert.equal(orders.orders[0].code, order.code);
-    assert.equal(orders.orders[0].status, 'cho_ck');
+    const listedOrder = orders.orders.find((item) => item.code === order.code);
+    assert.ok(listedOrder, 'admin phải thấy đơn vừa đặt');
+    assert.equal(listedOrder.status, 'cho_ck');
+    const listedDisc = orders.orders.find((item) => item.code === discOrder.code);
+    assert.equal(listedDisc.summary.discountPct, 5);
+    assert.equal(listedDisc.summary.discount, b.discount);
 
     const marked = await fetch(base + '/api/admin/orders/' + order.code, {
       method: 'PATCH',
@@ -297,7 +363,8 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.equal(savedOrder.customer.phone, '0909123456');
     assert.equal(savedOrder.status, 'dang_giao');
     assert.ok(savedOrder.items.length >= 1);
-    assert.ok(savedOrder.gifts.length >= 1);
+    assert.deepEqual(savedOrder.gifts, []);
+    assert.equal(typeof savedOrder.summary.discount, 'number');
     assert.equal(typeof backup.settings.giftMin, 'number');
 
     const csvRes = await fetch(base + '/api/admin/backup.csv', { headers: auth });
@@ -309,7 +376,8 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     const csv = csvBytes.toString('utf8');
     assert.match(csv, new RegExp(order.code));
     assert.match(csv, /0909123456/);
-    assert.match(csv, /Quà/);
+    assert.match(csv, /Giảm theo đơn/);
+    assert.match(csv, new RegExp(`${discOrder.code}.*,Giảm,.*Giảm 5% theo đơn`));
 
     const mergeRes = await fetch(base + '/api/admin/backup?mode=merge', {
       method: 'POST',
@@ -369,7 +437,7 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.ok(afterBad.orders.some((item) => item.code === 'MQ261025-EXTRA1'));
 
     const settingsNow = await (await fetch(base + '/api/admin/settings', { headers: auth })).json();
-    const tweaked = { ...settingsNow.settings, giftMin: settingsNow.settings.giftMin + 1000 };
+    const tweaked = { ...settingsNow.settings, shipFee: settingsNow.settings.shipFee + 1000 };
     const tweakRes = await fetch(base + '/api/admin/settings', {
       method: 'PUT',
       headers: auth,
@@ -385,7 +453,7 @@ test('khách xem hàng, giỏ tính quà, VietQR, admin sửa giá và trạng t
     assert.equal(restoreShop.status, 200, JSON.stringify(restoreBody));
     assert.equal(restoreBody.restoredShop, true);
     const settingsBack = await (await fetch(base + '/api/admin/settings', { headers: auth })).json();
-    assert.equal(settingsBack.settings.giftMin, backup.settings.giftMin);
+    assert.equal(settingsBack.settings.shipFee, backup.settings.shipFee);
 
     const cleaned = await fetch(base + '/api/admin/backup?mode=replace&confirm=THAY-HET', {
       method: 'POST',

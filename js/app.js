@@ -85,10 +85,10 @@ MQ._fv=(p,k)=>MQ.vars(p).find(v=>v.sku===k)||MQ.vars(p).find(v=>v.w===k)||MQ.def
 MQ.chipLabel=(p,v)=>{if(p.packs)return MQ.esc(v.w);const l=MQ.varLabel(p,v),L=MQ.LINES[v.line];return L&&L.short&&l.includes(L.name)?MQ.esc(l.replace(L.name,'%%')).replace('%%',`<span class="l-full">${MQ.esc(L.name)}</span><span class="l-short">${MQ.esc(L.short)}</span>`):MQ.esc(l)};
 MQ.zaloQuote=(p,v)=>`https://zalo.me/${MQ.TEL}`;
 MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Chọn quy cách">${MQ.sizeVars(p,sel).map(v=>`<button type="button" class="wchip${v.w===sel.w?' is-on':''}${v.p?'':' is-quote'}" data-sku="${v.sku}" title="${MQ.esc((v.line?MQ.lineName(v.line)+' · ':'')+(v.p?MQ.fmt(v.p):'Liên hệ báo giá'))}">${MQ.chipLabel(p,v)}</button>`).join('')}</div>`;
-MQ.dealTag=(p,cls='')=>p&&p.bundle?`<span class="deal${cls}"><svg><use href="#i-gift"/></svg>${MQ.esc(p.bundle.label)}</span>`:'';
-MQ.COMBO100={n:5,price:165000,skus:['MQ-DXO-100-GG','MQ-DXO-100-FHG','MQ-DXO-100-FHX']};
-MQ.cardPerk=(p,v)=>MQ.cardPerk0(p,v)+(MQ.gnEligible(p)?`<p class="perk perk--gn">${MQ.gnNote()}</p>`:'');
-MQ.cardPerk0=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}"><svg><use href="#i-gift"/></svg>Combo 100g mua 5 tặng 1</a></p>`:p.bundle?`<p class="perk perk--deal">${MQ.dealTag(p)}</p>`:!p.own?'':(p.cat==='set'||p.giftbox)?`<p class="perk"><svg><use href="#i-gift"/></svg>Tặng túi 100g sấy dẻo</p>`:(!/^(Hũ|Hộp)/.test(v.w)?`<p class="perk perk--qty">Mua 3 túi −5% · 6 túi −8%</p>`:'');
+MQ.dealTag=()=>'';  // không còn khuyến mãi tặng kèm (31/10/2026)
+MQ.isComboP=p=>!!(p&&((Array.isArray(p.comboOf)&&p.comboOf.length)||String(p.id||'').startsWith('combo-')||/^combo\s/i.test(String(p.name||'').trim())));
+MQ.cardPerk=(p,v)=>MQ.cardPerk0(p,v);
+MQ.cardPerk0=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label||'Xem combo')}</a></p>`:MQ.isComboP(p)?'<p class="perk">Combo giá riêng · không giảm thêm</p>':'';
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -146,53 +146,25 @@ MQ.SHIP_METHODS=[
   {id:'gift',name:'Giao quà hẹn giờ',eta:'đúng ngày & khung giờ bạn chọn',fee:40000}
 ];
 /* ---------- khuyến mãi minh bạch (tự động) ---------- */
-MQ.TIERS=[{min:2000000,pct:10},{min:1000000,pct:8},{min:500000,pct:5}];   // giảm theo giá trị đơn
-MQ.ZIPQ=[{n:6,pct:8},{n:3,pct:5}];                                       // mua nhiều túi zip Mộc Quả
-MQ.GIFT_OPTS=[{id:'xoai',name:'Xoài cát sấy dẻo',img:'products/mqz/mqz-dxo-500'},{id:'dautay',name:'Dâu tây Đà Lạt sấy dẻo',img:'products/mqz/mqz-ddy-500'},{id:'ximuoi',name:'Xí muội đỏ đặc biệt',img:'products/mqz/mqz-omxd-250'}];
-MQ.GIFT_BAG_MIN=1000000;
+MQ.TIERS=[{min:1000000,pct:8},{min:500000,pct:5}];   // giảm theo giá trị đơn (tiền hàng trước giảm); combo không giảm thêm nhưng vẫn tính vào mức
 MQ.r1k=v=>Math.round(v/1000)*1000;
-MQ.isZipItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&p.cat!=='set'&&!p.giftbox&&!/^(Hũ|Hộp)/.test(i.w||''))};
-MQ.isSetItem=i=>{const p=MQ.byId(i.id);return !!(p&&p.own&&(p.cat==='set'||p.giftbox))};
-MQ.giftPick=()=>MQ.GIFT_OPTS.find(o=>o.id===MQ.store.get('giftpick','xoai'))||MQ.GIFT_OPTS[0];
-/* Quà gói nhỏ xoài muối ớt GoodGood 50–100g (giá vốn ~12k): đơn từ 199k tặng 1 · mua 2 túi xoài 200g+ tặng 1 (mỗi 2 túi) — lấy mức cao hơn, không cộng dồn, tối đa 3 gói/đơn */
-MQ.GN={pid:'xoai-say-deo-muoi-ot-goodgood',sku:'MQ-DXM-S-GG',min:199000,pair:2,minG:200,max:3,label:'Gói nhỏ 50–100g'};
-MQ.gnBig=i=>{const p=MQ.byId(i.id);if(!p||p.fruit!=='xoai'||!(i.price>0))return false;const v=MQ.findVar(p,i.sku);return !!(v&&v.g>=MQ.GN.minG)};
-MQ.gnEligible=p=>p&&p.fruit==='xoai'&&!p.soon&&MQ.vars(p).some(v=>v.g>=MQ.GN.minG&&v.p);
-MQ.gnNote=(cls='')=>`<span class="gnnote${cls}" title="Mua 2 túi xoài từ 200g hoặc đơn từ ${MQ.fmt(MQ.GN.min)}: tặng 1 gói nhỏ xoài muối ớt GoodGood"><svg><use href="#i-gift"/></svg>Quà tặng: gói nhỏ 50–100g</span>`;
+MQ.fl1k=v=>Math.floor(v/1000)*1000;
+MQ.isComboItem=i=>MQ.isComboP(MQ.byId(i.id));
+MQ.gnEligible=()=>false;
+MQ.gnNote=()=>'';
 MQ.promo=items=>{
   const sub=items.reduce((s,i)=>s+i.qty*i.price,0);
-  const zip=items.filter(MQ.isZipItem),zipN=zip.reduce((s,i)=>s+i.qty,0),zipSub=zip.reduce((s,i)=>s+i.qty*i.price,0);
-  const zq=MQ.ZIPQ.find(t=>zipN>=t.n),qtyDisc=zq?MQ.r1k(zipSub*zq.pct/100):0;
-  const C=MQ.COMBO100,cu=[];items.forEach(i=>{if(C.skus.includes(i.sku)&&i.price>0)for(let k=0;k<i.qty;k++)cu.push(i)});
-  const comboN=Math.floor(cu.length/C.n);let comboDisc=0;
-  if(comboN){const sorted=[...cu].sort((a,b)=>a.price-b.price).slice(0,comboN*C.n);comboDisc=Math.max(0,sorted.reduce((s,i)=>s+i.price,0)-comboN*C.price)}
-  const base=sub-qtyDisc-comboDisc,tier=MQ.TIERS.find(t=>base>=t.min),tierDisc=tier?MQ.r1k(base*tier.pct/100):0;
+  const elig=items.filter(i=>!MQ.isComboItem(i)).reduce((s,i)=>s+i.qty*i.price,0);
+  const base=sub,tier=MQ.TIERS.find(t=>base>=t.min),tierDisc=tier?MQ.fl1k(elig*tier.pct/100):0;
   const up=[...MQ.TIERS].reverse().find(t=>base<t.min);
-  const setN=items.filter(MQ.isSetItem).reduce((s,i)=>s+i.qty,0),g=MQ.giftPick(),gifts=[];
-  if(setN)gifts.push({key:'gift-set',name:'Túi 100g '+g.name,w:'Quà tặng kèm Set quà · 1 túi/set',qty:setN,img:g.img,pick:true});
-  /* KM tặng kèm theo sản phẩm (p.bundle): đủ buy món cùng sản phẩm -> tặng 1 món quà 0đ */
-  const bq={};items.forEach(i=>{const p=MQ.byId(i.id);if(p&&p.bundle&&i.price>0){
-    if(p.bundle.gmap){const g=p.bundle.gmap[i.sku]||Object.values(p.bundle.gmap)[0],gp=MQ.byId(g[0]),gv=gp&&MQ.findVar(gp,g[1]);
-      gifts.push({key:'gift-b-'+i.sku,name:(gp?gp.name:'Quà tặng')+(gv?' · '+gv.w:''),w:'Quà tặng 0đ · KM “'+p.bundle.label+'”',qty:i.qty,img:gv?gv.img:null,bundle:p.id});return}
-    bq[p.id]=(bq[p.id]||0)+i.qty}});
-  Object.entries(bq).forEach(([id,q])=>{const p=MQ.byId(id),b=p.bundle,k=Math.floor(q/b.buy);if(!k)return;
-    const gp=MQ.byId(b.gid),gv=gp&&MQ.findVar(gp,b.gsku);
-    gifts.push({key:'gift-b-'+id,name:(gp?gp.name:'Quà tặng')+(gv?' · '+gv.w:''),w:'Quà tặng 0đ · KM “'+b.label+'”',qty:k,img:gv?gv.img:null,bundle:id})});
-  if(comboN){const cnt={};cu.forEach(i=>cnt[i.sku]=(cnt[i.sku]||0)+1);const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],gi=cu.find(i=>i.sku===top),gp=MQ.byId(gi.id),gv=gp&&MQ.findVar(gp,top);
-    gifts.push({key:'gift-c100',name:(gp?gp.name:'Xoài sấy dẻo')+' · 100g',w:'Quà tặng 0đ · Combo xoài 100g mua 5 tặng 1',qty:comboN,img:gv?gv.img:null})}
-  {const G=MQ.GN,bigN=items.filter(MQ.gnBig).reduce((s,i)=>s+i.qty,0),byPair=Math.floor(bigN/G.pair),byOrder=base>=G.min?1:0,q=Math.min(G.max,Math.max(byPair,byOrder));
-   if(q){const gp=MQ.byId(G.pid),gv=gp&&MQ.findVar(gp,G.sku);gifts.push({key:'gift-gn',name:'Xoài sấy dẻo muối ớt GoodGood · '+G.label,w:'Quà tặng 0đ · '+(byPair>=byOrder?`Mua ${G.pair} túi xoài từ ${G.minG}g tặng 1 gói nhỏ`:`Đơn từ ${MQ.fmt(G.min)} tặng 1 gói nhỏ`),qty:q,img:gv?gv.img:null})}}
-  if(base>=MQ.GIFT_BAG_MIN)gifts.push({key:'gift-bag',name:'Túi giấy quà & thiệp viết tay Mộc Quả',w:'Quà tặng đơn từ '+MQ.fmt(MQ.GIFT_BAG_MIN),qty:1,img:null,box:'#1e3a2f',ribbon:'#c4a265'});
-  return {sub,zipN,zq,qtyDisc,comboN,comboDisc,base,tier,tierDisc,up,gifts,zipNeed:zq?null:MQ.ZIPQ[MQ.ZIPQ.length-1].n-zipN};
+  return {sub,zipN:0,zq:null,qtyDisc:0,comboN:0,comboDisc:0,base,elig,tier,tierDisc,up,gifts:[],zipNeed:null};
 };
 /* gợi ý tiến độ: giao miễn phí → bậc giảm kế tiếp */
-MQ.progress=P=>{const b=P.base;
-  if(!P.sub)return {text:`Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b> · đơn từ <b>${MQ.fmt(MQ.TIERS[2].min)}</b> giảm 5%.`,pct:0};
-  const hasGN=P.gifts&&P.gifts.some(g=>g.key==='gift-gn');
-  if(b<MQ.GN.min&&!hasGN)return {text:`Mua thêm <b>${MQ.fmt(MQ.GN.min-b)}</b> để được <b>tặng 1 gói xoài muối ớt</b> (0đ).`,pct:b/MQ.FREE_SHIP*100};
-  if(b<MQ.FREE_SHIP)return {text:`Đã có quà gói xoài · Mua thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b>.`,pct:b/MQ.FREE_SHIP*100};
-  if(P.up)return {text:`${P.tier?`Đang giảm <b>${P.tier.pct}%</b> · `:'Đã miễn phí giao · '}Mua thêm <b>${MQ.fmt(P.up.min-b)}</b> để được giảm <b>${P.up.pct}%</b>.`,pct:b/P.up.min*100};
-  return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng.`,pct:100};
+MQ.progress=P=>{const b=P.base,low=MQ.TIERS[MQ.TIERS.length-1];
+  if(!P.sub)return {text:`Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b> · đơn từ <b>${MQ.fmt(low.min)}</b> giảm 5%, từ 1 triệu giảm 8%.`,pct:0};
+  if(b<MQ.FREE_SHIP)return {text:`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b> · thêm ${MQ.fmt(low.min-b)} để được giảm 5%.`,pct:b/MQ.FREE_SHIP*100};
+  if(P.up)return {text:`${P.tier?`Đang giảm <b>${P.tier.pct}%</b> · `:'Đã miễn phí giao · '}Thêm <b>${MQ.fmt(P.up.min-b)}</b> để được giảm <b>${P.up.pct}%</b>.`,pct:b/P.up.min*100};
+  return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng (combo không giảm thêm).`,pct:100};
 };
 MQ.calc=(items,couponCode,shipId='std')=>{
   const P=MQ.promo(items),sub=P.sub;
@@ -212,15 +184,13 @@ MQ.calc=(items,couponCode,shipId='std')=>{
   if(cdisc&&tierDisc){ if(cdisc>tierDisc){note=`Mã ${cp.code} có lợi hơn nên thay cho ưu đãi giảm ${P.tier.pct}% theo đơn`;tierDisc=0}else{note=`Ưu đãi giảm ${P.tier.pct}% theo đơn có lợi hơn mã ${cp.code} (không cộng dồn)`;cdisc=0} }
   const disc=P.qtyDisc+P.comboDisc+tierDisc+cdisc;
   const rows=[];
-  if(P.comboDisc)rows.push({k:'combo100',label:`Combo xoài 100g mua 5 tặng 1 (×${P.comboN})`,v:P.comboDisc});
-  if(P.qtyDisc)rows.push({k:'qty',label:`Mua ${P.zipN} túi zip Mộc Quả (−${P.zq.pct}%)`,v:P.qtyDisc});
-  if(tierDisc)rows.push({k:'tier',label:`Ưu đãi đơn từ ${MQ.fmt(P.tier.min)} (−${P.tier.pct}%)`,v:tierDisc});
+  if(tierDisc)rows.push({k:'tier',label:`Giảm ${P.tier.pct}% đơn từ ${MQ.fmt(P.tier.min)} (không áp cho combo)`,v:tierDisc});
   if(cdisc)rows.push({k:'coupon',label:`Mã ${cp.code}`,v:cdisc});
   const total=Math.max(0,sub-disc+ship);
   return {sub,ship,disc,qtyDisc:P.qtyDisc,tierDisc,cdisc,rows,gifts:P.gifts,promo:P,total,coupon:cp,msg,note,points:Math.floor(total/10000)};
 };
 MQ.discRowsHtml=r=>r.rows.map(x=>`<div class="srow srow--disc" data-drow="${x.k}"><span>${MQ.esc(x.label)}</span><b>−${MQ.fmt(x.v)}</b></div>`).join('');
-MQ.giftPickSel=()=>`<select class="giftpick" data-giftpick aria-label="Chọn quà tặng kèm">${MQ.GIFT_OPTS.map(o=>`<option value="${o.id}"${o.id===MQ.giftPick().id?' selected':''}>${o.name}</option>`).join('')}</select>`;
+MQ.giftPickSel=()=>'';
 
 /* ---------- wishlist ---------- */
 MQ.wish={
@@ -254,7 +224,7 @@ function header(){
   const omai=live.filter(p=>p.cat==='omai').sort((a,b)=>(a.rank||99)-(b.rank||99));
   return `
 <div class="tbar"><div class="wrap tbar__in">
-  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Đơn từ 500k <b>−5%</b>, từ 1 triệu <b>−8%</b>, từ 2 triệu <b>−10%</b><i>·</i>Set quà tặng túi 100g<i>·</i>Đơn 199k tặng gói xoài muối ớt</span><span class="tp-s">Freeship 300k<i>·</i>Đơn 500k <b>−5%</b> · 1tr <b>−8%</b> · 2tr <b>−10%</b><i>·</i>Set tặng quà</span></a>
+  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Giảm <b>5%</b> đơn từ 500k<i>·</i>Giảm <b>8%</b> đơn từ 1 triệu<i>·</i>Combo không giảm thêm</span><span class="tp-s">Freeship 300k<i>·</i>500k <b>−5%</b> · 1tr <b>−8%</b></span></a>
   <span class="tbar__msg tbar__demo">Hotline &amp; Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>
@@ -347,7 +317,7 @@ function footer(){
     <div class="drawer__row"><span>Tạm tính</span><b data-subtotal>0đ</b></div>
     <div data-dr-disc></div>
     <div class="drawer__row drawer__row--total" data-dr-totrow hidden><span>Sau ưu đãi</span><b data-dr-total></b></div>
-    <p class="drawer__note">Ưu đãi &amp; quà tặng tự áp dụng · phí giao hàng tính ở bước thanh toán.</p>
+    <p class="drawer__note">Giảm theo đơn tự áp dụng (combo không giảm thêm) · phí giao hàng tính ở bước thanh toán.</p>
     <div class="drawer__btns"><a href="gio-hang.html" class="btn btn--line">Xem giỏ hàng</a><a href="thanh-toan.html" class="btn btn--gold">Thanh toán</a></div>
     <p class="drawer__demo">Tư vấn qua Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</p>
   </footer>

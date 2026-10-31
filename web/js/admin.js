@@ -46,7 +46,7 @@ async function loadOrders() {
     const options = data.statuses.map(([id, label]) => `<option value="${id}"${id === order.status ? ' selected' : ''}>${label}</option>`).join('');
     const when = new Date(order.createdAt).toLocaleString('vi-VN', { hour12: false });
     const pay = order.payMethod === 'cod' ? 'Khi nhận' : 'Chuyển khoản';
-    const lines = order.items.map((item) => `<li>${item.qty} × ${esc(item.name)} · ${esc(item.w)} · ${money(item.line)}</li>`).join('');
+    const lines = order.items.map((item) => `<li>${item.qty} × ${esc(item.name)} · ${esc(item.w)} · ${money(item.line)}${item.combo ? ' · combo' : ''}</li>`).join('');
     const gifts = (order.gifts || []).map((item) => `<li>${item.qty} × ${esc(item.name)} · 0đ</li>`).join('');
     const c = order.customer;
     return `<article class="order" data-code="${esc(order.code)}">
@@ -58,6 +58,7 @@ async function loadOrders() {
       <p>${esc(c.name)} · ${esc(c.phone)}<br>${esc([c.address, c.ward, c.province].filter(Boolean).join(', '))}</p>
       ${order.note ? `<p class="fine">Ghi chú: ${esc(order.note)}</p>` : ''}
       <ul>${lines}${gifts}</ul>
+      <p class="fine">Tiền hàng ${money(order.summary.subtotal)}${order.summary.discount ? ` · Giảm ${order.summary.discountPct || ''}% theo đơn −${money(order.summary.discount)}` : ''} · Giao ${order.summary.ship ? money(order.summary.ship) : 'miễn phí'}</p>
       <p class="order__total">${money(order.summary.total)}</p>
       <p class="fine" data-saved hidden>Đã lưu trạng thái.</p>
     </article>`;
@@ -104,17 +105,17 @@ async function loadPromo() {
   const data = await api('/api/admin/settings');
   const s = data.settings;
   panels.promo.innerHTML = `<form id="promo-form" class="fields">
-    <p class="lead lead--left">Đơn từ mức bên dưới được 1 gói. Hoặc cứ đủ số túi xoài (từ khối lượng ghi bên dưới) thì được 1 gói. Lấy mức nhiều hơn, không cộng hai cách, và không vượt số gói tối đa.</p>
-    <label class="field">Đơn từ (đồng) <input name="giftMin" inputmode="numeric" value="${s.giftMin}" required></label>
-    <label class="field">Số túi xoài để tặng 1 gói <input name="giftPair" inputmode="numeric" value="${s.giftPair}" required></label>
-    <label class="field">Túi tính là túi lớn, từ (gram) <input name="giftMinG" inputmode="numeric" value="${s.giftMinG}" required></label>
-    <label class="field">Tối đa số gói quà <input name="giftMax" inputmode="numeric" value="${s.giftMax}" required></label>
-    <label class="field">Mã quà trong danh mục <input name="giftSku" value="${s.giftSku}" required></label>
+    <p class="lead lead--left">Ưu đãi theo đơn (tự tính trong giỏ và trên máy chủ): tiền hàng từ 500.000đ giảm 5%, từ 1.000.000đ giảm 8%. Mức tính trên tiền hàng trước giảm, chưa cộng phí giao. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn. Không còn quà tặng 0đ.</p>
+    <input type="hidden" name="giftMin" value="${s.giftMin}">
+    <input type="hidden" name="giftPair" value="${s.giftPair}">
+    <input type="hidden" name="giftMinG" value="${s.giftMinG}">
+    <input type="hidden" name="giftMax" value="${s.giftMax}">
+    <input type="hidden" name="giftSku" value="${s.giftSku}">
     <input type="hidden" name="giftProductId" value="${s.giftProductId}">
     <label class="field">Miễn phí giao từ (đồng) <input name="freeShip" inputmode="numeric" value="${s.freeShip}" required></label>
     <label class="field">Phí giao nếu chưa đủ mức (đồng) <input name="shipFee" inputmode="numeric" value="${s.shipFee}" required></label>
     <label class="check"><input type="checkbox" name="codEnabled"${s.codEnabled ? ' checked' : ''}> Cho phép trả khi nhận hàng</label>
-    <button class="btn" type="submit">Lưu quy tắc quà</button>
+    <button class="btn" type="submit">Lưu phí giao</button>
     <p class="fine" id="promo-msg"></p>
   </form>`;
   document.querySelector('#promo-form').addEventListener('submit', async (event) => {

@@ -15,7 +15,7 @@ function line(item, gift) {
     ${img}
     <div>
       <b>${esc(item.name)}</b>
-      <small>${esc(item.w || '')}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}</small>
+      <small>${esc(item.w || '')}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}${item.combo ? ' · combo giá riêng, không giảm thêm' : ''}</small>
       ${gift ? '' : `<button type="button" class="textbtn" data-del="${item.sku}">Bỏ</button>`}
     </div>
     ${qty}
@@ -55,6 +55,7 @@ async function draw() {
     <p class="hint">${data.hint || ''}</p>
     <div class="totals">
       <p><span>Tiền hàng</span><b>${money(data.subtotal)}</b></p>
+      ${data.discount ? `<p class="totals__discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(không áp cho combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
       <p><span>Giao hàng</span><b>${data.ship ? money(data.ship) : 'Miễn phí'}</b></p>
       <p class="totals__due"><span>Cần trả</span><b>${money(data.total)}</b></p>
     </div>

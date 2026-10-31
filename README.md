@@ -54,7 +54,7 @@ Nội dung chuyển khoản là mã đơn, ví dụ `MQ261024-K7MQ2X`.
 
 1. Vào cửa hàng, chọn Sấy dẻo → Xoài → một hãng.
 2. Trên trang món, chọn khối lượng (và màu túi nếu có), cho vào giỏ.
-3. Giỏ tự thêm dòng quà 0đ khi đơn từ mức tặng, hoặc khi đủ số túi xoài từ khối lượng quy định. Mức mặc định: đơn từ 199.000đ hoặc 2 túi xoài từ 200g, lấy mức nhiều hơn, tối đa 3 gói. Gói quà là xoài muối ớt GoodGood 50–100g.
+3. Giỏ tự tính ưu đãi theo tiền hàng (trước giảm, chưa cộng phí giao): từ 300.000đ miễn phí giao, từ 500.000đ giảm 5%, từ 1.000.000đ giảm 8%. % chỉ trừ trên món không phải combo (combo vẫn tính vào mức). Tiền giảm làm tròn xuống tới nghìn đồng, hiện thành dòng riêng trong giỏ, trang thanh toán, trang đơn, trang quản trị và file CSV. Không còn quà tặng 0đ.
 4. Đặt hàng, điền tên, điện thoại, địa chỉ. Chọn chuyển khoản để sang trang có QR. Trả khi nhận hàng là lựa chọn phụ.
 5. Vào `/admin`, đăng nhập, thấy đơn mới, đổi trạng thái: Chờ CK → Đã nhận → Đang giao → Xong. Sửa một giá ở tab Giá bán rồi tải lại trang món.
 
@@ -77,11 +77,11 @@ Trang chạy gói free của Render (Singapore), ví dụ https://mocqua.onrende
 
 Thói quen của chủ shop: sau mỗi đợt đơn, và luôn trước khi bấm deploy, vào `/admin` rồi bấm **Xuất tất cả (JSON)**. Giữ file đó trên máy. Khi trang lên lại mà danh sách đơn trống, chọn file → **Thêm đơn còn thiếu** → **Nhập bản sao**.
 
-- **Xuất tất cả (JSON)** là bản đầy đủ: mọi đơn, món trong đơn, quà, giá đã sửa và mức quà. Dùng file này để nhập lại.
+- **Xuất tất cả (JSON)** là bản đầy đủ: mọi đơn, món trong đơn, giá đã sửa và cài đặt giao hàng. Dùng file này để nhập lại.
 - **Xuất đơn (CSV)** để mở bằng Excel. Không dùng CSV để nhập lại.
 - **Thêm đơn còn thiếu** giữ đơn đang có, chỉ thêm mã chưa có.
 - **Thay toàn bộ đơn** xoá đơn hiện tại rồi ghi đúng file. Phải tick xác nhận.
-- Tick **Khôi phục luôn giá đã sửa và mức quà** khi muốn lấy lại phần đó trong file JSON.
+- Tick **Khôi phục luôn giá đã sửa và cài đặt giao hàng** khi muốn lấy lại phần đó trong file JSON.
 
 Cookie quản trị có `HttpOnly`, `SameSite=Lax`, và `Secure` khi trang chạy HTTPS. Phiên hết hạn sau 7 ngày. Nhập sai mật khẩu 5 lần từ cùng một địa chỉ thì khoá khoảng 15 phút. Bộ đếm nằm trong bộ nhớ của một máy chủ. Thao tác quản trị (đăng nhập, sửa đơn, nhập bản sao) chỉ nhận khi trình duyệt gửi từ chính trang này.
 
