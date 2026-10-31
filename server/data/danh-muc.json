@@ -19,7 +19,6 @@
  ],
  "labels": [
   "Mộc Quả",
-  "GoodFood",
   "Good Good",
   "Cheers+",
   "Yummy",
@@ -658,50 +657,9 @@
    ]
   },
   {
-   "id": "vz-gf-thom",
-   "brand": "viza-food",
-   "label": "GoodFood",
-   "name": "Thơm sấy dẻo",
-   "cat": "deo",
-   "type": "thom-deo",
-   "pack": "",
-   "images": [
-    {
-     "src": "/assets/catalog/vz-gf-thom.webp",
-     "thumb": "/assets/catalog/vz-gf-thom-sm.webp",
-     "w": 750,
-     "h": 1000,
-     "alt": "Túi GoodFood thơm sấy dẻo 100g, ảnh chụp thật",
-     "kind": "hero"
-    },
-    {
-     "src": "/assets/catalog/vz-gf-thom-2.webp",
-     "thumb": "/assets/catalog/vz-gf-thom-2-sm.webp",
-     "w": 1000,
-     "h": 1000,
-     "alt": "Túi thơm sấy dẻo trên đế vàng",
-     "kind": "phoi-canh"
-    }
-   ],
-   "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
-   "variants": [
-    {
-     "code": "VZ-GF-THOM-100",
-     "weightG": 100,
-     "weightLabel": "100g",
-     "verify": false,
-     "note": "",
-     "price": 39000,
-     "priceSource": "Giá thị trường VN (trung vị) – thơm dẻo 100g ~40k",
-     "priceCheckedAt": "2026-10-31"
-    }
-   ]
-  },
-  {
    "id": "vz-gf-coc",
    "brand": "viza-food",
-   "label": "GoodFood",
+   "label": "Good Good",
    "name": "Cóc sấy dẻo muối ớt",
    "cat": "deo",
    "type": "coc-deo-muoi-ot",
@@ -712,21 +670,21 @@
      "thumb": "/assets/catalog/vz-gf-coc-sm.webp",
      "w": 1000,
      "h": 1000,
-     "alt": "Túi cóc sấy dẻo muối ớt GoodFood",
+     "alt": "Túi cóc sấy dẻo muối ớt Good Good (mẫu túi trắng xanh)",
      "kind": "hero"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Cùng túi với thẻ cóc muối ớt GoodGood 80g trong cửa hàng. Combo 2: 55.000đ · Combo 3: 79.000đ.",
    "variants": [
     {
      "code": "VZ-GF-COC-100",
-     "weightG": 100,
-     "weightLabel": "100g",
+     "weightG": 80,
+     "weightLabel": "80g (bao không in KL, ghi mặc định 80g)",
      "verify": false,
-     "note": "",
-     "price": 39000,
-     "priceSource": "Giá thị trường VN (trung vị) – cóc muối ớt 100g ~36k",
+     "note": "Mã giữ đuôi -100 cho ổn định; túi nhỏ vuông Good Good 80g.",
+     "price": 30000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DCM-080-GG) – túi nhỏ 80g cân đối",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -749,17 +707,17 @@
      "kind": "hero"
     }
    ],
-   "verify": true,
-   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Chưa có ảnh túi cam 200g. 100g: Combo 2: 75.000đ · Combo 3: 105.000đ | 200g: Combo 2: 129.000đ · Combo 3: 185.000đ.",
+   "verify": false,
+   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 65.000đ · Combo 3: 95.000đ | 200g: Combo 2: 129.000đ · Combo 3: 185.000đ.",
    "variants": [
     {
      "code": "VZ-GG-XDMO-100",
      "weightG": 100,
-     "weightLabel": "100g",
+     "weightLabel": "100g (in trên bao: KL:100G)",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá thị trường VN (trung vị) – xoài muối ớt 100g ~47k; giữ gần giá F&H 100g 35k của shop",
+     "price": 35000,
+     "priceSource": "Giá cân đối Mộc Quả – túi 100g ≈ 80g × 1,2 (tem trên bao 36.000đ)",
      "priceCheckedAt": "2026-10-31"
     },
     {
@@ -825,39 +783,6 @@
      "weightLabel": "Chưa rõ",
      "verify": true,
      "note": ""
-    }
-   ]
-  },
-  {
-   "id": "vz-gg-mhh",
-   "brand": "viza-food",
-   "label": "Good Good",
-   "name": "Mít sấy Hoa Hậu",
-   "cat": "gion",
-   "type": "mit-say",
-   "pack": "",
-   "images": [
-    {
-     "src": "/assets/catalog/vz-gg-mhh.webp",
-     "thumb": "/assets/catalog/vz-gg-mhh-sm.webp",
-     "w": 525,
-     "h": 750,
-     "alt": "Túi tím mít sấy Hoa Hậu",
-     "kind": "hero"
-    }
-   ],
-   "verify": false,
-   "note": "Combo 2: 129.000đ · Combo 3: 185.000đ.",
-   "variants": [
-    {
-     "code": "VZ-GG-MHH-250",
-     "weightG": 250,
-     "weightLabel": "250g (tạm)",
-     "verify": true,
-     "note": "Khối lượng tạm.",
-     "price": 69000,
-     "priceSource": "Giá tạm tính Mộc Quả – mít sấy 250g ~55k; khối lượng tạm",
-     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -960,16 +885,32 @@
    "pack": "",
    "images": [
     {
+     "src": "/assets/catalog/vz-gg-thom-2.webp",
+     "thumb": "/assets/catalog/vz-gg-thom-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Mặt trước túi Good Good thơm sấy dẻo, bao in KL:80G",
+     "kind": "hero"
+    },
+    {
      "src": "/assets/catalog/vz-gg-thom.webp",
      "thumb": "/assets/catalog/vz-gg-thom-sm.webp",
      "w": 1000,
      "h": 1000,
-     "alt": "Túi Good Good thơm sấy dẻo (bên phải)",
-     "kind": "hero"
+     "alt": "Mặt sau túi Good Good thơm sấy dẻo (bên phải)",
+     "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-gf-thom-2.webp",
+     "thumb": "/assets/catalog/vz-gf-thom-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi thơm sấy dẻo Good Good (mẫu túi trắng vàng) trên đế vàng",
+     "kind": "phoi-canh"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 55.000đ · Combo 3: 79.000đ.",
+   "note": "Có 2 mẫu túi nhãn Good Good (túi xanh vàng và túi trắng vàng), 80g. Combo 2: 55.000đ · Combo 3: 79.000đ.",
    "variants": [
     {
      "code": "VZ-GG-THOM-80",
@@ -1002,16 +943,16 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
+   "note": "Combo 2: 65.000đ · Combo 3: 95.000đ.",
    "variants": [
     {
      "code": "VZ-GG-COC-100",
      "weightG": 100,
-     "weightLabel": "100g",
+     "weightLabel": "100g (in trên bao: KL:100G)",
      "verify": false,
      "note": "",
-     "price": 39000,
-     "priceSource": "Giá thị trường VN (trung vị) – cóc muối ớt 100g ~36k",
+     "price": 35000,
+     "priceSource": "Giá cân đối Mộc Quả – túi 100g ≈ 80g × 1,2 (thị trường cóc muối ớt ~36.000đ/100g; tem trên bao 37.000đ)",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1034,17 +975,17 @@
      "kind": "hero"
     }
    ],
-   "verify": true,
-   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Combo 2: 109.000đ · Combo 3: 159.000đ.",
+   "verify": false,
+   "note": "Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
      "code": "VZ-GG-TL-100",
-     "weightG": 100,
-     "weightLabel": "100g",
+     "weightG": 80,
+     "weightLabel": "80g (bao không in KL, ghi mặc định 80g)",
      "verify": false,
-     "note": "",
-     "price": 59000,
-     "priceSource": "Giá thị trường VN (trung vị) – thanh long dẻo 100g ~53k",
+     "note": "Mã giữ đuôi -100 cho ổn định; túi nhỏ vuông Good Good 80g.",
+     "price": 45000,
+     "priceSource": "Giá cân đối Mộc Quả (MQ-DTL-080-GG hạ 70k→45k) – thị trường ~53.000đ/100g",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1067,17 +1008,17 @@
      "kind": "hero"
     }
    ],
-   "verify": true,
-   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Combo 2: 95.000đ · Combo 3: 129.000đ.",
+   "verify": false,
+   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
    "variants": [
     {
      "code": "VZ-GG-MC-100",
-     "weightG": 100,
-     "weightLabel": "100g",
+     "weightG": 80,
+     "weightLabel": "80g (bao không in KL, ghi mặc định 80g)",
      "verify": false,
-     "note": "",
-     "price": 49000,
-     "priceSource": "Giá thị trường VN (trung vị) – mãng cầu dẻo 100g ~48k",
+     "note": "Mã giữ đuôi -100 cho ổn định; túi nhỏ vuông Good Good 80g.",
+     "price": 39000,
+     "priceSource": "Giá cân đối Mộc Quả (MQ-DMC-080 hạ 55k→39k) – thị trường ~48.000đ/100g",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1142,8 +1083,8 @@
      "weightLabel": "2 × 100g",
      "verify": false,
      "note": "",
-     "price": 75000,
-     "priceSource": "Combo = tổng giá lẻ 78.000đ (xoài muối ớt 100g + cóc 100g) −6%",
+     "price": 65000,
+     "priceSource": "Combo = tổng giá lẻ 70.000đ (xoài muối ớt 100g + cóc 100g) −6%",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -2461,6 +2402,90 @@
     "date": "2026-10-31",
     "mergedInto": "VZ-GG-KF-100",
     "reason": "Chủ shop muốn để combo thành một khung trong thư viện ảnh của thẻ sầu riêng Good Good (VZ-GG-KF-100), không tách thẻ riêng. Ảnh vz-gg-cb-srm.webp nay là ảnh thứ 5 của thẻ đó."
+   }
+  },
+  {
+   "id": "vz-gf-thom",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Thơm sấy dẻo",
+   "cat": "deo",
+   "type": "thom-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gf-thom.webp",
+     "thumb": "/assets/catalog/vz-gf-thom-sm.webp",
+     "w": 750,
+     "h": 1000,
+     "alt": "Túi Good Good thơm sấy dẻo, bao in KL:80G (chữ 100gr trên ảnh là ghi chú cũ)",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-gf-thom-2.webp",
+     "thumb": "/assets/catalog/vz-gf-thom-2-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi thơm sấy dẻo in logo GoodFood (nhãn Good Good) trên đế vàng",
+     "kind": "phoi-canh"
+    }
+   ],
+   "verify": false,
+   "note": "Trùng sản phẩm với VZ-GG-THOM-80 (thơm sấy dẻo Good Good 80g).",
+   "variants": [
+    {
+     "code": "VZ-GF-THOM-100",
+     "weightG": 80,
+     "weightLabel": "80g (in trên bao: KL:80G)",
+     "verify": false,
+     "note": "Mã giữ đuôi -100 cho ổn định; bao in 80g.",
+     "price": 30000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DTH-080-GG) – trùng VZ-GG-THOM-80",
+     "priceCheckedAt": "2026-10-31"
+    }
+   ],
+   "parked": {
+    "date": "2026-10-31",
+    "mergedInto": "VZ-GG-THOM-80",
+    "reason": "Cùng sản phẩm, cùng 80g với VZ-GG-THOM-80 sau khi sửa GoodFood thành Good Good. Ảnh đã đưa vào thư viện ảnh thẻ VZ-GG-THOM-80. Gác, không xoá."
+   }
+  },
+  {
+   "id": "vz-gg-mhh",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Mít sấy Hoa Hậu",
+   "cat": "gion",
+   "type": "mit-say",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-mhh.webp",
+     "thumb": "/assets/catalog/vz-gg-mhh-sm.webp",
+     "w": 525,
+     "h": 750,
+     "alt": "Túi tím mít sấy Hoa Hậu",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Combo 2: 129.000đ · Combo 3: 185.000đ.",
+   "variants": [
+    {
+     "code": "VZ-GG-MHH-250",
+     "weightG": 250,
+     "weightLabel": "250g (tạm)",
+     "verify": true,
+     "note": "Khối lượng tạm.",
+     "price": 69000,
+     "priceSource": "Giá tạm tính Mộc Quả – mít sấy 250g ~55k; khối lượng tạm",
+     "priceCheckedAt": "2026-10-31"
+    }
+   ],
+   "parked": {
+    "date": "2026-10-31",
+    "mergedInto": null,
+    "reason": "Chủ shop yêu cầu gỡ thẻ mít sấy Hoa Hậu (31/10). Ảnh combo mít Hoa Hậu + sầu riêng vẫn ở thư viện ảnh thẻ VZ-GG-KF-100. Gác, không xoá."
    }
   }
  ]

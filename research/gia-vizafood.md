@@ -1,23 +1,28 @@
 # Giá Vizafood (VZ-) – Mộc Quả
 Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6%, combo 3 ≈ 3×giá −10,5%, làm tròn …5k/…9k. Bỏ giá khuyến mãi/flash sale. Mã trùng sản phẩm đang bán giữ đúng giá cửa hàng. Bỏ mã parked (VZ-GG-CB2SRM-350, VZ-GG-SRS-100).
 
+## Cập nhật 31/10/2026 tối
+- GoodFood là nhãn Good Good (chủ shop xác nhận): bỏ nhãn GoodFood ở danh mục và cửa hàng.
+- Túi nhỏ vuông Good Good: ghi khối lượng in trên bao, không đọc được thì 80g. Giá cân đối: 80g thơm/cóc 30k, mãng cầu 39k, thanh long 45k; túi 100g (xoài muối ớt, cóc túi đỏ) 35k.
+- Gác VZ-GF-THOM-100 (trùng VZ-GG-THOM-80) và VZ-GG-MHH-250 (chủ shop yêu cầu gỡ).
+
 | Mã | Tên | KL | Giá | Combo 2 | Combo 3 | /100g | Tạm tính | Nguồn giá | Cửa hàng |
 |---|---|---|---|---|---|---|---|---|---|
-| VZ-GF-THOM-100 | GoodFood – Thơm sấy dẻo | 100g | 39.000đ | 75.000đ | 105.000đ | 39.000đ |  | Giá thị trường VN (trung vị) – thơm dẻo 100g ~40k | thẻ mới vz-gf-thom |
-| VZ-GF-COC-100 | GoodFood – Cóc sấy dẻo muối ớt | 100g | 39.000đ | 75.000đ | 105.000đ | 39.000đ |  | Giá thị trường VN (trung vị) – cóc muối ớt 100g ~36k | thẻ mới vz-gf-coc |
-| VZ-GG-XDMO-100 | Good Good – Xoài sấy dẻo muối ớt | 100g | 39.000đ | 75.000đ | 105.000đ | 39.000đ |  | Giá thị trường VN (trung vị) – xoài muối ớt 100g ~47k; giữ gần giá F&H 100g 35k của shop | thẻ mới vz-gg-xdmo |
+| VZ-GF-THOM-100 | Good Good – Thơm sấy dẻo | 80g (in trên bao) | 30.000đ | 55.000đ | 79.000đ | 37.500đ | gác (parked) | Trùng VZ-GG-THOM-80 – giá cửa hàng MQ-DTH-080-GG | gác; mã cũ trỏ về MQ-DTH-080-GG |
+| VZ-GF-COC-100 | Good Good – Cóc sấy dẻo muối ớt (túi trắng xanh) | 80g (mặc định) | 30.000đ | 55.000đ | 79.000đ | 37.500đ |  | Giá cửa hàng MQ-DCM-080-GG – túi nhỏ 80g cân đối | đã có: MQ-DCM-080-GG |
+| VZ-GG-XDMO-100 | Good Good – Xoài sấy dẻo muối ớt | 100g (in trên bao) | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cân đối – 100g ≈ 80g × 1,2; tem trên bao 36.000đ | thẻ vz-gg-xdmo |
 | VZ-GG-XDMO-200 | Good Good – Xoài sấy dẻo muối ớt | 200g | 69.000đ | 129.000đ | 185.000đ | 34.500đ |  | Giá cửa hàng Mộc Quả (MQ-DXM-200-GG) | đã có: MQ-DXM-200-GG |
 | VZ-GG-XD-200 | Good Good – Xoài sấy dẻo (túi trắng) | 200g | 69.000đ | 129.000đ | 185.000đ | 34.500đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-200-GG) | đã có: MQ-DXO-200-GG |
 | VZ-GG-XDV-XX | Good Good – Xoài sấy dẻo (túi vàng lớn) | Chưa rõ | — | — | — | — | bỏ qua | Chưa rõ khối lượng, chưa có ảnh | không |
-| VZ-GG-MHH-250 | Good Good – Mít sấy Hoa Hậu | 250g (tạm) | 69.000đ | 129.000đ | 185.000đ | 27.600đ | tạm tính | Giá tạm tính Mộc Quả – mít sấy 250g ~55k; khối lượng tạm | thẻ mới vz-gg-mhh |
+| VZ-GG-MHH-250 | Good Good – Mít sấy Hoa Hậu | 250g (tạm) | 69.000đ | 129.000đ | 185.000đ | 27.600đ | gác (parked) | Giá tạm tính Mộc Quả – mít sấy 250g ~55k; khối lượng tạm | gác theo yêu cầu chủ shop, gỡ khỏi cửa hàng |
 | VZ-GG-KF-100 | Good Good – King Fruit sầu riêng sấy | 100g (3.53oz) | 110.000đ | 205.000đ | 295.000đ | 110.000đ |  | Giá cửa hàng Mộc Quả (MQ-GSR-100-GG) – sầu riêng sấy | đã có: MQ-GSR-100-GG |
 | VZ-GG-ME-100 | Good Good – Me sấy dẻo muối ớt | 100g | 39.000đ | 75.000đ | 105.000đ | 39.000đ | tạm tính | Giá tạm tính Mộc Quả – ít dữ liệu, theo giá me GG 80g 30k của shop | chưa có ảnh |
 | VZ-GG-THOM-80 | Good Good – Thơm sấy dẻo | 80g (in trên bao) | 30.000đ | 55.000đ | 79.000đ | 37.500đ |  | Giá cửa hàng Mộc Quả (MQ-DTH-080-GG) | đã có: MQ-DTH-080-GG |
-| VZ-GG-COC-100 | Good Good – Cóc sấy dẻo muối ớt | 100g | 39.000đ | 75.000đ | 105.000đ | 39.000đ |  | Giá thị trường VN (trung vị) – cóc muối ớt 100g ~36k | thẻ mới vz-gg-coc |
-| VZ-GG-TL-100 | Good Good – Thanh long sấy dẻo | 100g | 59.000đ | 109.000đ | 159.000đ | 59.000đ |  | Giá thị trường VN (trung vị) – thanh long dẻo 100g ~53k | thẻ mới vz-gg-tl |
-| VZ-GG-MC-100 | Good Good – Mãng cầu sấy dẻo | 100g | 49.000đ | 95.000đ | 129.000đ | 49.000đ |  | Giá thị trường VN (trung vị) – mãng cầu dẻo 100g ~48k | thẻ mới vz-gg-mc |
+| VZ-GG-COC-100 | Good Good – Cóc sấy dẻo muối ớt | 100g (in trên bao) | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cân đối – 100g ≈ 80g × 1,2; tem trên bao 37.000đ | biến thể 100g · túi đỏ của thẻ cóc GoodGood |
+| VZ-GG-TL-100 | Good Good – Thanh long sấy dẻo | 80g (mặc định) | 45.000đ | 85.000đ | 119.000đ | 56.250đ |  | Giá cân đối – MQ-DTL-080-GG hạ 70k→45k; thị trường ~53k/100g | đã có: MQ-DTL-080-GG |
+| VZ-GG-MC-100 | Good Good – Mãng cầu sấy dẻo | 80g (mặc định) | 39.000đ | 75.000đ | 105.000đ | 48.750đ |  | Giá cân đối – MQ-DMC-080 hạ 55k→39k; thị trường ~48k/100g | đã có: MQ-DMC-080 |
 | VZ-GG-CARI-100 | Good Good – Bột cari Ngon (hũ) | 100g | 29.000đ | 55.000đ | 79.000đ | 29.000đ | tạm tính | Giá tạm tính Mộc Quả – bột cà ri 100g ~30k; khác loại hàng | gia vị – cửa hàng chưa có danh mục |
-| VZ-GG-CB2XC-200 | Good Good – Combo xoài muối ớt + cóc muối ớt | 2 × 100g | 75.000đ | — | — | 37.500đ |  | Combo = tổng giá lẻ 78.000đ (xoài muối ớt 100g + cóc 100g) −6% | thẻ mới vz-gg-cb-xc |
+| VZ-GG-CB2XC-200 | Good Good – Combo xoài muối ớt + cóc muối ớt | 2 × 100g | 65.000đ | — | — | 32.500đ |  | Combo = tổng giá lẻ 70.000đ (xoài muối ớt 100g + cóc 100g) −6% | thẻ mới vz-gg-cb-xc |
 | VZ-CH-XTH-120 | Cheers+ – Xoài sấy thăng hoa | 120g | 229.000đ | 429.000đ | 615.000đ | 190.833đ |  | Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) | đã có: MQ-THXO-120-CH |
 | VZ-CH-SRTH-100 | Cheers+ – Sầu riêng sấy thăng hoa | 100g · 3 gói nhỏ | 259.000đ | 485.000đ | 695.000đ | 259.000đ |  | Giá cửa hàng Mộc Quả (MQ-THSR-110-CH) – shop ghi 110g | đã có: MQ-THSR-110-CH |
 | VZ-CH-XDL-200 | Cheers+ – Xoài sấy dẻo (túi lá xoài) | 200g (250–300g) | 73.000đ | 139.000đ | 195.000đ | 36.500đ | tạm tính | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – cùng giá Cheers+ 200g, khác túi | đã có: MQ-DXC-200-CHA |
