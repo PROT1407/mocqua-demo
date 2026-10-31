@@ -684,14 +684,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
    "variants": [
     {
      "code": "VZ-GF-THOM-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 39000,
+     "priceSource": "Giá thị trường VN (trung vị) – thơm dẻo 100g ~40k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -714,14 +717,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
    "variants": [
     {
      "code": "VZ-GF-COC-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 39000,
+     "priceSource": "Giá thị trường VN (trung vị) – cóc muối ớt 100g ~36k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -744,21 +750,27 @@
     }
    ],
    "verify": true,
-   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Chưa có ảnh túi cam 200g.",
+   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Chưa có ảnh túi cam 200g. 100g: Combo 2: 75.000đ · Combo 3: 105.000đ | 200g: Combo 2: 129.000đ · Combo 3: 185.000đ.",
    "variants": [
     {
      "code": "VZ-GG-XDMO-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 39000,
+     "priceSource": "Giá thị trường VN (trung vị) – xoài muối ớt 100g ~47k; giữ gần giá F&H 100g 35k của shop",
+     "priceCheckedAt": "2026-10-31"
     },
     {
      "code": "VZ-GG-XDMO-200",
      "weightG": 200,
      "weightLabel": "200g",
      "verify": false,
-     "note": "Túi cam in 200g."
+     "note": "Túi cam in 200g.",
+     "price": 69000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXM-200-GG)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -781,14 +793,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 129.000đ · Combo 3: 185.000đ.",
    "variants": [
     {
      "code": "VZ-GG-XD-200",
      "weightG": 200,
      "weightLabel": "200g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 69000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXO-200-GG)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -832,14 +847,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 129.000đ · Combo 3: 185.000đ.",
    "variants": [
     {
      "code": "VZ-GG-MHH-250",
      "weightG": 250,
      "weightLabel": "250g (tạm)",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 69000,
+     "priceSource": "Giá tạm tính Mộc Quả – mít sấy 250g ~55k; khối lượng tạm",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -847,7 +865,7 @@
    "id": "vz-gg-kf",
    "brand": "viza-food",
    "label": "Good Good",
-   "name": "King Fruit sầu riêng sấy thăng hoa",
+   "name": "King Fruit sầu riêng sấy",
    "cat": "thanghoa",
    "type": "sau-rieng-thang-hoa",
    "pack": "",
@@ -894,14 +912,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 205.000đ · Combo 3: 295.000đ.",
    "variants": [
     {
      "code": "VZ-GG-KF-100",
      "weightG": 100,
      "weightLabel": "100g (3.53oz)",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 110000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GSR-100-GG) – sầu riêng sấy",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -915,14 +936,17 @@
    "pack": "",
    "images": [],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
    "variants": [
     {
      "code": "VZ-GG-ME-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 39000,
+     "priceSource": "Giá tạm tính Mộc Quả – ít dữ liệu, theo giá me GG 80g 30k của shop",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -945,14 +969,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 55.000đ · Combo 3: 79.000đ.",
    "variants": [
     {
      "code": "VZ-GG-THOM-80",
      "weightG": 80,
      "weightLabel": "80g (in trên bao)",
      "verify": false,
-     "note": "Anh Huy xác nhận 80g."
+     "note": "Anh Huy xác nhận 80g.",
+     "price": 30000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DTH-080-GG)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -975,14 +1002,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 75.000đ · Combo 3: 105.000đ.",
    "variants": [
     {
      "code": "VZ-GG-COC-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 39000,
+     "priceSource": "Giá thị trường VN (trung vị) – cóc muối ớt 100g ~36k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1005,14 +1035,17 @@
     }
    ],
    "verify": true,
-   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn.",
+   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Combo 2: 109.000đ · Combo 3: 159.000đ.",
    "variants": [
     {
      "code": "VZ-GG-TL-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 59000,
+     "priceSource": "Giá thị trường VN (trung vị) – thanh long dẻo 100g ~53k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1035,14 +1068,17 @@
     }
    ],
    "verify": true,
-   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn.",
+   "note": "Ảnh bao bì đang in logo GoodFood; anh Huy xếp vào nhãn Good Good. Cần kiểm tra nhãn. Combo 2: 95.000đ · Combo 3: 129.000đ.",
    "variants": [
     {
      "code": "VZ-GG-MC-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 49000,
+     "priceSource": "Giá thị trường VN (trung vị) – mãng cầu dẻo 100g ~48k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1065,14 +1101,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 55.000đ · Combo 3: 79.000đ.",
    "variants": [
     {
      "code": "VZ-GG-CARI-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 29000,
+     "priceSource": "Giá tạm tính Mộc Quả – bột cà ri 100g ~30k; khác loại hàng",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1102,7 +1141,10 @@
      "weightG": 200,
      "weightLabel": "2 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 75000,
+     "priceSource": "Combo = tổng giá lẻ 78.000đ (xoài muối ớt 100g + cóc 100g) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1133,14 +1175,17 @@
     }
    ],
    "verify": false,
-   "note": "Có 2 mẫu túi.",
+   "note": "Có 2 mẫu túi. Combo 2: 429.000đ · Combo 3: 615.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XTH-120",
      "weightG": 120,
      "weightLabel": "120g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 229000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1171,14 +1216,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 485.000đ · Combo 3: 695.000đ.",
    "variants": [
     {
      "code": "VZ-CH-SRTH-100",
      "weightG": 100,
      "weightLabel": "100g · 3 gói nhỏ",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 259000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THSR-110-CH) – shop ghi 110g",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1209,14 +1257,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XDL-200",
      "weightG": 200,
      "weightLabel": "200g (250–300g)",
      "verify": true,
-     "note": "Khoảng 250–300g, cần kiểm tra."
+     "note": "Khoảng 250–300g, cần kiểm tra.",
+     "price": 73000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – cùng giá Cheers+ 200g, khác túi (tạm tính)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1239,14 +1290,17 @@
     }
    ],
    "verify": true,
-   "note": "Có thể trùng mẫu túi lá xoài. Cần kiểm tra.",
+   "note": "Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XDR-200",
      "weightG": 200,
      "weightLabel": "200g (250–300g, tạm)",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 73000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – cùng giá Cheers+ 200g, khác túi (tạm tính)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1293,14 +1347,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XDT-200",
      "weightG": 200,
      "weightLabel": "200g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 73000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1330,7 +1387,10 @@
      "weightG": 600,
      "weightLabel": "3 × 200g + me 100g",
      "verify": true,
-     "note": "Tổng khối lượng tạm tính."
+     "note": "Tổng khối lượng tạm tính.",
+     "price": 205000,
+     "priceSource": "Combo = tổng giá lẻ 219.000đ (3 × Cheers+ 200g; me tặng kèm) −6% (tạm tính)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1353,14 +1413,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 459.000đ · Combo 3: 659.000đ.",
    "variants": [
     {
      "code": "VZ-YM-SRTH-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 245000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THSR-105-YM) – shop ghi 105g",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1383,14 +1446,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
    "variants": [
     {
      "code": "VZ-YM-MT-100",
      "weightG": 100,
      "weightLabel": "100g (tạm)",
      "verify": true,
-     "note": "Khối lượng tạm."
+     "note": "Khối lượng tạm.",
+     "price": 199000,
+     "priceSource": "Giá tạm tính Mộc Quả – sầu riêng sấy thăng hoa 100g ~193k; khối lượng tạm",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1413,14 +1479,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
    "variants": [
     {
      "code": "VZ-PS-GD-100",
      "weightG": 100,
      "weightLabel": "100g (100g – 150g – 200g)",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 199000,
+     "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1443,14 +1512,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
    "variants": [
     {
      "code": "VZ-PS-RY-100",
      "weightG": 100,
      "weightLabel": "100g (100g – 150g – 200g)",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 199000,
+     "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1473,14 +1545,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
    "variants": [
     {
      "code": "VZ-PS-YD-100",
      "weightG": 100,
      "weightLabel": "100g (100g – 150g – 200g)",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 199000,
+     "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1519,28 +1594,37 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "100g: Combo 2: 65.000đ · Combo 3: 95.000đ | 250g: Combo 2: 169.000đ · Combo 3: 239.000đ | 500g: Combo 2: 309.000đ · Combo 3: 445.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XD-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 35000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX)",
+     "priceCheckedAt": "2026-10-31"
     },
     {
      "code": "VZ-FH-XD-250",
      "weightG": 250,
      "weightLabel": "250g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 89000,
+     "priceSource": "Giá thị trường VN (trung vị) – xoài dẻo 250g ~65k; giữ trên giá F&H 200g 69k, dưới 500g 165k",
+     "priceCheckedAt": "2026-10-31"
     },
     {
      "code": "VZ-FH-XD-500",
      "weightG": 500,
      "weightLabel": "500g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 165000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXO-500-FH)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1563,14 +1647,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 65.000đ · Combo 3: 95.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XDH-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 35000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) – cùng giá F&H 100g, khác túi",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1593,14 +1680,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 65.000đ · Combo 3: 95.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XDV-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 35000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) – cùng giá F&H 100g, khác túi",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1630,7 +1720,10 @@
      "weightG": 350,
      "weightLabel": "100g + 250g = 350g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 115000,
+     "priceSource": "Combo = tổng giá lẻ 124.000đ (F&H 100g + 250g) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1677,14 +1770,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 159.000đ · Combo 3: 229.000đ.",
    "variants": [
     {
      "code": "VZ-FH-MIT-300",
      "weightG": 300,
      "weightLabel": "300g (200–300g)",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 85000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1766,14 +1862,17 @@
     }
    ],
    "verify": true,
-   "note": "Có 2 kiểu: túi in \"new\" và túi zip trong dán tem. Khối lượng chưa rõ.",
+   "note": "Có 2 kiểu: túi in \"new\" và túi zip trong dán tem. Khối lượng chưa rõ. Combo 2: 349.000đ · Combo 3: 495.000đ.",
    "variants": [
     {
      "code": "VZ-FH-SRTH-XX",
      "weightG": null,
      "weightLabel": "Chưa rõ",
      "verify": true,
-     "note": ""
+     "note": "",
+     "price": 185000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THSR-080-FH) – shop ghi 80g (tạm tính)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1781,7 +1880,7 @@
    "id": "vz-kt-srth",
    "brand": "viza-food",
    "label": "Kita",
-   "name": "Sầu riêng sấy thăng hoa",
+   "name": "Sầu riêng sấy",
    "cat": "thanghoa",
    "type": "sau-rieng-thang-hoa",
    "pack": "",
@@ -1804,14 +1903,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 169.000đ · Combo 3: 239.000đ.",
    "variants": [
     {
      "code": "VZ-KT-SRTH-100",
      "weightG": 100,
      "weightLabel": "100g · 3 gói nhỏ",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 90000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GSR-100-KT) – sầu riêng sấy",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1834,14 +1936,17 @@
     }
    ],
    "verify": false,
-   "note": "Ảnh cắt từ ảnh combo.",
+   "note": "Ảnh cắt từ ảnh combo. Combo 2: 95.000đ · Combo 3: 129.000đ.",
    "variants": [
     {
      "code": "VZ-VZ-HDI-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 49000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-HDR-100-VZ)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1864,14 +1969,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 99.000đ · Combo 3: 145.000đ.",
    "variants": [
     {
      "code": "VZ-VZ-HMC-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 54000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-HMC-100-VZ)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1894,14 +2002,17 @@
     }
    ],
    "verify": false,
-   "note": "Ảnh cắt từ ảnh combo.",
+   "note": "Ảnh cắt từ ảnh combo. Combo 2: 245.000đ · Combo 3: 349.000đ.",
    "variants": [
     {
      "code": "VZ-VZ-HDC-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 130000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-HDC-100-VZ)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1924,14 +2035,17 @@
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Combo 2: 139.000đ · Combo 3: 199.000đ.",
    "variants": [
     {
      "code": "VZ-VZ-HSE-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 75000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-HHS-100-VZ)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1954,14 +2068,17 @@
     }
    ],
    "verify": false,
-   "note": "Ảnh cắt từ ảnh combo.",
+   "note": "Ảnh cắt từ ảnh combo. Combo 2: 99.000đ · Combo 3: 139.000đ.",
    "variants": [
     {
      "code": "VZ-VZ-DUA-100",
      "weightG": 100,
      "weightLabel": "100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 52000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GDU-100-VZ)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -1991,7 +2108,10 @@
      "weightG": 200,
      "weightLabel": "2 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 95000,
+     "priceSource": "Combo = tổng giá lẻ 103.000đ (hạt điều + macca) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2021,7 +2141,10 @@
      "weightG": 200,
      "weightLabel": "2 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 195000,
+     "priceSource": "Combo = tổng giá lẻ 205.000đ (hạt dẻ cười + hạt sen) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2051,7 +2174,10 @@
      "weightG": 300,
      "weightLabel": "3 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 219000,
+     "priceSource": "Combo = tổng giá lẻ 233.000đ (hạt macca + điều + dẻ cười) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2081,7 +2207,10 @@
      "weightG": 300,
      "weightLabel": "3 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 239000,
+     "priceSource": "Combo = tổng giá lẻ 254.000đ (hạt điều + dẻ cười + sen) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2111,7 +2240,10 @@
      "weightG": 400,
      "weightLabel": "4 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 289000,
+     "priceSource": "Combo = tổng giá lẻ 306.000đ (hạt sen + dừa + điều + dẻ cười) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2141,7 +2273,10 @@
      "weightG": 400,
      "weightLabel": "4 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 289000,
+     "priceSource": "Combo = tổng giá lẻ 308.000đ (hạt macca + dẻ cười + sen + điều) −6%",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2171,7 +2306,10 @@
      "weightG": 500,
      "weightLabel": "5 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 339000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-CBH-5X100-VZ)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   },
@@ -2201,7 +2339,10 @@
      "weightG": 400,
      "weightLabel": "4 × 100g",
      "verify": false,
-     "note": ""
+     "note": "",
+     "price": 289000,
+     "priceSource": "Combo = tổng giá lẻ 308.000đ (hạt dẻ cười + sen + điều + macca theo giá lẻ Viza) −6%; YC Nuts chưa có giá thị trường (tạm tính)",
+     "priceCheckedAt": "2026-10-31"
     }
    ]
   }
