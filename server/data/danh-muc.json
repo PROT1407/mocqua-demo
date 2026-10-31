@@ -12,9 +12,10 @@
   {
    "id": "viza-food",
    "name": "Viza Food",
-   "kind": "competitor",
-   "kindLabel": "Đối thủ / tham khảo",
-   "owner": "Công ty CP Viza Food"
+   "kind": "partner",
+   "kindLabel": "Đối tác phân phối độc quyền",
+   "owner": "Công ty CP Viza Food",
+   "partnerNote": "Mộc Quả là đối tác phân phối độc quyền Viza Food"
   }
  ],
  "labels": [
@@ -2590,7 +2591,7 @@
    "note": "Cùng kiểu đĩa với ảnh đã xác nhận. Cần kiểm tra."
   }
  ],
- "codeScheme": "Mộc Quả: MQZ-<SP>-<gram>. Đối thủ: VZ-<NHÃN>-<SP>-<gram>; XX = chưa rõ khối lượng.",
+ "codeScheme": "Mộc Quả: MQZ-<SP>-<gram>. Viza Food (đối tác phân phối độc quyền): VZ-<NHÃN>-<SP>-<gram>; XX = chưa rõ khối lượng.",
  "parked": [
   {
    "id": "vz-gg-srs",

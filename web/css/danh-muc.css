@@ -44,14 +44,14 @@
 
 .dm-brand { border-radius: 26px; padding: 22px; margin-bottom: 28px; }
 .dm-brand--own { background: linear-gradient(180deg, #FFFDF8 0%, #F8F1E2 100%); border: 1.5px solid var(--gold); box-shadow: 0 18px 40px rgba(30,58,47,.08); }
-.dm-brand--competitor { background: #F4F2EC; border: 1px solid #E6E0D2; }
+.dm-brand--partner { background: #F4F2EC; border: 1px solid #E6E0D2; }
 .dm-brand__head { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
 .dm-brand__mark { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-weight: 600; letter-spacing: .04em; flex: none; }
 .dm-brand--own .dm-brand__mark { background: linear-gradient(135deg, var(--g), var(--g2)); color: var(--gold2); }
-.dm-brand--competitor .dm-brand__mark { background: #DCD6C8; color: #5A5A50; }
+.dm-brand--partner .dm-brand__mark { background: #DCD6C8; color: #5A5A50; }
 .dm-brand__kind { font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; font-weight: 600; }
 .dm-brand--own .dm-brand__kind { color: #9B7B3E; }
-.dm-brand--competitor .dm-brand__kind { color: #8A6A3A; background: #FFF3E0; display: inline-block; padding: 2px 8px; border-radius: 999px; }
+.dm-brand--partner .dm-brand__kind { color: var(--g); background: #E4EEE6; display: inline-block; padding: 2px 8px; border-radius: 999px; }
 .dm-brand h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--g); }
 .dm-brand__owner { color: var(--ink2); font-size: 13px; }
 .dm-label + .dm-label { margin-top: 22px; }
@@ -191,3 +191,6 @@
   .dm-buy--ask { grid-template-columns: 1fr; }
   .dm-buy__opt span { padding: 5px 6px; font-size: 11.5px; }
 }
+
+/* Viza Food: đối tác phân phối độc quyền */
+.dm-brand__partner { margin-top: 2px; font-size: 13px; color: var(--g2); font-weight: 500; }

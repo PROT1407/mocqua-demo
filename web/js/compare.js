@@ -1,5 +1,8 @@
 // Bảng so sánh Thương hiệu → Nhãn → Khối lượng. Mọi chuỗi đều qua esc() trước khi vào HTML.
 const OWN = 'Mộc Quả';
+// Viza Food: Mộc Quả là đối tác phân phối độc quyền, không phải hãng cạnh tranh.
+const PARTNER = 'Viza Food';
+const isHouse = (brand) => brand === OWN || brand === PARTNER;
 const MAX_PICK = 4;
 const WEIGHT_BUCKETS = [
   ['s', '≤ 100g', (g) => g != null && g <= 100],
@@ -31,7 +34,8 @@ const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : '');
 const viDate = (d) => (d ? d.split('-').reverse().join('/') : '');
 const uniq = (list) => [...new Set(list.filter(Boolean))];
 const sortVi = (a, b) => a.localeCompare(b, 'vi');
-const brandSort = (a, b) => (a === OWN ? -1 : b === OWN ? 1 : sortVi(a, b));
+const brandRank = (b) => (b === OWN ? 0 : b === PARTNER ? 1 : 2);
+const brandSort = (a, b) => brandRank(a) - brandRank(b) || sortVi(a, b);
 
 function hue(name) {
   let h = 0;
@@ -49,10 +53,10 @@ function median(list) {
   return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
 }
 
-// Trung vị giá/100g của các hãng khác theo loại (chỉ dòng có giá và gram, không tính dòng mẫu).
+// Trung vị giá/100g của các hãng thị trường theo loại (không tính Mộc Quả và đối tác Viza Food, không tính dòng mẫu).
 const market = new Map();
 for (const fruit of uniq(rows.map((r) => r.fruit))) {
-  const vals = rows.filter((r) => r.fruit === fruit && r.brand !== OWN && !r.isExample).map(per100).filter((v) => v != null);
+  const vals = rows.filter((r) => r.fruit === fruit && !isHouse(r.brand) && !r.isExample).map(per100).filter((v) => v != null);
   if (vals.length) market.set(fruit, { median: median(vals), min: Math.min(...vals), max: Math.max(...vals), n: vals.length });
 }
 
@@ -136,10 +140,11 @@ function renderTree() {
       return `<section class="cmp-label"><h3><span>Nhãn</span> ${esc(label)} <small>${esc(inLabel.length)}</small></h3><div class="cmp-cards">${cards}</div></section>`;
     }).join('');
     const own = brand === OWN;
-    return `<section class="cmp-brand${own ? ' cmp-brand--own' : ''}">
+    const partner = brand === PARTNER;
+    return `<section class="cmp-brand${own ? ' cmp-brand--own' : partner ? ' cmp-brand--partner' : ''}">
       <header class="cmp-brand__head">
         <span class="cmp-avatar" style="--h:${hue(brand)}">${esc(initials(brand))}</span>
-        <div><h2>${esc(brand)}</h2><p>${esc(labels.length)} nhãn · ${esc(inBrand.length)} quy cách${own ? ' · khối lượng ước lượng' : ''}</p></div>
+        <div>${partner ? '<p class="cmp-brand__kind">Đối tác phân phối độc quyền</p>' : ''}<h2>${esc(brand)}</h2><p>${esc(labels.length)} nhãn · ${esc(inBrand.length)} quy cách${own ? ' · khối lượng ước lượng' : ''}${partner ? ' · Mộc Quả là đối tác phân phối độc quyền Viza Food, giá theo trang Viza' : ''}</p></div>
       </header>
       ${labelHtml}
     </section>`;

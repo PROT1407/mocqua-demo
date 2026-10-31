@@ -840,7 +840,7 @@ export function catalogPage(data) {
       <div id="dm-grid"><p class="fine">Đang tải danh mục…</p></div>
       <div id="dm-compare" hidden></div>
       <section class="dm-gallery" id="dm-gallery" aria-labelledby="dm-gallery-title"></section>
-      <p class="dm-foot">Nút “Thêm vào giỏ” dùng giá bán ở cửa hàng và giỏ hàng chung; mã hiện “Liên hệ” chưa bán online (chưa có giá hoặc chưa có trong cửa hàng), nhắn Zalo để hỏi. Không ghi giá khuyến mãi trên tem. Giá đối thủ sẽ so chủ yếu với các trang dacsancaocap. Mã: ${esc(data.codeScheme)}</p>
+      <p class="dm-foot">Nút “Thêm vào giỏ” dùng giá bán ở cửa hàng và giỏ hàng chung; mã hiện “Liên hệ” chưa bán online (chưa có giá hoặc chưa có trong cửa hàng), nhắn Zalo để hỏi. Không ghi giá khuyến mãi trên tem. Giá thị trường chỉ so với các hãng bên ngoài như dacsancaocap; Viza Food là đối tác phân phối độc quyền của Mộc Quả, không phải đối thủ. Mã: ${esc(data.codeScheme)}</p>
     </section>
     <dialog class="dm-lb" id="dm-lb" aria-labelledby="dm-lb-title">
       <div class="dm-lb__head"><div><small id="dm-lb-sub"></small><h2 id="dm-lb-title"></h2></div><span class="dm-lb__count" id="dm-lb-count" aria-live="polite"></span><button type="button" class="dm-lb__x" id="dm-lb-x">Đóng</button></div>
@@ -856,7 +856,7 @@ export function catalogPage(data) {
   </main>`;
   return layout({
     title: 'Danh mục tra cứu | Mộc Quả',
-    description: 'Tra cứu sản phẩm Mộc Quả và nhãn tham khảo theo thương hiệu, nhãn, sản phẩm, khối lượng.',
+    description: 'Tra cứu sản phẩm Mộc Quả và Viza Food (Mộc Quả là đối tác phân phối độc quyền) theo thương hiệu, nhãn, sản phẩm, khối lượng.',
     page: 'catalog',
     body,
     scripts: ['/static/js/danh-muc.js'],

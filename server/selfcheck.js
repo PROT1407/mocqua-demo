@@ -720,6 +720,15 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.ok(raw, 'có dữ liệu danh mục');
     const data = JSON.parse(raw[1].replace(/\\u003c/g, '<'));
     assert.match(data.contact, /^https:\/\/zalo\.me\/\d+/);
+    // Viza Food là đối tác phân phối độc quyền, không ghi là đối thủ / tham khảo.
+    const viza = data.brands.find((b) => b.id === 'viza-food');
+    assert.equal(viza.kind, 'partner');
+    assert.equal(viza.kindLabel, 'Đối tác phân phối độc quyền');
+    assert.match(viza.partnerNote, /đối tác phân phối độc quyền Viza Food/);
+    assert.doesNotMatch(page, /Đối thủ \/ tham khảo|· tham khảo|không bán tại Mộc Quả/);
+    assert.match(page, /Viza Food là đối tác phân phối độc quyền/);
+    const cmpJs = await (await fetch(base + '/static/js/compare.js')).text();
+    assert.match(cmpJs, /Đối tác phân phối độc quyền/);
     const buy = data.buy;
     // Mỗi lựa chọn mua phải là mã bán được, giá khớp /api/quote.
     const skus = [...new Set(Object.values(buy).flatMap((b) => b.options.map((o) => o.sku)))];
@@ -744,7 +753,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v13/);
+    assert.match(sw, /mocqua-shell-v14/);
   } finally {
     server.close();
   }
