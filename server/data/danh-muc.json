@@ -1211,10 +1211,18 @@
      "h": 500,
      "alt": "Túi Cheers+ xoài sấy dẻo trên nền cam",
      "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ.",
+   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDL-200",
@@ -1244,10 +1252,18 @@
      "h": 1000,
      "alt": "Túi Cheers+ xoài sấy dẻo băng đỏ",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
+     "kind": "combo"
     }
    ],
    "verify": true,
-   "note": "Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ.",
+   "note": "Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDR-200",
@@ -1301,10 +1317,18 @@
      "h": 1000,
      "alt": "Túi tròn chụp ngoài trời",
      "kind": "thuc-te"
+    },
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ.",
+   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDT-200",
@@ -1322,7 +1346,7 @@
    "id": "vz-ch-cb3x",
    "brand": "viza-food",
    "label": "Cheers+",
-   "name": "Combo 3 xoài sấy dẻo + tặng me Good Good 100g",
+   "name": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -1332,21 +1356,21 @@
      "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
      "w": 1000,
      "h": 1000,
-     "alt": "Combo 3 túi xoài Cheers+ tặng me sấy",
+     "alt": "3 túi xoài sấy dẻo Cheers+ 200g",
      "kind": "hero"
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "3 túi Cheers+ 200g, khách chọn màu túi đỏ hoặc xanh lá, cùng giá. Combo 2 túi: 139.000đ.",
    "variants": [
     {
      "code": "VZ-CH-CB3X-600",
      "weightG": 600,
-     "weightLabel": "3 × 200g + me 100g",
+     "weightLabel": "3 × 200g",
      "verify": true,
-     "note": "Tổng khối lượng tạm tính.",
-     "price": 205000,
-     "priceSource": "Combo = tổng giá lẻ 219.000đ (3 × Cheers+ 200g; me tặng kèm) −6% (tạm tính)",
+     "note": "Chọn màu túi (đỏ / xanh lá) ở ô Ghi chú khi đặt hàng, cùng giá.",
+     "price": 195000,
+     "priceSource": "Chủ shop chốt 31/10: 3 × 73.000đ = 219.000đ, giảm ≈11%",
      "priceCheckedAt": "2026-10-31"
     }
    ]
@@ -1572,10 +1596,18 @@
      "h": 1000,
      "alt": "Túi xoài sấy dẻo trên nền trắng",
      "kind": "nen-trang"
+    },
+    {
+     "src": "/assets/catalog/vz-fh-cb350.webp",
+     "thumb": "/assets/catalog/vz-fh-cb350-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Combo xoài sấy dẻo Fresh & Healthy 100g + 250g",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "100g: Combo 2: 65.000đ · Combo 3: 95.000đ | 250g: Combo 2: 169.000đ · Combo 3: 239.000đ | 500g: Combo 2: 309.000đ · Combo 3: 445.000đ.",
+   "note": "100g: Combo 2: 65.000đ · Combo 3: 95.000đ | 250g: Combo 2: 169.000đ · Combo 3: 239.000đ | 500g: Combo 2: 309.000đ · Combo 3: 445.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 115.000đ (VZ-FH-CB-350).",
    "variants": [
     {
      "code": "VZ-FH-XD-100",
@@ -1679,7 +1711,7 @@
    "id": "vz-fh-cb350",
    "brand": "viza-food",
    "label": "Fresh & Healthy",
-   "name": "Combo xoài sấy dẻo 100g + 250g",
+   "name": "Combo xoài sấy dẻo Fresh & Healthy 100g + 250g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -1689,12 +1721,12 @@
      "thumb": "/assets/catalog/vz-fh-cb350-sm.webp",
      "w": 1000,
      "h": 1000,
-     "alt": "Hai túi xoài sấy dẻo 100g và 250g",
+     "alt": "Xoài sấy dẻo Fresh & Healthy túi 100g và túi 250g",
      "kind": "hero"
     }
    ],
    "verify": false,
-   "note": "",
+   "note": "Gồm 1 túi 100g (VZ-FH-XD-100) và 1 túi 250g (VZ-FH-XD-250). Bỏ qua chữ 53k in trên ảnh.",
    "variants": [
     {
      "code": "VZ-FH-CB-350",
