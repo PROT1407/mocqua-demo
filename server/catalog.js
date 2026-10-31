@@ -180,6 +180,8 @@ function presentProduct(mq, product, { detail = false } = {}) {
       ? Object.fromEntries(Object.entries(product.packs).map(([k, v]) => [k, { name: v.name, colors: v.c || [] }]))
       : null,
     pknote: product.pknote || '',
+    related: Array.isArray(product.related) ? product.related : [],
+    relatedNote: product.relatedNote || '',
     variants,
     defaultSku: def?.sku || '',
     priceFrom: prices.length ? Math.min(...prices) : null,

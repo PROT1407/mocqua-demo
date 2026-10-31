@@ -5,6 +5,7 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 - GoodFood là nhãn Good Good (chủ shop xác nhận): bỏ nhãn GoodFood ở danh mục và cửa hàng.
 - Túi nhỏ vuông Good Good: ghi khối lượng in trên bao, không đọc được thì 80g. Giá cân đối: 80g thơm/cóc 30k, mãng cầu 39k, thanh long 45k; túi 100g (xoài muối ớt, cóc túi đỏ) 35k.
 - Gác VZ-GF-THOM-100 (trùng VZ-GG-THOM-80) và VZ-GG-MHH-250 (chủ shop yêu cầu gỡ).
+- Premium Shrinking: 3 túi ghi 100g theo NET WT trên bao. Combo khác vị: 2 vị 375k, 3 vị (Golden + Royal + Yummy) 535k. Thêm ảnh combo 3 vị vào thư viện ảnh 3 thẻ. Cửa hàng có thẻ combo VZ-PS-CB3-300 / VZ-PS-CB2-200.
 
 | Mã | Tên | KL | Giá | Combo 2 | Combo 3 | /100g | Tạm tính | Nguồn giá | Cửa hàng |
 |---|---|---|---|---|---|---|---|---|---|
@@ -31,9 +32,11 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 | VZ-CH-CB3X-600 | Cheers+ – Combo 3 xoài sấy dẻo + tặng me Good Good 100g | 3 × 200g + me 100g | 205.000đ | — | — | 34.167đ | tạm tính | Combo = tổng giá lẻ 219.000đ (3 × Cheers+ 200g; me tặng kèm) −6% | thẻ mới vz-ch-cb3x |
 | VZ-YM-SRTH-100 | Yummy – Sầu riêng sấy thăng hoa | 100g | 245.000đ | 459.000đ | 659.000đ | 245.000đ |  | Giá cửa hàng Mộc Quả (MQ-THSR-105-YM) – shop ghi 105g | đã có: MQ-THSR-105-YM |
 | VZ-YM-MT-100 | Yummy – Yummy Monthong sầu riêng sấy thăng hoa | 100g (tạm) | 199.000đ | 375.000đ | 535.000đ | 199.000đ | tạm tính | Giá tạm tính Mộc Quả – sầu riêng sấy thăng hoa 100g ~193k; khối lượng tạm | thẻ mới vz-ym-mt |
-| VZ-PS-GD-100 | Premium Shrinking Dried Durian – Golden Durian sầu riêng sấy thăng hoa | 100g (100g – 150g – 200g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-gd |
-| VZ-PS-RY-100 | Premium Shrinking Dried Durian – Royal Durian sầu riêng sấy thăng hoa | 100g (100g – 150g – 200g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-ry |
-| VZ-PS-YD-100 | Premium Shrinking Dried Durian – Yummy Durian sầu riêng sấy thăng hoa | 100g (100g – 150g – 200g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-yd |
+| VZ-PS-GD-100 | Premium Shrinking Dried Durian – Golden Durian sầu riêng sấy thăng hoa | 100g (in trên bao: NET WT 100g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-gd; combo 2 vị khác nhau 375k, 3 vị 535k (khung ảnh combo) |
+| VZ-PS-RY-100 | Premium Shrinking Dried Durian – Royal Durian sầu riêng sấy thăng hoa | 100g (in trên bao: NET WT 100g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-ry; combo 2 vị khác nhau 375k, 3 vị 535k (khung ảnh combo) |
+| VZ-PS-YD-100 | Premium Shrinking Dried Durian – Yummy Durian sầu riêng sấy thăng hoa | 100g (in trên bao: NET WT 100g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-yd; combo 2 vị khác nhau 375k, 3 vị 535k (khung ảnh combo) |
+| VZ-PS-CB3-300 | Premium Shrinking – Combo 3 vị Golden + Royal + Yummy | 3 × 100g | 535.000đ | — | — | 178.333đ |  | Chủ shop chốt: 3 vị khác nhau, tiết kiệm 62.000đ so với 3 × 199.000đ | chỉ cửa hàng: thẻ vz-ps-cb3 |
+| VZ-PS-CB2-200 | Premium Shrinking – Combo 2 vị khác nhau (khách ghi vị ở ô Ghi chú) | 2 × 100g | 375.000đ | — | — | 187.500đ |  | Chủ shop chốt: 2 vị khác nhau, tiết kiệm 23.000đ so với 2 × 199.000đ | chỉ cửa hàng: biến thể 2 vị của thẻ vz-ps-cb3 |
 | VZ-FH-XD-100 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 100g | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) | đã có: MQ-DXO-100-FHX |
 | VZ-FH-XD-250 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 250g | 89.000đ | 169.000đ | 239.000đ | 35.600đ |  | Giá thị trường VN (trung vị) – xoài dẻo 250g ~65k; giữ trên giá F&H 200g 69k, dưới 500g 165k | thẻ mới vz-fh-xd |
 | VZ-FH-XD-500 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 500g | 165.000đ | 309.000đ | 445.000đ | 33.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-500-FH) | đã có: MQ-DXO-500-FH |

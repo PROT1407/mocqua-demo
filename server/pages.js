@@ -370,9 +370,10 @@ export function productPage(product, catalog) {
     ...(product.sections || []).map((s) => `<section><h2>${esc(s.h)}</h2>${(s.p || []).map((p) => `<p>${esc(p)}</p>`).join('')}${s.li ? `<ul>${s.li.map((li) => `<li>${esc(li)}</li>`).join('')}</ul>` : ''}${specTable(s.spec)}</section>`),
     !product.intro && product.long ? `<section><h2>Mô tả</h2><p>${esc(product.long)}</p></section>` : '',
   ].join('');
-  const related = catalog.products
-    .filter((p) => p.id !== product.id && p.priceFrom > 0)
-    .sort((a, b) => (b.fruit === product.fruit) - (a.fruit === product.fruit) || (b.cat === product.cat) - (a.cat === product.cat) || a.rank - b.rank)
+  const picked = (product.related || []).map((id) => catalog.products.find((p) => p.id === id && p.priceFrom > 0)).filter(Boolean);
+  const related = [...picked, ...catalog.products
+    .filter((p) => p.id !== product.id && p.priceFrom > 0 && !picked.includes(p))
+    .sort((a, b) => (b.fruit === product.fruit) - (a.fruit === product.fruit) || (b.cat === product.cat) - (a.cat === product.cat) || a.rank - b.rank)]
     .slice(0, 4);
   const client = {
     id: product.id,
@@ -421,7 +422,7 @@ export function productPage(product, catalog) {
       </div>
     </article>
     <div class="prose">${sections}</div>
-    ${related.length ? `<section class="related"><h2>Cùng kệ</h2><div class="grid">${related.map(productCard).join('')}</div></section>` : ''}
+    ${related.length ? `<section class="related"><h2>${picked.length ? 'Thường mua kèm' : 'Cùng kệ'}</h2>${product.relatedNote ? `<p class="lead lead--left">${esc(product.relatedNote)}</p>` : ''}<div class="grid">${related.map(productCard).join('')}</div></section>` : ''}
     <div class="buysticky">
       <div><b id="pdp-sticky-price"></b><span id="pdp-sticky-label"></span></div>
       <button class="btn" type="button" id="pdp-add-2" data-add>${product.oos ? 'Hết hàng' : 'Cho vào giỏ'}</button>
