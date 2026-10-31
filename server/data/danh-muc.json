@@ -1417,15 +1417,23 @@
      "h": 1000,
      "alt": "Túi Golden Durian",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ps-cb3.webp",
+     "thumb": "/assets/catalog/vz-ps-cb3-sm.webp",
+     "w": 1200,
+     "h": 1200,
+     "alt": "3 vị: Golden + Royal + Yummy Durian, mỗi túi 100g",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
+   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 535.000đ, tiết kiệm 62.000đ.",
    "variants": [
     {
      "code": "VZ-PS-GD-100",
      "weightG": 100,
-     "weightLabel": "100g (100g – 150g – 200g)",
+     "weightLabel": "100g (in trên bao: NET WT 100g)",
      "verify": false,
      "note": "",
      "price": 199000,
@@ -1450,15 +1458,23 @@
      "h": 1000,
      "alt": "Túi Royal Durian",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ps-cb3.webp",
+     "thumb": "/assets/catalog/vz-ps-cb3-sm.webp",
+     "w": 1200,
+     "h": 1200,
+     "alt": "3 vị: Golden + Royal + Yummy Durian, mỗi túi 100g",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
+   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 535.000đ, tiết kiệm 62.000đ.",
    "variants": [
     {
      "code": "VZ-PS-RY-100",
      "weightG": 100,
-     "weightLabel": "100g (100g – 150g – 200g)",
+     "weightLabel": "100g (in trên bao: NET WT 100g)",
      "verify": false,
      "note": "",
      "price": 199000,
@@ -1483,15 +1499,23 @@
      "h": 1000,
      "alt": "Túi Yummy Durian",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-ps-cb3.webp",
+     "thumb": "/assets/catalog/vz-ps-cb3-sm.webp",
+     "w": 1200,
+     "h": 1200,
+     "alt": "3 vị: Golden + Royal + Yummy Durian, mỗi túi 100g",
+     "kind": "combo"
     }
    ],
    "verify": false,
-   "note": "Combo 2: 375.000đ · Combo 3: 535.000đ.",
+   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 535.000đ, tiết kiệm 62.000đ.",
    "variants": [
     {
      "code": "VZ-PS-YD-100",
      "weightG": 100,
-     "weightLabel": "100g (100g – 150g – 200g)",
+     "weightLabel": "100g (in trên bao: NET WT 100g)",
      "verify": false,
      "note": "",
      "price": 199000,
