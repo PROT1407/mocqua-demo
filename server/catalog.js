@@ -182,6 +182,8 @@ function presentProduct(mq, product, { detail = false } = {}) {
     pknote: product.pknote || '',
     related: Array.isArray(product.related) ? product.related : [],
     relatedNote: product.relatedNote || '',
+    comboOf: Array.isArray(product.comboOf) ? product.comboOf : [],
+    kem: Array.isArray(product.kem) ? product.kem : [],
     variants,
     defaultSku: def?.sku || '',
     priceFrom: prices.length ? Math.min(...prices) : null,
