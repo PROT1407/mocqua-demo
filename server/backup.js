@@ -278,7 +278,7 @@ export function ordersToCsv(orders) {
     const discount = order.summary?.discount || 0;
     if (discount > 0) {
       const pct = order.summary.discountPct ? ` ${order.summary.discountPct}%` : '';
-      rows.push(csvRow(order, { sku: '', name: `Giảm${pct} theo đơn (không áp cho combo)`, w: '', qty: '', price: '', line: discount }, 'Giảm'));
+      rows.push(csvRow(order, { sku: '', name: `Giảm${pct} theo đơn${order.summary.discountBase && order.summary.discountBase < order.summary.subtotal ? ' (không áp cho combo)' : ''}`, w: '', qty: '', price: '', line: discount }, 'Giảm'));
     }
   }
   return `\uFEFF${rows.join('\n')}\n`;

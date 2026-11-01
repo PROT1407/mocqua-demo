@@ -14,7 +14,7 @@ function rows(data) {
   return `<ul class="lines">${items}${gifts}</ul>
     <p class="hint">${data.hint || ''}</p>
     <p class="sumrow"><span>Tiền hàng</span><b>${money(data.subtotal)}</b></p>
-    ${data.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(không áp cho combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
+    ${data.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(gồm cả combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
     <p class="sumrow"><span>Giao hàng</span><b>${data.ship ? money(data.ship) : 'Miễn phí'}</b></p>
     <p class="sumrow sumrow--due"><span>Cần trả</span><b>${money(data.total)}</b></p>`;
 }

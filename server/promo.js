@@ -5,7 +5,8 @@ import { vnd, problem } from './format.js';
 
 // Chiết khấu theo giá trị đơn (chủ shop duyệt 01/11/2026: từ 300k −3% + miễn ship, từ 500k −7%, từ 1 triệu −12%). Không còn quà tặng 0đ.
 // - Mức tính trên tiền hàng trước giảm, chưa cộng phí giao.
-// - % chỉ giảm trên món lẻ, set, hộp quà. Dòng combo đã có giá riêng: không giảm thêm, nhưng vẫn tính vào mức đơn.
+// - Kế hoạch A (chủ shop duyệt 01/11/2026 22:00): % giảm trên toàn bộ tiền hàng, combo cũng được giảm theo đơn và vẫn tính vào mức đơn.
+//   (Kế hoạch B để thử sau 1–3 tháng — xem research/gia-vizafood.md; chưa làm.)
 // - Tiền giảm làm tròn xuống tới nghìn đồng.
 export const ORDER_TIERS = Object.freeze([
   Object.freeze({ min: 1000000, pct: 12 }),
@@ -32,10 +33,11 @@ export function nextTier(subtotal, tiers = ORDER_TIERS) {
 // lines: [{ line, combo }]
 export function orderDiscount(lines, tiers = ORDER_TIERS) {
   const subtotal = lines.reduce((sum, l) => sum + l.line, 0);
-  const base = lines.filter((l) => !l.combo).reduce((sum, l) => sum + l.line, 0);
+  const comboSubtotal = lines.filter((l) => l.combo).reduce((sum, l) => sum + l.line, 0);
+  const base = subtotal; // kế hoạch A: combo cũng được giảm theo đơn
   const tier = tierFor(subtotal, tiers);
   const discount = tier ? Math.floor((base * tier.pct) / 100 / 1000) * 1000 : 0;
-  return { subtotal, base, comboSubtotal: subtotal - base, pct: tier ? tier.pct : 0, discount };
+  return { subtotal, base, comboSubtotal, pct: tier ? tier.pct : 0, discount };
 }
 
 export function shipFor(subtotal, settings) {
@@ -92,7 +94,7 @@ function publicSettings(settings) {
 }
 
 export function hintText({ settings, subtotal, pct, hasCombo, base, ship = true }) {
-  if (!subtotal) return `${bannerText(settings)}. Combo đã có giá riêng, không giảm thêm.`;
+  if (!subtotal) return `${bannerText(settings)}. Combo cũng được giảm theo đơn.`;
   const bits = [];
   const next = nextTier(subtotal);
   const both = ship && next && subtotal < settings.freeShip && next.min === settings.freeShip;
@@ -100,7 +102,7 @@ export function hintText({ settings, subtotal, pct, hasCombo, base, ship = true 
   else if (ship) bits.push(subtotal < settings.freeShip ? `Thêm ${kfmt(settings.freeShip - subtotal)} để được miễn phí giao.` : 'Đơn được miễn phí giao.');
   if (pct) bits.push(`Đang giảm ${pct}%.`);
   if (!both) bits.push(next ? `Thêm ${kfmt(next.min - subtotal)} để được giảm ${next.pct}%.` : 'Đã đạt mức giảm cao nhất.');
-  if (hasCombo) bits.push(base > 0 ? 'Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.' : 'Combo đã có giá riêng, không giảm thêm.');
+  if (hasCombo) bits.push('Combo cũng được giảm theo đơn và tính vào mức đơn.');
   return bits.join(' ');
 }
 
@@ -146,7 +148,7 @@ export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}
     discountPct: d.pct,
     discountBase: d.base,
     comboSubtotal: d.comboSubtotal,
-    discountLabel: d.pct ? `Giảm ${d.pct}% đơn từ ${vnd(tierFor(d.subtotal).min)}${hasCombo ? ' (không áp cho combo)' : ''}` : '',
+    discountLabel: d.pct ? `Giảm ${d.pct}% đơn từ ${vnd(tierFor(d.subtotal).min)}${hasCombo ? ' (gồm cả combo)' : ''}` : '',
     ship,
     total,
     next: next ? { ...next, need: next.min - d.subtotal } : null,

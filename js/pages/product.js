@@ -91,9 +91,9 @@ if(!soon){
    $('[data-pricebox]').innerHTML=v.p?`<small>Giá bán</small><b>${MQ.fmt(v.p)}</b>${v.g?`<span class="pinfo__unit">≈ ${MQ.fmt(Math.round(v.p/v.g*100/100)*100)} / 100g</span>`:''}`:`<small>Giá</small><b class="is-quote">Liên hệ báo giá</b>`;
    const T=MQ.TIERS;
    $('[data-perks]').innerHTML=v.p?[
-     MQ.isComboP(p)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Combo giá riêng</b> — không giảm thêm theo đơn, nhưng vẫn được tính vào mức giảm.</span></li>`:'',
+     MQ.isComboP(p)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Combo giá riêng</b> — cũng được giảm theo đơn và vẫn được tính vào mức giảm.</span></li>`:'',
      p.combo?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b><a href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label)}</a></b> — chọn nhãn vàng GoodGood, xanh Fresh &amp; Healthy hoặc trộn.</span></li>`:'',
-     `<li class="perk"><svg><use href="#i-truck"/></svg><span>${T.slice().reverse().map((t,i)=>`${i?'từ':'Đơn từ'} ${MQ.fmt(t.min)} <b>−${t.pct}%</b>${t.min===MQ.FREE_SHIP?' + miễn phí giao':''}`).join(' · ')} — tự áp dụng trong giỏ, combo không giảm thêm. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
+     `<li class="perk"><svg><use href="#i-truck"/></svg><span>${T.slice().reverse().map((t,i)=>`${i?'từ':'Đơn từ'} ${MQ.fmt(t.min)} <b>−${t.pct}%</b>${t.min===MQ.FREE_SHIP?' + miễn phí giao':''}`).join(' · ')} — tự áp dụng trong giỏ, combo cũng được giảm. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
    ].join(''):'';
    $('[data-wlabel]').textContent=MQ.varLabel(p,v);
    if(p.packs){$('[data-vars]').innerHTML=varBtns();$('[data-packs]').innerHTML=packBtns();$('[data-pklabel]').textContent=p.packs[v.pk].name}else

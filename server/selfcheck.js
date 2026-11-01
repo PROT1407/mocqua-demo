@@ -138,20 +138,24 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     const singlesC = c.subtotal - combo.price;
     assert.ok(c.subtotal >= 1000000);
     assert.equal(c.discountPct, 12);
-    assert.equal(c.discountBase, singlesC);
-    assert.equal(c.discount, Math.floor((singlesC * 12) / 100 / 1000) * 1000, 'combo không được giảm');
+    assert.ok(singlesC > 0);
+    // Kế hoạch A: combo cũng được giảm theo đơn → % trên toàn bộ tiền hàng.
+    assert.equal(c.discountBase, c.subtotal);
+    assert.equal(c.comboSubtotal, combo.price);
+    assert.equal(c.discount, Math.floor((c.subtotal * 12) / 100 / 1000) * 1000, 'combo cũng được giảm');
+    assert.match(c.discountLabel, /\(gồm cả combo\)$/);
     assert.equal(c.total, c.subtotal - c.discount);
     assert.equal(c.items.find((i) => i.sku === combo.sku).combo, true);
 
-    // combo kéo đơn qua mức nhưng chỉ giảm phần món lẻ
+    // combo kéo đơn qua mức và cũng được giảm
     const lift = await quote([{ sku: single.sku, qty: qtyFor(500000 - combo.price) }, { sku: combo.sku, qty: 1 }]);
     if (lift.subtotal - combo.price < 500000 && lift.subtotal < 1000000) {
       assert.equal(lift.discountPct, 7);
-      assert.equal(lift.discount, Math.floor(((lift.subtotal - combo.price) * 7) / 100 / 1000) * 1000);
+      assert.equal(lift.discount, Math.floor((lift.subtotal * 7) / 100 / 1000) * 1000);
     }
     const onlyCombo = await quote([{ sku: combo.sku, qty: Math.ceil(500000 / combo.price) }]);
     assert.ok(onlyCombo.discountPct >= 7);
-    assert.equal(onlyCombo.discount, 0);
+    assert.equal(onlyCombo.discount, Math.floor((onlyCombo.subtotal * onlyCombo.discountPct) / 100 / 1000) * 1000);
     assert.equal(onlyCombo.ship, 0);
 
     // hàm thuần
@@ -163,9 +167,9 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.equal(orderDiscount([{ line: 999999 }]).discount, 69000);
     assert.equal(orderDiscount([{ line: 1000000 }]).discount, 120000);
     assert.equal(orderDiscount([{ line: 2500000 }]).discount, 300000, 'không có mức 2 triệu');
-    assert.deepEqual(orderDiscount([{ line: 840000 }, { line: 210000, combo: true }]), { subtotal: 1050000, base: 840000, comboSubtotal: 210000, pct: 12, discount: 100000 });
-    // Combo không giảm % nhưng kéo đơn qua mức 300k: chỉ món lẻ giảm 3%.
-    assert.deepEqual(orderDiscount([{ line: 100000 }, { line: 239000, combo: true }]), { subtotal: 339000, base: 100000, comboSubtotal: 239000, pct: 3, discount: 3000 });
+    assert.deepEqual(orderDiscount([{ line: 840000 }, { line: 210000, combo: true }]), { subtotal: 1050000, base: 1050000, comboSubtotal: 210000, pct: 12, discount: 126000 });
+    // Combo kéo đơn qua mức 300k và cũng được giảm 3%.
+    assert.deepEqual(orderDiscount([{ line: 100000 }, { line: 239000, combo: true }]), { subtotal: 339000, base: 339000, comboSubtotal: 239000, pct: 3, discount: 10000 });
     const { bannerText, promoTiers } = await import('./promo.js');
     assert.equal(bannerText(shop.settings), 'Giảm 3% + miễn ship đơn từ 300k · Giảm 7% đơn từ 500k · Giảm 12% đơn từ 1 triệu');
     assert.deepEqual(promoTiers({ freeShip: 250000 }).map((t) => [t.min, t.pct, t.ship]), [[250000, 0, true], [300000, 3, false], [500000, 7, false], [1000000, 12, false]]);
@@ -845,11 +849,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const inc = tl.split('<section class="incombo"')[1].split('</section>')[0];
     assert.match(inc, /Có trong combo/);
     assert.match(inc, /class="cbmini"[\s\S]*href="\/san-pham\/vz-gg-cb3-deo"[\s\S]*class="cbmini__save">Tiết kiệm 15k<\/span>[\s\S]*<b>120\.000đ<\/b> <span class="was">mua lẻ <s>135\.000đ<\/s><\/span>[\s\S]*data-add-sku="VZ-GG-CB3D-240"/);
-    // Combo không giảm theo mức nhưng vẫn tính vào mức đơn; miễn phí giao từ 300k.
+    // Kế hoạch A: combo cũng được giảm theo đơn và tính vào mức đơn; miễn phí giao từ 300k.
     const th = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }, { sku: 'VZ-YM-CB2SR-200', qty: 1 }, { sku: 'MQ-THSR-105-YM', qty: 1 }] }) })).json();
-    // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: chỉ món lẻ được giảm 12%.
+    // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: cả đơn giảm 12% = 135.000đ.
     assert.equal(th.subtotal, 1131000);
-    assert.equal(th.discount, Math.floor((199000 * 12) / 100 / 1000) * 1000);
+    assert.equal(th.discount, 135000);
+    assert.match(th.hint, /Combo cũng được giảm theo đơn/);
     assert.equal(th.ship, 0);
     // Combo Cheers 3 túi + combo 6 túi xoài: ảnh ghép đủ túi, hiện trọn; không còn ảnh/video "Mua 5 tặng 1" hay poster khuyến mãi.
     const ch3 = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
