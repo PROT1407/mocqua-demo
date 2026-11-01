@@ -784,7 +784,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v26/);
+    assert.match(sw, /mocqua-shell-v27/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
     const cbp = await (await fetch(base + '/combo')).text();
@@ -827,8 +827,8 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(tl, /class="incombo">Có trong combo <a href="\/san-pham\/vz-gg-cb3-deo">/);
     // Combo không giảm theo mức nhưng vẫn tính vào mức đơn; miễn phí giao từ 300k.
     const th = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }, { sku: 'VZ-YM-CB2SR-200', qty: 1 }, { sku: 'MQ-THSR-105-YM', qty: 1 }] }) })).json();
-    // 546k + 374k combo + 199k lẻ = 1.119.000đ ≥ 1 triệu: chỉ món lẻ được giảm 8%.
-    assert.equal(th.subtotal, 1119000);
+    // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: chỉ món lẻ được giảm 8%.
+    assert.equal(th.subtotal, 1131000);
     assert.equal(th.discount, Math.floor((199000 * 8) / 100 / 1000) * 1000);
     assert.equal(th.ship, 0);
     // Combo Cheers 3 túi + combo 6 túi xoài: ảnh ghép đủ túi, hiện trọn; không còn ảnh/video "Mua 5 tặng 1" hay poster khuyến mãi.
@@ -889,6 +889,18 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
         assert.equal(dmj.products.flatMap((x) => x.variants).find((v) => v.code === sku).price, price, sku + ' danh mục');
       }
       for (const p of shopAll) if ((p.comboOf || []).includes('MQ-GMI-300-FH')) assert.doesNotMatch(p.short + p.long, /(85|65)\.000đ/, p.id);
+      // Đợt giá xoài 01/11 (chủ shop duyệt đề xuất): F&H 250g 99k, Cheers+ 200g 89k, GG muối ớt 300g 125k, Cheers+ thăng hoa 159k; gói nhỏ 29k giữ nguyên.
+      for (const [sku, price] of [['VZ-FH-XD-250', 99000], ['MQ-DXC-200-CHA', 89000], ['MQ-DXM-300-GG', 125000], ['MQ-THXO-120-CH', 159000], ['MQ-DXM-S-GG', 29000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(priceOf.get(sku), price, sku);
+      const dmv = new Map(dmj.products.flatMap((x) => x.variants).map((v) => [v.code, v.price]));
+      for (const [code, price] of [['VZ-FH-XD-250', 99000], ['VZ-CH-XDL-200', 89000], ['VZ-CH-XDR-200', 89000], ['VZ-CH-XDT-200', 89000], ['MQ-DXM-300-GG', 125000], ['VZ-CH-XTH-120', 159000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(dmv.get(code), price, code + ' danh mục');
+      for (const [id, total, price] of [['vz-ch-cb3x', '267.000đ', '239.000đ'], ['vz-mix-cb3-thang-hoa', '627.000đ', '558.000đ']]) {
+        const p = shopAll.find((x) => x.id === id);
+        assert.ok(p.short.includes(price + ' (mua lẻ') && p.short.includes('= ' + total), id);
+        assert.equal(p.comboOf.reduce((a, sku) => a + priceOf.get(sku), 0), Number(total.replace(/\D/g, '')), id);
+      }
+      assert.match(dmp.get('vz-ch-xdt').note, /Combo 2: 169\.000đ · Combo 3: 239\.000đ/);
+      assert.match(dmp.get('vz-fh-xd').note, /250g: Combo 2: 185\.000đ · Combo 3: 265\.000đ/);
+      assert.match(dmp.get('vz-ch-xth').note, /Combo 2: 299\.000đ · Combo 3: 425\.000đ/);
       const fm = dmp.get('vz-fh-mit');
       assert.match(fm.note, /^Lưu ý: Mẫu bao bì vàng này đã hết/);
       assert.equal(fm.images[1].src, '/assets/catalog/fhx-mit200-moi.webp');

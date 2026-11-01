@@ -26,12 +26,12 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 | VZ-GG-MC-100 | Good Good – Mãng cầu sấy dẻo | 80g (mặc định) | 39.000đ | 75.000đ | 105.000đ | 48.750đ |  | Giá cân đối – MQ-DMC-080 hạ 55k→39k; thị trường ~48k/100g | đã có: MQ-DMC-080 |
 | VZ-GG-CARI-100 | Good Good – Bột cari Ngon (hũ) | 100g | 29.000đ | 55.000đ | 79.000đ | 29.000đ | tạm tính | Giá tạm tính Mộc Quả – bột cà ri 100g ~30k; khác loại hàng | gia vị – cửa hàng chưa có danh mục |
 | VZ-GG-CB2XC-200 | Good Good – Combo xoài muối ớt + cóc muối ớt | 2 × 100g | 65.000đ | — | — | 32.500đ |  | Combo = tổng giá lẻ 70.000đ (xoài muối ớt 100g + cóc 100g) −6% | thẻ mới vz-gg-cb-xc |
-| VZ-CH-XTH-120 | Cheers+ – Xoài sấy thăng hoa | 120g | 229.000đ | 429.000đ | 615.000đ | 190.833đ |  | Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) | đã có: MQ-THXO-120-CH |
+| VZ-CH-XTH-120 | Cheers+ – Xoài sấy thăng hoa | 110g | 159.000đ | 299.000đ | 425.000đ | 144.545đ |  | Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop duyệt đề xuất giá 01/11/2026: 145k → 159k | đã có: MQ-THXO-120-CH |
 | VZ-CH-SRTH-100 | Cheers+ – Sầu riêng sấy thăng hoa | 100g · 3 gói nhỏ | 259.000đ | 485.000đ | 695.000đ | 259.000đ |  | Giá cửa hàng Mộc Quả (MQ-THSR-110-CH) – shop ghi 110g | đã có: MQ-THSR-110-CH |
-| VZ-CH-XDL-200 | Cheers+ – Xoài sấy dẻo (túi lá xoài) | 200g (250–300g) | 73.000đ | 139.000đ | 195.000đ | 36.500đ | tạm tính | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – cùng giá Cheers+ 200g, khác túi | đã có: MQ-DXC-200-CHA |
-| VZ-CH-XDR-200 | Cheers+ – Xoài sấy dẻo (túi băng đỏ) | 200g (250–300g, tạm) | 73.000đ | 139.000đ | 195.000đ | 36.500đ | tạm tính | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – cùng giá Cheers+ 200g, khác túi | đã có: MQ-DXC-200-CHA |
-| VZ-CH-XDT-200 | Cheers+ – Xoài sấy dẻo (túi tròn áo dài) | 200g | 73.000đ | 139.000đ | 195.000đ | 36.500đ |  | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) | đã có: MQ-DXC-200-CHA |
-| VZ-CH-CB3X-600 | Cheers+ – Combo 3 túi xoài sấy dẻo 200g | 3 × 200g | 195.000đ | — | — | 32.500đ |  | Chủ shop chốt 31/10: 3 × 73.000đ = 219.000đ, giảm ≈11%; không kèm quà me | thẻ vz-ch-cb3x (chọn màu túi ở ô Ghi chú) |
+| VZ-CH-XDL-200 | Cheers+ – Xoài sấy dẻo (túi lá xoài) | 200g (250–300g) | 89.000đ | 169.000đ | 239.000đ | 44.500đ | tạm tính | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – chủ shop duyệt đề xuất giá 01/11/2026: Cheers+ 200g 75k → 89k, cùng giá Good Good 200g | đã có: MQ-DXC-200-CHA |
+| VZ-CH-XDR-200 | Cheers+ – Xoài sấy dẻo (túi băng đỏ) | 200g (250–300g, tạm) | 89.000đ | 169.000đ | 239.000đ | 44.500đ | tạm tính | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – chủ shop duyệt đề xuất giá 01/11/2026: Cheers+ 200g 75k → 89k, cùng giá Good Good 200g | đã có: MQ-DXC-200-CHA |
+| VZ-CH-XDT-200 | Cheers+ – Xoài sấy dẻo (túi tròn áo dài) | 200g | 89.000đ | 169.000đ | 239.000đ | 44.500đ |  | Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – chủ shop duyệt đề xuất giá 01/11/2026: Cheers+ 200g 75k → 89k, cùng giá Good Good 200g | đã có: MQ-DXC-200-CHA |
+| VZ-CH-CB3X-600 | Cheers+ – Combo 3 túi xoài sấy dẻo 200g | 3 × 200g | 239.000đ | — | — | 39.833đ |  | Combo = 3 × 89.000đ = 267.000đ −11%, làm tròn đuôi 9k (chủ shop duyệt đề xuất giá 01/11/2026); không kèm quà me | thẻ vz-ch-cb3x (chọn màu túi ở ô Ghi chú) |
 | VZ-YM-SRTH-100 | Yummy – Sầu riêng sấy thăng hoa | 100g | 245.000đ | 459.000đ | 659.000đ | 245.000đ |  | Giá cửa hàng Mộc Quả (MQ-THSR-105-YM) – shop ghi 105g | đã có: MQ-THSR-105-YM |
 | VZ-YM-MT-100 | Yummy – Yummy Monthong sầu riêng sấy thăng hoa | 100g (tạm) | 199.000đ | 375.000đ | 535.000đ | 199.000đ | tạm tính | Giá tạm tính Mộc Quả – sầu riêng sấy thăng hoa 100g ~193k; khối lượng tạm | thẻ mới vz-ym-mt |
 | VZ-PS-GD-100 | Premium Shrinking Dried Durian – Golden Durian sầu riêng sấy thăng hoa | 100g (in trên bao: NET WT 100g) | 199.000đ | 375.000đ | 535.000đ | 199.000đ |  | Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k | thẻ mới vz-ps-gd; combo 2 vị khác nhau 375k, 3 vị 535k (khung ảnh combo) |
@@ -40,11 +40,11 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 | VZ-PS-CB3-300 | Premium Shrinking – Combo 3 vị Golden + Royal + Yummy | 3 × 100g | 535.000đ | — | — | 178.333đ |  | Chủ shop chốt: 3 vị khác nhau, tiết kiệm 62.000đ so với 3 × 199.000đ | chỉ cửa hàng: thẻ vz-ps-cb3 |
 | VZ-PS-CB2-200 | Premium Shrinking – Combo 2 vị khác nhau (khách ghi vị ở ô Ghi chú) | 2 × 100g | 375.000đ | — | — | 187.500đ |  | Chủ shop chốt: 2 vị khác nhau, tiết kiệm 23.000đ so với 2 × 199.000đ | chỉ cửa hàng: biến thể 2 vị của thẻ vz-ps-cb3 |
 | VZ-FH-XD-100 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 100g | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) | đã có: MQ-DXO-100-FHX |
-| VZ-FH-XD-250 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 250g | 89.000đ | 169.000đ | 239.000đ | 35.600đ |  | Giá thị trường VN (trung vị) – xoài dẻo 250g ~65k; giữ trên giá F&H 200g 69k, dưới 500g 165k | thẻ mới vz-fh-xd |
+| VZ-FH-XD-250 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 250g | 99.000đ | 185.000đ | 265.000đ | 39.600đ |  | Giá cửa hàng Mộc Quả (VZ-FH-XD-250) – chủ shop duyệt đề xuất giá 01/11/2026: 85k → 99k, trên túi 200g 89k | thẻ mới vz-fh-xd |
 | VZ-FH-XD-500 | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 500g | 165.000đ | 309.000đ | 445.000đ | 33.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-500-FH) | đã có: MQ-DXO-500-FH |
 | VZ-FH-XDH-100 | Fresh & Healthy – Xoài sấy dẻo (túi hồng cam) | 100g | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) – cùng giá F&H 100g, khác túi | đã có: MQ-DXO-100-FHX |
 | VZ-FH-XDV-100 | Fresh & Healthy – Xoài sấy dẻo (túi vàng) | 100g | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) – cùng giá F&H 100g, khác túi | đã có: MQ-DXO-100-FHX |
-| VZ-FH-CB-350 | Fresh & Healthy – Combo xoài sấy dẻo 100g + 250g | 100g + 250g = 350g | 115.000đ | — | — | 32.857đ |  | Combo = tổng giá lẻ 124.000đ (F&H 100g + 250g) −6%; chủ shop xác nhận 31/10 | thẻ vz-fh-cb350 |
+| VZ-FH-CB-350 | Fresh & Healthy – Combo xoài sấy dẻo 100g + 250g | 100g + 250g = 350g | 139.000đ | — | — | 39.714đ |  | Combo = tổng giá lẻ 148.000đ (F&H 100g 49k + 250g 99k) −6% (chủ shop duyệt đề xuất giá 01/11/2026) | thẻ vz-fh-cb350 |
 | VZ-FH-MIT-300 | Fresh & Healthy – Mít sấy | 200g (túi mới) | 74.000đ | 139.000đ | 199.000đ | 37.000đ |  | Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) – chủ shop đặt 74k cho túi 200g (01/11/2026, đổi từ 65k) | đã có: MQ-GMI-300-FH |
 | VZ-FH-MITV-XX | Fresh & Healthy – Mít sấy (túi vàng có cửa sổ) | Chưa rõ | — | — | — | — | bỏ qua | Chưa rõ khối lượng, chưa có ảnh | không |
 | VZ-FH-XDMO-XX | Fresh & Healthy – Xoài sấy dẻo muối ớt (túi đỏ) | Chưa rõ | — | — | — | — | bỏ qua | Chưa rõ khối lượng (shop có F&H muối ớt 100/200/500g nhưng không biết mã này là cỡ nào) | không |
@@ -162,4 +162,18 @@ Chủ shop duyệt: "bám theo giá thị trường". Cùng khối lượng + c�
 | `VZ-FH-XDV-100` | Fresh & Healthy – Xoài sấy dẻo (túi vàng) | 100g | 39k | **49k** | 95k / 129k | danh mục |
 | `VZ-FH-CB-350` | Fresh & Healthy – Combo xoài sấy dẻo Fresh & Healthy 100g + 250g | 100g + 250g = 350g | 115k | **125k** | — | cửa hàng, danh mục |
 
-Chưa đổi, cần chủ shop xem: F&H xoài 250g (`VZ-FH-XD-250`) còn 85k, thấp hơn túi 200g 89k; Cheers+ 200g 75k nay thấp hơn Good Good 200g 89k; `MQ-DXM-300-GG` 300g 99k; `MQ-DXM-S-GG` gói nhỏ 50–100g 29k; Yummy hũ 150g / Viza hộp giấy 150g 55k; các hộp quà (An Nhiên, Sum Vầy, Phú Quý, Thịnh Vượng) giữ giá.
+Chưa đổi lúc đó (đã xử lý ở đợt 01/11 bên dưới): F&H xoài 250g, Cheers+ 200g, `MQ-DXM-300-GG` 300g, Cheers+ thăng hoa. Giữ nguyên: `MQ-DXM-S-GG` gói nhỏ 50–100g 29k; Yummy hũ 150g / Viza hộp giấy 150g 55k; các hộp quà (An Nhiên, Sum Vầy, Phú Quý, Thịnh Vượng) giữ giá.
+
+## Đợt giá 01/11/2026 tối — chủ shop duyệt đề xuất ("ok làm theo ý bạn đề xuất, còn set quà để đó đi") (đã áp dụng)
+
+Cùng khối lượng = cùng giá; túi lớn hơn không rẻ hơn túi nhỏ. Combo cùng loại ≈ −6% (2 túi) / −11% (3 túi), làm tròn đuôi 5k/9k; combo trộn vị −11%, làm tròn nghìn. Gói nhỏ `MQ-DXM-S-GG` 29k và 4 hộp quà (GIFTS) giữ nguyên.
+
+| Mã | Sản phẩm | KL | Trước | Sau | Combo 2 / 3 | Nơi |
+|---|---|---|---|---|---|---|
+| `VZ-FH-XD-250` | Fresh & Healthy – Xoài sấy dẻo (túi trắng xanh) | 250g | 85k | **99k** | 185k / 265k | cửa hàng, danh mục |
+| `MQ-DXC-200-CHA` (danh mục `VZ-CH-XDT-200`, `VZ-CH-XDL-200`, `VZ-CH-XDR-200`) | Cheers+ – Xoài sấy dẻo 200g | 200g | 75k | **89k** | 169k / 239k | cửa hàng, danh mục |
+| `MQ-DXM-300-GG` | Good Good – Xoài sấy dẻo muối ớt | 300g | 99k | **125k** | 235k / 335k | cửa hàng, danh mục |
+| `MQ-THXO-120-CH` (danh mục `VZ-CH-XTH-120`) | Cheers+ – Xoài sấy thăng hoa | 110g | 145k | **159k** | 299k / 425k | cửa hàng, danh mục |
+| `VZ-CH-CB3X-600` | Cheers+ – Combo 3 túi xoài sấy dẻo 200g (lẻ 267k) | 3 × 200g | 195k | **239k** | — | cửa hàng, danh mục |
+| `VZ-FH-CB-350` | Fresh & Healthy – Combo 100g + 250g (lẻ 148k) | 350g | 125k | **139k** | — | cửa hàng, danh mục |
+| `VZ-MIX-CB3TH-315` | Combo 3 vị thăng hoa: măng cụt + sầu riêng + xoài (lẻ 627k) | 315g | 546k | **558k** | — | cửa hàng (/combo), danh mục |
