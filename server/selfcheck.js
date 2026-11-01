@@ -784,7 +784,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v25/);
+    assert.match(sw, /mocqua-shell-v26/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
     const cbp = await (await fetch(base + '/combo')).text();
@@ -865,9 +865,9 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(byId.get('vz-mix-cb3-sr-xoai').comboOf.join(','), ['MQ-THSR-080-FH', 'MQ-DXM-200-GG', 'MQ-DXO-200-GG'].join(','));
       assert.equal(byId.get('vz-mix-cb3-sr-xoai').variants[0].price, 300000);
       assert.equal(byId.get('vz-mix-cb4-kita-fh').comboOf.join(','), ['MQ-GSR-100-KT', 'MQ-DXO-100-FHV', 'MQ-GMI-300-FH', 'MQ-DXM-100-FHR'].join(','));
-      assert.equal(byId.get('vz-mix-cb4-kita-fh').variants[0].price, 233000);
+      assert.equal(byId.get('vz-mix-cb4-kita-fh').variants[0].price, 241000);
       assert.equal(byId.get('vz-mix-cb-ch-mit').comboOf.join(','), ['MQ-THSR-110-CH', 'MQ-GMI-300-FH'].join(','));
-      assert.equal(byId.get('vz-mix-cb-ch-mit').variants[0].price, 201000);
+      assert.equal(byId.get('vz-mix-cb-ch-mit').variants[0].price, 210000);
       for (const id of ['vz-mix-cb3-sr-xoai', 'vz-mix-cb-ch-mit']) assert.match(cbp.split('id="cbg-qua-bieu"')[1].split('</section>')[0], new RegExp('/san-pham/' + id + '"'));
       assert.match(cbp.split('id="cbg-an-vat"')[1].split('</section>')[0], /\/san-pham\/vz-mix-cb4-kita-fh"/);
       // Poster có chữ quảng cáo tiếng Anh: không làm ảnh chính ở đâu cả.
@@ -880,15 +880,15 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(mit, /class="pdp__notice" role="note">Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh &amp; Healthy mới, đóng gói 200g\./);
       assert.match(mit, /"photos":\[\{"src":"\/assets\/products\/fhx-mit200-moi\.webp"/);
       assert.equal(byId.get('mit-say-gion').variants.find((v) => v.sku === 'MQ-GMI-300-FH').g, 200);
-      // Chủ shop đặt giá túi 200g 65k (01/11); túi 500g giữ 139k; combo có mít tính lại theo giá mới.
-      assert.equal(priceOf.get('MQ-GMI-300-FH'), 65000);
+      // Chủ shop đặt giá túi 200g 74k (01/11, đổi từ 65k); túi 500g giữ 139k; combo có mít tính lại theo giá mới.
+      assert.equal(priceOf.get('MQ-GMI-300-FH'), 74000);
       assert.equal(priceOf.get('MQ-GMI-500-FH'), 139000);
-      assert.equal(buy['VZ-FH-MIT-300'].price, 65000);
-      for (const [sku, price] of [['VZ-MIX-CB2MS-400', 165000], ['VZ-MIX-CB2CM-305', 201000], ['VZ-MIX-CB4KF-500', 233000], ['VZ-MIX-CB3DG-600', 181000]]) {
+      assert.equal(buy['VZ-FH-MIT-300'].price, 74000);
+      for (const [sku, price] of [['VZ-MIX-CB2MS-400', 173000], ['VZ-MIX-CB2CM-305', 210000], ['VZ-MIX-CB4KF-500', 241000], ['VZ-MIX-CB3DG-600', 189000]]) {
         assert.equal(priceOf.get(sku), price, sku);
         assert.equal(dmj.products.flatMap((x) => x.variants).find((v) => v.code === sku).price, price, sku + ' danh mục');
       }
-      for (const p of shopAll) if ((p.comboOf || []).includes('MQ-GMI-300-FH')) assert.doesNotMatch(p.short + p.long, /85\.000đ/, p.id);
+      for (const p of shopAll) if ((p.comboOf || []).includes('MQ-GMI-300-FH')) assert.doesNotMatch(p.short + p.long, /(85|65)\.000đ/, p.id);
       const fm = dmp.get('vz-fh-mit');
       assert.match(fm.note, /^Lưu ý: Mẫu bao bì vàng này đã hết/);
       assert.equal(fm.images[1].src, '/assets/catalog/fhx-mit200-moi.webp');
