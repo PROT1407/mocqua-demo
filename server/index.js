@@ -15,7 +15,7 @@ import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCs
 import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
 import { catalogBuyMap } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
-import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage } from './pages.js';
+import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage } from './pages.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
 
@@ -340,6 +340,9 @@ export function createApp() {
   });
   app.get(['/cua-hang', '/cua-hang.html'], (req, res) => {
     html(res, 200, shopPage(getShopCatalog(), req.query));
+  });
+  app.get('/combo', (req, res) => {
+    html(res, 200, comboPage(getShopCatalog()));
   });
   app.get('/san-pham.html', (req, res) => {
     const id = String(req.query.id || '');

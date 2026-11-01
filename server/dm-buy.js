@@ -64,7 +64,8 @@ export function catalogBuyMap(catalog) {
   const shop = getShopCatalog();
   const bySku = new Map();
   for (const p of shop.products) for (const v of p.variants) if (v.price > 0) bySku.set(v.sku, { p, v });
-  const combos = shop.products.filter((p) => isComboProduct(p) && p.comboOf?.length);
+  // Combo trộn vị (mixed) có thẻ riêng ở nhóm Combo, không gắn thêm lựa chọn vào thẻ lẻ.
+  const combos = shop.products.filter((p) => isComboProduct(p) && p.comboOf?.length && !p.mixed);
   const out = {};
   for (const prod of catalog.products) {
     for (const cv of prod.variants) {

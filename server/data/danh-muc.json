@@ -3961,14 +3961,6 @@
      "kind": "nen-trang"
     },
     {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
-     "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
-     "kind": "combo"
-    },
-    {
      "src": "/assets/products/chx-xanh-45.jpg",
      "thumb": "/assets/products/chx-xanh-45.jpg",
      "w": 1200,
@@ -4017,6 +4009,14 @@
      "price": 105000,
      "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
      "priceCheckedAt": "2026-11-01"
+    }
+   ],
+   "parkedImages": [
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "date": "2026-11-01",
+     "movedTo": null,
+     "reason": "Chủ shop: bỏ ảnh combo có chữ khuyến mãi. Ảnh combo mới (3 túi áo dài, ảnh ghép) chỉ hợp túi tròn áo dài nên không đặt ở thẻ lá xoài. File ảnh giữ nguyên."
     }
    ]
   },
@@ -4137,10 +4137,10 @@
      "kind": "thuc-te"
     },
     {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
+     "src": "/assets/catalog/vz-ch-cb3x-3tui.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
      "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
      "kind": "combo"
     }
@@ -4170,10 +4170,10 @@
    "pack": "",
    "images": [
     {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
+     "src": "/assets/catalog/vz-ch-cb3x-3tui.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
      "alt": "3 túi xoài sấy dẻo Cheers+ 200g",
      "kind": "hero"
     }
@@ -5653,6 +5653,270 @@
      "price": 259000,
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-cb-xmx",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Combo xoài GoodGood 200g: muối ớt + nguyên vị",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-cb-xmx.webp",
+     "thumb": "/assets/catalog/vz-gg-cb-xmx-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi xoài sấy dẻo muối ớt GoodGood 200g, Túi xoài sấy dẻo GoodGood 200g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-CB2XM-400",
+     "weightG": 400,
+     "weightLabel": "2 × 200g",
+     "verify": false,
+     "note": "",
+     "price": 167000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −6%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-ym-cb-sr",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Combo đôi sầu riêng thăng hoa Yummy: túi đỏ + Monthong",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ym-cb-sr.webp",
+     "thumb": "/assets/catalog/vz-ym-cb-sr-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi sầu riêng sấy thăng hoa Yummy 105g, túi đỏ, Yummy Monthong sầu riêng sấy thăng hoa, túi xanh đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-YM-CB2SR-200",
+     "weightG": 205,
+     "weightLabel": "105g + ~100g",
+     "verify": false,
+     "note": "",
+     "price": 374000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −6%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb-xth",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo xoài dẻo Fresh & Healthy 100g + thơm dẻo GoodGood 80g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb-xth.webp",
+     "thumb": "/assets/catalog/vz-mix-cb-xth-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy 100g, túi kem đáy vàng, Túi thơm sấy dẻo GoodGood 80g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB2XT-180",
+     "weightG": 180,
+     "weightLabel": "100g + 80g",
+     "verify": false,
+     "note": "",
+     "price": 88000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −6%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb-msr",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo mít sấy Fresh & Healthy 300g + sầu riêng sấy GoodGood 100g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb-msr.webp",
+     "thumb": "/assets/catalog/vz-mix-cb-msr-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi mít sấy giòn Fresh & Healthy 300g, Túi sầu riêng sấy GoodGood 100g, túi đỏ đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB2MS-400",
+     "weightG": 400,
+     "weightLabel": "300g + 100g",
+     "verify": false,
+     "note": "",
+     "price": 183000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −6%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-gg-cb3-deo",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Combo 3 vị sấy dẻo GoodGood 80g: thơm + thanh long + đu đủ",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-gg-cb3-deo.webp",
+     "thumb": "/assets/catalog/vz-gg-cb3-deo-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi thơm sấy dẻo GoodGood 80g, Túi thanh long sấy dẻo GoodGood 80g, Túi đu đủ sấy dẻo GoodGood 80g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-GG-CB3D-240",
+     "weightG": 240,
+     "weightLabel": "3 × 80g",
+     "verify": false,
+     "note": "",
+     "price": 120000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb3-an-vat",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo ăn vặt: xoài dẻo 200g + mít giòn 300g + hạt điều 100g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb3-an-vat.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3-an-vat-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy 200g, túi xanh, Túi mít sấy giòn Fresh & Healthy 300g, Hộp hạt điều rang muối Viza Food 100g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB3DG-600",
+     "weightG": 600,
+     "weightLabel": "200g + 300g + 100g",
+     "verify": false,
+     "note": "",
+     "price": 198000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb3-thang-hoa",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo quà 3 vị sấy thăng hoa: măng cụt + sầu riêng + xoài",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb3-thang-hoa.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3-thang-hoa-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi măng cụt sấy thăng hoa GoodGood 100g, Túi sầu riêng sấy thăng hoa Yummy 105g, Túi xoài sấy thăng hoa Cheers+ 110g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB3TH-315",
+     "weightG": 315,
+     "weightLabel": "100g + 105g + 110g",
+     "verify": false,
+     "note": "",
+     "price": 546000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb3-hat-sr",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo quà biếu: hạt dẻ cười + hạt sen + sầu riêng sấy",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb3-hat-sr.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3-hat-sr-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hộp hạt dẻ cười Viza Food 100g, Hộp hạt sen sấy giòn Viza Food 100g, Túi sầu riêng sấy GoodGood 100g, túi đỏ đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB3HS-300",
+     "weightG": 300,
+     "weightLabel": "3 × 100g",
+     "verify": false,
+     "note": "",
+     "price": 271000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   }

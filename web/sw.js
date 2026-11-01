@@ -1,8 +1,9 @@
-const CACHE = 'mocqua-shell-v22';
+const CACHE = 'mocqua-shell-v23';
 
 const SHELL = [
   '/',
   '/cua-hang',
+  '/combo',
   '/gio-hang',
   '/thanh-toan',
   '/tra-cuu',

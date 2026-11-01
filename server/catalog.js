@@ -188,6 +188,8 @@ function presentProduct(mq, product, { detail = false } = {}) {
     related: Array.isArray(product.related) ? product.related : [],
     relatedNote: product.relatedNote || '',
     comboOf: Array.isArray(product.comboOf) ? product.comboOf : [],
+    // Combo trộn vị (trang /combo): không xếp vào lưới /cua-hang, không gắn vào thẻ lẻ ở /danh-muc.
+    mixed: !!product.mixed,
     kem: Array.isArray(product.kem) ? product.kem : [],
     variants,
     defaultSku: def?.sku || '',
