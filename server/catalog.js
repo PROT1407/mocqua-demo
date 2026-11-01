@@ -21,12 +21,14 @@ const SHELF_CAPS = [
   ['viza-ke-12', 'Thanh long sấy Viza Food tại siêu thị'],
 ];
 
-const SHELF_FOR_FRUIT = {
-  xoai: 'viza-ke-05',
-  saurieng: 'viza-ke-02',
-  mit: 'viza-ke-03',
-  thanhlong: 'viza-ke-12',
-};
+// Ảnh kệ chỉ gắn vào trang có cùng nhãn hàng với túi trên ảnh (vd. kệ Cheers+ thì chỉ trang Cheers+).
+// Không khớp nhãn nào (Premium Durian, KITA, hộp giấy, YC Nuts, quả không có ảnh kệ riêng…) thì không có ảnh kệ.
+const SHELF_RULES = [
+  { id: 'viza-ke-05', fruit: 'xoai', lines: ['cheers', 'goodgood', 'fh'] },
+  { id: 'viza-ke-02', fruit: 'saurieng', lines: ['yummy', 'cheers'] },
+  { id: 'viza-ke-03', fruit: 'mit', lines: ['fh'] },
+  { id: 'viza-ke-12', fruit: 'thanhlong', lines: null },
+];
 
 const existsCache = new Map();
 
@@ -142,14 +144,18 @@ function presentProduct(mq, product, { detail = false } = {}) {
   const brandKey = brandKeyOf(product);
   const real = product.real?.img ? { src: resolveImg(product.real.img), cap: product.real.cap || 'Ảnh mở túi' } : null;
   let shelf = null;
-  if (product.maker === 'viza') {
-    const id = SHELF_FOR_FRUIT[product.fruit] || 'viza-ke-01';
-    const cap = SHELF_CAPS.find(([k]) => k === id)?.[1] || 'Hàng trên kệ';
-    shelf = {
-      src: `/assets/shelf/${id}.webp`,
-      thumb: `/assets/shelf/${id}-t.webp`,
-      cap,
-    };
+  // noShelf: ảnh kệ theo loại quả không khớp sản phẩm (vd. combo Premium: kệ là túi Cheers+/Yummy) thì bỏ.
+  if (product.maker === 'viza' && !product.noShelf) {
+    const lines = product.lines || [];
+    const rule = SHELF_RULES.find((r) => r.fruit === product.fruit && (!r.lines || lines.some((l) => r.lines.includes(l))));
+    if (rule) {
+      const cap = SHELF_CAPS.find(([k]) => k === rule.id)?.[1] || 'Hàng trên kệ';
+      shelf = {
+        src: `/assets/shelf/${rule.id}.webp`,
+        thumb: `/assets/shelf/${rule.id}-t.webp`,
+        cap,
+      };
+    }
   }
   const out = {
     id: product.id,
@@ -193,6 +199,12 @@ function presentProduct(mq, product, { detail = false } = {}) {
     cardImg: def?.img || resolveImg(product.img, false) || resolveImg(cat.img, false),
     open: real?.src ? real : null,
     shelf,
+    // Ảnh khung 4:5 cần hiện trọn (ảnh nhiều túi đứng cạnh nhau); ảnh khác giữ khung PDP như cũ.
+    fit45: (Array.isArray(product.fit45) ? product.fit45 : []).map((f) => resolveImg(f, true)).filter(Boolean),
+    // Ảnh thêm sau ảnh bao bì (vd. combo: từng túi trong combo): [đường dẫn, nhãn ngắn, alt].
+    photos: (Array.isArray(product.photos) ? product.photos : [])
+      .map(([img, kind, alt]) => ({ src: resolveImg(img, true), kind: kind || 'Ảnh', alt: alt || product.name }))
+      .filter((x) => x.src),
   };
   if (detail) {
     out.long = product.long || '';

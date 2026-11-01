@@ -1,4 +1,4 @@
-const CACHE = 'mocqua-shell-v17';
+const CACHE = 'mocqua-shell-v18';
 
 const SHELL = [
   '/',
