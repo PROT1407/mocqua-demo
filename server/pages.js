@@ -541,6 +541,7 @@ export function productPage(product, catalog) {
         <h1>${esc(product.name)}</h1>
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
         <p class="lead lead--left">${esc(product.short)}</p>
+        ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
         <fieldset class="choiceset">
