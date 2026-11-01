@@ -557,3 +557,97 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
 .kem__meta b { color: var(--ink); }
 .kem__add { white-space: nowrap; }
 @media (max-width: 420px) { .kem__it { grid-template-columns: 60px 1fr; } .kem__img img { width: 60px; height: 60px; } .kem__add { grid-column: 1 / -1; } }
+
+/* ===== Cửa hàng kiểu tạp chí (chỉ /cua-hang): Nổi bật dạng bento, băng tiêu đề từng nhóm, mobile vuốt ngang ===== */
+.gband, .gband__all, .rowmore { --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; }
+.feat__h h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 600; letter-spacing: -.01em; }
+.card--hero h3 { font-size: 20px; }
+.card--hero .card__price { font-size: 18px; }
+
+.gband {
+  position: relative; display: grid; gap: 14px; align-items: center; overflow: hidden;
+  margin: 34px 0 16px; padding: 22px; border-radius: 26px;
+  background: radial-gradient(120% 140% at 100% 0%, var(--gb2, #F1E3C8) 0%, var(--gb1, #F8EFDF) 55%, var(--paper) 100%);
+  border: 1px solid color-mix(in srgb, var(--gb2, #F1E3C8) 70%, var(--line));
+  scroll-margin-top: calc(var(--header) + 12px);
+}
+.gband--deo { --gb1: #FBF0D9; --gb2: #F6D9A0; }
+.gband--thanghoa { --gb1: #F7F0DC; --gb2: #E8D6A2; }
+.gband--gion { --gb1: #F8EEDD; --gb2: #EBCFA3; }
+.gband--kho { --gb1: #F4ECE2; --gb2: #E2CDB6; }
+.gband--omai { --gb1: #FAEDE8; --gb2: #EFC9BE; }
+.gband--set { --gb1: #F8EAE6; --gb2: #E6C3BC; }
+.gband--hat { --gb1: #F1F0E2; --gb2: #D6D9B6; }
+.gband__k { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--olive-dark); }
+.gband h2 { margin: 4px 0 6px; font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.05; letter-spacing: -.015em; }
+.gband__intro { margin: 0 0 14px; max-width: 30rem; font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--brown); }
+.gband__all {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px;
+  background: var(--brown); color: var(--cream); text-decoration: none; font-size: 14px; font-weight: 600;
+}
+.gband__pics { position: relative; height: 170px; }
+.gband__pics img {
+  position: absolute; bottom: 0; width: 112px; aspect-ratio: 4 / 5; height: auto; object-fit: cover;
+  border-radius: 16px; border: 3px solid var(--paper); background: var(--paper);
+  box-shadow: 0 14px 30px -14px rgba(61, 43, 31, .45);
+}
+.gband__pics img.fit { object-fit: contain; background: #F3EEE3; }
+.gband__pics img:nth-child(1) { left: 50%; z-index: 3; width: 132px; transform: translateX(-50%); }
+.gband__pics img:nth-child(2) { left: calc(50% - 150px); z-index: 2; transform: rotate(-6deg); bottom: 6px; }
+.gband__pics img:nth-child(3) { left: calc(50% + 38px); z-index: 1; transform: rotate(6deg); bottom: 6px; }
+.rowmore { display: none; }
+
+@media (min-width: 720px) {
+  .gband { grid-template-columns: 1.15fr 1fr; padding: 28px 34px; min-height: 230px; }
+  .gband__pics { height: 200px; }
+  .gband__pics img { width: 130px; }
+  .gband__pics img:nth-child(1) { width: 152px; }
+  .gband__pics img:nth-child(2) { left: calc(50% - 170px); }
+  .gband__pics img:nth-child(3) { left: calc(50% + 40px); }
+
+  /* Bento Nổi bật: 1 ô lớn 2x2, ô cuối nằm ngang 2 cột cho kín hàng. */
+  .bento { grid-auto-flow: dense; }
+  .bento > .card--hero { grid-column: span 2; grid-row: span 2; }
+  .bento > .card--hero .card__img { aspect-ratio: auto; flex: 1 1 auto; min-height: 360px; }
+  .bento > .card--hero .card__body { flex: 0 0 auto; }
+  .bento > .card--wide { grid-column: span 2; display: grid; grid-template-columns: minmax(0, 48%) 1fr; gap: 16px; align-items: stretch; }
+  .bento > .card--wide .card__img { aspect-ratio: auto; height: 100%; min-height: 0; }
+  .bento > .card--wide .card__body { justify-content: flex-end; padding: 6px 4px 0; }
+}
+
+@media (max-width: 719px) {
+  .gband { margin: 26px 0 12px; padding: 18px 18px 0; border-radius: 22px; }
+  .gband__intro { font-size: 15px; }
+  .gband__pics { height: 132px; margin: 0 -18px; }
+  .gband__pics img { width: 88px; }
+  .gband__pics img:nth-child(1) { width: 104px; }
+  .gband__pics img:nth-child(2) { left: calc(50% - 118px); }
+  .gband__pics img:nth-child(3) { left: calc(50% + 30px); }
+  .gband__pics img { bottom: -18px; }
+  .gband__pics img:nth-child(1) { bottom: -12px; }
+
+  /* Mỗi nhóm thành một hàng vuốt ngang, cuối hàng có ô "Xem tất cả" áp bộ lọc. */
+  .grid--row {
+    grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: calc(50% - 22px);
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; overscroll-behavior-x: contain;
+    margin: 0 -16px 8px; padding: 2px 16px 10px; scrollbar-width: none;
+  }
+  .grid--row::-webkit-scrollbar { display: none; }
+  .grid--row > * { scroll-snap-align: start; }
+  .rowmore {
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px;
+    padding: 16px; border-radius: 18px; text-decoration: none; color: var(--brown);
+    background: var(--paper); border: 1px dashed color-mix(in srgb, var(--brown) 35%, var(--line));
+    font-size: 14px; line-height: 1.3;
+  }
+  .rowmore b { font-family: var(--serif); font-size: 22px; }
+  /* Nổi bật: vuốt ngang, ô lớn rộng hơn các ô khác */
+  .grid--feat { display: flex; gap: 12px; }
+  .grid--feat > .card { flex: 0 0 calc(50% - 20px); }
+  .grid--feat > .card--hero { flex-basis: 74%; }
+  .grid--feat > .card--hero .card__img { aspect-ratio: auto; height: calc((50vw - 20px) * 1.25); }
+}
+/* Nút chuyển Kiểu 1 / Kiểu 2 để so sánh bố cục */
+.kieu { display: inline-flex; justify-self: start; width: max-content; max-width: 100%; gap: 2px; margin: 0 0 10px; padding: 3px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font-size: 13px; }
+.kieu a { padding: 5px 12px; border-radius: 999px; text-decoration: none; color: var(--muted); font-weight: 600; }
+.kieu a[aria-current] { background: var(--brown); color: var(--cream); }

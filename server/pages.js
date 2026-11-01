@@ -7,6 +7,17 @@ import { catalogHeroBySku } from './dm-buy.js';
 import { bankConfig } from './vietqr.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
+// Câu mở đầu cho băng tiêu đề từng nhóm ở /cua-hang (chỉ trang Cửa hàng dùng).
+const CAT_INTRO = {
+  deo: 'Dẻo mềm, ngọt chua tự nhiên của trái chín: xoài, mít, thơm, mãng cầu.',
+  thanghoa: 'Sấy lạnh thăng hoa: giòn tan, giữ trọn màu và mùi trái chín, nổi nhất là sầu riêng.',
+  gion: 'Giòn rụm, ít ngọt, món nhâm nhi bán chạy, đứng đầu là mít Thái.',
+  kho: 'Sấy khô truyền thống, vị đậm, để được lâu.',
+  omai: 'Ô mai, xí muội chua cay mặn ngọt, vị Tết và vị tuổi thơ.',
+  set: 'Set quà và hộp mứt Tết đóng sẵn, gói đẹp để biếu.',
+  hat: 'Hạt dinh dưỡng rang mộc: mắc ca, điều, hạt sen, dẻ cười.',
+};
+const BAND_MIN = 4;
 const EXTRA = ['omai', 'set', 'hat'];
 // Khối "Nổi bật" đầu /cua-hang (chỉ khi chưa lọc) và món đứng đầu mỗi cách sấy. Theo thứ tự này; id ẩn/không có thì bỏ qua.
 // Chỉ đổi thứ tự hiển thị — không đụng mã, giá hay nút mua ở /danh-muc.
@@ -170,17 +181,22 @@ function kemBlock(product, kem) {
   return `<section class="related kem" aria-labelledby="kem-h"><h2 id="kem-h">Thường mua kèm</h2>${product.relatedNote ? `<p class="lead lead--left">${esc(product.relatedNote)}</p>` : ''}<ul class="kem__list">${items}</ul></section>`;
 }
 
-export function productCard(product, { eager = false } = {}) {
-  const href = `/san-pham/${encodeURIComponent(product.id)}`;
+// Ảnh thẻ: 4:5 dựng sẵn (-45.jpg) giữ nguyên; ảnh khác tỉ lệ thì dùng ảnh chính ở /danh-muc (cùng ảnh, có bản nhỏ) nếu có.
+function cardImage(product) {
   const own = product.cardImg || '/assets/img/xoai.jpg';
-  // Ảnh 4:5 dựng sẵn (-45.jpg) giữ nguyên; ảnh khác tỉ lệ thì dùng ảnh chính ở /danh-muc (cùng ảnh, có bản nhỏ) nếu có.
   const hero = /-45\.jpg$/.test(own) ? null : (product.variants || []).map((v) => catalogHeroBySku().get(v.sku)).find(Boolean);
   const img = hero?.src || own;
+  return { hero, img, src: hero?.thumb || img, native45: /-45\.jpg$/.test(img) };
+}
+
+export function productCard(product, { eager = false, cls = '' } = {}) {
+  const href = `/san-pham/${encodeURIComponent(product.id)}`;
+  const { hero, img } = cardImage(product);
   const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
   const canBuy = product.defaultSku && product.priceFrom > 0 && !product.oos;
   // Ảnh không phải 4:5 dựng sẵn (ảnh vuông/ngang/dọc mượn từ /danh-muc): hiện trọn ảnh, căn giữa trong khung 4:5, không cắt.
   const fit = /-45\.jpg$/.test(img) ? '' : ' card__img--fit';
-  return `<article class="card">
+  return `<article class="card${cls ? ` ${cls}` : ''}">
     <a class="card__img${fit}" href="${href}">
       <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
@@ -288,12 +304,13 @@ export function homePage(catalog) {
   });
 }
 
-function shopHref({ cat = '', fruit = '', line = '', q = '' }) {
+function shopHref({ cat = '', fruit = '', line = '', q = '', kieu = '' }) {
   const u = new URLSearchParams();
   if (cat) u.set('cat', cat);
   if (fruit) u.set('fruit', fruit);
   if (line) u.set('line', line);
   if (q) u.set('q', q);
+  if (kieu === '2') u.set('kieu', '2');
   const s = u.toString();
   return '/cua-hang' + (s ? '?' + s : '');
 }
@@ -304,6 +321,9 @@ function chip(href, label, on, count) {
 
 export function shopPage(catalog, query) {
   const q = String(query.q || '').trim().slice(0, 80);
+  // Hai kiểu bố cục để chủ shop so sánh: 1 = lưới đều (mặc định), 2 = kiểu tạp chí (?kieu=2). Bộ lọc giữ nguyên kiểu đang xem.
+  const kieu = String(query.kieu || '') === '2' ? '2' : '1';
+  const link = (o) => shopHref({ ...o, kieu });
   const nq = q ? q.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd') : '';
   let pool = catalog.products;
   if (nq) {
@@ -360,6 +380,10 @@ export function shopPage(catalog, query) {
     return (ia < 0 ? 20 : ia) - (ib < 0 ? 20 : ib);
   });
   const multiCat = cats.length > 1;
+  const filtered = !!(q || wantedCat || wantedFruit || wantedLine);
+  // Không lọc: mỗi nhóm có băng tiêu đề kiểu tạp chí, mobile vuốt ngang. Đang lọc: lưới thường.
+  const editorial = kieu === '2' && !filtered && multiCat;
+  let bandNo = 0;
   let html = '';
   for (const cat of cats) {
     const items = byCat.get(cat).sort((a, b) => featIdx(a) - featIdx(b)
@@ -369,15 +393,32 @@ export function shopPage(catalog, query) {
       || brandOrder(a.brandKey) - brandOrder(b.brandKey)
       || a.rank - b.rank
       || a.name.localeCompare(b.name, 'vi'));
-    if (multiCat) html += `<h2 class="ghead" id="nhom-${esc(cat)}">${esc(catMeta[cat]?.name || cat)} <small>${items.length} món</small></h2>`;
-    html += `<div class="grid">${items.map((p) => productCard(p)).join('')}</div>`;
+    const name = catMeta[cat]?.name || cat;
+    if (editorial && items.length >= BAND_MIN) {
+      // Băng tạp chí: tên nhóm + một câu giới thiệu + ảnh 3 món tiêu biểu (ưu tiên ảnh 4:5 dựng sẵn, không lấy combo).
+      const pics = [...items.filter((p) => !isComboProduct(p) && cardImage(p).native45), ...items]
+        .filter((p, i, a) => a.indexOf(p) === i).slice(0, 3);
+      const all = link({ cat });
+      html += `<section class="gband gband--${esc(cat)}" id="nhom-${esc(cat)}" aria-labelledby="gh-${esc(cat)}">
+      <div class="gband__txt">
+        <p class="gband__k">Nhóm ${String(++bandNo).padStart(2, '0')} · ${items.length} món</p>
+        <h2 id="gh-${esc(cat)}">${esc(name)}</h2>
+        <p class="gband__intro">${esc(CAT_INTRO[cat] || catMeta[cat]?.desc || '')}</p>
+        <a class="gband__all" href="${esc(all)}">Xem tất cả ${items.length} món <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="gband__pics" aria-hidden="true">${pics.map((p) => `<img src="${esc(cardImage(p).src)}" alt="" loading="lazy" decoding="async" width="480" height="600"${cardImage(p).native45 ? '' : ' class="fit"'}>`).join('')}</div>
+    </section>
+    <div class="grid grid--row">${items.map((p) => productCard(p)).join('')}<a class="rowmore" href="${esc(all)}">Xem tất cả<br><b>${items.length} món</b> <span aria-hidden="true">→</span></a></div>`;
+      continue;
+    }
+    if (multiCat) html += `<h2 class="ghead" id="nhom-${esc(cat)}">${esc(name)} <small>${items.length} món</small></h2>`;
+    html += `<div class="grid${editorial ? ' grid--row' : ''}">${items.map((p) => productCard(p)).join('')}</div>`;
   }
-  const filtered = !!(q || wantedCat || wantedFruit || wantedLine);
   const featured = filtered ? [] : FEATURED.map((id) => final.find((p) => p.id === id)).filter(Boolean);
   const featHtml = featured.length
     ? `<section class="feat" aria-labelledby="feat-h">
       <div class="feat__h"><h2 id="feat-h">Nổi bật</h2><p>Món tiêu biểu của Mộc Quả và hàng hãng bán chạy.</p></div>
-      <div class="grid grid--feat">${featured.map((p, i) => productCard(p, { eager: i < 4 })).join('')}</div>
+      <div class="grid grid--feat${kieu === '2' ? ' bento' : ''}">${featured.map((p, i) => productCard(p, { eager: i < 4, cls: kieu !== '2' ? '' : i === 0 ? 'card--hero' : (i === featured.length - 1 && featured.length === 8 ? 'card--wide' : '') })).join('')}</div>
     </section>`
     : '';
   const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
@@ -390,21 +431,21 @@ export function shopPage(catalog, query) {
     html = `<div class="empty"><h2>Chưa có món nào khớp.</h2><p>Bỏ bớt bộ lọc, hoặc tìm một tên quả khác.</p><a class="btn" href="/cua-hang">Xem tất cả</a></div>`;
   }
 
-  const procChips = chip(shopHref({ q }), 'Tất cả', !wantedCat, pool.length)
+  const procChips = chip(link({ q }), 'Tất cả', !wantedCat, pool.length)
     + catOrder
       .filter((id) => catMeta[id] && pool.some((p) => p.cat === id))
-      .map((id) => chip(shopHref({ cat: id, q }), catMeta[id].short, wantedCat === id, pool.filter((p) => p.cat === id).length))
+      .map((id) => chip(link({ cat: id, q }), catMeta[id].short, wantedCat === id, pool.filter((p) => p.cat === id).length))
       .join('');
-  const fruitChips = chip(shopHref({ cat: wantedCat, q }), 'Tất cả', !wantedFruit, afterCat.length)
+  const fruitChips = chip(link({ cat: wantedCat, q }), 'Tất cả', !wantedFruit, afterCat.length)
     + fruits.map(([id, name]) => chip(
-      shopHref({ cat: wantedCat, fruit: id, q }),
+      link({ cat: wantedCat, fruit: id, q }),
       name,
       wantedFruit === id,
       afterCat.filter((p) => p.fruit === id).length,
     )).join('');
-  const brandChips = chip(shopHref({ cat: wantedCat, fruit: wantedFruit, q }), 'Tất cả', !wantedLine, afterFruit.length)
+  const brandChips = chip(link({ cat: wantedCat, fruit: wantedFruit, q }), 'Tất cả', !wantedLine, afterFruit.length)
     + lines.map(([id, name]) => chip(
-      shopHref({ cat: wantedCat, fruit: wantedFruit, line: id, q }),
+      link({ cat: wantedCat, fruit: wantedFruit, line: id, q }),
       name,
       wantedLine === id,
       afterFruit.filter((p) => p.lines.includes(id) || (id === 'other' && !p.lines.length) || p.brandKey === id).length,
@@ -420,6 +461,7 @@ export function shopPage(catalog, query) {
   const body = `<main id="main" class="wrap shop">
     <header class="pagehead">
       <h1>${esc(title)}</h1>
+      <nav class="kieu" aria-label="Kiểu bố cục"><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q }))}"${kieu === '1' ? ' aria-current="true"' : ''}>Kiểu 1 · Lưới đều</a><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q, kieu: '2' }))}"${kieu === '2' ? ' aria-current="true"' : ''}>Kiểu 2 · Tạp chí</a></nav>
       <p>${esc(sub)}</p>
       ${tierBox}
       <p class="tiers__note">Tự trừ trong giỏ. Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.</p>
@@ -427,6 +469,7 @@ export function shopPage(catalog, query) {
     <div class="filters">
       <form class="find find--bar" action="/cua-hang" method="get">
         ${wantedCat ? `<input type="hidden" name="cat" value="${esc(wantedCat)}">` : ''}
+        ${kieu === '2' ? '<input type="hidden" name="kieu" value="2">' : ''}
         <label class="sr" for="sq">Tìm trong cửa hàng</label>
         <input id="sq" name="q" value="${esc(q)}" placeholder="Tìm trong cửa hàng" autocomplete="off">
         <button class="btn btn--small" type="submit">Tìm</button>
