@@ -3346,7 +3346,7 @@
     }
    ],
    "verify": false,
-   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 200g: Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 95.000đ (VZ-GG-CB2XC-200).",
+   "note": "Chưa có ảnh túi cam 200g. Chưa có ảnh túi cam 200g. 100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 200g: Combo 2: 169.000đ · Combo 3: 239.000đ | 300g: Combo 2: 235.000đ · Combo 3: 335.000đ. Có trong combo: Combo xoài muối ớt + cóc muối ớt 95.000đ (VZ-GG-CB2XC-200).",
    "variants": [
     {
      "code": "VZ-GG-XDMO-100",
@@ -3374,8 +3374,8 @@
      "weightLabel": "300g",
      "verify": false,
      "note": "",
-     "price": 99000,
-     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "price": 125000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXM-300-GG) – chủ shop duyệt đề xuất giá 01/11/2026: 99k → 125k",
      "priceCheckedAt": "2026-11-01"
     }
    ]
@@ -3872,7 +3872,7 @@
     }
    ],
    "verify": false,
-   "note": "Có 2 mẫu túi. Combo 2: 275.000đ · Combo 3: 389.000đ.",
+   "note": "Có 2 mẫu túi. Combo 2: 299.000đ · Combo 3: 425.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XTH-120",
@@ -3880,9 +3880,9 @@
      "weightLabel": "110g",
      "verify": false,
      "note": "",
-     "price": 145000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
-     "priceCheckedAt": "2026-10-31"
+     "price": 159000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop duyệt đề xuất giá 01/11/2026: 145k → 159k",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -3978,7 +3978,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
+   "note": "Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDL-200",
@@ -3986,9 +3986,9 @@
      "weightLabel": "200g (250–300g)",
      "verify": true,
      "note": "Khoảng 250–300g, cần kiểm tra.",
-     "price": 75000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
-     "priceCheckedAt": "2026-10-31"
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – chủ shop duyệt đề xuất giá 01/11/2026: Cheers+ 200g 75k → 89k, cùng giá Good Good 200g",
+     "priceCheckedAt": "2026-11-01"
     },
     {
      "code": "MQ-DXC-250-CHX",
@@ -4047,7 +4047,7 @@
     }
    ],
    "verify": true,
-   "note": "Chưa có ảnh riêng túi băng đỏ (ảnh cũ là túi lá xoài, đã chuyển sang VZ-CH-XDL-200 ngày 31/10). Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
+   "note": "Chưa có ảnh riêng túi băng đỏ (ảnh cũ là túi lá xoài, đã chuyển sang VZ-CH-XDL-200 ngày 31/10). Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDR-200",
@@ -4055,9 +4055,9 @@
      "weightLabel": "200g (250–300g, tạm)",
      "verify": true,
      "note": "Khối lượng tạm.",
-     "price": 75000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
-     "priceCheckedAt": "2026-10-31"
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – chủ shop duyệt đề xuất giá 01/11/2026: Cheers+ 200g 75k → 89k, cùng giá Good Good 200g",
+     "priceCheckedAt": "2026-11-01"
     },
     {
      "code": "MQ-DXC-250-CHD",
@@ -4146,7 +4146,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
+   "note": "Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDT-200",
@@ -4154,9 +4154,9 @@
      "weightLabel": "200g",
      "verify": false,
      "note": "",
-     "price": 75000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
-     "priceCheckedAt": "2026-10-31"
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXC-200-CHA) – chủ shop duyệt đề xuất giá 01/11/2026: Cheers+ 200g 75k → 89k, cùng giá Good Good 200g",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -4179,7 +4179,7 @@
     }
    ],
    "verify": false,
-   "note": "3 túi tròn vàng in cô gái áo dài Cheers+ 200g (mẫu túi của mã MQ-DXC-200-CHA). Combo 2 túi: 139.000đ.",
+   "note": "3 túi tròn vàng in cô gái áo dài Cheers+ 200g (mẫu túi của mã MQ-DXC-200-CHA). Combo 2 túi: 169.000đ.",
    "variants": [
     {
      "code": "VZ-CH-CB3X-600",
@@ -4187,9 +4187,9 @@
      "weightLabel": "3 × 200g",
      "verify": true,
      "note": "Chọn màu túi (đỏ / xanh lá) ở ô Ghi chú khi đặt hàng, cùng giá.",
-     "price": 195000,
-     "priceSource": "Chủ shop chốt 31/10: 3 × 73.000đ = 219.000đ, giảm ≈11%",
-     "priceCheckedAt": "2026-10-31"
+     "price": 239000,
+     "priceSource": "Combo = 3 × 89.000đ = 267.000đ −11%, làm tròn đuôi 9k (chủ shop duyệt đề xuất giá 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -4482,7 +4482,7 @@
     }
    ],
    "verify": false,
-   "note": "100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 250g: Combo 2: 159.000đ · Combo 3: 225.000đ | 500g: Combo 2: 279.000đ · Combo 3: 399.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 125.000đ (VZ-FH-CB-350).",
+   "note": "100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 250g: Combo 2: 185.000đ · Combo 3: 265.000đ | 500g: Combo 2: 279.000đ · Combo 3: 399.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 139.000đ (VZ-FH-CB-350).",
    "variants": [
     {
      "code": "VZ-FH-XD-100",
@@ -4540,9 +4540,9 @@
      "weightLabel": "250g",
      "verify": false,
      "note": "",
-     "price": 85000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
-     "priceCheckedAt": "2026-10-31"
+     "price": 99000,
+     "priceSource": "Giá cửa hàng Mộc Quả (VZ-FH-XD-250) – chủ shop duyệt đề xuất giá 01/11/2026: 85k → 99k",
+     "priceCheckedAt": "2026-11-01"
     },
     {
      "code": "VZ-FH-XD-500",
@@ -4677,9 +4677,9 @@
      "weightLabel": "100g + 250g = 350g",
      "verify": false,
      "note": "",
-     "price": 125000,
-     "priceSource": "Combo = tổng giá lẻ 134.000đ (F&H 100g + 250g) −6%",
-     "priceCheckedAt": "2026-10-31"
+     "price": 139000,
+     "priceSource": "Combo = tổng giá lẻ 148.000đ (F&H 100g 49k + 250g 99k) −6% (chủ shop duyệt đề xuất giá 01/11/2026)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -5929,8 +5929,8 @@
      "weightLabel": "100g + 105g + 110g",
      "verify": false,
      "note": "",
-     "price": 546000,
-     "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
+     "price": 558000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ 627.000đ −11%, làm tròn nghìn (chủ shop duyệt đề xuất giá 01/11/2026)",
      "priceCheckedAt": "2026-11-01"
     }
    ]
