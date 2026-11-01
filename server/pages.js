@@ -15,10 +15,10 @@ const FEATURED = [
   'sau-rieng-say-thang-hoa-cheers',
   'vz-ps-cb3',
   'xoai-say-deo',
+  'mqz-mit-say-gion',
   'xoai-chin-cay',
   'combo-xoai-say-deo-100g',
-  'mqz-hop-tim-8-vi',
-  'vz-combo-5-hop-hat',
+  'mit-say-gion',
 ];
 
 function layout({ title, description, page, body, scripts = [], styles = [] }) {
