@@ -47,7 +47,10 @@ function gallery(variant) {
     if (photo.src && !list.some((x) => x.src === photo.src)) list.push({ src: photo.src, alt: photo.alt || data.name, kind: photo.kind || 'Ảnh' });
   }
   if (data.open?.src) list.push({ src: data.open.src, alt: data.open.cap || 'Mở túi', kind: 'Mở túi' });
-  if (data.shelf?.src) list.push({ src: data.shelf.src, alt: data.shelf.cap || 'Trên kệ', kind: 'Trên kệ' });
+  // Ảnh kệ siêu thị có túi của chính sản phẩm (có thể nhiều ảnh).
+  for (const shelf of data.shelves || (data.shelf ? [data.shelf] : [])) {
+    if (shelf?.src && !list.some((x) => x.src === shelf.src)) list.push({ src: shelf.src, alt: shelf.cap || 'Trên kệ', kind: 'Trên kệ' });
+  }
   if (!list.length && data.open?.src) list.push({ src: data.open.src, alt: data.name, kind: 'Ảnh' });
   return list;
 }

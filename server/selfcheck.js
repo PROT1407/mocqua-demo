@@ -777,7 +777,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v18/);
+    assert.match(sw, /mocqua-shell-v19/);
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
@@ -792,15 +792,51 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.doesNotMatch(one, /viza-ke-|"shelf":\{/);
       assert.match(one, /"photos":\[\{"src":"\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
     }
-    // Ảnh kệ chỉ trên trang cùng nhãn: Cheers+/Yummy sầu riêng giữ kệ viza-ke-02; Premium, KITA, hạt hộp giấy… không có ảnh kệ khác nhãn.
+    // Ảnh kệ siêu thị: chỉ gắn khi túi của chính sản phẩm nhìn thấy trên ảnh (bảng soi tay, đối chiếu MQ.SHELF_FOR).
     {
+      const BAG_ON_SHELF = {
+        'viza-ke-01': ['sau-rieng-say-goodgood', 'mit-say-gion', 'xoai-say-deo'],
+        'viza-ke-02': ['sau-rieng-say-thang-hoa-yummy', 'vz-ym-mt', 'sau-rieng-say-thang-hoa-cheers'],
+        'viza-ke-03': ['sau-rieng-say-thang-hoa-cheers', 'mit-say-gion'],
+        'viza-ke-04': ['xoai-say-deo'],
+        'viza-ke-05': ['xoai-chin-cay', 'xoai-say-deo-muoi-ot', 'xoai-say-deo-muoi-ot-goodgood', 'xoai-say-deo', 'combo-xoai-say-deo-100g', 'vz-fh-cb350'],
+        'viza-ke-06': ['xoai-say-deo', 'xoai-say-deo-muoi-ot', 'mit-say-gion'],
+        'viza-ke-07': ['xoai-say-deo'],
+        'viza-ke-08': ['xoai-say-deo'],
+        'viza-ke-09': ['sau-rieng-say-goodgood', 'mit-say-gion'],
+        'viza-ke-10': [],
+        'viza-ke-11': [],
+        'viza-ke-12': [],
+      };
+      // Trang đã đủ Bao bì + Mở túi + Trên kệ hoặc chưa có ảnh kệ đúng túi: giữ nguyên ảnh kệ như bản đang chạy (chờ chủ shop).
+      const KEEP = { 'xoai-say-deo-goodgood': 'viza-ke-05', 'xoai-say-thang-hoa': 'viza-ke-05', 'vz-ch-cb3x': 'viza-ke-05', 'vz-fh-xd': 'viza-ke-05', 'vz-gg-xdmo': 'viza-ke-05', 'thanh-long-say-deo': 'viza-ke-12' };
       const { getShopCatalog: cat } = await import('./catalog.js');
-      const byId = new Map(cat().products.map((p) => [p.id, p]));
-      assert.equal(byId.get('sau-rieng-say-thang-hoa-cheers').shelf?.src, '/assets/shelf/viza-ke-02.webp');
-      assert.equal(byId.get('sau-rieng-say-thang-hoa-yummy').shelf?.src, '/assets/shelf/viza-ke-02.webp');
-      for (const id of ['vz-ps-gd', 'vz-ps-cb3', 'sau-rieng-say-kita', 'xoai-say-deo-yummy', 'vz-hat-macca-say', 'coc-say-deo-muoi-ot-goodgood']) {
-        assert.equal(byId.get(id).shelf, null, id + ' không được có ảnh kệ khác nhãn');
+      const prods = cat().products;
+      for (const p of prods) {
+        if (KEEP[p.id]) { assert.equal(p.shelves.map((s) => s.src).join(','), '/assets/shelf/' + KEEP[p.id] + '.webp', p.id); continue; }
+        for (const s of p.shelves) {
+          const id = s.src.match(/(viza-ke-\d+)\.webp$/)?.[1];
+          assert.ok(BAG_ON_SHELF[id]?.includes(p.id), `${p.id}: ảnh kệ ${id} không có túi của sản phẩm này`);
+        }
       }
+      // Ngược lại: túi có trên ảnh kệ thì trang đó phải có ảnh kệ ấy.
+      const byId = new Map(prods.map((p) => [p.id, p]));
+      // (trừ trang đã đủ Bao bì + Mở túi + Trên kệ, giữ nguyên như đang chạy)
+      const AS_IS = ['xoai-say-deo-muoi-ot', 'xoai-say-deo-muoi-ot-goodgood', 'sau-rieng-say-thang-hoa-cheers', 'sau-rieng-say-thang-hoa-yummy'];
+      for (const [id, ids] of Object.entries(BAG_ON_SHELF)) {
+        for (const pid of ids.filter((x) => !AS_IS.includes(x))) assert.ok(byId.get(pid)?.shelves.some((s) => s.src.endsWith(id + '.webp')), `${pid} thiếu ảnh kệ ${id}`);
+      }
+      for (const id of ['vz-ps-gd', 'vz-ps-ry', 'vz-ps-yd', 'vz-ps-cb3', 'sau-rieng-say-kita', 'vz-hat-macca-say']) {
+        assert.equal(byId.get(id).shelves.length, 0, id + ' không có túi trên ảnh kệ nào');
+      }
+      // Trang xoài muối ớt F&H đã đủ: Bao bì → Mở túi → Trên kệ (ke-05), giữ nguyên.
+      const fhr = await (await fetch(base + '/san-pham/xoai-say-deo-muoi-ot?sku=MQ-DXM-200-FHR')).text();
+      assert.match(fhr, /"open":\{"src":"\/assets\/products\/real\/xoai-deo-muoi-ot\.webp"/);
+      assert.match(fhr, /"shelves":\[\{"src":"\/assets\/shelf\/viza-ke-05\.webp"[^\]]*\]/);
+      assert.match(fhr, /"fit45":\[\]/);
+      // Trang thêm kệ: xoài sấy dẻo F&H có đủ 6 ảnh kệ, ảnh kệ hiện trọn khung.
+      const xd = await (await fetch(base + '/san-pham/xoai-say-deo')).text();
+      assert.match(xd, /"fit45":\["\/assets\/shelf\/viza-ke-07\.webp"/);
     }
     // Cửa hàng có thì danh mục cũng có: mọi mã đang bán ở /cua-hang đều có thẻ danh mục (trùng mã, nối tay hoặc lựa chọn combo).
     // Riêng gói nhỏ 29k MQ-DXM-S-GG chưa rõ khối lượng, chờ chủ shop xác nhận.
