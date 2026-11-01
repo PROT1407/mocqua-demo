@@ -105,7 +105,7 @@ async function loadPromo() {
   const data = await api('/api/admin/settings');
   const s = data.settings;
   panels.promo.innerHTML = `<form id="promo-form" class="fields">
-    <p class="lead lead--left">Ưu đãi theo đơn (tự tính trong giỏ và trên máy chủ): tiền hàng từ 500.000đ giảm 5%, từ 1.000.000đ giảm 8%. Mức tính trên tiền hàng trước giảm, chưa cộng phí giao. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn. Không còn quà tặng 0đ.</p>
+    <p class="lead lead--left">Ưu đãi theo đơn (tự tính trong giỏ và trên máy chủ): tiền hàng từ 300.000đ giảm 3% và miễn phí giao, từ 500.000đ giảm 7%, từ 1.000.000đ giảm 12%. Mức tính trên tiền hàng trước giảm, chưa cộng phí giao. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn. Không còn quà tặng 0đ.</p>
     <input type="hidden" name="giftMin" value="${s.giftMin}">
     <input type="hidden" name="giftPair" value="${s.giftPair}">
     <input type="hidden" name="giftMinG" value="${s.giftMinG}">

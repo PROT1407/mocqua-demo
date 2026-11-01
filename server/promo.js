@@ -3,13 +3,14 @@ import { lookupSku, getShopCatalog } from './catalog.js';
 import { comboDeals, cartNudges, shipBar, shipSingles } from './deals.js';
 import { vnd, problem } from './format.js';
 
-// Chiết khấu theo giá trị đơn (duyệt 31/10/2026). Không còn quà tặng 0đ.
+// Chiết khấu theo giá trị đơn (chủ shop duyệt 01/11/2026: từ 300k −3% + miễn ship, từ 500k −7%, từ 1 triệu −12%). Không còn quà tặng 0đ.
 // - Mức tính trên tiền hàng trước giảm, chưa cộng phí giao.
 // - % chỉ giảm trên món lẻ, set, hộp quà. Dòng combo đã có giá riêng: không giảm thêm, nhưng vẫn tính vào mức đơn.
 // - Tiền giảm làm tròn xuống tới nghìn đồng.
 export const ORDER_TIERS = Object.freeze([
-  Object.freeze({ min: 1000000, pct: 8 }),
-  Object.freeze({ min: 500000, pct: 5 }),
+  Object.freeze({ min: 1000000, pct: 12 }),
+  Object.freeze({ min: 500000, pct: 7 }),
+  Object.freeze({ min: 300000, pct: 3 }),
 ]);
 
 export function isComboProduct(product) {
@@ -46,9 +47,24 @@ export function kfmt(n) {
   return `${k.toLocaleString('vi-VN')}k`;
 }
 
-export function bannerText(settings) {
-  const [top, low] = [...ORDER_TIERS].sort((a, b) => b.min - a.min);
-  return `Miễn phí giao từ ${kfmt(settings.freeShip)} · Giảm ${low.pct}% đơn từ ${kfmt(low.min)} · Giảm ${top.pct}% đơn từ 1 triệu`;
+export function shortMoney(n) {
+  return n >= 1000000 && n % 1000000 === 0 ? `${n / 1000000} triệu` : kfmt(n);
+}
+
+// Các mức ưu đãi theo thứ tự tăng dần; mức trùng ngưỡng miễn ship gộp thành "Giảm 3% + miễn ship".
+// [{ min, pct, ship }] — dòng chỉ miễn ship (pct 0) khi ngưỡng miễn ship không trùng mức nào.
+export function promoTiers(settings) {
+  const tiers = [...ORDER_TIERS].sort((a, b) => a.min - b.min).map((t) => ({ min: t.min, pct: t.pct, ship: t.min === settings.freeShip }));
+  if (settings.freeShip > 0 && !tiers.some((t) => t.ship)) tiers.push({ min: settings.freeShip, pct: 0, ship: true });
+  return tiers.sort((a, b) => a.min - b.min);
+}
+
+export function tierTitle(t) {
+  return t.pct ? `Giảm ${t.pct}%${t.ship ? ' + miễn ship' : ''}` : 'Miễn phí giao';
+}
+
+export function bannerText(settings, fmt = shortMoney) {
+  return promoTiers(settings).map((t) => `${tierTitle(t)} đơn từ ${fmt(t.min)}`).join(' · ');
 }
 
 function mergeItems(items) {
@@ -79,9 +95,11 @@ export function hintText({ settings, subtotal, pct, hasCombo, base, ship = true 
   if (!subtotal) return `${bannerText(settings)}. Combo đã có giá riêng, không giảm thêm.`;
   const bits = [];
   const next = nextTier(subtotal);
-  if (ship) bits.push(subtotal < settings.freeShip ? `Thêm ${kfmt(settings.freeShip - subtotal)} để được miễn phí giao.` : 'Đơn được miễn phí giao.');
+  const both = ship && next && subtotal < settings.freeShip && next.min === settings.freeShip;
+  if (both) bits.push(`Thêm ${kfmt(next.min - subtotal)} để được giảm ${next.pct}% và miễn phí giao hàng.`);
+  else if (ship) bits.push(subtotal < settings.freeShip ? `Thêm ${kfmt(settings.freeShip - subtotal)} để được miễn phí giao.` : 'Đơn được miễn phí giao.');
   if (pct) bits.push(`Đang giảm ${pct}%.`);
-  bits.push(next ? `Thêm ${kfmt(next.min - subtotal)} để được giảm ${next.pct}%.` : 'Đã đạt mức giảm cao nhất.');
+  if (!both) bits.push(next ? `Thêm ${kfmt(next.min - subtotal)} để được giảm ${next.pct}%.` : 'Đã đạt mức giảm cao nhất.');
   if (hasCombo) bits.push(base > 0 ? 'Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.' : 'Combo đã có giá riêng, không giảm thêm.');
   return bits.join(' ');
 }
@@ -141,15 +159,25 @@ export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}
 }
 
 // Tổng phải trả của một giỏ giả định (không báo lỗi; món không bán được thì trả Infinity để bỏ gợi ý đó).
-function quickTotal(list, settings) {
+function quickQuote(list, settings) {
   const lines = [];
   for (const it of list) {
     const hit = lookupSku(it.sku);
-    if (!hit || hit.product.oos || !(hit.price > 0)) return Infinity;
+    if (!hit || hit.product.oos || !(hit.price > 0)) return null;
     lines.push({ line: hit.price * it.qty, combo: isComboProduct(hit.product) });
   }
   const d = orderDiscount(lines);
-  return d.subtotal - d.discount + shipFor(d.subtotal, settings);
+  const ship = shipFor(d.subtotal, settings);
+  return { total: d.subtotal - d.discount + ship, pct: d.pct, freeShip: ship === 0 };
+}
+function quickTotal(list, settings) {
+  const q = quickQuote(list, settings);
+  return q ? q.total : Infinity;
+}
+// Mức ưu đãi của giỏ (để gợi ý combo không bao giờ làm rớt mức % hay mất miễn ship).
+function quickLevel(list, settings) {
+  const q = quickQuote(list, settings);
+  return q ? { pct: q.pct, freeShip: q.freeShip } : null;
 }
 
 // Chỉ cho /api/quote (trang giỏ): gợi ý combo + thanh miễn ship. Đơn hàng không cần.
@@ -158,8 +186,8 @@ function cartExtras(pairs, items, d, settings, hasCombo) {
   const deals = comboDeals(catalog);
   const nameOf = (sku) => { const h = lookupSku(sku); return h ? `${h.name} ${h.w}`.trim() : sku; };
   return {
-    nudges: cartNudges(pairs, deals, (list) => quickTotal(list, settings), { nameOf, comboSkus: new Set(items.filter((i) => i.combo).map((i) => i.sku)) }).slice(0, 2),
-    shipBar: shipBar(d.subtotal, settings.freeShip, { deals, singles: shipSingles(catalog), inCart: new Set(pairs.map((p) => p.sku)) }),
+    nudges: cartNudges(pairs, deals, (list) => quickTotal(list, settings), { nameOf, comboSkus: new Set(items.filter((i) => i.combo).map((i) => i.sku)), levelOf: (list) => quickLevel(list, settings) }).slice(0, 2),
+    shipBar: shipBar(d.subtotal, settings.freeShip, { deals, singles: shipSingles(catalog), inCart: new Set(pairs.map((p) => p.sku)), withPct: (ORDER_TIERS.find((t) => t.min === settings.freeShip) || {}).pct || 0 }),
     cartHint: hintText({ settings, subtotal: d.subtotal, pct: d.pct, hasCombo, base: d.base, ship: false }),
   };
 }

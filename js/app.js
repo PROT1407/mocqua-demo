@@ -146,7 +146,7 @@ MQ.SHIP_METHODS=[
   {id:'gift',name:'Giao quà hẹn giờ',eta:'đúng ngày & khung giờ bạn chọn',fee:40000}
 ];
 /* ---------- khuyến mãi minh bạch (tự động) ---------- */
-MQ.TIERS=[{min:1000000,pct:8},{min:500000,pct:5}];   // giảm theo giá trị đơn (tiền hàng trước giảm); combo không giảm thêm nhưng vẫn tính vào mức
+MQ.TIERS=[{min:1000000,pct:12},{min:500000,pct:7},{min:300000,pct:3}];   // giảm theo giá trị đơn (tiền hàng trước giảm); combo không giảm thêm nhưng vẫn tính vào mức
 MQ.r1k=v=>Math.round(v/1000)*1000;
 MQ.fl1k=v=>Math.floor(v/1000)*1000;
 MQ.isComboItem=i=>MQ.isComboP(MQ.byId(i.id));
@@ -161,8 +161,8 @@ MQ.promo=items=>{
 };
 /* gợi ý tiến độ: giao miễn phí → bậc giảm kế tiếp */
 MQ.progress=P=>{const b=P.base,low=MQ.TIERS[MQ.TIERS.length-1];
-  if(!P.sub)return {text:`Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b> · đơn từ <b>${MQ.fmt(low.min)}</b> giảm 5%, từ 1 triệu giảm 8%.`,pct:0};
-  if(b<MQ.FREE_SHIP)return {text:`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b> · thêm ${MQ.fmt(low.min-b)} để được giảm 5%.`,pct:b/MQ.FREE_SHIP*100};
+  if(!P.sub)return {text:MQ.TIERS.slice().reverse().map(t=>`đơn từ <b>${MQ.fmt(t.min)}</b> giảm ${t.pct}%${t.min===MQ.FREE_SHIP?' + miễn phí giao':''}`).join(' · ').replace(/^đ/,'Đ')+'.',pct:0};
+  if(b<MQ.FREE_SHIP)return {text:low.min===MQ.FREE_SHIP?`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>giảm ${low.pct}% và miễn phí giao hàng</b>.`:`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b> · thêm ${MQ.fmt(low.min-b)} để được giảm ${low.pct}%.`,pct:b/MQ.FREE_SHIP*100};
   if(P.up)return {text:`${P.tier?`Đang giảm <b>${P.tier.pct}%</b> · `:'Đã miễn phí giao · '}Thêm <b>${MQ.fmt(P.up.min-b)}</b> để được giảm <b>${P.up.pct}%</b>.`,pct:b/P.up.min*100};
   return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng (combo không giảm thêm).`,pct:100};
 };
@@ -224,7 +224,7 @@ function header(){
   const omai=live.filter(p=>p.cat==='omai').sort((a,b)=>(a.rank||99)-(b.rank||99));
   return `
 <div class="tbar"><div class="wrap tbar__in">
-  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Giảm <b>5%</b> đơn từ 500k<i>·</i>Giảm <b>8%</b> đơn từ 1 triệu<i>·</i>Combo không giảm thêm</span><span class="tp-s">Freeship 300k<i>·</i>500k <b>−5%</b> · 1tr <b>−8%</b></span></a>
+  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Giảm <b>3%</b> + miễn ship đơn từ 300k<i>·</i>Giảm <b>7%</b> đơn từ 500k<i>·</i>Giảm <b>12%</b> đơn từ 1 triệu<i>·</i>Combo không giảm thêm</span><span class="tp-s">300k <b>−3%</b> + freeship<i>·</i>500k <b>−7%</b> · 1tr <b>−12%</b></span></a>
   <span class="tbar__msg tbar__demo">Hotline &amp; Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>

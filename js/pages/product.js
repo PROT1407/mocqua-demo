@@ -93,7 +93,7 @@ if(!soon){
    $('[data-perks]').innerHTML=v.p?[
      MQ.isComboP(p)?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b>Combo giá riêng</b> — không giảm thêm theo đơn, nhưng vẫn được tính vào mức giảm.</span></li>`:'',
      p.combo?`<li class="perk"><svg><use href="#i-gift"/></svg><span><b><a href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label)}</a></b> — chọn nhãn vàng GoodGood, xanh Fresh &amp; Healthy hoặc trộn.</span></li>`:'',
-     `<li class="perk"><svg><use href="#i-truck"/></svg><span>Đơn từ ${MQ.fmt(T[1].min)} <b>−${T[1].pct}%</b> · từ ${MQ.fmt(T[0].min)} <b>−${T[0].pct}%</b> · miễn phí giao từ ${MQ.fmt(MQ.FREE_SHIP)} — tự áp dụng trong giỏ, combo không giảm thêm. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
+     `<li class="perk"><svg><use href="#i-truck"/></svg><span>${T.slice().reverse().map((t,i)=>`${i?'từ':'Đơn từ'} ${MQ.fmt(t.min)} <b>−${t.pct}%</b>${t.min===MQ.FREE_SHIP?' + miễn phí giao':''}`).join(' · ')} — tự áp dụng trong giỏ, combo không giảm thêm. <a href="chinh-sach.html#khuyen-mai">Chi tiết</a></span></li>`
    ].join(''):'';
    $('[data-wlabel]').textContent=MQ.varLabel(p,v);
    if(p.packs){$('[data-vars]').innerHTML=varBtns();$('[data-packs]').innerHTML=packBtns();$('[data-pklabel]').textContent=p.packs[v.pk].name}else

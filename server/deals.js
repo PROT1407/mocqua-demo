@@ -96,7 +96,8 @@ import { applyNudge as apply } from '../web/js/cart-core.js';
 // - "swap": giỏ đã đủ món lẻ của một combo → đổi sang combo, tiết kiệm = tổng hiện tại − tổng sau khi đổi.
 // - "add": thiếu đúng 1 món → so với mua lẻ thêm món đó, lấy combo rẻ hơn bao nhiêu.
 // Chỉ gợi ý khi tổng thật sự giảm (tính cả mất % giảm theo đơn và phí giao). Sắp: đổi trước, rồi tiết kiệm nhiều hơn.
-export function cartNudges(cart, deals, totalOf, { nameOf = () => '', comboSkus = new Set() } = {}) {
+// levelOf(items) → { pct, freeShip }: không bao giờ gợi ý đổi/ghép làm rớt mức % hoặc mất miễn ship (so với giỏ hiện tại / mua lẻ thêm món đó).
+export function cartNudges(cart, deals, totalOf, { nameOf = () => '', comboSkus = new Set(), levelOf = null } = {}) {
   const counts = new Map();
   for (const it of cart) if (!comboSkus.has(it.sku)) counts.set(it.sku, (counts.get(it.sku) || 0) + it.qty);
   if (!counts.size) return [];
@@ -109,13 +110,19 @@ export function cartNudges(cart, deals, totalOf, { nameOf = () => '', comboSkus 
     if (missing.length > 1 || have < 1) continue;
     const remove = [...used.entries()].map(([sku, qty]) => ({ sku, qty }));
     const nudge = { kind: missing.length ? 'add' : 'swap', sku: deal.sku, id: deal.id, name: deal.name, w: deal.w, img: deal.img, href: deal.href, price: deal.price, sum: deal.sum, remove };
-    const after = totalOf(apply(cart, nudge));
+    const next = apply(cart, nudge);
+    const after = totalOf(next);
+    const ref = nudge.kind === 'swap' ? cart : apply(cart, { remove: [], sku: missing[0].ref });
+    if (levelOf) {
+      const a = levelOf(ref), b = levelOf(next);
+      if (!a || !b || b.pct < a.pct || (a.freeShip && !b.freeShip)) continue;
+    }
     if (nudge.kind === 'swap') {
       nudge.save = now - after;
     } else {
       nudge.addSku = missing[0].ref;
       nudge.addName = nameOf(missing[0].ref);
-      nudge.save = totalOf(apply(cart, { remove: [], sku: missing[0].ref })) - after;
+      nudge.save = totalOf(ref) - after;
     }
     if (nudge.save >= 1000) out.push(nudge);
   }
@@ -127,9 +134,10 @@ export function cartNudges(cart, deals, totalOf, { nameOf = () => '', comboSkus 
 
 // Thanh miễn ship: còn bao nhiêu, và một món/combo vừa đủ khoảng thiếu (rẻ nhất mà vẫn ≥ khoảng thiếu).
 // Ưu tiên combo nếu giá combo không hơn món lẻ vừa đủ quá 30k; không thì món lẻ.
-export function shipBar(subtotal, freeShip, { deals = [], singles = [], inCart = new Set() } = {}) {
+// withPct: % giảm theo đơn bắt đầu cùng ngưỡng miễn ship (vd. 3%) để thanh ghi "giảm 3% + miễn ship".
+export function shipBar(subtotal, freeShip, { deals = [], singles = [], inCart = new Set(), withPct = 0 } = {}) {
   if (!(subtotal > 0) || !(freeShip > 0)) return null;
-  if (subtotal >= freeShip) return { freeShip, need: 0, pct: 100, suggest: null };
+  if (subtotal >= freeShip) return { freeShip, withPct, need: 0, pct: 100, suggest: null };
   const need = freeShip - subtotal;
   const fit = (list) => list.filter((x) => x.price >= need && !inCart.has(x.sku)).sort((a, b) => a.price - b.price || (a.rank || 99) - (b.rank || 99))[0];
   const combo = fit(deals.filter((d) => d.isDefault).map((d) => ({ ...d, combo: true })));
@@ -137,7 +145,7 @@ export function shipBar(subtotal, freeShip, { deals = [], singles = [], inCart =
   // Combo chỉ thắng khi không đắt hơn món lẻ vừa đủ quá 30k (khách không bị đẩy mua quá tay).
   const suggest = combo && (!single || combo.price <= single.price + 30000) ? combo : (single || null);
   return {
-    freeShip, need, pct: Math.max(4, Math.min(99, Math.round((subtotal / freeShip) * 100))),
+    freeShip, withPct, need, pct: Math.max(4, Math.min(99, Math.round((subtotal / freeShip) * 100))),
     suggest: suggest ? { sku: suggest.sku, name: suggest.name, w: suggest.w, img: suggest.img, href: suggest.href, price: suggest.price, save: suggest.save || 0, combo: !!suggest.combo } : null,
   };
 }

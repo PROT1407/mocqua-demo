@@ -181,3 +181,14 @@ Cùng khối lượng = cùng giá; túi lớn hơn không rẻ hơn túi nhỏ.
 ## 01/11/2026 20:40 — túi vuông nhỏ xoài muối ớt GoodGood (đã áp dụng)
 
 Chủ shop: "cố định túi nhỏ dạng vuông này là 80 gr". `MQ-DXM-S-GG` đổi nhãn "Gói nhỏ 50–100g" → **80g** (túi vuông nhỏ 80g), giá 29.000đ → **45.000đ**, bằng các túi vuông 80g GoodGood khác (`MQ-DTH-080-GG`, `MQ-DCM-080-GG`, `MQ-DME-080-GG`, `MQ-DTL-080-GG`, `MQ-DDU-080-GG` đều 45k). Không có combo nào chứa mã này; danh mục chưa có thẻ riêng cho túi vuông 80g.
+
+## 01/11/2026 21:47 — mức ưu đãi theo giá trị đơn mới (chủ shop duyệt)
+
+| Tiền hàng (trước giảm, chưa cộng phí giao) | Trước | Sau |
+|---|---|---|
+| từ 300.000đ | miễn phí giao | **−3% + miễn phí giao** |
+| từ 500.000đ | −5% | **−7%** (vẫn miễn ship) |
+| từ 1.000.000đ | −8% | **−12%** (vẫn miễn ship) |
+
+Combo giữ quy tắc cũ: không giảm % thêm nhưng vẫn tính vào mức đơn. % trừ trên món lẻ/set/hộp quà, làm tròn xuống nghìn đồng. Gợi ý đổi/ghép combo trong giỏ không bao giờ làm rớt mức % hay mất miễn ship.
+

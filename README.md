@@ -54,7 +54,7 @@ Nội dung chuyển khoản là mã đơn, ví dụ `MQ261024-K7MQ2X`.
 
 1. Vào cửa hàng, chọn Sấy dẻo → Xoài → một hãng.
 2. Trên trang món, chọn khối lượng (và màu túi nếu có), cho vào giỏ.
-3. Giỏ tự tính ưu đãi theo tiền hàng (trước giảm, chưa cộng phí giao): từ 300.000đ miễn phí giao, từ 500.000đ giảm 5%, từ 1.000.000đ giảm 8%. % chỉ trừ trên món không phải combo (combo vẫn tính vào mức). Tiền giảm làm tròn xuống tới nghìn đồng, hiện thành dòng riêng trong giỏ, trang thanh toán, trang đơn, trang quản trị và file CSV. Không còn quà tặng 0đ.
+3. Giỏ tự tính ưu đãi theo tiền hàng (trước giảm, chưa cộng phí giao): từ 300.000đ giảm 3% và miễn phí giao, từ 500.000đ giảm 7%, từ 1.000.000đ giảm 12% (chủ shop duyệt 01/11/2026). % chỉ trừ trên món không phải combo (combo vẫn tính vào mức). Tiền giảm làm tròn xuống tới nghìn đồng, hiện thành dòng riêng trong giỏ, trang thanh toán, trang đơn, trang quản trị và file CSV. Không còn quà tặng 0đ.
 4. Đặt hàng, điền tên, điện thoại, địa chỉ. Chọn chuyển khoản để sang trang có QR. Trả khi nhận hàng là lựa chọn phụ.
 5. Vào `/admin`, đăng nhập, thấy đơn mới, đổi trạng thái: Chờ CK → Đã nhận → Đang giao → Xong. Sửa một giá ở tab Giá bán rồi tải lại trang món.
 
