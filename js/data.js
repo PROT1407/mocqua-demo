@@ -753,7 +753,7 @@ MQ.SHELF_BAGS={
  'xoai-say-deo-muoi-ot':{'*':['fhx-do']},
  'xoai-say-deo-muoi-ot-goodgood':{'viza-ke-13':['dxmo300'],'viza-ke-15':['dxmo300'],'viza-ke-05':['dxmo300'],'viza-ke-14':['dxmogn'],'viza-ke-18':['dxmogn']},
  'xoai-chin-cay':{'*':['chx-aodai']},
- 'combo-xoai-say-deo-100g':{'*':['fhx-dayxanh-100r']},
+ 'combo-xoai-say-deo-100g':{'*':['combo-xoai-6tui-xanh','combo-xoai-6tui-tron']},
  'mit-say-gion':{'*':['gm500'],'viza-ke-20':['fhx-mit300']},
  'coc-say-deo-muoi-ot-goodgood':{'*':['vz-gg-coc']},
  /* gói vuông trắng-vàng trên kệ = cùng sản phẩm thơm GoodGood 80g (chủ shop xác nhận 01/11/2026) */
