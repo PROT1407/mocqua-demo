@@ -38,8 +38,12 @@
    "mit-say-gion",
    "sau-rieng-say-goodgood"
   ],
-  "viza-ke-10": [],
-  "viza-ke-11": [],
+  "viza-ke-10": [
+   "sau-rieng-say-viza-food"
+  ],
+  "viza-ke-11": [
+   "sau-rieng-say-viza-food"
+  ],
   "viza-ke-12": [
    "thanh-long-say-deo"
   ],

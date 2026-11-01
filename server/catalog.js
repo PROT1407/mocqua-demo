@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import { ROOT } from './paths.js';
 import { getOverrides, getSettings } from './db.js';
 
-const BRAND_ORDER = ['mq', 'fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizabox', 'other'];
+const BRAND_ORDER = ['mq', 'fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'other'];
 
 const SHELF_CAPS = [
   ['viza-ke-01', 'Kệ trái cây sấy Viza Food: xoài, mít, sầu riêng'],

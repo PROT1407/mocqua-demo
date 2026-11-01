@@ -35,6 +35,7 @@ MQ.LINES = {
   fh:      {name:'Fresh & Healthy', short:'F&H', maker:'viza'},
   cheers:  {name:'Cheers+', maker:'viza'},
   kita:    {name:'KITA', maker:'viza'},
+  vizafood:{name:'Viza Food', maker:'viza'},
   yummy:   {name:'Yummy', maker:'viza'},
   vizabox: {name:'Viza Food · hộp giấy', short:'Hộp giấy', maker:'viza'},
   psdd:    {name:'Premium Shrinking Dried Durian', short:'Premium Durian', maker:'viza'},
@@ -108,6 +109,11 @@ MQ.PRODUCTS = [
   taste:{ngot:5,chua:0,deo:0,gion:4},
   short:'Sầu riêng sấy giòn dòng KITA, túi 100g — béo, thơm, giá dễ chịu để ăn thử hay chia nhau.',
   long:'Sầu riêng chín tách múi, sấy giòn, giữ vị béo ngọt tự nhiên. Túi 100g dòng KITA của Viza Food, bán nguyên bao bì gốc.'},
+ {id:'sau-rieng-say-viza-food',name:'Sầu riêng sấy Viza Food',cat:'gion',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:7,badge:'Mới',
+  variants:[V('MQ-GSR-100-VZ','100g',100,'vizafood',110000,'vz/vz-vz-srs-100')],
+  taste:{ngot:5,chua:0,deo:0,gion:4},
+  short:'Sầu riêng sấy túi cam – vàng “Durian Dried” nhãn riêng Viza Food, 100g — béo, thơm, cùng giá túi 100g GoodGood.',
+  long:'Sầu riêng chín tách múi rồi sấy, giữ vị béo ngọt và màu vàng của cơm sầu riêng. Túi 100g nhãn riêng Viza Food (in “Sầu riêng sấy – Durian Dried · 100% Natural”), bán nguyên bao bì gốc. Ảnh bao bì cắt từ ảnh chụp túi thật trên kệ siêu thị.'},
  {id:'sau-rieng-say-thang-hoa-yummy',name:'Sầu riêng sấy thăng hoa Yummy',cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:6,
   variants:[V('MQ-THSR-105-YM','105g',105,'yummy',199000,'tsr105')],
   taste:{ngot:5,chua:0,deo:0,gion:5},
@@ -668,7 +674,7 @@ MQ.PRODUCTS = [
    ke-06 F&H xoài sấy dẻo · F&H xoài muối ớt · F&H mít sấy
    ke-07, ke-08 F&H xoài sấy dẻo túi trắng
    ke-09 GoodGood sầu riêng sấy · F&H mít sấy (+ bánh đậu xanh nhãn khác)
-   ke-10, ke-11 túi sầu riêng Viza Food đời cũ — không trùng túi nào đang bán nên chưa gắn.
+   ke-10, ke-11 túi cam – vàng "Sầu riêng sấy – Durian Dried" nhãn riêng Viza Food 100g = sản phẩm sau-rieng-say-viza-food (ảnh chính cắt từ ke-10; đã che tag giá).
    ke-12 túi thanh long sấy Viza Food "Dragon Fruit Dried" — cùng dòng gói nhỏ 80–100g, chủ shop xác nhận là thanh long sấy dẻo của shop.
    Ảnh chủ shop gửi 01/11/2026 (đã che giá trên tag/sticker):
    ke-13 cận cảnh F&H xoài muối ớt túi trắng đáy đỏ (cùng mẫu GoodGood 300g)
@@ -694,6 +700,7 @@ MQ.SHELF_FOR={
  'mit-say-gion':['viza-ke-20','viza-ke-19','viza-ke-15','viza-ke-17','viza-ke-01','viza-ke-09','viza-ke-06','viza-ke-03','viza-ke-18'],
  'sau-rieng-say-goodgood':['viza-ke-16','viza-ke-19','viza-ke-15','viza-ke-09','viza-ke-01'],
  'sau-rieng-say-kita':['viza-ke-20'],
+ 'sau-rieng-say-viza-food':['viza-ke-10','viza-ke-11'],
  'sau-rieng-say-thang-hoa-cheers':['viza-ke-02','viza-ke-03','viza-ke-18'],
  'sau-rieng-say-thang-hoa-yummy':['viza-ke-02','viza-ke-18'],
  'vz-ym-mt':['viza-ke-02','viza-ke-18'],
@@ -716,7 +723,9 @@ MQ.SHELF_BAGS={
  /* gói vuông trắng-vàng trên kệ = cùng sản phẩm thơm GoodGood 80g (chủ shop xác nhận 01/11/2026) */
  'thom-say-deo':{'*':['vz-gg-thom-80g']},
  /* túi "Dragon Fruit Dried" Viza Food trên ke-12 = cùng sản phẩm thanh long sấy dẻo 80g (chủ shop xác nhận 01/11/2026) */
- 'thanh-long-say-deo':{'*':['tl080']}};
+ 'thanh-long-say-deo':{'*':['tl080']},
+ /* túi cam – vàng "Sầu riêng sấy – Durian Dried" nhãn riêng Viza Food 100g trên ke-10, ke-11 (chủ shop xác nhận 01/11/2026) */
+ 'sau-rieng-say-viza-food':{'*':['vz-vz-srs-100']}};
 /* trang không có túi của chính nó trên ảnh kệ nào thì không có ảnh kệ (quy tắc chặt, chủ shop 01/11/2026) */
 MQ.GALLERY_AS_IS=[];
 MQ.REAL_PHOTOS={

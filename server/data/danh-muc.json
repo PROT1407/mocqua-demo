@@ -5303,6 +5303,55 @@
    ]
   },
   {
+   "id": "vz-vz-srs",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Sầu riêng sấy (túi cam – vàng)",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-vz-srs.webp",
+     "thumb": "/assets/catalog/vz-vz-srs-sm.webp",
+     "w": 1000,
+     "h": 1000,
+     "alt": "Túi Viza Food sầu riêng sấy Durian Dried 100g (cắt từ ảnh kệ)",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/shelf/viza-ke-10.webp",
+     "thumb": "/assets/shelf/viza-ke-10-t.webp",
+     "w": 900,
+     "h": 1200,
+     "alt": "Túi sầu riêng sấy Viza Food trên kệ siêu thị",
+     "kind": "thuc-te"
+    },
+    {
+     "src": "/assets/shelf/viza-ke-11.webp",
+     "thumb": "/assets/shelf/viza-ke-11-t.webp",
+     "w": 900,
+     "h": 1200,
+     "alt": "Kệ sầu riêng sấy Viza Food",
+     "kind": "thuc-te"
+    }
+   ],
+   "verify": false,
+   "note": "Nhãn riêng Viza Food, túi cam – vàng in \"Sầu riêng sấy – Durian Dried\". Ảnh chính cắt từ ảnh kệ ke-10.",
+   "variants": [
+    {
+     "code": "VZ-VZ-SRS-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 110000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GSR-100-VZ) – cùng giá sầu riêng sấy GoodGood 100g",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
    "id": "vz-vz-cb2dm",
    "brand": "viza-food",
    "label": "Viza Food",
