@@ -744,11 +744,16 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal(buy['VZ-CH-XDT-200'].sku, 'MQ-DXC-200-CHA');
     assert.ok(buy['VZ-CH-XDT-200'].options.some((o) => o.sku === 'VZ-CH-CB3X-600'));
     assert.equal(buy['VZ-VZ-HDI-100'].sku, 'MQ-HDR-100-VZ');
+    // Sầu riêng sấy Viza Food 100g: cùng giá túi 100g GoodGood (cùng khối lượng = cùng giá), có trên cả cửa hàng và danh mục.
+    assert.equal(buy['VZ-VZ-SRS-100'].sku, 'MQ-GSR-100-VZ');
+    assert.equal(buy['VZ-VZ-SRS-100'].price, buy['VZ-GG-KF-100'].price);
+    assert.equal(data.products.find((p) => p.id === 'vz-vz-srs').brand, 'viza-food');
     // Chưa có giá hoặc chưa bán online thì không có nút mua.
     for (const code of ['VZ-GG-XDV-XX', 'VZ-FH-MITV-XX', 'VZ-FH-XDMO-XX', 'MQZ-DDY', 'VZ-GG-CARI-100']) assert.equal(buy[code], undefined, code);
     for (const p of data.products) for (const v of p.variants) if (v.price == null) assert.equal(buy[v.code], undefined, v.code);
 
     const shop = await (await fetch(base + '/cua-hang')).text();
+    assert.match(shop, /sau-rieng-say-viza-food/);
     // Bố cục cân đối: mỗi cách sấy một lưới liền, có khối Nổi bật và 3 mức ưu đãi; món ẩn bằng cờ hide trong data.js không hiện.
     assert.match(shop, /class="feat"/);
     assert.match(shop, /class="tiers"/);
@@ -777,7 +782,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v20/);
+    assert.match(sw, /mocqua-shell-v21/);
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
@@ -843,6 +848,10 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       const tl = await (await fetch(base + '/san-pham/thanh-long-say-deo')).text();
       assert.match(tl, /id="pdp-main" src="\/assets\/products\/tl080/);
       assert.equal(shelvesFor('thanh-long-say-deo', 'MQ-DTL-080-GG'), 'viza-ke-12');
+      // Sầu riêng sấy nhãn riêng Viza Food 100g (túi cam – vàng): ảnh túi cắt từ ke-10 trước, rồi ke-10, ke-11 "Trên kệ".
+      const vzsr = await (await fetch(base + '/san-pham/sau-rieng-say-viza-food')).text();
+      assert.match(vzsr, /id="pdp-main"[^>]* src="\/assets\/products\/vz\/vz-vz-srs-100-45\.jpg"/);
+      assert.equal(shelvesFor('sau-rieng-say-viza-food', 'MQ-GSR-100-VZ'), 'viza-ke-10,viza-ke-11');
       const xd = await (await fetch(base + '/san-pham/xoai-say-deo')).text();
       assert.match(xd, /"fit45":\["\/assets\/shelf\/viza-ke-20\.webp"/);
     }
