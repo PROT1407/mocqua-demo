@@ -162,11 +162,11 @@ Chủ shop duyệt: "bám theo giá thị trường". Cùng khối lượng + c�
 | `VZ-FH-XDV-100` | Fresh & Healthy – Xoài sấy dẻo (túi vàng) | 100g | 39k | **49k** | 95k / 129k | danh mục |
 | `VZ-FH-CB-350` | Fresh & Healthy – Combo xoài sấy dẻo Fresh & Healthy 100g + 250g | 100g + 250g = 350g | 115k | **125k** | — | cửa hàng, danh mục |
 
-Chưa đổi lúc đó (đã xử lý ở đợt 01/11 bên dưới): F&H xoài 250g, Cheers+ 200g, `MQ-DXM-300-GG` 300g, Cheers+ thăng hoa. Giữ nguyên: `MQ-DXM-S-GG` gói nhỏ 50–100g 29k; Yummy hũ 150g / Viza hộp giấy 150g 55k; các hộp quà (An Nhiên, Sum Vầy, Phú Quý, Thịnh Vượng) giữ giá.
+Chưa đổi lúc đó (đã xử lý ở đợt 01/11 bên dưới): F&H xoài 250g, Cheers+ 200g, `MQ-DXM-300-GG` 300g, Cheers+ thăng hoa. Giữ nguyên: `MQ-DXM-S-GG` gói nhỏ 29k (01/11 tối chủ shop chốt túi vuông nhỏ 80g, 45k — xem cuối file); Yummy hũ 150g / Viza hộp giấy 150g 55k; các hộp quà (An Nhiên, Sum Vầy, Phú Quý, Thịnh Vượng) giữ giá.
 
 ## Đợt giá 01/11/2026 tối — chủ shop duyệt đề xuất ("ok làm theo ý bạn đề xuất, còn set quà để đó đi") (đã áp dụng)
 
-Cùng khối lượng = cùng giá; túi lớn hơn không rẻ hơn túi nhỏ. Combo cùng loại ≈ −6% (2 túi) / −11% (3 túi), làm tròn đuôi 5k/9k; combo trộn vị −11%, làm tròn nghìn. Gói nhỏ `MQ-DXM-S-GG` 29k và 4 hộp quà (GIFTS) giữ nguyên.
+Cùng khối lượng = cùng giá; túi lớn hơn không rẻ hơn túi nhỏ. Combo cùng loại ≈ −6% (2 túi) / −11% (3 túi), làm tròn đuôi 5k/9k; combo trộn vị −11%, làm tròn nghìn. Gói nhỏ `MQ-DXM-S-GG` 29k (sau đó đổi: túi vuông nhỏ 80g, 45k — xem cuối file) và 4 hộp quà (GIFTS) giữ nguyên.
 
 | Mã | Sản phẩm | KL | Trước | Sau | Combo 2 / 3 | Nơi |
 |---|---|---|---|---|---|---|
@@ -177,3 +177,7 @@ Cùng khối lượng = cùng giá; túi lớn hơn không rẻ hơn túi nhỏ.
 | `VZ-CH-CB3X-600` | Cheers+ – Combo 3 túi xoài sấy dẻo 200g (lẻ 267k) | 3 × 200g | 195k | **239k** | — | cửa hàng, danh mục |
 | `VZ-FH-CB-350` | Fresh & Healthy – Combo 100g + 250g (lẻ 148k) | 350g | 125k | **139k** | — | cửa hàng, danh mục |
 | `VZ-MIX-CB3TH-315` | Combo 3 vị thăng hoa: măng cụt + sầu riêng + xoài (lẻ 627k) | 315g | 546k | **558k** | — | cửa hàng (/combo), danh mục |
+
+## 01/11/2026 20:40 — túi vuông nhỏ xoài muối ớt GoodGood (đã áp dụng)
+
+Chủ shop: "cố định túi nhỏ dạng vuông này là 80 gr". `MQ-DXM-S-GG` đổi nhãn "Gói nhỏ 50–100g" → **80g** (túi vuông nhỏ 80g), giá 29.000đ → **45.000đ**, bằng các túi vuông 80g GoodGood khác (`MQ-DTH-080-GG`, `MQ-DCM-080-GG`, `MQ-DME-080-GG`, `MQ-DTL-080-GG`, `MQ-DDU-080-GG` đều 45k). Không có combo nào chứa mã này; danh mục chưa có thẻ riêng cho túi vuông 80g.

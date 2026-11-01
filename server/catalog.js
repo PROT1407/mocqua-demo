@@ -254,7 +254,7 @@ export function getShopCatalog() {
     })),
     settings,
     giftRetail: gift?.price ?? null,
-    giftLabel: gift?.w || 'Gói nhỏ 50–100g',
+    giftLabel: gift?.w || '80g',
     provinces: mq.PROVINCES || [],
     shelf: getShelf(),
   };
