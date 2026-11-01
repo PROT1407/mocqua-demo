@@ -669,15 +669,15 @@ MQ.PRODUCTS = [
    ke-07, ke-08 F&H xoài sấy dẻo túi trắng
    ke-09 GoodGood sầu riêng sấy · F&H mít sấy (+ bánh đậu xanh nhãn khác)
    ke-10, ke-11 túi sầu riêng Viza Food đời cũ — không trùng túi nào đang bán nên chưa gắn.
-   ke-12 túi thanh long Viza Food đời cũ — không trùng túi đang bán nên chưa gắn.
+   ke-12 túi thanh long sấy Viza Food "Dragon Fruit Dried" — cùng dòng gói nhỏ 80–100g, chủ shop xác nhận là thanh long sấy dẻo của shop.
    Ảnh chủ shop gửi 01/11/2026 (đã che giá trên tag/sticker):
    ke-13 cận cảnh F&H xoài muối ớt túi trắng đáy đỏ (cùng mẫu GoodGood 300g)
-   ke-14 GoodGood xoài muối ớt "Dried Salted Chili Mango" (gói đỏ-xanh) · GoodGood thơm sấy dẻo gói trắng-vàng mẫu mới (trang thơm đang dùng gói xanh-vàng cũ → chưa gắn) · GoodGood cóc muối ớt (gói nâu "Ambarella with chili salt")
+   ke-14 GoodGood xoài muối ớt "Dried Salted Chili Mango" (gói đỏ-xanh) · GoodGood thơm sấy dẻo gói vuông trắng-vàng (cùng dòng gói vuông 80–100g với cóc, xoài, mãng cầu; chủ shop xác nhận là thơm sấy dẻo GoodGood của shop) · GoodGood cóc muối ớt (gói nâu "Ambarella with chili salt")
    ke-15 bàn trưng bày: GoodGood sầu riêng sấy · F&H mít sấy · F&H xoài sấy dẻo trắng + vàng · F&H xoài muối ớt
    ke-16 cận cảnh GoodGood King Fruit sầu riêng sấy (đã cắt tag giá)
    ke-17 kệ F&H: xoài sấy dẻo vàng + trắng · xoài muối ớt · mít sấy
    ke-18 kiosk TTTM: F&H mít · Cheers+ sầu riêng thăng hoa · Yummy sầu riêng · Cheers+ xoài áo dài · F&H xoài vàng · F&H muối ớt ·
-         gói nhỏ GoodGood xoài muối ớt, mãng cầu (soursop), cóc muối ớt nâu, thơm mẫu mới (chưa gắn) · F&H xoài sấy dẻo gói đáy xanh 100g
+         gói nhỏ GoodGood xoài muối ớt, mãng cầu (soursop), cóc muối ớt nâu, thơm (gói vuông trắng-vàng) · F&H xoài sấy dẻo gói đáy xanh 100g
    ke-19 tủ kính: GoodGood sầu riêng sấy · F&H mít sấy (+ dừa nhãn khác)
    ke-20 KITA sầu riêng sấy · F&H xoài sấy dẻo vàng · F&H mít sấy (ảnh cắt khung dọc, bỏ phần xoài muối ớt)
    ke-18, ke-19 cũng cắt khung dọc quanh túi Viza để khung 4:5 không cắt mất túi
@@ -697,7 +697,9 @@ MQ.SHELF_FOR={
  'sau-rieng-say-thang-hoa-cheers':['viza-ke-02','viza-ke-03','viza-ke-18'],
  'sau-rieng-say-thang-hoa-yummy':['viza-ke-02','viza-ke-18'],
  'vz-ym-mt':['viza-ke-02','viza-ke-18'],
+ 'thom-say-deo':['viza-ke-14','viza-ke-18'],
  'mang-cau-say-deo':['viza-ke-18'],
+ 'thanh-long-say-deo':['viza-ke-12'],
  'coc-say-deo-muoi-ot-goodgood':['viza-ke-14','viza-ke-18']};
 /* Sản phẩm nhiều mẫu túi: ảnh kệ chỉ hiện ở mẫu có túi đó trên ảnh (khớp tên ảnh bao bì của mẫu, img hoặc back).
    Ví dụ xoài sấy dẻo F&H mẫu Xanh lá – trắng (fhx-xanh) chưa có ảnh kệ nào → trang ?sku=MQ-DXO-200-FHX không có ảnh kệ. */
@@ -710,7 +712,11 @@ MQ.SHELF_BAGS={
  'xoai-chin-cay':{'*':['chx-aodai']},
  'combo-xoai-say-deo-100g':{'*':['fhx-dayxanh-100r']},
  'mit-say-gion':{'*':['gm500'],'viza-ke-20':['fhx-mit300']},
- 'coc-say-deo-muoi-ot-goodgood':{'*':['vz-gg-coc']}};
+ 'coc-say-deo-muoi-ot-goodgood':{'*':['vz-gg-coc']},
+ /* gói vuông trắng-vàng trên kệ = cùng sản phẩm thơm GoodGood 80g (chủ shop xác nhận 01/11/2026) */
+ 'thom-say-deo':{'*':['vz-gg-thom-80g']},
+ /* túi "Dragon Fruit Dried" Viza Food trên ke-12 = cùng sản phẩm thanh long sấy dẻo 80g (chủ shop xác nhận 01/11/2026) */
+ 'thanh-long-say-deo':{'*':['tl080']}};
 /* trang không có túi của chính nó trên ảnh kệ nào thì không có ảnh kệ (quy tắc chặt, chủ shop 01/11/2026) */
 MQ.GALLERY_AS_IS=[];
 MQ.REAL_PHOTOS={
