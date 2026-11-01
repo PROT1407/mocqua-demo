@@ -561,7 +561,7 @@ MQ.PRODUCTS = [
   variants:[V('MQZ-BDT-300',"Hũ PET nắp vàng · ~300g",300,'mq',89000,'mqz/hu/mqz-bdt.webp')],
   short:"Bánh đồng tiền giòn thơm trộn hạt — hũ PET nắp vàng Mộc Quả.",
   long:"Bánh đồng tiền giòn thơm trộn hạt — hũ PET nắp vàng Mộc Quả."},
- {id:"mqz-xxx",name:"Trái cây sấy (chưa rõ loại)",cat:'thanghoa',fruit:'mix',flavour:'nguyen',maker:'mocqua',own:true,rank:38,badge:"Giá tạm tính",pack:"Hũ nắp thiếc",
+ {id:"mqz-xxx",hide:true,name:"Trái cây sấy (chưa rõ loại)",cat:'thanghoa',fruit:'mix',flavour:'nguyen',maker:'mocqua',own:true,rank:38,badge:"Giá tạm tính",pack:"Hũ nắp thiếc",
   variants:[V('MQZ-XXX',"Hũ nắp thiếc · Chưa rõ",0,'mq',119000,'mqz/hu/mqz-xxx.webp')],
   short:"Trái cây sấy trong hũ nắp thiếc (chưa rõ loại và khối lượng) — giá tạm tính, Mộc Quả sẽ xác nhận khi chốt đơn.",
   long:"Trái cây sấy trong hũ nắp thiếc (chưa rõ loại và khối lượng) — giá tạm tính, Mộc Quả sẽ xác nhận khi chốt đơn. Nhìn giống mít hoặc dừa sấy thăng hoa. Chưa rõ loại và khối lượng. Giá tạm tính."},

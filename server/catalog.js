@@ -175,7 +175,8 @@ function presentProduct(mq, product, { detail = false } = {}) {
     short: over?.short || product.short || '',
     catalogShort: product.short || '',
     shortOverride: over?.short || '',
-    hidden: !!over?.hidden,
+    // Ẩn khỏi cửa hàng: cờ hide:true trong js/data.js (giữ qua mỗi lần deploy) hoặc nút Ẩn ở /admin.
+    hidden: !!over?.hidden || !!product.hide,
     packs: product.packs
       ? Object.fromEntries(Object.entries(product.packs).map(([k, v]) => [k, { name: v.name, colors: v.c || [] }]))
       : null,
@@ -282,7 +283,7 @@ export function lookupSku(sku, { allowHidden = false } = {}) {
   const hit = bySku.get(key);
   if (!hit) return null;
   const overrides = getOverrides();
-  const hidden = !!overrides.products.get(hit.product.id)?.hidden;
+  const hidden = !!overrides.products.get(hit.product.id)?.hidden || !!hit.product.hide;
   if (hidden && !allowHidden) return null;
   const price = overrides.prices.has(key) ? overrides.prices.get(key) : (hit.variant.p ?? null);
   return {
