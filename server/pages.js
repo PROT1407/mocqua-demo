@@ -519,7 +519,7 @@ export function productPage(product, catalog) {
     packs: product.packs,
     pknote: product.pknote,
     open: product.open,
-    shelf: product.shelf,
+    shelves: product.shelves || [],
     photos: product.photos || [],
     fit45: product.fit45 || [],
     variants: product.variants.map((v) => ({

@@ -1,0 +1,92 @@
+{
+ "_note": "Ảnh kệ siêu thị (assets/shelf/<id>.webp) → mã sản phẩm cửa hàng có TÚI ĐÚNG MÃ nhìn thấy trên ảnh. Soi tay 01/11/2026. Dùng cho trang sản phẩm (MQ.SHELF_FOR) và tính năng 'Mua kèm' sau này. Mẫu túi cụ thể (sản phẩm nhiều mẫu bao bì): MQ.SHELF_BAGS trong js/data.js.",
+ "shelves": {
+  "viza-ke-01": [
+   "xoai-say-deo",
+   "mit-say-gion",
+   "sau-rieng-say-goodgood"
+  ],
+  "viza-ke-02": [
+   "sau-rieng-say-thang-hoa-cheers",
+   "sau-rieng-say-thang-hoa-yummy",
+   "vz-ym-mt"
+  ],
+  "viza-ke-03": [
+   "mit-say-gion",
+   "sau-rieng-say-thang-hoa-cheers"
+  ],
+  "viza-ke-04": [
+   "xoai-say-deo"
+  ],
+  "viza-ke-05": [
+   "xoai-say-deo-muoi-ot",
+   "xoai-say-deo-muoi-ot-goodgood",
+   "xoai-chin-cay"
+  ],
+  "viza-ke-06": [
+   "xoai-say-deo-muoi-ot",
+   "xoai-say-deo",
+   "mit-say-gion"
+  ],
+  "viza-ke-07": [
+   "xoai-say-deo"
+  ],
+  "viza-ke-08": [
+   "xoai-say-deo"
+  ],
+  "viza-ke-09": [
+   "mit-say-gion",
+   "sau-rieng-say-goodgood"
+  ],
+  "viza-ke-10": [],
+  "viza-ke-11": [],
+  "viza-ke-12": [],
+  "viza-ke-13": [
+   "xoai-say-deo-muoi-ot",
+   "xoai-say-deo-muoi-ot-goodgood"
+  ],
+  "viza-ke-14": [
+   "xoai-say-deo-muoi-ot-goodgood",
+   "vz-gg-xdmo",
+   "coc-say-deo-muoi-ot-goodgood"
+  ],
+  "viza-ke-15": [
+   "xoai-say-deo-muoi-ot",
+   "xoai-say-deo-muoi-ot-goodgood",
+   "xoai-say-deo",
+   "mit-say-gion",
+   "sau-rieng-say-goodgood"
+  ],
+  "viza-ke-16": [
+   "sau-rieng-say-goodgood"
+  ],
+  "viza-ke-17": [
+   "xoai-say-deo-muoi-ot",
+   "xoai-say-deo",
+   "mit-say-gion"
+  ],
+  "viza-ke-18": [
+   "xoai-say-deo-muoi-ot",
+   "xoai-say-deo-muoi-ot-goodgood",
+   "vz-gg-xdmo",
+   "xoai-say-deo",
+   "combo-xoai-say-deo-100g",
+   "xoai-chin-cay",
+   "mit-say-gion",
+   "sau-rieng-say-thang-hoa-cheers",
+   "sau-rieng-say-thang-hoa-yummy",
+   "vz-ym-mt",
+   "mang-cau-say-deo",
+   "coc-say-deo-muoi-ot-goodgood"
+  ],
+  "viza-ke-19": [
+   "mit-say-gion",
+   "sau-rieng-say-goodgood"
+  ],
+  "viza-ke-20": [
+   "xoai-say-deo",
+   "mit-say-gion",
+   "sau-rieng-say-kita"
+  ]
+ }
+}

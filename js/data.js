@@ -587,19 +587,19 @@ MQ.PRODUCTS = [
   variants:[V("VZ-YM-MT-100","~100g",100,'yummy',199000,'vz/vz-ym-mt.webp')],
   short:"Yummy Monthong sầu riêng sấy thăng hoa – Yummy, ~100g. Giá tạm tính, Mộc Quả xác nhận khi chốt đơn.",
   long:"Yummy Monthong sầu riêng sấy thăng hoa – Yummy, ~100g. Giá tạm tính, Mộc Quả xác nhận khi chốt đơn."},
- {id:"vz-ps-gd",fit45:["products/vz/vz-ps-cb3-3tui.webp"],noShelf:true,photos:[["products/vz/vz-ps-cb3-3tui.webp","Combo 3 vị","Combo 3 vị Premium: Golden + Royal + Yummy Durian đứng cạnh nhau"]],related:["vz-ps-ry", "vz-ps-yd", "vz-ps-cb3"],relatedNote:"Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",name:"Sầu riêng sấy thăng hoa Golden Durian · Premium Shrinking",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:50,badge:"Mới",
+ {id:"vz-ps-gd",fit45:["products/vz/vz-ps-cb3-3tui.webp"],photos:[["products/vz/vz-ps-cb3-3tui.webp","Combo 3 vị","Combo 3 vị Premium: Golden + Royal + Yummy Durian đứng cạnh nhau"]],related:["vz-ps-ry", "vz-ps-yd", "vz-ps-cb3"],relatedNote:"Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",name:"Sầu riêng sấy thăng hoa Golden Durian · Premium Shrinking",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:50,badge:"Mới",
   variants:[V("VZ-PS-GD-100","100g",100,'psdd',199000,'vz/vz-ps-gd.webp')],
   short:"Golden Durian sầu riêng sấy thăng hoa – Premium Shrinking Dried Durian, 100g. Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",
   long:"Golden Durian sầu riêng sấy thăng hoa – Premium Shrinking Dried Durian, 100g. Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ."},
- {id:"vz-ps-ry",fit45:["products/vz/vz-ps-cb3-3tui.webp"],noShelf:true,photos:[["products/vz/vz-ps-cb3-3tui.webp","Combo 3 vị","Combo 3 vị Premium: Golden + Royal + Yummy Durian đứng cạnh nhau"]],related:["vz-ps-gd", "vz-ps-yd", "vz-ps-cb3"],relatedNote:"Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",name:"Sầu riêng sấy thăng hoa Royal Durian · Premium Shrinking",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:51,badge:"Mới",
+ {id:"vz-ps-ry",fit45:["products/vz/vz-ps-cb3-3tui.webp"],photos:[["products/vz/vz-ps-cb3-3tui.webp","Combo 3 vị","Combo 3 vị Premium: Golden + Royal + Yummy Durian đứng cạnh nhau"]],related:["vz-ps-gd", "vz-ps-yd", "vz-ps-cb3"],relatedNote:"Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",name:"Sầu riêng sấy thăng hoa Royal Durian · Premium Shrinking",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:51,badge:"Mới",
   variants:[V("VZ-PS-RY-100","100g",100,'psdd',199000,'vz/vz-ps-ry.webp')],
   short:"Royal Durian sầu riêng sấy thăng hoa – Premium Shrinking Dried Durian, 100g. Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",
   long:"Royal Durian sầu riêng sấy thăng hoa – Premium Shrinking Dried Durian, 100g. Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ."},
- {id:"vz-ps-yd",fit45:["products/vz/vz-ps-cb3-3tui.webp"],noShelf:true,photos:[["products/vz/vz-ps-cb3-3tui.webp","Combo 3 vị","Combo 3 vị Premium: Golden + Royal + Yummy Durian đứng cạnh nhau"]],related:["vz-ps-gd", "vz-ps-ry", "vz-ps-cb3"],relatedNote:"Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",name:"Sầu riêng sấy thăng hoa Yummy Durian · Premium Shrinking",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:52,badge:"Mới",
+ {id:"vz-ps-yd",fit45:["products/vz/vz-ps-cb3-3tui.webp"],photos:[["products/vz/vz-ps-cb3-3tui.webp","Combo 3 vị","Combo 3 vị Premium: Golden + Royal + Yummy Durian đứng cạnh nhau"]],related:["vz-ps-gd", "vz-ps-ry", "vz-ps-cb3"],relatedNote:"Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",name:"Sầu riêng sấy thăng hoa Yummy Durian · Premium Shrinking",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:52,badge:"Mới",
   variants:[V("VZ-PS-YD-100","100g",100,'psdd',199000,'vz/vz-ps-yd.webp')],
   short:"Yummy Durian sầu riêng sấy thăng hoa – Premium Shrinking Dried Durian, 100g. Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ.",
   long:"Yummy Durian sầu riêng sấy thăng hoa – Premium Shrinking Dried Durian, 100g. Combo 3 vị Golden + Royal + Yummy (3 × 100g) 535.000đ, tiết kiệm 62.000đ; 2 vị khác nhau 375.000đ."},
- {id:"vz-ps-cb3",fit45:["products/vz/vz-ps-cb3-3tui.webp","products/vz/vz-ps-cb2-2vi.webp"],comboOf:["VZ-PS-GD-100", "VZ-PS-RY-100", "VZ-PS-YD-100"],related:["vz-ps-gd","vz-ps-ry","vz-ps-yd"],noShelf:true,photos:[["products/vz/vz-ps-gd.webp","Golden","Túi Golden Durian 100g"],["products/vz/vz-ps-ry.webp","Royal","Túi Royal Durian 100g"],["products/vz/vz-ps-yd.webp","Yummy","Túi Yummy Durian 100g"]],relatedNote:"Mua lẻ từng vị 199.000đ / túi 100g.",name:"Combo 3 vị sầu riêng sấy thăng hoa Premium Shrinking (Golden + Royal + Yummy)",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:49,badge:"Combo tiết kiệm",
+ {id:"vz-ps-cb3",fit45:["products/vz/vz-ps-cb3-3tui.webp","products/vz/vz-ps-cb2-2vi.webp"],comboOf:["VZ-PS-GD-100", "VZ-PS-RY-100", "VZ-PS-YD-100"],related:["vz-ps-gd","vz-ps-ry","vz-ps-yd"],photos:[["products/vz/vz-ps-gd.webp","Golden","Túi Golden Durian 100g"],["products/vz/vz-ps-ry.webp","Royal","Túi Royal Durian 100g"],["products/vz/vz-ps-yd.webp","Yummy","Túi Yummy Durian 100g"]],relatedNote:"Mua lẻ từng vị 199.000đ / túi 100g.",name:"Combo 3 vị sầu riêng sấy thăng hoa Premium Shrinking (Golden + Royal + Yummy)",cat:'thanghoa',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:49,badge:"Combo tiết kiệm",
   variants:[V("VZ-PS-CB3-300","3 vị · 3 × 100g",300,'psdd',535000,'vz/vz-ps-cb3-3tui.webp'),V("VZ-PS-CB2-200","2 vị · 2 × 100g",200,'psdd',375000,'vz/vz-ps-cb2-2vi.webp')],
   short:"3 vị khác nhau: Golden + Royal + Yummy Durian, mỗi vị 1 túi 100g, 535.000đ (tiết kiệm 62.000đ so với mua lẻ 597.000đ). Bản 2 vị khác nhau 375.000đ: ghi 2 vị bạn chọn ở ô Ghi chú khi đặt hàng.",
   long:"Combo sầu riêng sấy thăng hoa Premium Shrinking Dried Durian gồm 3 vị khác nhau: Golden Durian, Royal Durian và Yummy Durian, mỗi vị 1 túi 100g (NET WT 100g). Giá combo 3 vị 535.000đ, tiết kiệm 62.000đ so với mua lẻ 3 × 199.000đ. Combo 2 vị khác nhau (2 × 100g) 375.000đ: ghi 2 vị bạn chọn (Golden, Royal hoặc Yummy) ở ô Ghi chú khi đặt hàng; không ghi thì Mộc Quả gọi xác nhận."},
@@ -658,6 +658,61 @@ MQ.PRODUCTS = [
   P[i].variants.forEach(v=>t.variants.push(Object.assign({},v,{w:lab(v.w)})));if(P[i].gallery)t.gallery=(t.gallery||[]).concat(P[i].gallery.filter(g=>!(t.gallery||[]).includes(g)));P.splice(i,1)});
 /* chuẩn hoá: ảnh chính = ảnh biến thể đầu tiên; sizes = biến thể (tương thích code cũ) */
 /* ảnh thật ruột sản phẩm (chủ shop chụp hàng xá tại xưởng) — hiện ở vị trí thứ 2 trong gallery */
+/* ảnh kệ siêu thị (assets/shelf/viza-ke-NN.webp) — chỉ gắn vào trang có TÚI CỦA CHÍNH SẢN PHẨM nhìn thấy trên ảnh
+   (kệ có nhãn khác bên cạnh vẫn được, miễn túi sản phẩm này có mặt). Đã soi từng ảnh, 01/11/2026:
+   ke-01 GoodGood sầu riêng sấy · F&H mít sấy · F&H xoài sấy dẻo túi vàng (+ xoài/hạt nhãn khác)
+   ke-02 Yummy sầu riêng thăng hoa · Cheers+ sầu riêng thăng hoa (+ thạch Cherish)
+   ke-03 Cheers+ sầu riêng thăng hoa · F&H mít sấy (+ nhãn khác)
+   ke-04 F&H xoài sấy dẻo túi vàng (+ LOT100, xoài muối ớt nhãn khác)
+   ke-05 Cheers+ xoài túi áo dài · xoài muối ớt túi trắng đáy đỏ (F&H, cùng mẫu GoodGood 300g) (+ hạt điều nhãn khác) — chủ shop xác nhận không có túi xoài sấy dẻo F&H
+   ke-06 F&H xoài sấy dẻo · F&H xoài muối ớt · F&H mít sấy
+   ke-07, ke-08 F&H xoài sấy dẻo túi trắng
+   ke-09 GoodGood sầu riêng sấy · F&H mít sấy (+ bánh đậu xanh nhãn khác)
+   ke-10, ke-11 túi sầu riêng Viza Food đời cũ — không trùng túi nào đang bán nên chưa gắn.
+   ke-12 túi thanh long Viza Food đời cũ — không trùng túi đang bán nên chưa gắn.
+   Ảnh chủ shop gửi 01/11/2026 (đã che giá trên tag/sticker):
+   ke-13 cận cảnh F&H xoài muối ớt túi trắng đáy đỏ (cùng mẫu GoodGood 300g)
+   ke-14 GoodGood xoài muối ớt "Dried Salted Chili Mango" (gói đỏ-xanh) · GoodGood thơm sấy dẻo gói trắng-vàng mẫu mới (trang thơm đang dùng gói xanh-vàng cũ → chưa gắn) · GoodGood cóc muối ớt (gói nâu "Ambarella with chili salt")
+   ke-15 bàn trưng bày: GoodGood sầu riêng sấy · F&H mít sấy · F&H xoài sấy dẻo trắng + vàng · F&H xoài muối ớt
+   ke-16 cận cảnh GoodGood King Fruit sầu riêng sấy (đã cắt tag giá)
+   ke-17 kệ F&H: xoài sấy dẻo vàng + trắng · xoài muối ớt · mít sấy
+   ke-18 kiosk TTTM: F&H mít · Cheers+ sầu riêng thăng hoa · Yummy sầu riêng · Cheers+ xoài áo dài · F&H xoài vàng · F&H muối ớt ·
+         gói nhỏ GoodGood xoài muối ớt, mãng cầu (soursop), cóc muối ớt nâu, thơm mẫu mới (chưa gắn) · F&H xoài sấy dẻo gói đáy xanh 100g
+   ke-19 tủ kính: GoodGood sầu riêng sấy · F&H mít sấy (+ dừa nhãn khác)
+   ke-20 KITA sầu riêng sấy · F&H xoài sấy dẻo vàng · F&H mít sấy (ảnh cắt khung dọc, bỏ phần xoài muối ớt)
+   ke-18, ke-19 cũng cắt khung dọc quanh túi Viza để khung 4:5 không cắt mất túi
+   (ảnh trùng không dùng: một ảnh trùng ke-17, một ảnh trùng ke-03)
+   Bảng ảnh kệ → sản phẩm thấy túi: server/data/ke-map.json (selfcheck đối chiếu hai chiều với MQ.SHELF_FOR).
+   Thứ tự trong mảng = thứ tự ảnh "Trên kệ" trong gallery (ảnh cận cảnh rõ túi nhất trước). */
+MQ.SHELF_FOR={
+ 'xoai-say-deo-muoi-ot':['viza-ke-13','viza-ke-15','viza-ke-17','viza-ke-18','viza-ke-05','viza-ke-06'],
+ 'xoai-say-deo-muoi-ot-goodgood':['viza-ke-13','viza-ke-14','viza-ke-15','viza-ke-18','viza-ke-05'],
+ 'vz-gg-xdmo':['viza-ke-14','viza-ke-18'],
+ 'xoai-say-deo':['viza-ke-20','viza-ke-15','viza-ke-17','viza-ke-07','viza-ke-08','viza-ke-04','viza-ke-06','viza-ke-01','viza-ke-18'],
+ 'combo-xoai-say-deo-100g':['viza-ke-18'],
+ 'xoai-chin-cay':['viza-ke-05','viza-ke-18'],
+ 'mit-say-gion':['viza-ke-20','viza-ke-19','viza-ke-15','viza-ke-17','viza-ke-01','viza-ke-09','viza-ke-06','viza-ke-03','viza-ke-18'],
+ 'sau-rieng-say-goodgood':['viza-ke-16','viza-ke-19','viza-ke-15','viza-ke-09','viza-ke-01'],
+ 'sau-rieng-say-kita':['viza-ke-20'],
+ 'sau-rieng-say-thang-hoa-cheers':['viza-ke-02','viza-ke-03','viza-ke-18'],
+ 'sau-rieng-say-thang-hoa-yummy':['viza-ke-02','viza-ke-18'],
+ 'vz-ym-mt':['viza-ke-02','viza-ke-18'],
+ 'mang-cau-say-deo':['viza-ke-18'],
+ 'coc-say-deo-muoi-ot-goodgood':['viza-ke-14','viza-ke-18']};
+/* Sản phẩm nhiều mẫu túi: ảnh kệ chỉ hiện ở mẫu có túi đó trên ảnh (khớp tên ảnh bao bì của mẫu, img hoặc back).
+   Ví dụ xoài sấy dẻo F&H mẫu Xanh lá – trắng (fhx-xanh) chưa có ảnh kệ nào → trang ?sku=MQ-DXO-200-FHX không có ảnh kệ. */
+MQ.SHELF_BAGS={
+ 'xoai-say-deo':{'viza-ke-20':['fhx-vang'],'viza-ke-15':['fhx-trong','dx500','fhx-vang'],'viza-ke-17':['fhx-trong','dx500','fhx-vang'],
+  'viza-ke-07':['fhx-trong','dx500'],'viza-ke-08':['fhx-trong','dx500'],'viza-ke-04':['fhx-trong','dx500','fhx-vang'],
+  'viza-ke-06':['fhx-trong','dx500','fhx-vang'],'viza-ke-01':['fhx-trong','dx500','fhx-vang'],'viza-ke-18':['fhx-dayxanh','fhx-vang']},
+ 'xoai-say-deo-muoi-ot':{'*':['fhx-do']},
+ 'xoai-say-deo-muoi-ot-goodgood':{'viza-ke-13':['dxmo300'],'viza-ke-15':['dxmo300'],'viza-ke-05':['dxmo300'],'viza-ke-14':['dxmogn'],'viza-ke-18':['dxmogn']},
+ 'xoai-chin-cay':{'*':['chx-aodai']},
+ 'combo-xoai-say-deo-100g':{'*':['fhx-dayxanh-100r']},
+ 'mit-say-gion':{'*':['gm500'],'viza-ke-20':['fhx-mit300']},
+ 'coc-say-deo-muoi-ot-goodgood':{'*':['vz-gg-coc']}};
+/* trang không có túi của chính nó trên ảnh kệ nào thì không có ảnh kệ (quy tắc chặt, chủ shop 01/11/2026) */
+MQ.GALLERY_AS_IS=[];
 MQ.REAL_PHOTOS={
  'products/real/sau-rieng-thang-hoa.webp':['mqz-sau-rieng-ri6-thang-hoa','sau-rieng-say-thang-hoa-fh','sau-rieng-say-thang-hoa-cheers','sau-rieng-say-thang-hoa-yummy'],
  'products/real/xoai-thang-hoa.webp':['xoai-say-thang-hoa','mqz-xoai-thang-hoa'],
