@@ -784,7 +784,8 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v27/);
+    assert.match(sw, /mocqua-shell-v28/);
+    assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
     const cbp = await (await fetch(base + '/combo')).text();
@@ -822,9 +823,11 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     }
     assert.doesNotMatch(filteredShop, /class="cbstrip"/);
     assert.doesNotMatch(shop.split('class="cbstrip"')[1].split('</section>').slice(1).join(''), /vz-mix-cb/);
-    // Trang lẻ có trong combo: dòng "Có trong combo".
+    // Trang lẻ có trong combo: thẻ combo nhỏ (ảnh, tên, giá, mua lẻ gạch ngang, tiết kiệm, nút thêm).
     const tl = await (await fetch(base + '/san-pham/thanh-long-say-deo')).text();
-    assert.match(tl, /class="incombo">Có trong combo <a href="\/san-pham\/vz-gg-cb3-deo">/);
+    const inc = tl.split('<section class="incombo"')[1].split('</section>')[0];
+    assert.match(inc, /Có trong combo/);
+    assert.match(inc, /class="cbmini"[\s\S]*href="\/san-pham\/vz-gg-cb3-deo"[\s\S]*class="cbmini__save">Tiết kiệm 15k<\/span>[\s\S]*<b>120\.000đ<\/b> <span class="was">mua lẻ <s>135\.000đ<\/s><\/span>[\s\S]*data-add-sku="VZ-GG-CB3D-240"/);
     // Combo không giảm theo mức nhưng vẫn tính vào mức đơn; miễn phí giao từ 300k.
     const th = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }, { sku: 'VZ-YM-CB2SR-200', qty: 1 }, { sku: 'MQ-THSR-105-YM', qty: 1 }] }) })).json();
     // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: chỉ món lẻ được giảm 8%.
@@ -997,6 +1000,126 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal(buy['MQ-DXO-150-VZ'].options.length, 0);
     const dmJs = await (await fetch(base + '/static/js/danh-muc.js')).text();
     assert.match(dmJs, /Hết hàng/);
+  } finally {
+    server.close();
+  }
+});
+
+test('combo: tiết kiệm từ giá lẻ thật, gợi ý đổi/thêm combo trong giỏ, thanh miễn ship', async () => {
+  const { createApp } = await import('./index.js');
+  const { getShopCatalog } = await import('./catalog.js');
+  const { comboDeals, matchDeal, cartNudges, shipBar } = await import('./deals.js');
+  const { applyNudge } = await import('../web/js/cart-core.js');
+  const app = createApp();
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const quote = async (items) => (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items }) })).json();
+  try {
+    const catalog = getShopCatalog();
+    const priceOf = new Map(catalog.products.flatMap((p) => p.variants.map((v) => [v.sku, v.price])));
+    const deals = comboDeals(catalog);
+    // 1) Tiết kiệm = tổng giá lẻ hiện tại − giá combo; không có combo "tiết kiệm" 0 hay âm.
+    assert.ok(deals.length >= 20);
+    for (const d of deals) {
+      assert.equal(d.sum, d.slots.reduce((t, sl) => t + priceOf.get(sl.ref), 0), d.sku);
+      assert.equal(d.save, d.sum - d.price, d.sku);
+      assert.ok(d.save > 0 && d.price === priceOf.get(d.sku), d.sku);
+    }
+    const by = new Map(deals.map((d) => [d.sku, d]));
+    assert.deepEqual([by.get('VZ-CH-CB3X-600').sum, by.get('VZ-CH-CB3X-600').save], [267000, 28000]);
+    assert.deepEqual([by.get('VZ-FH-CB-350').sum, by.get('VZ-FH-CB-350').save], [148000, 9000]);
+    assert.deepEqual([by.get('VZ-MIX-CB3TH-315').sum, by.get('VZ-MIX-CB3TH-315').save], [627000, 69000]);
+    assert.deepEqual([by.get('MQ-CBX-100-GG').sum, by.get('MQ-CBX-100-GG').save], [294000, 35000]);
+    // Combo 2 vị khách tự chọn (không rõ món) không có số tiết kiệm.
+    assert.ok(!by.has('VZ-PS-CB2-200'));
+
+    // 2) Hiển thị: nhãn trên ảnh + "mua lẻ" gạch ngang đúng tổng lẻ, ở /combo, dải combo (2 kiểu), danh mục, trang combo.
+    const cbp = await (await fetch(base + '/combo')).text();
+    assert.match(cbp, /class="savebadge">Tiết kiệm 28k<\/span><\/a>/);
+    assert.match(cbp, /<b>239\.000đ<\/b><span class="was">mua lẻ <s>267\.000đ<\/s><\/span>/);
+    assert.match(cbp, /class="cbhero__img"[^]*?class="savebadge savebadge--lg">Tiết kiệm \d+k<\/span>/);
+    assert.doesNotMatch(cbp, /giá gốc|tặng 1|Mua \d+ tặng/i);
+    for (const u of ['/cua-hang', '/cua-hang?kieu=2']) {
+      const page = await (await fetch(base + u)).text();
+      const strip = page.split('class="cbstrip"')[1].split('</section>')[0];
+      const n = (strip.match(/class="cbcard"/g) || []).length;
+      assert.equal((strip.match(/class="savebadge">Tiết kiệm \d+k<\/span>/g) || []).length, n, u);
+      assert.equal((strip.match(/<span class="was">mua lẻ <s>[\d.]+đ<\/s><\/span>/g) || []).length, n, u);
+    }
+    const dm = await (await fetch(base + '/danh-muc')).text();
+    const dmData = JSON.parse(dm.split('<script type="application/json" id="dm-data">')[1].split('</script>')[0]);
+    assert.deepEqual(dmData.deals['VZ-CH-CB3X-600'], { sum: 267000, save: 28000 });
+    const pg = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
+    assert.match(pg, /id="pdp-save" hidden/);
+    const pd = JSON.parse(pg.split('<script type="application/json" id="product-data">')[1].split('</script>')[0]);
+    assert.deepEqual(pd.deals['VZ-CH-CB3X-600'], { sum: 267000, save: 28000 });
+
+    // 3) applyNudge: bớt đúng số món lẻ, thêm 1 combo, giữ món khác, gộp combo đã có.
+    assert.deepEqual(applyNudge([{ sku: 'A', qty: 2 }, { sku: 'B', qty: 1 }, { sku: 'C', qty: 1 }], { sku: 'CB', remove: [{ sku: 'A', qty: 1 }, { sku: 'B', qty: 1 }] }),
+      [{ sku: 'A', qty: 1 }, { sku: 'C', qty: 1 }, { sku: 'CB', qty: 1 }]);
+    assert.deepEqual(applyNudge([{ sku: 'CB', qty: 1 }, { sku: 'A', qty: 3 }], { sku: 'CB', remove: [{ sku: 'A', qty: 3 }] }), [{ sku: 'CB', qty: 2 }]);
+    // Mã cùng sản phẩm, cùng cỡ, cùng giá (khác màu túi) được ghép vào combo.
+    const m = matchDeal(by.get('MQ-CBX-100-FH'), new Map([['MQ-DXO-100-FHG', 4], ['MQ-DXO-100-FHH', 1]]));
+    assert.equal(m.missing.length, 1);
+    assert.deepEqual([...m.used.entries()].sort(), [['MQ-DXO-100-FHG', 4], ['MQ-DXO-100-FHH', 1]]);
+    // Hàm thuần: đủ món → "swap"; thiếu 1 → "add"; tiết kiệm lấy từ totalOf.
+    const flat = (list) => list.reduce((t, it) => t + priceOf.get(it.sku) * it.qty, 0);
+    const n3 = cartNudges([{ sku: 'MQ-DXC-200-CHA', qty: 3 }], deals, flat);
+    assert.equal(n3[0].kind, 'swap'); assert.equal(n3[0].sku, 'VZ-CH-CB3X-600'); assert.equal(n3[0].save, 28000);
+    const n2 = cartNudges([{ sku: 'MQ-DXC-200-CHA', qty: 2 }], deals, flat);
+    assert.equal(n2[0].kind, 'add'); assert.equal(n2[0].addSku, 'MQ-DXC-200-CHA'); assert.equal(n2[0].save, 28000);
+    assert.deepEqual(cartNudges([{ sku: 'MQ-DXC-200-CHA', qty: 1 }], deals, flat).filter((n) => n.sku === 'VZ-CH-CB3X-600'), []);
+
+    // 4) /api/quote: gợi ý + đổi xong tổng giảm đúng số đã báo; combo không bị giảm % nhưng vẫn tính vào mức đơn.
+    const ch3 = [{ sku: 'MQ-DXC-200-CHA', qty: 3 }];
+    const q3 = await quote(ch3);
+    assert.equal(q3.nudges[0].kind, 'swap');
+    assert.equal(q3.nudges[0].save, 28000);
+    const q3b = await quote(applyNudge(ch3, q3.nudges[0]));
+    assert.deepEqual(q3b.items.map((i) => [i.sku, i.qty]), [['VZ-CH-CB3X-600', 1]]);
+    assert.equal(q3b.total, q3.total - 28000);
+    assert.ok(!q3b.nudges.some((n) => n.sku === 'VZ-CH-CB3X-600'));
+    // Thiếu 1 túi: "thêm" → so với mua lẻ thêm túi đó, combo rẻ hơn đúng số báo.
+    const mit = [{ sku: 'MQ-GMI-300-FH', qty: 1 }];
+    const qm = await quote(mit);
+    const add = qm.nudges[0];
+    assert.equal(add.kind, 'add');
+    const lẻ = await quote([...mit, { sku: add.addSku, qty: 1 }]);
+    const ghép = await quote(applyNudge(mit, add));
+    assert.equal(lẻ.total - ghép.total, add.save);
+    assert.ok(ghép.items.every((i) => i.sku === add.sku));
+    // Đơn lớn có món lẻ khác: đổi sang combo vẫn tính đúng mức giảm (tính cả phần lẻ còn lại).
+    const big = [{ sku: 'MQ-DXC-200-CHA', qty: 3 }, { sku: 'MQ-THSR-105-YM', qty: 4 }];
+    const qb = await quote(big);
+    for (const n of qb.nudges.filter((x) => x.kind === 'swap')) {
+      const after = await quote(applyNudge(big, n));
+      assert.equal(after.total, qb.total - n.save, n.sku);
+      assert.equal(after.discount, Math.floor((after.discountBase * after.discountPct) / 100 / 1000) * 1000);
+    }
+    // Đổi làm rớt mức 8% → tổng thật tăng: không gợi ý. 3 Cheers + 15 túi 100g = 1.002.000đ; đổi xong 974.000đ chỉ còn giảm 5%.
+    const edge = [{ sku: 'MQ-DXC-200-CHA', qty: 3 }, { sku: 'MQ-DXO-100-GG', qty: 15 }];
+    const qe = await quote(edge);
+    assert.equal(qe.subtotal, 1002000);
+    assert.ok(!qe.nudges.some((n) => n.sku === 'VZ-CH-CB3X-600'), 'không gợi ý khi đổi làm tăng tổng');
+    for (const n of qe.nudges) assert.ok(n.save > 0);
+    // Giỏ chỉ có combo: không gợi ý.
+    assert.deepEqual((await quote([{ sku: 'VZ-CH-CB3X-600', qty: 1 }])).nudges, []);
+
+    // 5) Thanh miễn ship: còn thiếu bao nhiêu + 1 món/combo vừa đủ (≥ khoảng thiếu, không có sẵn trong giỏ).
+    assert.equal(q3.shipBar.need, 300000 - 267000);
+    assert.ok(q3.shipBar.suggest.price >= q3.shipBar.need);
+    assert.doesNotMatch(q3.cartHint, /miễn phí giao/);
+    const qFree = await quote([{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }]);
+    assert.deepEqual([qFree.shipBar.need, qFree.shipBar.pct, qFree.shipBar.suggest], [0, 100, null]);
+    assert.equal(shipBar(0, 300000), null);
+    const sb = shipBar(255000, 300000, { deals, singles: [{ sku: 'S1', price: 39000 }, { sku: 'S2', price: 49000 }, { sku: 'S3', price: 45000 }] });
+    assert.equal(sb.need, 45000); assert.equal(sb.suggest.sku, 'S3');
+    // Không gợi ý thứ đã có trong giỏ.
+    assert.equal(shipBar(255000, 300000, { singles: [{ sku: 'S3', price: 45000 }, { sku: 'S2', price: 49000 }], inCart: new Set(['S3']) }).suggest.sku, 'S2');
+    // Giỏ (client) có câu gợi ý đổi combo và thanh miễn ship.
+    const cartJs = await (await fetch(base + '/static/js/cart.js')).text();
+    assert.match(cartJs, /Đổi sang combo, tiết kiệm/);
+    assert.match(cartJs, /nữa được miễn ship/);
   } finally {
     server.close();
   }

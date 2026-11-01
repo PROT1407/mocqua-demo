@@ -6,6 +6,10 @@ import { ROOT } from './paths.js';
 import { problem } from './format.js';
 import { getShopCatalog, getProductPage, adminProducts, skuExists } from './catalog.js';
 import { priceItems } from './promo.js';
+import { dealBySku } from './deals.js';
+
+// { mã combo: { sum, save } } cho thẻ combo ở /danh-muc (tiết kiệm = tổng giá lẻ thật − giá combo).
+const dealsForClient = (catalog) => Object.fromEntries([...dealBySku(catalog)].map(([sku, d]) => [sku, { sum: d.sum, save: d.save }]));
 import { placeOrder, readCustomer } from './orders.js';
 import { applyBackup, getOrder, getSettings, isStatus, listAllOrders, listOrders, listProductOverrideRows, listVariantPriceRows, saveSettings, setProductOverride, setVariantPrice, STATUSES, updateOrderStatus } from './db.js';
 import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.js';
@@ -114,7 +118,7 @@ export function createApp() {
   });
 
   app.post('/api/quote', wrap((req, res) => {
-    const priced = priceItems(req.body?.items, { allowEmpty: true });
+    const priced = priceItems(req.body?.items, { allowEmpty: true, extras: true });
     res.json(priced);
   }));
 
@@ -269,7 +273,7 @@ export function createApp() {
   }));
   app.get(['/danh-muc', '/danh-muc.html'], (req, res) => {
     const data = catalogWithPrices();
-    html(res, 200, catalogPage({ ...data, buy: catalogBuyMap(data) }));
+    html(res, 200, catalogPage({ ...data, buy: catalogBuyMap(data), deals: dealsForClient(getShopCatalog()) }));
   });
 
   app.patch('/api/admin/orders/:code', requireAdmin, wrap((req, res) => {

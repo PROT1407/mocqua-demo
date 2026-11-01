@@ -195,3 +195,5 @@
 
 /* Viza Food: đối tác phân phối độc quyền */
 .dm-brand__partner { margin-top: 2px; font-size: 13px; color: var(--g2); font-weight: 500; }
+.dm-card__media .savebadge { position: absolute; left: 10px; bottom: 10px; z-index: 2; }
+.dm-w em .was { font-size: 12px; }

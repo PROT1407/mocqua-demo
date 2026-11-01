@@ -4,6 +4,7 @@ import { STATUSES, getSettings } from './db.js';
 import { bannerText, ORDER_TIERS, isComboProduct } from './promo.js';
 import { shopContact } from './contact.js';
 import { catalogHeroBySku } from './dm-buy.js';
+import { dealBySku } from './deals.js';
 import { bankConfig } from './vietqr.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
@@ -136,6 +137,22 @@ function priceLabel(product) {
   return (product.priceVaries ? 'từ ' : '') + vnd(product.priceFrom);
 }
 
+// Combo: gắn { sum, save } của mã mặc định (tổng giá lẻ thật − giá combo) để thẻ hiện nhãn tiết kiệm + "mua lẻ" gạch ngang.
+// Combo có nhiều giá (vd. 2 vị / 3 vị) thì không gắn, vì giá "từ …" không khớp với số tiết kiệm của mã mặc định.
+function attachDeals(catalog) {
+  if (catalog.dealsAttached) return catalog;
+  const deals = dealBySku(catalog);
+  for (const p of catalog.products) {
+    const d = deals.get(p.defaultSku);
+    p.deal = d && !p.priceVaries ? { sum: d.sum, save: d.save } : null;
+  }
+  catalog.dealsAttached = true;
+  return catalog;
+}
+
+const saveBadge = (save, cls = '') => (save > 0 ? `<span class="savebadge${cls ? ` ${cls}` : ''}">Tiết kiệm ${esc(kShort(save))}</span>` : '');
+const wasPrice = (sum) => (sum > 0 ? `<span class="was">mua lẻ <s>${esc(vnd(sum))}</s></span>` : '');
+
 // "Thường mua kèm": combo chứa món này trước, rồi cùng dòng + cùng loại, rồi cùng loại, rồi quà dễ tặng.
 function crossSell(product, catalog) {
   const live = catalog.products.filter((p) => p.id !== product.id && p.priceFrom > 0 && !p.oos && !p.hidden && p.defaultSku);
@@ -201,13 +218,13 @@ export function productCard(product, { eager = false, cls = '' } = {}) {
     <a class="card__img${fit}" href="${href}">
       <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
-      ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : ''}
+      ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : product.deal ? saveBadge(product.deal.save) : ''}
     </a>
     <div class="card__body">
       <p class="card__brand">${esc(product.brandName)}</p>
       <h3><a href="${href}">${esc(product.name)}</a></h3>
       <p class="card__meta">${esc(product.weightLabel)}</p>
-      <p class="card__price">${esc(priceLabel(product))}</p>
+      <p class="card__price">${esc(priceLabel(product))}${product.deal ? ` ${wasPrice(product.deal.sum)}` : ''}</p>
       ${canBuy
         ? `<button type="button" class="btn btn--small" data-add-sku="${esc(product.defaultSku)}">Cho vào giỏ</button>`
         : `<a class="btn btn--small btn--ghost" href="${href}">${product.oos ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
@@ -222,6 +239,7 @@ function tierCopy(catalog) {
 }
 
 export function homePage(catalog) {
+  attachDeals(catalog);
   const byCat = Object.fromEntries(catalog.cats.map((c) => [c.id, { ...c, count: catalog.products.filter((p) => p.cat === c.id).length }]));
   const tiles = PROC.map((id) => byCat[id]).filter(Boolean);
   const picks = [...catalog.products].filter((p) => p.priceFrom > 0 && !p.oos).sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name, 'vi')).slice(0, 8);
@@ -321,6 +339,7 @@ function chip(href, label, on, count) {
 }
 
 export function shopPage(catalog, query) {
+  attachDeals(catalog);
   const q = String(query.q || '').trim().slice(0, 80);
   // Hai kiểu bố cục để chủ shop so sánh: 1 = lưới đều (mặc định), 2 = kiểu tạp chí (?kieu=2). Bộ lọc giữ nguyên kiểu đang xem.
   const kieu = String(query.kieu || '') === '2' ? '2' : '1';
@@ -514,7 +533,10 @@ export function productPage(product, catalog) {
     !product.intro && product.long ? `<section><h2>Mô tả</h2><p>${esc(product.long)}</p></section>` : '',
   ].join('');
   const kem = crossSell(product, catalog);
+  const dealMap = dealBySku(catalog);
+  const deals = Object.fromEntries(product.variants.map((v) => [v.sku, dealMap.get(v.sku)]).filter(([, d]) => d).map(([sku, d]) => [sku, { sum: d.sum, save: d.save }]));
   const client = {
+    deals,
     id: product.id,
     name: product.name,
     oos: product.oos,
@@ -536,6 +558,7 @@ export function productPage(product, catalog) {
         <div class="pdp__stage">
           <img id="pdp-main"${(product.fit45 || []).includes(product.cardImg) ? ' class="is-45"' : ''} src="${esc(product.cardImg || '')}" alt="${esc(product.name)}" width="900" height="1125">
           <span class="pdp__kind" id="pdp-kind">Bao bì</span>
+          <span class="savebadge savebadge--lg" id="pdp-save" hidden></span>
         </div>
         <div class="pdp__thumbs" id="pdp-thumbs"></div>
       </div>
@@ -544,7 +567,6 @@ export function productPage(product, catalog) {
         <h1>${esc(product.name)}</h1>
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
         <p class="lead lead--left">${esc(product.short)}</p>
-        ${inComboLink(product, catalog)}
         ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
@@ -561,6 +583,7 @@ export function productPage(product, catalog) {
           <label class="qty"><span class="sr">Số lượng</span><input id="pdp-qty" type="number" min="1" max="99" value="1" inputmode="numeric"></label>
           <button class="btn" type="button" id="pdp-add" data-add>${product.oos ? 'Hết hàng đợt này' : 'Cho vào giỏ'}</button>
         </div>
+        ${inComboCards(product, catalog)}
         <ul class="trust">${trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       </div>
     </article>
@@ -637,12 +660,12 @@ function comboCard(p, idx, { eager = false, sizes = '(max-width: 719px) 50vw, (m
   const { src, srcset } = comboImg(p);
   const canBuy = p.defaultSku && info.price > 0 && !p.oos;
   return `<article class="cbcard">
-    <a class="cbcard__img" href="${href}"><img src="${esc(src)}"${srcset}${srcset ? ` sizes="${sizes}"` : ''} alt="${esc(p.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600"><span class="cbcard__n">${info.count} túi</span></a>
+    <a class="cbcard__img" href="${href}"><img src="${esc(src)}"${srcset}${srcset ? ` sizes="${sizes}"` : ''} alt="${esc(p.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600"><span class="cbcard__n">${info.count} túi</span>${saveBadge(info.save)}</a>
     <div class="cbcard__body">
       <h3><a href="${href}">${esc(p.name)}</a></h3>
       <ul class="cbcard__items">${info.lines.map((l) => `<li>${l.n > 1 ? `<b>${l.n} ×</b> ` : ''}${esc(l.name)}${l.w ? ` <span>${esc(l.w)}</span>` : ''}</li>`).join('')}</ul>
       <div class="cbcard__foot">
-        <p class="cbcard__price"><b>${esc(vnd(info.price))}</b>${info.save ? `<span class="cbcard__save">Tiết kiệm ${esc(kShort(info.save))}</span><small>so với mua lẻ ${esc(vnd(info.sum))}</small>` : ''}</p>
+        <p class="cbcard__price"><b>${esc(vnd(info.price))}</b>${info.save ? wasPrice(info.sum) : ''}</p>
         ${canBuy ? `<button type="button" class="btn btn--small" data-add-sku="${esc(p.defaultSku)}" aria-label="Thêm ${esc(p.name)} vào giỏ">Thêm combo</button>` : `<a class="btn btn--small btn--ghost" href="${href}">Xem</a>`}
       </div>
     </div>
@@ -676,14 +699,28 @@ function inCombos(product, catalog) {
     .sort((a, b) => (b.mixed - a.mixed) || a.rank - b.rank);
 }
 
-function inComboLink(product, catalog) {
-  const list = inCombos(product, catalog).slice(0, 3);
+// Trang món lẻ: thẻ combo nhỏ (ảnh, tên, giá, mua lẻ gạch ngang, nhãn tiết kiệm, nút thêm) thay cho dòng chữ "Có trong combo".
+function inComboCards(product, catalog) {
+  const list = inCombos(product, catalog).slice(0, 2);
   if (!list.length) return '';
   const idx = shopSkuIndex(catalog);
-  return `<p class="incombo">Có trong combo ${list.map((p) => {
-    const info = comboInfo(p, idx);
-    return `<a href="/san-pham/${encodeURIComponent(p.id)}">${esc(p.name.replace(/^Combo\s+/i, ''))}${info.save ? ` <span>· tiết kiệm ${esc(kShort(info.save))}</span>` : ''}</a>`;
-  }).join(', ')} · <a href="/combo">Xem các combo</a></p>`;
+  return `<section class="incombo" aria-labelledby="incombo-h">
+      <p class="incombo__h" id="incombo-h">Có trong combo <a href="/combo">Xem các combo</a></p>
+      ${list.map((p) => {
+        const info = comboInfo(p, idx);
+        const href = `/san-pham/${encodeURIComponent(p.id)}`;
+        const { src } = comboImg(p);
+        return `<article class="cbmini">
+        <a class="cbmini__img" href="${href}"><img src="${esc(src)}" alt="" width="72" height="90" loading="lazy" decoding="async"></a>
+        <div class="cbmini__body">
+          <a class="cbmini__name" href="${href}">${esc(p.name)}</a>
+          ${info.save ? `<span class="cbmini__save">Tiết kiệm ${esc(kShort(info.save))}</span>` : ''}
+          <p class="cbmini__price"><b>${esc(vnd(info.price))}</b>${info.save ? ` ${wasPrice(info.sum)}` : ''}</p>
+        </div>
+        <button type="button" class="btn btn--small" data-add-sku="${esc(p.defaultSku)}" aria-label="Thêm ${esc(p.name)} vào giỏ">Thêm</button>
+      </article>`;
+      }).join('')}
+    </section>`;
 }
 
 export function comboPage(catalog) {
@@ -696,13 +733,13 @@ export function comboPage(catalog) {
     const { src } = comboImg(hero);
     const big = hero.variants.find((v) => v.sku === hero.defaultSku)?.img || src;
     heroHtml = `<section class="cbhero" aria-labelledby="cbhero-h">
-      <a class="cbhero__img" href="/san-pham/${encodeURIComponent(hero.id)}"><img src="${esc(big)}" alt="${esc(hero.name)}" width="1200" height="1500" fetchpriority="high"></a>
+      <a class="cbhero__img" href="/san-pham/${encodeURIComponent(hero.id)}"><img src="${esc(big)}" alt="${esc(hero.name)}" width="1200" height="1500" fetchpriority="high">${saveBadge(info.save, 'savebadge--lg')}</a>
       <div class="cbhero__txt">
         <p class="kicker">Combo nổi bật · ${info.count} túi</p>
         <h2 id="cbhero-h">${esc(hero.name)}</h2>
         <p class="cbhero__lead">${esc(hero.short)}</p>
         <ul class="cbhero__items">${info.lines.map((l) => `<li><a href="${esc(l.href)}">${esc(l.name)}</a><span>${esc(l.w)} · ${esc(vnd(l.price))}</span></li>`).join('')}</ul>
-        <p class="cbhero__price"><b>${esc(vnd(info.price))}</b>${info.save ? ` <span class="cbcard__save">Tiết kiệm ${esc(kShort(info.save))}</span> <small>so với mua lẻ ${esc(vnd(info.sum))}</small>` : ''}</p>
+        <p class="cbhero__price"><b>${esc(vnd(info.price))}</b>${info.save ? ` ${wasPrice(info.sum)}` : ''}</p>
         <div class="cbhero__act">
           <button type="button" class="btn" data-add-sku="${esc(hero.defaultSku)}">Thêm combo vào giỏ</button>
           <a class="btn btn--ghost" href="/san-pham/${encodeURIComponent(hero.id)}">Xem chi tiết</a>

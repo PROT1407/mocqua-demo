@@ -100,14 +100,19 @@ function buyBlock(p) {
   </div>`;
 }
 
+// Thẻ combo: tiết kiệm tính ở server từ giá lẻ thật đang bán (data.deals theo mã cửa hàng).
+const dealOf = (v) => { const b = data.buy?.[v.code]; return b && !b.oos ? data.deals?.[b.sku] : null; };
+
 function card(p) {
   const hero = p.images[0];
+  const deal = p.variants.map(dealOf).find(Boolean);
   const extra = p.images.slice(1);
   const check = needsCheck(p);
   return `<article class="dm-card${isOwn(p) ? ' dm-card--own' : ''}" id="sp-${esc(p.id)}">
     <div class="dm-card__media">
       ${hero ? `<button type="button" class="dm-card__img" data-gal="${esc(p.id)}" aria-label="Xem ${p.images.length > 1 ? `${p.images.length} ảnh` : 'ảnh'} ${esc(p.name)}"><img src="${esc(thumbOf(hero))}" srcset="${esc(thumbOf(hero))} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 520px) 50vw, 300px" alt="${esc(hero.alt)}" loading="lazy" decoding="async" width="480" height="600"></button>` : placeholder(p)}
       <span class="dm-tag dm-tag--cat">${esc(cats.get(p.cat)?.name || '')}</span>
+      ${deal ? `<span class="savebadge">Tiết kiệm ${Math.round(deal.save / 1000)}k</span>` : ''}
       ${check ? '<span class="dm-tag dm-tag--warn" title="Thông tin chưa xác nhận">Cần kiểm tra</span>' : ''}
       ${extra.length ? `<span class="dm-galdot" aria-hidden="true"><i class="is-on"></i>${extra.map(() => '<i></i>').join('')}<b>${p.images.length} ảnh</b></span>` : ''}
     </div>
@@ -119,7 +124,7 @@ function card(p) {
         ${p.variants.map((v) => `<li class="dm-w${v.verify ? ' dm-w--warn' : ''}">
           <button type="button" data-cmp-type="${esc(p.type)}" data-cmp-w="${esc(v.weightG ?? 'x')}" title="So sánh ${esc(data.types[p.type] || '')} ${esc(v.weightLabel)}">
             <b>${esc(v.weightLabel)}</b><code>${esc(v.code)}</code>
-            <em>${v.price != null ? `${money(v.price)}${v.per100g != null ? ` · ${money(v.per100g)}/100g` : ''}` : 'Chưa có giá'}</em>
+            <em>${v.price != null ? `${money(v.price)}${dealOf(v) ? ` · <span class="was">mua lẻ <s>${money(dealOf(v).sum)}</s></span>` : v.per100g != null ? ` · ${money(v.per100g)}/100g` : ''}` : 'Chưa có giá'}</em>
           </button></li>`).join('')}
       </ul>
       ${p.note ? `<p class="dm-card__note">${esc(p.note)}</p>` : ''}

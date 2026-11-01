@@ -708,9 +708,6 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
 .cbstrip__list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .cbstrip .cbcard__items { display: none; }
 
-.incombo { margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: #F1EADB; border: 1px solid var(--line); font-size: 14px; color: var(--brown); }
-.incombo a { color: var(--olive-dark); font-weight: 500; text-underline-offset: 3px; }
-.incombo a span { font-weight: 400; color: var(--muted); }
 
 @media (min-width: 720px) {
   .cbgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
@@ -743,3 +740,62 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
   .top__nav a { flex: 0 0 auto; }
 }
 @media (max-width: 380px) { .top__nav { gap: 8px; font-size: 13.5px; } }
+
+/* ---------- Combo: nhãn tiết kiệm + "mua lẻ" gạch ngang (tổng giá lẻ thật − giá combo) ---------- */
+.savebadge {
+  position: absolute; left: 10px; bottom: 10px; z-index: 1;
+  padding: 3px 9px; border-radius: 999px;
+  background: rgba(69, 80, 56, .94); color: #FBF7EF;
+  font-size: 12px; font-weight: 600; line-height: 1.35; letter-spacing: .01em; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(44, 33, 24, .14);
+  pointer-events: none;
+}
+.savebadge[hidden] { display: none; }
+.savebadge--lg { left: 14px; bottom: 14px; padding: 5px 12px; font-size: 14px; }
+.was { color: var(--muted); font-size: 13px; font-weight: 400; white-space: nowrap; }
+.was s { text-decoration-thickness: 1px; text-decoration-color: rgba(122, 107, 93, .7); }
+.card__price .was { font-size: 12px; }
+.cbcard__price .was { font-size: 13px; }
+.cbhero__img { position: relative; }
+.cbhero__price .was { font-size: 15px; }
+.price .was { display: inline-block; margin-left: 6px; font-size: 15px; vertical-align: middle; }
+
+/* Trang món lẻ: thẻ combo nhỏ */
+.incombo { margin: 18px 0 6px; display: grid; gap: 8px; }
+.incombo__h { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 600; color: var(--brown); }
+.incombo__h a { font-weight: 400; color: var(--muted); font-size: 13px; }
+.cbmini { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 8px 10px 8px 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; }
+.cbmini__img { position: relative; display: block; width: 64px; height: 80px; border-radius: 10px; overflow: hidden; background: #F6F0E6; }
+.cbmini__img img { width: 100%; height: 100%; object-fit: contain; }
+.cbmini__body { min-width: 0; display: grid; gap: 2px; }
+.cbmini__name { font-size: 14px; font-weight: 600; line-height: 1.3; text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cbmini__save { justify-self: start; padding: 1px 8px; border-radius: 999px; background: #E7EEDC; color: var(--olive-dark); font-size: 12px; font-weight: 600; line-height: 1.5; }
+.cbmini__price { font-size: 14px; }
+.cbmini__price .was { font-size: 12px; }
+
+/* Giỏ: gợi ý combo + thanh miễn ship */
+.nudge { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; margin: 14px 0 0; padding: 10px 12px 10px 10px; background: #F1F3EA; border: 1px solid #D9DFCB; border-radius: 16px; }
+.nudge__img img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; background: var(--paper); }
+.nudge__txt { min-width: 0; display: grid; gap: 1px; }
+.nudge__txt b { font-size: 14px; font-weight: 600; line-height: 1.35; color: var(--olive-dark); }
+.nudge__txt small { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nudge__txt s { margin-left: 4px; }
+.shipbar { margin: 12px 0 0; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; display: grid; gap: 8px; }
+.shipbar p { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 14px; }
+.shipbar p small { color: var(--muted); font-size: 12px; }
+.shipbar__track { height: 6px; border-radius: 999px; background: var(--cream-2); overflow: hidden; }
+.shipbar__track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #8A9A6E, var(--olive)); transition: width .4s ease; }
+.shipbar.is-done { padding: 10px 14px; }
+.shipbar.is-done p { color: var(--olive-dark); font-weight: 600; }
+.shipbar__pick { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+.shipbar__pick img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; background: var(--cream-2); }
+.shipbar__pick a { color: var(--ink); text-decoration: none; font-weight: 500; }
+.shipbar__pick em { font-style: normal; color: var(--olive-dark); }
+.shipbar__pick .textbtn { white-space: nowrap; font-weight: 600; color: var(--olive-dark); }
+@media (max-width: 420px) {
+  .nudge { grid-template-columns: 48px 1fr auto; gap: 10px; }
+  .nudge__img img { width: 48px; height: 48px; }
+  .cbmini { grid-template-columns: 56px 1fr auto; gap: 10px; }
+  .cbmini__img { width: 56px; height: 70px; }
+}
+.pdp__stage .savebadge { top: 14px; bottom: auto; } /* góc dưới trái là nhãn loại ảnh (Bao bì…) */
