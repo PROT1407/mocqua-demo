@@ -3961,14 +3961,6 @@
      "kind": "nen-trang"
     },
     {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
-     "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
-     "kind": "combo"
-    },
-    {
      "src": "/assets/products/chx-xanh-45.jpg",
      "thumb": "/assets/products/chx-xanh-45.jpg",
      "w": 1200,
@@ -4017,6 +4009,14 @@
      "price": 105000,
      "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
      "priceCheckedAt": "2026-11-01"
+    }
+   ],
+   "parkedImages": [
+    {
+     "src": "/assets/catalog/vz-ch-cb3x.webp",
+     "date": "2026-11-01",
+     "movedTo": null,
+     "reason": "Chủ shop: bỏ ảnh combo có chữ khuyến mãi. Ảnh combo mới (3 túi áo dài, ảnh ghép) chỉ hợp túi tròn áo dài nên không đặt ở thẻ lá xoài. File ảnh giữ nguyên."
     }
    ]
   },
@@ -4137,10 +4137,10 @@
      "kind": "thuc-te"
     },
     {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
+     "src": "/assets/catalog/vz-ch-cb3x-3tui.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
      "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
      "kind": "combo"
     }
@@ -4170,10 +4170,10 @@
    "pack": "",
    "images": [
     {
-     "src": "/assets/catalog/vz-ch-cb3x.webp",
-     "thumb": "/assets/catalog/vz-ch-cb3x-sm.webp",
-     "w": 1000,
-     "h": 1000,
+     "src": "/assets/catalog/vz-ch-cb3x-3tui.webp",
+     "thumb": "/assets/catalog/vz-ch-cb3x-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
      "alt": "3 túi xoài sấy dẻo Cheers+ 200g",
      "kind": "hero"
     }

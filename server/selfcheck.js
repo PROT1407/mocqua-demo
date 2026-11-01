@@ -831,6 +831,21 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal(th.subtotal, 1119000);
     assert.equal(th.discount, Math.floor((199000 * 8) / 100 / 1000) * 1000);
     assert.equal(th.ship, 0);
+    // Combo Cheers 3 túi + combo 6 túi xoài: ảnh ghép đủ túi, hiện trọn; không còn ảnh/video "Mua 5 tặng 1" hay poster khuyến mãi.
+    const ch3 = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
+    assert.match(ch3, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ch-cb3x-3tui\.webp"/);
+    assert.doesNotMatch(ch3, /vz-ch-cb3x\.webp/);
+    const x6 = await (await fetch(base + '/san-pham/combo-xoai-say-deo-100g')).text();
+    assert.match(x6, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/combo-xoai-6tui\.webp"/);
+    for (const f of ['combo-xoai-6tui-xanh', 'combo-xoai-6tui-tron']) assert.match(x6, new RegExp('"fit45":\\[[^\\]]*/assets/products/vz/' + f + '\\.webp'));
+    assert.doesNotMatch(x6, /vzx-combo100|combo-xoai-100g/);
+    assert.doesNotMatch(shop, /vzx-combo100|vz-ch-cb3x\.webp/);
+    {
+      const dmj = JSON.parse(fs.readFileSync(new URL('./data/danh-muc.json', import.meta.url), 'utf8'));
+      const imgs = JSON.stringify((dmj.products || dmj).map((x) => x.images));
+      assert.doesNotMatch(imgs, /catalog\/vz-ch-cb3x(-sm)?\.webp/);
+      assert.match(imgs, /catalog\/vz-ch-cb3x-3tui\.webp/);
+    }
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
