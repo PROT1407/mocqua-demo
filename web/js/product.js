@@ -48,8 +48,10 @@ function gallery(variant) {
   }
   if (data.open?.src) list.push({ src: data.open.src, alt: data.open.cap || 'Mở túi', kind: 'Mở túi' });
   // Ảnh kệ siêu thị có túi của chính sản phẩm (có thể nhiều ảnh).
+  // Sản phẩm nhiều mẫu túi: ảnh kệ chỉ hiện ở mẫu có túi đó trên ảnh (shelf.bags = tên ảnh bao bì).
+  const bagOn = (shelf) => !shelf.bags || shelf.bags.some((k) => [variant.img, variant.back].some((p) => p && new RegExp('/' + k + '[-.]').test(p)));
   for (const shelf of data.shelves || (data.shelf ? [data.shelf] : [])) {
-    if (shelf?.src && !list.some((x) => x.src === shelf.src)) list.push({ src: shelf.src, alt: shelf.cap || 'Trên kệ', kind: 'Trên kệ' });
+    if (shelf?.src && bagOn(shelf) && !list.some((x) => x.src === shelf.src)) list.push({ src: shelf.src, alt: shelf.cap || 'Trên kệ', kind: 'Trên kệ' });
   }
   if (!list.length && data.open?.src) list.push({ src: data.open.src, alt: data.name, kind: 'Ảnh' });
   return list;

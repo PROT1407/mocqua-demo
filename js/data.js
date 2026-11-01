@@ -664,38 +664,55 @@ MQ.PRODUCTS = [
    ke-02 Yummy sầu riêng thăng hoa · Cheers+ sầu riêng thăng hoa (+ thạch Cherish)
    ke-03 Cheers+ sầu riêng thăng hoa · F&H mít sấy (+ nhãn khác)
    ke-04 F&H xoài sấy dẻo túi vàng (+ LOT100, xoài muối ớt nhãn khác)
-   ke-05 Cheers+ xoài túi áo dài · xoài muối ớt túi trắng đáy đỏ (F&H, cùng mẫu GoodGood 300g) · F&H xoài sấy dẻo trắng/xanh/vàng (+ hạt điều nhãn khác)
+   ke-05 Cheers+ xoài túi áo dài · xoài muối ớt túi trắng đáy đỏ (F&H, cùng mẫu GoodGood 300g) (+ hạt điều nhãn khác) — chủ shop xác nhận không có túi xoài sấy dẻo F&H
    ke-06 F&H xoài sấy dẻo · F&H xoài muối ớt · F&H mít sấy
    ke-07, ke-08 F&H xoài sấy dẻo túi trắng
    ke-09 GoodGood sầu riêng sấy · F&H mít sấy (+ bánh đậu xanh nhãn khác)
    ke-10, ke-11 túi sầu riêng Viza Food đời cũ — không trùng túi nào đang bán nên chưa gắn.
-   ke-12 túi thanh long Viza Food đời cũ (trang thanh long GoodGood đang dùng, giữ nguyên).
-   Thứ tự trong mảng = thứ tự ảnh "Trên kệ" trong gallery (ảnh rõ túi nhất trước). */
+   ke-12 túi thanh long Viza Food đời cũ — không trùng túi đang bán nên chưa gắn.
+   Ảnh chủ shop gửi 01/11/2026 (đã che giá trên tag/sticker):
+   ke-13 cận cảnh F&H xoài muối ớt túi trắng đáy đỏ (cùng mẫu GoodGood 300g)
+   ke-14 GoodGood xoài muối ớt "Dried Salted Chili Mango" (gói đỏ-xanh) · GoodGood thơm sấy dẻo gói trắng-vàng mẫu mới (trang thơm đang dùng gói xanh-vàng cũ → chưa gắn) · GoodGood cóc muối ớt (gói nâu "Ambarella with chili salt")
+   ke-15 bàn trưng bày: GoodGood sầu riêng sấy · F&H mít sấy · F&H xoài sấy dẻo trắng + vàng · F&H xoài muối ớt
+   ke-16 cận cảnh GoodGood King Fruit sầu riêng sấy (đã cắt tag giá)
+   ke-17 kệ F&H: xoài sấy dẻo vàng + trắng · xoài muối ớt · mít sấy
+   ke-18 kiosk TTTM: F&H mít · Cheers+ sầu riêng thăng hoa · Yummy sầu riêng · Cheers+ xoài áo dài · F&H xoài vàng · F&H muối ớt ·
+         gói nhỏ GoodGood xoài muối ớt, mãng cầu (soursop), cóc muối ớt nâu, thơm mẫu mới (chưa gắn) · F&H xoài sấy dẻo gói đáy xanh 100g
+   ke-19 tủ kính: GoodGood sầu riêng sấy · F&H mít sấy (+ dừa nhãn khác)
+   ke-20 KITA sầu riêng sấy · F&H xoài sấy dẻo vàng · F&H mít sấy (ảnh cắt khung dọc, bỏ phần xoài muối ớt)
+   ke-18, ke-19 cũng cắt khung dọc quanh túi Viza để khung 4:5 không cắt mất túi
+   (ảnh trùng không dùng: một ảnh trùng ke-17, một ảnh trùng ke-03)
+   Bảng ảnh kệ → sản phẩm thấy túi: server/data/ke-map.json (selfcheck đối chiếu hai chiều với MQ.SHELF_FOR).
+   Thứ tự trong mảng = thứ tự ảnh "Trên kệ" trong gallery (ảnh cận cảnh rõ túi nhất trước). */
 MQ.SHELF_FOR={
- /* thêm/khôi phục ảnh kệ (túi của sản phẩm thấy rõ trên ảnh) */
- 'xoai-say-deo':['viza-ke-07','viza-ke-08','viza-ke-04','viza-ke-05','viza-ke-06','viza-ke-01'],
- 'mit-say-gion':['viza-ke-01','viza-ke-09','viza-ke-06','viza-ke-03'],
- 'sau-rieng-say-goodgood':['viza-ke-09','viza-ke-01'],
- /* giữ nguyên như đang chạy (MQ.GALLERY_AS_IS) */
- 'xoai-say-deo-muoi-ot':['viza-ke-05'],
- 'xoai-say-deo-muoi-ot-goodgood':['viza-ke-05'],
- 'xoai-chin-cay':['viza-ke-05'],
- 'combo-xoai-say-deo-100g':['viza-ke-05'],
- 'vz-fh-cb350':['viza-ke-05'],
- 'sau-rieng-say-thang-hoa-cheers':['viza-ke-02'],
- 'sau-rieng-say-thang-hoa-yummy':['viza-ke-02'],
- 'vz-ym-mt':['viza-ke-02'],
- /* giữ nguyên nhưng túi đúng mã chưa thấy trên ảnh kệ (cùng nhãn/cùng quả) — chờ chủ shop gửi ảnh kệ đúng túi */
- 'xoai-say-deo-goodgood':['viza-ke-05'],
- 'xoai-say-thang-hoa':['viza-ke-05'],
- 'vz-ch-cb3x':['viza-ke-05'],
- 'vz-fh-xd':['viza-ke-05'],
- 'vz-gg-xdmo':['viza-ke-05'],
- 'thanh-long-say-deo':['viza-ke-12']};
-/* gallery giữ nguyên như bản đang chạy: không thêm kệ, không đổi khung ảnh kệ */
-MQ.GALLERY_AS_IS=['xoai-say-deo-muoi-ot','xoai-say-deo-muoi-ot-goodgood','xoai-chin-cay','combo-xoai-say-deo-100g','vz-fh-cb350',
- 'sau-rieng-say-thang-hoa-cheers','sau-rieng-say-thang-hoa-yummy','vz-ym-mt',
- 'xoai-say-deo-goodgood','xoai-say-thang-hoa','vz-ch-cb3x','vz-fh-xd','vz-gg-xdmo','thanh-long-say-deo'];
+ 'xoai-say-deo-muoi-ot':['viza-ke-13','viza-ke-15','viza-ke-17','viza-ke-18','viza-ke-05','viza-ke-06'],
+ 'xoai-say-deo-muoi-ot-goodgood':['viza-ke-13','viza-ke-14','viza-ke-15','viza-ke-18','viza-ke-05'],
+ 'vz-gg-xdmo':['viza-ke-14','viza-ke-18'],
+ 'xoai-say-deo':['viza-ke-20','viza-ke-15','viza-ke-17','viza-ke-07','viza-ke-08','viza-ke-04','viza-ke-06','viza-ke-01','viza-ke-18'],
+ 'combo-xoai-say-deo-100g':['viza-ke-18'],
+ 'xoai-chin-cay':['viza-ke-05','viza-ke-18'],
+ 'mit-say-gion':['viza-ke-20','viza-ke-19','viza-ke-15','viza-ke-17','viza-ke-01','viza-ke-09','viza-ke-06','viza-ke-03','viza-ke-18'],
+ 'sau-rieng-say-goodgood':['viza-ke-16','viza-ke-19','viza-ke-15','viza-ke-09','viza-ke-01'],
+ 'sau-rieng-say-kita':['viza-ke-20'],
+ 'sau-rieng-say-thang-hoa-cheers':['viza-ke-02','viza-ke-03','viza-ke-18'],
+ 'sau-rieng-say-thang-hoa-yummy':['viza-ke-02','viza-ke-18'],
+ 'vz-ym-mt':['viza-ke-02','viza-ke-18'],
+ 'mang-cau-say-deo':['viza-ke-18'],
+ 'coc-say-deo-muoi-ot-goodgood':['viza-ke-14','viza-ke-18']};
+/* Sản phẩm nhiều mẫu túi: ảnh kệ chỉ hiện ở mẫu có túi đó trên ảnh (khớp tên ảnh bao bì của mẫu, img hoặc back).
+   Ví dụ xoài sấy dẻo F&H mẫu Xanh lá – trắng (fhx-xanh) chưa có ảnh kệ nào → trang ?sku=MQ-DXO-200-FHX không có ảnh kệ. */
+MQ.SHELF_BAGS={
+ 'xoai-say-deo':{'viza-ke-20':['fhx-vang'],'viza-ke-15':['fhx-trong','dx500','fhx-vang'],'viza-ke-17':['fhx-trong','dx500','fhx-vang'],
+  'viza-ke-07':['fhx-trong','dx500'],'viza-ke-08':['fhx-trong','dx500'],'viza-ke-04':['fhx-trong','dx500','fhx-vang'],
+  'viza-ke-06':['fhx-trong','dx500','fhx-vang'],'viza-ke-01':['fhx-trong','dx500','fhx-vang'],'viza-ke-18':['fhx-dayxanh','fhx-vang']},
+ 'xoai-say-deo-muoi-ot':{'*':['fhx-do']},
+ 'xoai-say-deo-muoi-ot-goodgood':{'viza-ke-13':['dxmo300'],'viza-ke-15':['dxmo300'],'viza-ke-05':['dxmo300'],'viza-ke-14':['dxmogn'],'viza-ke-18':['dxmogn']},
+ 'xoai-chin-cay':{'*':['chx-aodai']},
+ 'combo-xoai-say-deo-100g':{'*':['fhx-dayxanh-100r']},
+ 'mit-say-gion':{'*':['gm500'],'viza-ke-20':['fhx-mit300']},
+ 'coc-say-deo-muoi-ot-goodgood':{'*':['vz-gg-coc']}};
+/* trang không có túi của chính nó trên ảnh kệ nào thì không có ảnh kệ (quy tắc chặt, chủ shop 01/11/2026) */
+MQ.GALLERY_AS_IS=[];
 MQ.REAL_PHOTOS={
  'products/real/sau-rieng-thang-hoa.webp':['mqz-sau-rieng-ri6-thang-hoa','sau-rieng-say-thang-hoa-fh','sau-rieng-say-thang-hoa-cheers','sau-rieng-say-thang-hoa-yummy'],
  'products/real/xoai-thang-hoa.webp':['xoai-say-thang-hoa','mqz-xoai-thang-hoa'],

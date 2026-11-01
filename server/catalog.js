@@ -19,6 +19,14 @@ const SHELF_CAPS = [
   ['viza-ke-10', 'Sầu riêng sấy Viza Food tại siêu thị'],
   ['viza-ke-11', 'Kệ sầu riêng sấy Viza Food'],
   ['viza-ke-12', 'Thanh long sấy Viza Food tại siêu thị'],
+  ['viza-ke-13', 'Xoài sấy dẻo muối ớt Fresh & Healthy trên kệ siêu thị'],
+  ['viza-ke-14', 'Xoài muối ớt, thơm, cóc sấy GoodGood trên kệ'],
+  ['viza-ke-15', 'Bàn trưng bày sầu riêng, mít, xoài sấy tại cửa hàng'],
+  ['viza-ke-16', 'Sầu riêng sấy GoodGood King Fruit trên kệ'],
+  ['viza-ke-17', 'Kệ xoài sấy dẻo, xoài muối ớt, mít sấy Fresh & Healthy'],
+  ['viza-ke-18', 'Kiosk trái cây sấy Viza Food tại trung tâm thương mại'],
+  ['viza-ke-19', 'Sầu riêng sấy GoodGood và mít sấy trong tủ kính'],
+  ['viza-ke-20', 'Sầu riêng KITA, xoài sấy dẻo, mít sấy trên kệ siêu thị'],
 ];
 
 // Ảnh kệ: chỉ theo bảng MQ.SHELF_FOR trong js/data.js (trang nào có túi của chính nó trên ảnh kệ thì mới gắn ảnh đó).
@@ -143,6 +151,7 @@ function presentProduct(mq, product, { detail = false } = {}) {
       src: `/assets/shelf/${id}.webp`,
       thumb: `/assets/shelf/${id}-t.webp`,
       cap: SHELF_CAPS.find(([k]) => k === id)[1],
+      ...(mq.SHELF_BAGS?.[product.id] ? { bags: [...(mq.SHELF_BAGS[product.id][id] || mq.SHELF_BAGS[product.id]['*'] || [])] } : {}),
     }));
   const out = {
     id: product.id,
