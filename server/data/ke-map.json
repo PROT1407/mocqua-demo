@@ -40,7 +40,9 @@
   ],
   "viza-ke-10": [],
   "viza-ke-11": [],
-  "viza-ke-12": [],
+  "viza-ke-12": [
+   "thanh-long-say-deo"
+  ],
   "viza-ke-13": [
    "xoai-say-deo-muoi-ot",
    "xoai-say-deo-muoi-ot-goodgood"
@@ -48,7 +50,8 @@
   "viza-ke-14": [
    "xoai-say-deo-muoi-ot-goodgood",
    "vz-gg-xdmo",
-   "coc-say-deo-muoi-ot-goodgood"
+   "coc-say-deo-muoi-ot-goodgood",
+   "thom-say-deo"
   ],
   "viza-ke-15": [
    "xoai-say-deo-muoi-ot",
@@ -77,7 +80,8 @@
    "sau-rieng-say-thang-hoa-yummy",
    "vz-ym-mt",
    "mang-cau-say-deo",
-   "coc-say-deo-muoi-ot-goodgood"
+   "coc-say-deo-muoi-ot-goodgood",
+   "thom-say-deo"
   ],
   "viza-ke-19": [
    "mit-say-gion",

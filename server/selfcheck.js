@@ -777,7 +777,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v19/);
+    assert.match(sw, /mocqua-shell-v20/);
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
@@ -810,7 +810,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       for (const [id, ids] of Object.entries(BAG_ON_SHELF)) {
         for (const pid of ids) assert.ok(byId.get(pid)?.shelves.some((s) => s.src.endsWith(id + '.webp')), `${pid} thiếu ảnh kệ ${id}`);
       }
-      for (const id of ['vz-ps-gd', 'vz-ps-ry', 'vz-ps-yd', 'vz-ps-cb3', 'vz-hat-macca-say', 'vz-fh-cb350', 'xoai-say-deo-goodgood', 'xoai-say-thang-hoa', 'vz-ch-cb3x', 'vz-fh-xd', 'thanh-long-say-deo', 'thom-say-deo']) {
+      for (const id of ['vz-ps-gd', 'vz-ps-ry', 'vz-ps-yd', 'vz-ps-cb3', 'vz-hat-macca-say', 'vz-fh-cb350', 'xoai-say-deo-goodgood', 'xoai-say-thang-hoa', 'vz-ch-cb3x', 'vz-fh-xd']) {
         assert.equal(byId.get(id).shelves.length, 0, id + ' không có túi trên ảnh kệ nào');
       }
       // Nhiều mẫu túi: ảnh kệ chỉ hiện ở mẫu có túi đó (cùng luật với web/js/product.js gallery()).
@@ -826,6 +826,8 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(shelvesFor('xoai-say-deo-muoi-ot-goodgood', 'MQ-DXM-S-GG'), 'viza-ke-14,viza-ke-18');
       assert.equal(shelvesFor('mit-say-gion', 'MQ-GMI-300-FH'), 'viza-ke-20');
       assert.equal(shelvesFor('xoai-chin-cay', 'MQ-DXC-250-CHD'), '');
+      // Thơm GoodGood: gói vuông trắng-vàng trên kệ là cùng sản phẩm (chủ shop xác nhận), ảnh bao bì chính giữ nguyên.
+      assert.equal(shelvesFor('thom-say-deo', 'MQ-DTH-080-GG'), 'viza-ke-14,viza-ke-18');
       assert.ok(!byId.get('vz-fh-cb350').shelves.length && !byId.get('xoai-say-deo').shelves.some((s) => s.src.includes('viza-ke-05')));
       // Ảnh cận cảnh rõ túi nhất đứng đầu nhóm "Trên kệ".
       const first = (pid) => byId.get(pid).shelves[0]?.src.match(/viza-ke-\d+/)[0];
@@ -837,9 +839,10 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(fhr, /"open":\{"src":"\/assets\/products\/real\/xoai-deo-muoi-ot\.webp"/);
       assert.match(fhr, /"shelves":\[\{"src":"\/assets\/shelf\/viza-ke-13\.webp"[^\]]*\]/);
       assert.match(fhr, /"fit45":\["\/assets\/shelf\/viza-ke-13\.webp"/);
-      // Trang không thấy túi của chính nó trên ảnh kệ nào: không có ảnh kệ.
+      // Thanh long: túi "Dragon Fruit Dried" Viza Food trên ke-12 là cùng sản phẩm (chủ shop xác nhận), ảnh bao bì chính giữ nguyên.
       const tl = await (await fetch(base + '/san-pham/thanh-long-say-deo')).text();
-      assert.doesNotMatch(tl, /viza-ke-/);
+      assert.match(tl, /id="pdp-main" src="\/assets\/products\/tl080/);
+      assert.equal(shelvesFor('thanh-long-say-deo', 'MQ-DTL-080-GG'), 'viza-ke-12');
       const xd = await (await fetch(base + '/san-pham/xoai-say-deo')).text();
       assert.match(xd, /"fit45":\["\/assets\/shelf\/viza-ke-20\.webp"/);
     }
