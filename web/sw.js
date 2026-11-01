@@ -1,4 +1,4 @@
-const CACHE = 'mocqua-shell-v28';
+const CACHE = 'mocqua-shell-v29';
 
 const SHELL = [
   '/',
@@ -13,6 +13,7 @@ const SHELL = [
   '/static/js/pwa.js',
   '/static/js/home.js',
   '/static/js/cart.js',
+  '/static/js/cart-core.js',
   '/static/js/checkout.js',
   '/favicon.svg',
   '/manifest.webmanifest',

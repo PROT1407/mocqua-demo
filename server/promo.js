@@ -1,5 +1,6 @@
 import { getSettings } from './db.js';
-import { lookupSku } from './catalog.js';
+import { lookupSku, getShopCatalog } from './catalog.js';
+import { comboDeals, cartNudges, shipBar, shipSingles } from './deals.js';
 import { vnd, problem } from './format.js';
 
 // Chiết khấu theo giá trị đơn (duyệt 31/10/2026). Không còn quà tặng 0đ.
@@ -74,18 +75,18 @@ function publicSettings(settings) {
   };
 }
 
-export function hintText({ settings, subtotal, pct, hasCombo, base }) {
+export function hintText({ settings, subtotal, pct, hasCombo, base, ship = true }) {
   if (!subtotal) return `${bannerText(settings)}. Combo đã có giá riêng, không giảm thêm.`;
   const bits = [];
   const next = nextTier(subtotal);
-  bits.push(subtotal < settings.freeShip ? `Thêm ${kfmt(settings.freeShip - subtotal)} để được miễn phí giao.` : 'Đơn được miễn phí giao.');
+  if (ship) bits.push(subtotal < settings.freeShip ? `Thêm ${kfmt(settings.freeShip - subtotal)} để được miễn phí giao.` : 'Đơn được miễn phí giao.');
   if (pct) bits.push(`Đang giảm ${pct}%.`);
   bits.push(next ? `Thêm ${kfmt(next.min - subtotal)} để được giảm ${next.pct}%.` : 'Đã đạt mức giảm cao nhất.');
   if (hasCombo) bits.push(base > 0 ? 'Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.' : 'Combo đã có giá riêng, không giảm thêm.');
   return bits.join(' ');
 }
 
-export function priceItems(rawItems, { allowEmpty = false } = {}) {
+export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}) {
   const settings = getSettings();
   let pairs;
   try {
@@ -119,7 +120,7 @@ export function priceItems(rawItems, { allowEmpty = false } = {}) {
   const total = d.subtotal - d.discount + ship;
   const next = nextTier(d.subtotal);
   const hasCombo = items.some((i) => i.combo);
-  return {
+  const out = {
     items,
     gifts: [],
     subtotal: d.subtotal,
@@ -134,6 +135,32 @@ export function priceItems(rawItems, { allowEmpty = false } = {}) {
     hint: hintText({ settings, subtotal: d.subtotal, pct: d.pct, hasCombo, base: d.base }),
     banner: bannerText(settings),
     settings: publicSettings(settings),
+  };
+  if (extras) Object.assign(out, cartExtras(pairs, items, d, settings, hasCombo));
+  return out;
+}
+
+// Tổng phải trả của một giỏ giả định (không báo lỗi; món không bán được thì trả Infinity để bỏ gợi ý đó).
+function quickTotal(list, settings) {
+  const lines = [];
+  for (const it of list) {
+    const hit = lookupSku(it.sku);
+    if (!hit || hit.product.oos || !(hit.price > 0)) return Infinity;
+    lines.push({ line: hit.price * it.qty, combo: isComboProduct(hit.product) });
+  }
+  const d = orderDiscount(lines);
+  return d.subtotal - d.discount + shipFor(d.subtotal, settings);
+}
+
+// Chỉ cho /api/quote (trang giỏ): gợi ý combo + thanh miễn ship. Đơn hàng không cần.
+function cartExtras(pairs, items, d, settings, hasCombo) {
+  const catalog = getShopCatalog();
+  const deals = comboDeals(catalog);
+  const nameOf = (sku) => { const h = lookupSku(sku); return h ? `${h.name} ${h.w}`.trim() : sku; };
+  return {
+    nudges: cartNudges(pairs, deals, (list) => quickTotal(list, settings), { nameOf, comboSkus: new Set(items.filter((i) => i.combo).map((i) => i.sku)) }).slice(0, 2),
+    shipBar: shipBar(d.subtotal, settings.freeShip, { deals, singles: shipSingles(catalog), inCart: new Set(pairs.map((p) => p.sku)) }),
+    cartHint: hintText({ settings, subtotal: d.subtotal, pct: d.pct, hasCombo, base: d.base, ship: false }),
   };
 }
 

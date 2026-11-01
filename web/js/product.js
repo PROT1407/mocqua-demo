@@ -58,6 +58,7 @@ function gallery(variant) {
 }
 
 // Ảnh 4:5 nhiều túi đứng cạnh nhau (data.fit45) hiện trọn khung 4:5, không cắt mất túi hai bên; ảnh khác giữ khung cũ.
+const saveTag = document.querySelector('#pdp-save');
 const fit45 = new Set(data.fit45 || []);
 function fitMain() {
   main.classList.toggle('is-45', fit45.has(new URL(main.src, location.href).pathname));
@@ -95,8 +96,12 @@ function render() {
   } else {
     packWrap.hidden = true;
   }
+  const deal = data.deals?.[current.sku];
+  saveTag.hidden = !deal;
+  saveTag.textContent = deal ? `Tiết kiệm ${Math.round(deal.save / 1000)}k` : '';
   if (current.price) {
     price.textContent = money(current.price);
+    if (deal) price.insertAdjacentHTML('beforeend', ` <span class="was">mua lẻ <s>${money(deal.sum)}</s></span>`);
     unit.textContent = current.g ? `Khoảng ${money(Math.round(current.price / current.g * 100))} / 100g` : '';
   } else {
     price.textContent = 'Liên hệ';
