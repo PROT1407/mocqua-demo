@@ -178,8 +178,10 @@ export function productCard(product, { eager = false } = {}) {
   const img = hero?.src || own;
   const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
   const canBuy = product.defaultSku && product.priceFrom > 0 && !product.oos;
+  // Ảnh không phải 4:5 dựng sẵn (ảnh vuông/ngang/dọc mượn từ /danh-muc): hiện trọn ảnh, căn giữa trong khung 4:5, không cắt.
+  const fit = /-45\.jpg$/.test(img) ? '' : ' card__img--fit';
   return `<article class="card">
-    <a class="card__img" href="${href}">
+    <a class="card__img${fit}" href="${href}">
       <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
       ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : ''}

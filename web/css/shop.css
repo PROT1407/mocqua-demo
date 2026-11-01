@@ -144,6 +144,10 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .card__img { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 18px; background: var(--paper); }
 .card__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .card:hover .card__img img { transform: scale(1.03); }
+/* Ảnh khác tỉ lệ 4:5: hiện trọn, căn giữa trên nền sáng như /danh-muc, không phóng to/cắt */
+.card__img--fit { background: #F3EEE3; }
+.card__img--fit img { inset: 7%; width: 86%; height: 86%; object-fit: contain; border-radius: 10px; mix-blend-mode: multiply; } /* nền trắng của ảnh hòa vào khung sáng */
+.card:hover .card__img--fit img { transform: scale(1.02); }
 .card__body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .card__brand, .card__meta { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card__body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(2em * 1.35); }
