@@ -8,6 +8,18 @@ import { bankConfig } from './vietqr.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 const EXTRA = ['omai', 'set', 'hat'];
+// Khối "Nổi bật" đầu /cua-hang (chỉ khi chưa lọc) và món đứng đầu mỗi cách sấy. Theo thứ tự này; id ẩn/không có thì bỏ qua.
+// Chỉ đổi thứ tự hiển thị — không đụng mã, giá hay nút mua ở /danh-muc.
+const FEATURED = [
+  'mqz-sau-rieng-ri6-thang-hoa',
+  'sau-rieng-say-thang-hoa-cheers',
+  'vz-ps-cb3',
+  'xoai-say-deo',
+  'xoai-chin-cay',
+  'combo-xoai-say-deo-100g',
+  'mqz-hop-tim-8-vi',
+  'vz-combo-5-hop-hat',
+];
 
 function layout({ title, description, page, body, scripts = [], styles = [] }) {
   const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
@@ -158,7 +170,7 @@ function kemBlock(product, kem) {
   return `<section class="related kem" aria-labelledby="kem-h"><h2 id="kem-h">Thường mua kèm</h2>${product.relatedNote ? `<p class="lead lead--left">${esc(product.relatedNote)}</p>` : ''}<ul class="kem__list">${items}</ul></section>`;
 }
 
-export function productCard(product) {
+export function productCard(product, { eager = false } = {}) {
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
   const own = product.cardImg || '/assets/img/xoai.jpg';
   // Ảnh 4:5 dựng sẵn (-45.jpg) giữ nguyên; ảnh khác tỉ lệ thì dùng ảnh chính ở /danh-muc (cùng ảnh, có bản nhỏ) nếu có.
@@ -168,7 +180,7 @@ export function productCard(product) {
   const canBuy = product.defaultSku && product.priceFrom > 0 && !product.oos;
   return `<article class="card">
     <a class="card__img" href="${href}">
-      <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="lazy" decoding="async" width="480" height="600">
+      <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
       ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : ''}
     </a>
@@ -179,7 +191,7 @@ export function productCard(product) {
       <p class="card__price">${esc(priceLabel(product))}</p>
       ${canBuy
         ? `<button type="button" class="btn btn--small" data-add-sku="${esc(product.defaultSku)}">Cho vào giỏ</button>`
-        : `<a class="textlink" href="${href}">${product.oos ? 'Xem hàng' : 'Xem chi tiết'}</a>`}
+        : `<a class="btn btn--small btn--ghost" href="${href}">${product.oos ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
     </div>
   </article>`;
 }
@@ -324,37 +336,54 @@ export function shopPage(catalog, query) {
     : afterFruit;
 
   const catMeta = Object.fromEntries(catalog.cats.map((c) => [c.id, c]));
-  const groups = [];
-  const grouped = new Map();
-  for (const p of final) {
-    const key = p.cat + '|' + (p.fruit || '');
-    if (!grouped.has(key)) {
-      const g = { cat: p.cat, fruit: p.fruit, fruitName: p.fruitName, items: [] };
-      grouped.set(key, g);
-      groups.push(g);
-    }
-    grouped.get(key).items.push(p);
-  }
   const catOrder = [...PROC, ...EXTRA];
-  groups.sort((a, b) => {
-    const ia = catOrder.indexOf(a.cat);
-    const ib = catOrder.indexOf(b.cat);
-    return (ia < 0 ? 20 : ia) - (ib < 0 ? 20 : ib) || a.fruitName.localeCompare(b.fruitName, 'vi');
+  // Mỗi cách sấy là MỘT lưới liền. Trước đây mỗi loại quả là một lưới riêng nên quả chỉ có 1–2 món để lại nửa hàng trống.
+  // Trong một cách sấy: món Nổi bật trước, rồi theo quả (quả có món rank tốt nhất lên trước), hãng, rank; combo xếp cuối.
+  const featIdx = (p) => { const i = FEATURED.indexOf(p.id); return i < 0 ? 99 : i; };
+  const fruitRank = new Map();
+  for (const p of final) {
+    if (isComboProduct(p)) continue;
+    const key = p.cat + '|' + (p.fruit || '');
+    fruitRank.set(key, Math.min(fruitRank.get(key) ?? 999, p.rank));
+  }
+  const fruitKey = (p) => (p.fruit === 'mix' ? 900 : (fruitRank.get(p.cat + '|' + (p.fruit || '')) ?? 950));
+  const byCat = new Map();
+  for (const p of final) {
+    if (!byCat.has(p.cat)) byCat.set(p.cat, []);
+    byCat.get(p.cat).push(p);
+  }
+  const cats = [...byCat.keys()].sort((a, b) => {
+    const ia = catOrder.indexOf(a);
+    const ib = catOrder.indexOf(b);
+    return (ia < 0 ? 20 : ia) - (ib < 0 ? 20 : ib);
   });
-  for (const g of groups) {
-    g.items.sort((a, b) => brandOrder(a.brandKey) - brandOrder(b.brandKey) || a.rank - b.rank || a.name.localeCompare(b.name, 'vi'));
-  }
-  const multiCat = new Set(final.map((p) => p.cat)).size > 1;
+  const multiCat = cats.length > 1;
   let html = '';
-  let lastCat = '';
-  for (const g of groups) {
-    if (multiCat && g.cat !== lastCat) {
-      html += `<h2 class="ghead">${esc(catMeta[g.cat]?.name || g.cat)} <small>${final.filter((p) => p.cat === g.cat).length} món</small></h2>`;
-      lastCat = g.cat;
-    }
-    if (g.fruitName && !wantedFruit) html += `<h3 class="fhead">${esc(g.fruitName)}</h3>`;
-    html += `<div class="grid">${g.items.map(productCard).join('')}</div>`;
+  for (const cat of cats) {
+    const items = byCat.get(cat).sort((a, b) => featIdx(a) - featIdx(b)
+      || isComboProduct(a) - isComboProduct(b)
+      || fruitKey(a) - fruitKey(b)
+      || a.fruitName.localeCompare(b.fruitName, 'vi')
+      || brandOrder(a.brandKey) - brandOrder(b.brandKey)
+      || a.rank - b.rank
+      || a.name.localeCompare(b.name, 'vi'));
+    if (multiCat) html += `<h2 class="ghead" id="nhom-${esc(cat)}">${esc(catMeta[cat]?.name || cat)} <small>${items.length} món</small></h2>`;
+    html += `<div class="grid">${items.map((p) => productCard(p)).join('')}</div>`;
   }
+  const filtered = !!(q || wantedCat || wantedFruit || wantedLine);
+  const featured = filtered ? [] : FEATURED.map((id) => final.find((p) => p.id === id)).filter(Boolean);
+  const featHtml = featured.length
+    ? `<section class="feat" aria-labelledby="feat-h">
+      <div class="feat__h"><h2 id="feat-h">Nổi bật</h2><p>Món tiêu biểu của Mộc Quả và hàng hãng bán chạy.</p></div>
+      <div class="grid grid--feat">${featured.map((p, i) => productCard(p, { eager: i < 4 })).join('')}</div>
+    </section>`
+    : '';
+  const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
+  const short = (n) => (n >= 1000000 && n % 1000000 === 0 ? `${n / 1000000} triệu` : n >= 1000 ? `${Math.round(n / 1000)}k` : vnd(n));
+  const tierBox = `<ul class="tiers" aria-label="Ưu đãi theo đơn">
+      <li><b>Miễn phí giao</b><span>đơn từ ${esc(short(catalog.settings.freeShip))}</span></li>
+      ${tiers.map((t) => `<li><b>Giảm ${esc(t.pct)}%</b><span>đơn từ ${esc(short(t.min))}</span></li>`).join('')}
+    </ul>`;
   if (!final.length) {
     html = `<div class="empty"><h2>Chưa có món nào khớp.</h2><p>Bỏ bớt bộ lọc, hoặc tìm một tên quả khác.</p><a class="btn" href="/cua-hang">Xem tất cả</a></div>`;
   }
@@ -390,6 +419,8 @@ export function shopPage(catalog, query) {
     <header class="pagehead">
       <h1>${esc(title)}</h1>
       <p>${esc(sub)}</p>
+      ${tierBox}
+      <p class="tiers__note">Tự trừ trong giỏ. Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.</p>
     </header>
     <div class="filters">
       <form class="find find--bar" action="/cua-hang" method="get">
@@ -402,6 +433,7 @@ export function shopPage(catalog, query) {
       <div class="chiprow"><span class="chiprow__k">Loại quả</span><div class="chiprow__s">${fruitChips}</div></div>
       <div class="chiprow"><span class="chiprow__k">Hãng</span><div class="chiprow__s">${brandChips}</div></div>
     </div>
+    ${featHtml}
     <p class="count">${final.length} món</p>
     ${html}
   </main>`;

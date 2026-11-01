@@ -749,11 +749,22 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     for (const p of data.products) for (const v of p.variants) if (v.price == null) assert.equal(buy[v.code], undefined, v.code);
 
     const shop = await (await fetch(base + '/cua-hang')).text();
+    // Bố cục cân đối: mỗi cách sấy một lưới liền, có khối Nổi bật và 3 mức ưu đãi; món ẩn bằng cờ hide trong data.js không hiện.
+    assert.match(shop, /class="feat"/);
+    assert.match(shop, /class="tiers"/);
+    assert.doesNotMatch(shop, /class="fhead"/);
+    assert.doesNotMatch(shop, /mqz-xxx/);
+    assert.equal(buy['MQZ-XXX'], undefined);
+    assert.equal((await fetch(base + '/san-pham/mqz-xxx')).status, 404);
+    const grids = (shop.match(/<div class="grid">/g) || []).length;
+    assert.ok(grids <= 7, 'mỗi cách sấy một lưới, có ' + grids);
+    const filteredShop = await (await fetch(base + '/cua-hang?cat=deo')).text();
+    assert.doesNotMatch(filteredShop, /class="feat"/);
     assert.match(shop, /class="card__img"[^>]*>\s*<img [^>]*loading="lazy"[^>]*width="480" height="600"/);
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v15/);
+    assert.match(sw, /mocqua-shell-v16/);
   } finally {
     server.close();
   }

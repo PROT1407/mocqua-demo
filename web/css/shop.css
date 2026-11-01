@@ -151,6 +151,8 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .card__price { font-weight: 600; }
 .card__body > .btn, .card__body > .textlink { margin-top: auto; align-self: stretch; }
 .card__body > .textlink { align-self: start; }
+/* Món hết hàng/chưa giá: nút viền cùng cao với nút "Cho vào giỏ" để hàng thẻ thẳng nút. */
+.card__body > .btn--ghost { border: 0; box-shadow: inset 0 0 0 1px var(--line); }
 @media (max-width: 719px) { .card__body h3 { font-size: 15px; } }
 .badge {
   display: inline-flex; align-items: center; border-radius: 999px;
@@ -209,6 +211,30 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .ghead { margin: 12px 0; }
 .ghead small, .fhead { color: var(--muted); font-weight: 500; }
 .fhead { margin: 0 0 10px; font-size: 16px; }
+/* Cửa hàng: 3 mức ưu đãi dưới tiêu đề */
+.tiers { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 560px; }
+.tiers li { display: grid; gap: 2px; padding: 8px 10px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); text-align: center; }
+.tiers li:first-child { background: #2f4a33; border-color: #2f4a33; color: #fbf6ee; }
+.tiers b { font-size: 15px; font-weight: 600; line-height: 1.2; }
+.tiers span { font-size: 12px; color: var(--muted); }
+.tiers li:first-child span { color: #E4EBD4; }
+.tiers__note { font-size: 12px; color: var(--muted); }
+/* Khối Nổi bật */
+.feat { margin: 8px 0 18px; padding: 16px; border-radius: 24px; background: var(--paper); border: 1px solid var(--line); }
+.feat__h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 12px; }
+.feat__h p { color: var(--muted); font-size: 14px; }
+.grid--feat { margin-bottom: 0; }
+.ghead { scroll-margin-top: calc(var(--header) + 12px); }
+@media (max-width: 719px) {
+  /* Mobile: thanh lọc không dính (trước che ~43% màn hình và đè lên đầu trang 2 dòng). */
+  .filters { position: static; backdrop-filter: none; background: transparent; }
+  /* Nổi bật trượt ngang, thẻ rộng như lưới 2 cột. */
+  .feat { padding: 14px 0 14px 14px; margin-left: -4px; margin-right: -4px; }
+  .grid--feat { display: grid; grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: calc(50% - 20px); overflow-x: auto; scroll-snap-type: x mandatory; padding-right: 14px; scrollbar-width: none; }
+  .grid--feat::-webkit-scrollbar { display: none; }
+  .grid--feat > .card { scroll-snap-align: start; }
+  .tiers b { font-size: 14px; }
+}
 
 .crumbs { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 16px; color: var(--muted); font-size: 14px; }
 .crumbs a { color: var(--olive-dark); }
