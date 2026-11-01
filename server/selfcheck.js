@@ -784,7 +784,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v23/);
+    assert.match(sw, /mocqua-shell-v24/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
     const cbp = await (await fetch(base + '/combo')).text();
@@ -807,7 +807,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.ok(cbp.includes('Tiết kiệm ' + (sum - price) / 1000 + 'k'), p.id + ' tiết kiệm');
       // Ảnh combo hiện trọn (khung 4:5, is-45), có ảnh từng túi; có thẻ danh mục cùng mã.
       const pg = await (await fetch(base + '/san-pham/' + p.id)).text();
-      assert.match(pg, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/[a-z0-9-]+-[23]tui\.webp"/);
+      assert.match(pg, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/[a-z0-9-]+-(?:[23]tui|anh)\.webp"/);
       assert.ok(buy[p.variants[0].sku]?.sku === p.variants[0].sku, p.id + ' có trên danh mục');
       // Không tự gắn thành lựa chọn trên thẻ lẻ ở danh mục.
       for (const b of Object.values(buy)) if (b.sku !== p.variants[0].sku) assert.ok(!b.options.some((o) => o.sku === p.variants[0].sku), p.id);
@@ -845,6 +845,45 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       const imgs = JSON.stringify((dmj.products || dmj).map((x) => x.images));
       assert.doesNotMatch(imgs, /catalog\/vz-ch-cb3x(-sm)?\.webp/);
       assert.match(imgs, /catalog\/vz-ch-cb3x-3tui\.webp/);
+    }
+    // Ảnh chủ shop gửi 01/11: ảnh chính của combo (hiện trọn), ảnh ghép lùi xuống ảnh phụ; 3 combo mới; Cheers 3 túi là túi tròn áo dài.
+    {
+      const dmj = JSON.parse(fs.readFileSync(new URL('./data/danh-muc.json', import.meta.url), 'utf8'));
+      const dmp = new Map(dmj.products.map((x) => [x.id, x]));
+      const want = { 'vz-gg-cb-xmx': 'vz-gg-cb2xm-anh', 'vz-ym-cb-sr': 'vz-ym-cb2sr-anh', 'vz-mix-cb-xth': 'vz-mix-cb2xt-anh', 'vz-mix-cb-msr': 'vz-mix-cb2ms-anh',
+        'vz-mix-cb3-sr-xoai': 'vz-mix-cb3sx-anh', 'vz-mix-cb-ch-mit': 'vz-mix-cb2cm-anh', 'vz-mix-cb4-kita-fh': 'vz-mix-cb4kf-anh' };
+      for (const [id, f] of Object.entries(want)) {
+        const pg = await (await fetch(base + '/san-pham/' + id)).text();
+        assert.match(pg, new RegExp('<img id="pdp-main" class="is-45" src="/assets/products/vz/' + f + '\\.webp"'), id);
+        assert.equal(dmp.get(id).images[0].src, '/assets/catalog/' + f + '.webp', id);
+        assert.match(cbp, new RegExp('/assets/(catalog|products/vz)/' + f + '(-sm)?\\.webp'), id + ' trên /combo');
+      }
+      const xmx = await (await fetch(base + '/san-pham/vz-gg-cb-xmx')).text();
+      assert.match(xmx, /"photos":\[\{"src":"\/assets\/products\/vz\/vz-gg-cb2xm-anh-2\.webp"/);
+      assert.match(xmx, /vz-gg-cb2xm-2tui\.webp/);
+      const byId = new Map(shopAll.map((p) => [p.id, p]));
+      assert.equal(byId.get('vz-mix-cb3-sr-xoai').comboOf.join(','), ['MQ-THSR-080-FH', 'MQ-DXM-200-GG', 'MQ-DXO-200-GG'].join(','));
+      assert.equal(byId.get('vz-mix-cb3-sr-xoai').variants[0].price, 300000);
+      assert.equal(byId.get('vz-mix-cb4-kita-fh').comboOf.join(','), ['MQ-GSR-100-KT', 'MQ-DXO-100-FHV', 'MQ-GMI-300-FH', 'MQ-DXM-100-FHR'].join(','));
+      assert.equal(byId.get('vz-mix-cb4-kita-fh').variants[0].price, 251000);
+      assert.equal(byId.get('vz-mix-cb-ch-mit').comboOf.join(','), ['MQ-THSR-110-CH', 'MQ-GMI-300-FH'].join(','));
+      assert.equal(byId.get('vz-mix-cb-ch-mit').variants[0].price, 220000);
+      for (const id of ['vz-mix-cb3-sr-xoai', 'vz-mix-cb-ch-mit']) assert.match(cbp.split('id="cbg-qua-bieu"')[1].split('</section>')[0], new RegExp('/san-pham/' + id + '"'));
+      assert.match(cbp.split('id="cbg-an-vat"')[1].split('</section>')[0], /\/san-pham\/vz-mix-cb4-kita-fh"/);
+      // Poster có chữ quảng cáo tiếng Anh: không làm ảnh chính ở đâu cả.
+      assert.doesNotMatch(cbp, /vz-fh-mit-poster/);
+      assert.doesNotMatch(ch3, /đỏ hoặc xanh lá/);
+      assert.match(ch3, /túi tròn[^"<]*áo dài/);
+      assert.doesNotMatch(dmp.get('vz-ch-cb3x').note, /đỏ hoặc xanh/);
+      // Mít túi vàng hết bao bì: ghi chú cho khách, ảnh túi mới 200g ngay sau ảnh túi cũ; mã 300 nay đóng 200g.
+      const mit = await (await fetch(base + '/san-pham/mit-say-gion')).text();
+      assert.match(mit, /class="pdp__notice" role="note">Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh &amp; Healthy mới, đóng gói 200g\./);
+      assert.match(mit, /"photos":\[\{"src":"\/assets\/products\/fhx-mit200-moi\.webp"/);
+      assert.equal(byId.get('mit-say-gion').variants.find((v) => v.sku === 'MQ-GMI-300-FH').g, 200);
+      const fm = dmp.get('vz-fh-mit');
+      assert.match(fm.note, /^Lưu ý: Mẫu bao bì vàng này đã hết/);
+      assert.equal(fm.images[1].src, '/assets/catalog/fhx-mit200-moi.webp');
+      assert.equal(fm.variants[0].weightLabel, '200g');
     }
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
