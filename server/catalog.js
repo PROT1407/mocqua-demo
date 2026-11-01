@@ -183,6 +183,8 @@ function presentProduct(mq, product, { detail = false } = {}) {
       ? Object.fromEntries(Object.entries(product.packs).map(([k, v]) => [k, { name: v.name, colors: v.c || [] }]))
       : null,
     pknote: product.pknote || '',
+    // Ghi chú cho khách trên trang sản phẩm (vd. mẫu bao bì đã hết, đang giao túi khác).
+    notice: product.notice || '',
     related: Array.isArray(product.related) ? product.related : [],
     relatedNote: product.relatedNote || '',
     comboOf: Array.isArray(product.comboOf) ? product.comboOf : [],

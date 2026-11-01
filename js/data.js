@@ -110,6 +110,8 @@ MQ.PRODUCTS = [
   short:'Sầu riêng sấy giòn dòng KITA, túi 100g — béo, thơm, giá dễ chịu để ăn thử hay chia nhau.',
   long:'Sầu riêng chín tách múi, sấy giòn, giữ vị béo ngọt tự nhiên. Túi 100g dòng KITA của Viza Food, bán nguyên bao bì gốc.'},
  {id:'sau-rieng-say-viza-food',name:'Sầu riêng sấy Viza Food',cat:'gion',fruit:'saurieng',flavour:'nguyen',maker:'viza',rank:7,badge:'Mới',
+  notice:'Lưu ý: Mẫu bao bì Viza Food này đã hết, hiện giao túi GoodGood đỏ cùng loại, cùng 100g.',
+  photos:[['shelf/viza-ke-16.webp','Túi GoodGood đỏ (đang giao)','Túi GoodGood đỏ King Fruit sầu riêng sấy 100g — mẫu bao bì đang giao thay túi Viza Food']],fit45:['shelf/viza-ke-16.webp'],
   variants:[V('MQ-GSR-100-VZ','100g',100,'vizafood',110000,'vz/vz-vz-srs-100')],
   taste:{ngot:5,chua:0,deo:0,gion:4},
   short:'Sầu riêng sấy túi cam – vàng “Durian Dried” nhãn riêng Viza Food, 100g — béo, thơm, cùng giá túi 100g GoodGood.',

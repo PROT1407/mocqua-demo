@@ -5320,6 +5320,14 @@
      "kind": "hero"
     },
     {
+     "src": "/assets/shelf/viza-ke-16.webp",
+     "thumb": "/assets/shelf/viza-ke-16-t.webp",
+     "w": 1154,
+     "h": 1200,
+     "alt": "Túi GoodGood đỏ (đang giao) — King Fruit sầu riêng sấy 100g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
      "src": "/assets/shelf/viza-ke-10.webp",
      "thumb": "/assets/shelf/viza-ke-10-t.webp",
      "w": 900,
@@ -5337,7 +5345,7 @@
     }
    ],
    "verify": false,
-   "note": "Nhãn riêng Viza Food, túi cam – vàng in \"Sầu riêng sấy – Durian Dried\". Ảnh chính cắt từ ảnh kệ ke-10.",
+   "note": "Lưu ý: Mẫu bao bì Viza Food này đã hết, hiện giao túi GoodGood đỏ cùng loại, cùng 100g.",
    "variants": [
     {
      "code": "VZ-VZ-SRS-100",

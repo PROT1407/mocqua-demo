@@ -748,6 +748,8 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal(buy['VZ-VZ-SRS-100'].sku, 'MQ-GSR-100-VZ');
     assert.equal(buy['VZ-VZ-SRS-100'].price, buy['VZ-GG-KF-100'].price);
     assert.equal(data.products.find((p) => p.id === 'vz-vz-srs').brand, 'viza-food');
+    assert.match(data.products.find((p) => p.id === 'vz-vz-srs').note, /^Lưu ý: Mẫu bao bì Viza Food này đã hết, hiện giao túi GoodGood đỏ/);
+    assert.equal(data.products.find((p) => p.id === 'vz-vz-srs').images[1].src, '/assets/shelf/viza-ke-16.webp');
     // Chưa có giá hoặc chưa bán online thì không có nút mua.
     for (const code of ['VZ-GG-XDV-XX', 'VZ-FH-MITV-XX', 'VZ-FH-XDMO-XX', 'MQZ-DDY', 'VZ-GG-CARI-100']) assert.equal(buy[code], undefined, code);
     for (const p of data.products) for (const v of p.variants) if (v.price == null) assert.equal(buy[v.code], undefined, v.code);
@@ -782,7 +784,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v21/);
+    assert.match(sw, /mocqua-shell-v22/);
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
@@ -852,6 +854,10 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       const vzsr = await (await fetch(base + '/san-pham/sau-rieng-say-viza-food')).text();
       assert.match(vzsr, /id="pdp-main"[^>]* src="\/assets\/products\/vz\/vz-vz-srs-100-45\.jpg"/);
       assert.equal(shelvesFor('sau-rieng-say-viza-food', 'MQ-GSR-100-VZ'), 'viza-ke-10,viza-ke-11');
+      // Túi Viza Food đã hết: ghi chú cho khách + ảnh túi GoodGood đỏ đang giao ngay sau ảnh túi Viza.
+      assert.match(vzsr, /class="pdp__notice" role="note">Lưu ý: Mẫu bao bì Viza Food này đã hết, hiện giao túi GoodGood đỏ cùng loại, cùng 100g\./);
+      assert.match(vzsr, /"photos":\[\{"src":"\/assets\/shelf\/viza-ke-16\.webp","kind":"Túi GoodGood đỏ \(đang giao\)"/);
+      assert.doesNotMatch(await (await fetch(base + '/san-pham/sau-rieng-say-goodgood')).text(), /pdp__notice/);
       const xd = await (await fetch(base + '/san-pham/xoai-say-deo')).text();
       assert.match(xd, /"fit45":\["\/assets\/shelf\/viza-ke-20\.webp"/);
     }
