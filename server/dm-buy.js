@@ -21,6 +21,9 @@ export const CATALOG_TO_SHOP = {
   'VZ-YM-SRTH-100': 'MQ-THSR-105-YM',
   'VZ-FH-XD-100': 'MQ-DXO-100-FHX',
   'VZ-FH-XD-500': 'MQ-DXO-500-FHG',
+  // Túi hồng cam / túi vàng 100g: cửa hàng có mã riêng trên trang xoai-say-deo (cùng giá 49k mọi mẫu túi 100g).
+  'VZ-FH-XDH-100': 'MQ-DXO-100-FHH',
+  'VZ-FH-XDV-100': 'MQ-DXO-100-FHV',
   'VZ-FH-MIT-300': 'MQ-GMI-300-FH',
   'VZ-FH-SRTH-XX': 'MQ-THSR-080-FH',
   'VZ-KT-SRTH-100': 'MQ-GSR-100-KT',
@@ -42,12 +45,20 @@ const COMBO_LABEL = {
   'VZ-FH-CB-350': 'Combo 100g + 250g',
 };
 
+// Combo đông túi (trên 3) không nằm trong comboOf: gắn tay vào túi lẻ cùng nhãn, cùng khối lượng.
+const EXTRA_COMBOS = {
+  'MQ-DXO-100-FHX': [['MQ-CBX-100-FH', 'Combo 6 túi'], ['MQ-CBX-100-MIX', 'Combo 6 trộn 2 nhãn']],
+  'MQ-DXO-100-FHG': [['MQ-CBX-100-FH', 'Combo 6 túi'], ['MQ-CBX-100-MIX', 'Combo 6 trộn 2 nhãn']],
+  'MQ-DXO-100-GG': [['MQ-CBX-100-GG', 'Combo 6 túi'], ['MQ-CBX-100-MIX', 'Combo 6 trộn 2 nhãn']],
+};
+
 function comboSize(product, variant) {
   const m = String(variant.w || '').match(/(\d+)\s*[×x]/);
   return m ? Number(m[1]) : (product.comboOf?.length || 0);
 }
 
 // Trả về { [mã danh mục]: { sku, price, options: [{ sku, label, price, title, combo }] } }.
+// Hàng cửa hàng đang hết (oos) thì trả { sku, price, oos: true, options: [] }: thẻ danh mục hiện "Hết hàng", không có nút mua.
 export function catalogBuyMap(catalog) {
   const shop = getShopCatalog();
   const bySku = new Map();
@@ -59,6 +70,7 @@ export function catalogBuyMap(catalog) {
       const sku = bySku.has(cv.code) ? cv.code : (CATALOG_TO_SHOP[cv.code] || lookupSku(cv.code)?.sku);
       const hit = sku && bySku.get(sku);
       if (!hit) continue;
+      if (hit.p.oos) { out[cv.code] = { sku, price: hit.v.price, oos: true, options: [] }; continue; }
       const options = [{ sku, label: 'Lẻ', price: hit.v.price, title: `${hit.p.name} · ${hit.v.w}`, combo: isComboProduct(hit.p) }];
       if (!isComboProduct(hit.p)) {
         for (const cb of combos) {
@@ -69,6 +81,11 @@ export function catalogBuyMap(catalog) {
             const label = COMBO_LABEL[v.sku] || (/vị/.test(v.w) ? `Combo ${n} vị` : `Combo ${n}`);
             options.push({ sku: v.sku, label, price: v.price, title: `${cb.name} · ${v.w}`, combo: true });
           }
+        }
+        for (const [cbSku, label] of EXTRA_COMBOS[sku] || []) {
+          const cb = bySku.get(cbSku);
+          if (!cb || cb.p.oos || options.some((o) => o.sku === cbSku)) continue;
+          options.push({ sku: cbSku, label, price: cb.v.price, title: `${cb.p.name} · ${cb.v.label || cb.v.w}`, combo: true });
         }
         options.sort((a, b) => a.combo - b.combo || a.price - b.price);
       }

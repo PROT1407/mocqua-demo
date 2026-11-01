@@ -777,7 +777,22 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v16/);
+    assert.match(sw, /mocqua-shell-v17/);
+    // Cửa hàng có thì danh mục cũng có: mọi mã đang bán ở /cua-hang đều có thẻ danh mục (trùng mã, nối tay hoặc lựa chọn combo).
+    // Riêng gói nhỏ 29k MQ-DXM-S-GG chưa rõ khối lượng, chờ chủ shop xác nhận.
+    const { getShopCatalog } = await import('./catalog.js');
+    const reach = new Set(Object.values(buy).flatMap((b) => [b.sku, ...b.options.map((o) => o.sku)]));
+    const missing = getShopCatalog().products.flatMap((p) => p.variants.map((v) => v.sku)).filter((sku) => !reach.has(sku) && sku !== 'MQ-DXM-S-GG');
+    assert.equal(missing.join(','), '', 'mã cửa hàng chưa có trên danh mục');
+    assert.ok(data.categories.some((c) => c.id === 'omai') && data.categories.some((c) => c.id === 'set'));
+    assert.ok(data.products.filter((p) => p.brand === 'moc-qua').length >= 70);
+    assert.equal(buy['VZ-FH-XDH-100'].sku, 'MQ-DXO-100-FHH');
+    assert.equal(buy['VZ-FH-XDV-100'].sku, 'MQ-DXO-100-FHV');
+    assert.deepEqual(buy['VZ-FH-XD-100'].options.find((o) => o.sku === 'MQ-CBX-100-FH')?.label, 'Combo 6 túi');
+    assert.equal(buy['MQ-DXO-150-VZ'].oos, true);
+    assert.equal(buy['MQ-DXO-150-VZ'].options.length, 0);
+    const dmJs = await (await fetch(base + '/static/js/danh-muc.js')).text();
+    assert.match(dmJs, /Hết hàng/);
   } finally {
     server.close();
   }
