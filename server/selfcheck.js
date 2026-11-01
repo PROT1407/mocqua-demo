@@ -777,7 +777,31 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v17/);
+    assert.match(sw, /mocqua-shell-v18/);
+    // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
+    const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
+    assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
+    assert.doesNotMatch(cb3, /viza-ke-02|"shelf":\{/);
+    assert.match(cb3, /vz-ps-cb2-2vi\.webp/);
+    assert.match(cb3, /<img id="pdp-main" class="is-45"/);
+    for (const f of ['vz-ps-gd', 'vz-ps-ry', 'vz-ps-yd']) assert.match(cb3, new RegExp('"photos":\\[.*' + f + '\\.webp'));
+    // Túi lẻ Premium (Golden/Royal/Yummy): ảnh túi của chính nó + ảnh 3 túi; không ảnh kệ Cheers+.
+    for (const id of ['vz-ps-gd', 'vz-ps-ry', 'vz-ps-yd']) {
+      const one = await (await fetch(base + '/san-pham/' + id)).text();
+      assert.match(one, new RegExp('id="pdp-main" src="\\/assets\\/products\\/vz\\/' + id + '\\.webp"'));
+      assert.doesNotMatch(one, /viza-ke-|"shelf":\{/);
+      assert.match(one, /"photos":\[\{"src":"\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
+    }
+    // Ảnh kệ chỉ trên trang cùng nhãn: Cheers+/Yummy sầu riêng giữ kệ viza-ke-02; Premium, KITA, hạt hộp giấy… không có ảnh kệ khác nhãn.
+    {
+      const { getShopCatalog: cat } = await import('./catalog.js');
+      const byId = new Map(cat().products.map((p) => [p.id, p]));
+      assert.equal(byId.get('sau-rieng-say-thang-hoa-cheers').shelf?.src, '/assets/shelf/viza-ke-02.webp');
+      assert.equal(byId.get('sau-rieng-say-thang-hoa-yummy').shelf?.src, '/assets/shelf/viza-ke-02.webp');
+      for (const id of ['vz-ps-gd', 'vz-ps-cb3', 'sau-rieng-say-kita', 'xoai-say-deo-yummy', 'vz-hat-macca-say', 'coc-say-deo-muoi-ot-goodgood']) {
+        assert.equal(byId.get(id).shelf, null, id + ' không được có ảnh kệ khác nhãn');
+      }
+    }
     // Cửa hàng có thì danh mục cũng có: mọi mã đang bán ở /cua-hang đều có thẻ danh mục (trùng mã, nối tay hoặc lựa chọn combo).
     // Riêng gói nhỏ 29k MQ-DXM-S-GG chưa rõ khối lượng, chờ chủ shop xác nhận.
     const { getShopCatalog } = await import('./catalog.js');

@@ -43,16 +43,27 @@ function gallery(variant) {
   const list = [];
   if (variant.img) list.push({ src: variant.img, alt: `${data.name}, bao bì ${variant.label}`, kind: 'Bao bì' });
   if (variant.back && variant.back !== variant.img) list.push({ src: variant.back, alt: `${data.name}, mặt sau`, kind: 'Mặt sau' });
+  for (const photo of data.photos || []) {
+    if (photo.src && !list.some((x) => x.src === photo.src)) list.push({ src: photo.src, alt: photo.alt || data.name, kind: photo.kind || 'Ảnh' });
+  }
   if (data.open?.src) list.push({ src: data.open.src, alt: data.open.cap || 'Mở túi', kind: 'Mở túi' });
   if (data.shelf?.src) list.push({ src: data.shelf.src, alt: data.shelf.cap || 'Trên kệ', kind: 'Trên kệ' });
   if (!list.length && data.open?.src) list.push({ src: data.open.src, alt: data.name, kind: 'Ảnh' });
   return list;
 }
 
+// Ảnh 4:5 nhiều túi đứng cạnh nhau (data.fit45) hiện trọn khung 4:5, không cắt mất túi hai bên; ảnh khác giữ khung cũ.
+const fit45 = new Set(data.fit45 || []);
+function fitMain() {
+  main.classList.toggle('is-45', fit45.has(new URL(main.src, location.href).pathname));
+}
+fitMain();
+
 function showImage(list, index) {
   const image = list[index] || list[0];
   if (!image) return;
   main.src = image.src;
+  fitMain();
   main.alt = image.alt;
   kind.textContent = image.kind;
   thumbs.querySelectorAll('button').forEach((button, i) => button.classList.toggle('is-on', i === index));

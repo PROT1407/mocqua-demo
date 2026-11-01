@@ -520,6 +520,8 @@ export function productPage(product, catalog) {
     pknote: product.pknote,
     open: product.open,
     shelf: product.shelf,
+    photos: product.photos || [],
+    fit45: product.fit45 || [],
     variants: product.variants.map((v) => ({
       sku: v.sku, w: v.w, g: v.g, price: v.price, pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back,
     })),
@@ -529,7 +531,7 @@ export function productPage(product, catalog) {
     <article class="pdp">
       <div class="pdp__gallery">
         <div class="pdp__stage">
-          <img id="pdp-main" src="${esc(product.cardImg || '')}" alt="${esc(product.name)}" width="900" height="1125">
+          <img id="pdp-main"${(product.fit45 || []).includes(product.cardImg) ? ' class="is-45"' : ''} src="${esc(product.cardImg || '')}" alt="${esc(product.name)}" width="900" height="1125">
           <span class="pdp__kind" id="pdp-kind">Bao bì</span>
         </div>
         <div class="pdp__thumbs" id="pdp-thumbs"></div>
