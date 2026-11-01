@@ -186,6 +186,7 @@
 .dm-buy__ask { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 18px; border: 1px solid var(--g); border-radius: 999px; color: var(--g); font-size: 14px; font-weight: 600; text-decoration: none; }
 .dm-buy__ask:hover { background: #EEF3EF; }
 .dm-buy--ask span { font-size: 12px; color: var(--ink2); }
+.dm-buy--oos .dm-buy__add, .dm-buy--oos .dm-buy__add:hover { justify-content: center; background: #D9D3C6; color: var(--ink2); cursor: not-allowed; }
 @media (max-width: 520px) {
   .dm-buy__add { flex-direction: column; justify-content: center; gap: 0; padding: 6px 10px; font-size: 13px; line-height: 1.25; border-radius: 16px; }
   .dm-buy--ask { grid-template-columns: 1fr; }

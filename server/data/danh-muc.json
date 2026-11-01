@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated": "2026-10-31",
+ "updated": "2026-11-01",
  "brands": [
   {
    "id": "moc-qua",
@@ -43,12 +43,20 @@
    "name": "Sấy giòn & sấy khô"
   },
   {
+   "id": "omai",
+   "name": "Ô mai & xí muội"
+  },
+  {
    "id": "hat",
    "name": "Hạt"
   },
   {
    "id": "combo",
    "name": "Combo / quà"
+  },
+  {
+   "id": "set",
+   "name": "Set quà & hộp mứt Tết"
   },
   {
    "id": "giavi",
@@ -80,7 +88,37 @@
   "combo-hat": "Combo hạt",
   "de-cuoi": "Hạt dẻ cười",
   "hat-sen": "Hạt sen sấy",
-  "dua-say": "Dừa sấy giòn"
+  "dua-say": "Dừa sấy giòn",
+  "sung-thang-hoa": "Sung sấy thăng hoa",
+  "mang-cau-thang-hoa": "Mãng cầu sấy thăng hoa",
+  "nhan-thang-hoa": "Nhãn sấy thăng hoa",
+  "thanh-long-thang-hoa": "Thanh long sấy thăng hoa",
+  "thom-thang-hoa": "Thơm sấy thăng hoa",
+  "vai-thang-hoa": "Vải sấy thăng hoa",
+  "hat-sen-deo": "Hạt sen sấy dẻo",
+  "chanh-day-deo": "Chanh dây sấy dẻo",
+  "dau-tay-deo": "Dâu tây sấy dẻo",
+  "gung-deo": "Gừng sấy dẻo",
+  "dua-non-deo": "Dừa non sấy dẻo",
+  "du-du-deo": "Đu đủ sấy dẻo",
+  "cam-deo": "Cam sấy dẻo",
+  "hong-deo": "Hồng sấy dẻo",
+  "khoai-lang-deo": "Khoai lang sấy dẻo",
+  "oi-deo": "Ổi sấy dẻo",
+  "mit-deo": "Mít sấy dẻo",
+  "nhan-deo": "Nhãn sấy dẻo",
+  "coc-deo": "Cóc sấy dẻo",
+  "vo-buoi-deo": "Vỏ bưởi sấy dẻo",
+  "ca-chua-bi-deo": "Cà chua bi sấy dẻo",
+  "tao-deo": "Táo sấy dẻo",
+  "o-mai": "Ô mai & xí muội",
+  "khoai-mon-gion": "Khoai môn sấy giòn",
+  "thap-cam-gion": "Thập cẩm sấy giòn",
+  "khoai-lang-gion": "Khoai lang sấy giòn",
+  "chuoi-gion": "Chuối sấy giòn",
+  "nhan-kho": "Nhãn sấy khô",
+  "vai-kho": "Vải sấy khô",
+  "mang-cut-thang-hoa": "Măng cụt sấy thăng hoa"
  },
  "products": [
   {
@@ -353,6 +391,14 @@
      "h": 1000,
      "alt": "Đĩa trưng bày một lát xoài sấy dẻo",
      "kind": "dia-trung-bay"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dxo-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dxo-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài cát sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "mau-bao-bi-2"
     }
    ],
    "verify": false,
@@ -367,6 +413,16 @@
      "price": 199000,
      "priceSource": "Giá niêm yết Mộc Quả",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQZ-DXO-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 205000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -658,6 +714,2571 @@
    ]
   },
   {
+   "id": "mqz-sung-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Sung sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sung-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thsu-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thsu-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Sung sấy thăng hoa · 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THSU-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-mang-cau-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Mãng cầu xiêm sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "mang-cau-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thmc-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thmc-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mãng cầu xiêm sấy thăng hoa · 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THMC-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 205000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-nhan-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Nhãn Hưng Yên sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "nhan-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thnh-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thnh-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Nhãn Hưng Yên sấy thăng hoa · 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THNH-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 225000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-thanh-long-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Thanh long sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "thanh-long-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thtlt-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thtlt-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thanh long sấy thăng hoa · Ruột trắng · 100g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-thtld-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thtld-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thanh long sấy thăng hoa · Ruột đỏ · 100g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THTLT-100",
+     "weightG": 100,
+     "weightLabel": "Ruột trắng · 100g",
+     "verify": false,
+     "note": "",
+     "price": 165000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-THTLD-100",
+     "weightG": 100,
+     "weightLabel": "Ruột đỏ · 100g",
+     "verify": false,
+     "note": "",
+     "price": 185000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-thom-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Thơm Queen sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "thom-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thth-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thth-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thơm Queen sấy thăng hoa · 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THTH-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 179000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-xoai-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xoài cát sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "xoai-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thxo-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thxo-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài cát sấy thăng hoa · 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THXO-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 185000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-sau-rieng-ri6-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Sầu riêng Ri6 sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thsr-100c-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thsr-100c-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Sầu riêng Ri6 sấy thăng hoa · Múi cắt · 100g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-thsr-100n-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thsr-100n-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Sầu riêng Ri6 sấy thăng hoa · Nguyên múi · 100g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-thsr-200-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thsr-200-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Sầu riêng Ri6 sấy thăng hoa · Túi lớn · 200g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THSR-100C",
+     "weightG": 100,
+     "weightLabel": "Múi cắt · 100g",
+     "verify": false,
+     "note": "",
+     "price": 229000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-THSR-100N",
+     "weightG": 100,
+     "weightLabel": "Nguyên múi · 100g",
+     "verify": false,
+     "note": "",
+     "price": 259000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-THSR-200",
+     "weightG": 200,
+     "weightLabel": "Túi lớn · 200g",
+     "verify": false,
+     "note": "",
+     "price": 209000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-vai-thang-hoa",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Vải Lục Ngạn sấy thăng hoa",
+   "cat": "thanghoa",
+   "type": "vai-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-thva-100-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-thva-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Vải Lục Ngạn sấy thăng hoa · 100g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-THVA-100",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 285000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hat-sen-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hạt sen sấy dẻo",
+   "cat": "deo",
+   "type": "hat-sen-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dhs-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dhs-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hạt sen sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dhs-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dhs-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hạt sen sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DHS-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 125000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DHS-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 119000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-thanh-long-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Thanh long ruột đỏ sấy dẻo",
+   "cat": "deo",
+   "type": "thanh-long-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dtl-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dtl-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thanh long ruột đỏ sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dtl-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dtl-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thanh long ruột đỏ sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DTL-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 205000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DTL-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 199000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-chanh-day-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Chanh dây sấy dẻo",
+   "cat": "deo",
+   "type": "chanh-day-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dcd-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dcd-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Chanh dây sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dcd-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dcd-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Chanh dây sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DCD-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 185000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DCD-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 179000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-dau-tay-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dâu tây Đà Lạt sấy dẻo",
+   "cat": "deo",
+   "type": "dau-tay-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ddy-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ddy-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Dâu tây Đà Lạt sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-ddy-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ddy-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Dâu tây Đà Lạt sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DDY-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 209000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DDY-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 205000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-mang-cau-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Mãng cầu xiêm sấy dẻo",
+   "cat": "deo",
+   "type": "mang-cau-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dmc-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dmc-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mãng cầu xiêm sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dmc-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dmc-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mãng cầu xiêm sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DMC-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 229000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DMC-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 225000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-gung-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Gừng Huế sấy dẻo",
+   "cat": "deo",
+   "type": "gung-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dgu-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dgu-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Gừng Huế sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dgu-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dgu-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Gừng Huế sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DGU-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 115000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DGU-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 109000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-dua-non-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dừa non sấy dẻo",
+   "cat": "deo",
+   "type": "dua-non-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ddn-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ddn-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Dừa non sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-ddn-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ddn-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Dừa non sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DDN-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 129000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DDN-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 125000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-thom-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Thơm sấy dẻo",
+   "cat": "deo",
+   "type": "thom-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dth-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dth-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thơm sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dth-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dth-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Thơm sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DTH-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 175000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DTH-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 169000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-du-du-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Đu đủ sấy dẻo",
+   "cat": "deo",
+   "type": "du-du-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ddd-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ddd-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Đu đủ sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-ddd-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ddd-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Đu đủ sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DDD-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 155000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DDD-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-cam-lat-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Cam lát sấy dẻo",
+   "cat": "deo",
+   "type": "cam-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dca-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dca-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Cam lát sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dca-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dca-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Cam lát sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DCA-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 195000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DCA-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 189000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hong-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hồng Đà Lạt sấy dẻo",
+   "cat": "deo",
+   "type": "hong-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dho-1000-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dho-1000-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hồng Đà Lạt sấy dẻo · Hộp vuông PET · Hồng chẻ 1kg",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dhoe-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dhoe-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hồng Đà Lạt sấy dẻo · Hộp vuông PET · Nguyên trái ép 500g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dho-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dho-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hồng Đà Lạt sấy dẻo · Túi zip · Hồng chẻ 1kg",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dhoe-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dhoe-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hồng Đà Lạt sấy dẻo · Túi zip · Nguyên trái ép 500g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dhv-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dhv-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hồng Đà Lạt sấy dẻo · Hộp xách 2 × 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DHO-1000-HV",
+     "weightG": 1000,
+     "weightLabel": "Hộp vuông PET · Hồng chẻ 1kg",
+     "verify": false,
+     "note": "",
+     "price": 255000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DHOE-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · Nguyên trái ép 500g",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DHO-1000",
+     "weightG": 1000,
+     "weightLabel": "Túi zip · Hồng chẻ 1kg",
+     "verify": false,
+     "note": "",
+     "price": 249000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DHOE-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · Nguyên trái ép 500g",
+     "verify": false,
+     "note": "",
+     "price": 145000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DHV-1000",
+     "weightG": 1000,
+     "weightLabel": "Hộp xách 2 × 500g",
+     "verify": false,
+     "note": "",
+     "price": 439000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khoai-lang-mat-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khoai lang mật sấy dẻo",
+   "cat": "deo",
+   "type": "khoai-lang-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dkl-1000-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dkl-1000-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khoai lang mật sấy dẻo · Hộp vuông PET · 1kg",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dkl-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dkl-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khoai lang mật sấy dẻo · Túi zip · 1kg",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DKL-1000-HV",
+     "weightG": 1000,
+     "weightLabel": "Hộp vuông PET · 1kg",
+     "verify": false,
+     "note": "",
+     "price": 175000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DKL-1000",
+     "weightG": 1000,
+     "weightLabel": "Túi zip · 1kg",
+     "verify": false,
+     "note": "",
+     "price": 169000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-oi-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Ổi sấy dẻo",
+   "cat": "deo",
+   "type": "oi-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-doi-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-doi-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Ổi sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-doi-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-doi-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Ổi sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DOI-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 189000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DOI-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 185000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-mit-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Mít sấy dẻo",
+   "cat": "deo",
+   "type": "mit-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dmi-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dmi-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mít sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dmi-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dmi-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mít sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DMI-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 169000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DMI-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 165000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-nhan-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Nhãn Hưng Yên sấy dẻo",
+   "cat": "deo",
+   "type": "nhan-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dnh-500-hv-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dnh-500-hv-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Nhãn Hưng Yên sấy dẻo · Hộp vuông PET · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dnh-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dnh-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Nhãn Hưng Yên sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DNH-500-HV",
+     "weightG": 500,
+     "weightLabel": "Hộp vuông PET · 500g",
+     "verify": false,
+     "note": "",
+     "price": 195000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DNH-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 189000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-coc-non-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Cóc non sấy dẻo",
+   "cat": "deo",
+   "type": "coc-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dco-500-hb-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dco-500-hb-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Cóc non sấy dẻo · Hộp bát giác · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dco-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dco-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Cóc non sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DCO-500-HB",
+     "weightG": 500,
+     "weightLabel": "Hộp bát giác · 500g",
+     "verify": false,
+     "note": "",
+     "price": 135000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DCO-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 129000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-vo-buoi-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Vỏ bưởi sấy dẻo",
+   "cat": "deo",
+   "type": "vo-buoi-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dvb-500-hb-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dvb-500-hb-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Vỏ bưởi sấy dẻo · Hộp bát giác · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dvb-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dvb-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Vỏ bưởi sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DVB-500-HB",
+     "weightG": 500,
+     "weightLabel": "Hộp bát giác · 500g",
+     "verify": false,
+     "note": "",
+     "price": 165000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DVB-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 159000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-ca-chua-bi-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Cà chua bi sấy dẻo",
+   "cat": "deo",
+   "type": "ca-chua-bi-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dcc-500-hb-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dcc-500-hb-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Cà chua bi sấy dẻo · Hộp bát giác · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dcc-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dcc-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Cà chua bi sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DCC-500-HB",
+     "weightG": 500,
+     "weightLabel": "Hộp bát giác · 500g",
+     "verify": false,
+     "note": "",
+     "price": 139000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DCC-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 135000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-tao-say-deo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Táo sấy dẻo",
+   "cat": "deo",
+   "type": "tao-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dta-500-hb-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dta-500-hb-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Táo sấy dẻo · Hộp bát giác · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-dta-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dta-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Táo sấy dẻo · Túi zip · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DTA-500-HB",
+     "weightG": 500,
+     "weightLabel": "Hộp bát giác · 500g",
+     "verify": false,
+     "note": "",
+     "price": 145000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-DTA-500",
+     "weightG": 500,
+     "weightLabel": "Túi zip · 500g",
+     "verify": false,
+     "note": "",
+     "price": 139000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hong-treo-say-gio",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hồng treo sấy gió Đà Lạt — hộp quà",
+   "cat": "deo",
+   "type": "hong-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-dht-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-dht-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hồng treo sấy gió Đà Lạt — hộp quà · Hộp quà 2 × 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-DHT-1000",
+     "weightG": 1000,
+     "weightLabel": "Hộp quà 2 × 500g",
+     "verify": false,
+     "note": "",
+     "price": 539000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-o-mai-mo-man",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Ô mai mơ mặn",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ommo-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ommo-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Ô mai mơ mặn · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMO-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 135000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-xi-muoi-dac-biet",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xí muội đặc biệt",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omxd-250-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omxd-250-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xí muội đặc biệt · Đỏ · 250g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-omxt-250-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omxt-250-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xí muội đặc biệt · Trắng · 250g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMXD-250",
+     "weightG": 250,
+     "weightLabel": "Đỏ · 250g",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-OMXT-250",
+     "weightG": 250,
+     "weightLabel": "Trắng · 250g",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-man-deo-duong-ot",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Mận sấy dẻo đường ớt",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omma-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omma-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mận sấy dẻo đường ớt · 1kg",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMA-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg",
+     "verify": false,
+     "note": "",
+     "price": 159000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-me-ngao-duong",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Me trái ngào đường",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ommn-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ommn-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Me trái ngào đường · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMN-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 95000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-me-xi-muoi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Me trái xí muội",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ommx-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ommx-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Me trái xí muội · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMX-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 95000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-o-mai-me-gung-tac",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Ô mai me gừng tắc",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ommg-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ommg-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Ô mai me gừng tắc · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMG-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 95000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-dau-tam-ngao-duong",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dâu tằm ngào đường",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omdt-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omdt-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Dâu tằm ngào đường · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMDT-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 79000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-dau-tay-ngao-duong",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dâu tây ngào đường",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omdy-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omdy-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Dâu tây ngào đường · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMDY-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 105000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-chum-ruot-muoi-ot",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Chùm ruột muối ớt",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omcr-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omcr-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Chùm ruột muối ớt · 1kg",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMCR-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg",
+     "verify": false,
+     "note": "",
+     "price": 145000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-me-ngao-cay",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Me ngào đường vị cay",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ommc-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ommc-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Me ngào đường vị cay · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMC-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 95000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-me-xi-muoi-chum-ruot",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Me xí muội chùm ruột",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-ommr-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-ommr-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Me xí muội chùm ruột · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMMR-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 115000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-xi-muoi-khong-hat",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xí muội không hạt",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omxk-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omxk-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xí muội không hạt · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMXK-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 159000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-xi-muoi-dao-hong",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xí muội đào hồng",
+   "cat": "omai",
+   "type": "o-mai",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-omda-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-omda-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xí muội đào hồng · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-OMDA-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 99000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khoai-mon-say-gion",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khoai môn sấy giòn",
+   "cat": "gion",
+   "type": "khoai-mon-gion",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-gkm-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-gkm-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khoai môn sấy giòn · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-GKM-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 119000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-thap-cam-say-gion",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Trái cây thập cẩm sấy giòn",
+   "cat": "gion",
+   "type": "thap-cam-gion",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-gtc-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-gtc-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Trái cây thập cẩm sấy giòn · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-GTC-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 99000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khoai-lang-say-gion",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khoai lang Đà Lạt sấy giòn",
+   "cat": "gion",
+   "type": "khoai-lang-gion",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-gklv-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-gklv-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khoai lang Đà Lạt sấy giòn · Vàng · 500g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/mqz/mqz-gklt-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-gklt-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khoai lang Đà Lạt sấy giòn · Tím · 500g",
+     "kind": "mau-bao-bi-2"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-GKLV-500",
+     "weightG": 500,
+     "weightLabel": "Vàng · 500g",
+     "verify": false,
+     "note": "",
+     "price": 69000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQZ-GKLT-500",
+     "weightG": 500,
+     "weightLabel": "Tím · 500g",
+     "verify": false,
+     "note": "",
+     "price": 69000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-chuoi-say-gion",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Chuối sấy giòn",
+   "cat": "gion",
+   "type": "chuoi-gion",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-gch-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-gch-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Chuối sấy giòn · 500g",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-GCH-500",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 75000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-nhan-say-kho",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Nhãn sấy khô nguyên vỏ",
+   "cat": "gion",
+   "type": "nhan-kho",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-knh-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-knh-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Nhãn sấy khô nguyên vỏ · 1kg",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-KNH-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg",
+     "verify": false,
+     "note": "",
+     "price": 159000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-vai-say-kho",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Vải thiều sấy khô",
+   "cat": "gion",
+   "type": "vai-kho",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-kva-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-kva-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Vải thiều sấy khô · 1kg",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-KVA-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg",
+     "verify": false,
+     "note": "",
+     "price": 155000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hop-9-vi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hộp quà 9 vị Mộc Quả",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-set9-980-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-set9-980-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hộp quà 9 vị Mộc Quả · 980g · 9 ô",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SET9-980",
+     "weightG": 980,
+     "weightLabel": "980g · 9 ô",
+     "verify": false,
+     "note": "",
+     "price": 299000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-bo-12-vi-mut",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Bộ 12 vị mứt sấy dẻo",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-set12-1700-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-set12-1700-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Bộ 12 vị mứt sấy dẻo · 1,7kg · 2 hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SET12-1700",
+     "weightG": 1700,
+     "weightLabel": "1,7kg · 2 hũ",
+     "verify": false,
+     "note": "",
+     "price": 715000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-doi-thom-say",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Đôi thơm sấy: mộc & muối ớt",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setth-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setth-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Đôi thơm sấy: mộc & muối ớt · 1kg · 2 hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETTH-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg · 2 hũ",
+     "verify": false,
+     "note": "",
+     "price": 449000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-bo-mut-dua-non",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Bộ mứt dừa non 4 vị",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setdn-1200-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setdn-1200-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Bộ mứt dừa non 4 vị · 1,2kg · 2 hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETDN-1200",
+     "weightG": 1200,
+     "weightLabel": "1,2kg · 2 hũ",
+     "verify": false,
+     "note": "",
+     "price": 325000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-doi-mut-muoi-ot",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Đôi mứt muối ớt: thơm & mãng cầu",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setmo-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setmo-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Đôi mứt muối ớt: thơm & mãng cầu · 1kg · 2 hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETMO-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg · 2 hũ",
+     "verify": false,
+     "note": "",
+     "price": 435000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khay-mut-7-vi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khay mứt 7 vị lục giác",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setk7-750-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setk7-750-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khay mứt 7 vị lục giác · 750g · 7 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETK7-750",
+     "weightG": 750,
+     "weightLabel": "750g · 7 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 265000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khay-mut-5-vi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khay mứt 5 vị thượng hạng",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setk5-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setk5-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khay mứt 5 vị thượng hạng · 500g · 5 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETK5-500",
+     "weightG": 500,
+     "weightLabel": "500g · 5 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 219000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hop-qua-hat",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hộp nắp gập Phú Quý 1kg",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-seth4-1000-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-seth4-1000-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hộp nắp gập Phú Quý 1kg · 1kg · 4 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETH4-1000",
+     "weightG": 1000,
+     "weightLabel": "1kg · 4 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 565000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hop-ngan-keo-600",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hộp ngăn kéo Sen Vàng 600g",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-seth3-600-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-seth3-600-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hộp ngăn kéo Sen Vàng 600g · 600g · 4 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETH3-600",
+     "weightG": 600,
+     "weightLabel": "600g · 4 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 369000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-gio-qua-viet",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Giỏ quà quả Việt",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setgio-2500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setgio-2500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Giỏ quà quả Việt · 2,5kg · 4 hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETGIO-2500",
+     "weightG": 2500,
+     "weightLabel": "2,5kg · 4 hũ",
+     "verify": false,
+     "note": "",
+     "price": 869000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-gio-mut-6-vi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khay tròn mứt dẻo 6 vị",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setg6-650-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setg6-650-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khay tròn mứt dẻo 6 vị · 650g · 6 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETG6-650",
+     "weightG": 650,
+     "weightLabel": "650g · 6 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 229000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hop-6-hu-mini",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hộp 6 hũ mini quà Việt",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-set6-670-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-set6-670-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hộp 6 hũ mini quà Việt · 670g · 6 hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SET6-670",
+     "weightG": 670,
+     "weightLabel": "670g · 6 hũ",
+     "verify": false,
+     "note": "",
+     "price": 215000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hop-tim-8-vi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Hộp tim 8 vị Xuân Yêu Thương",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setht-700-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setht-700-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Hộp tim 8 vị Xuân Yêu Thương · 700g · 8 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETHT-700",
+     "weightG": 700,
+     "weightLabel": "700g · 8 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 319000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-hop-hat-5-vi",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khay ngũ hạt dinh dưỡng 550g",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-sethd1-550-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-sethd1-550-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khay ngũ hạt dinh dưỡng 550g · 550g · 5 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETHD1-550",
+     "weightG": 550,
+     "weightLabel": "550g · 5 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 315000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khay-hat-hoa-mai",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khay hạt hoa mai 750g",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-sethd2-750-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-sethd2-750-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khay hạt hoa mai 750g · 750g · 5+1 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETHD2-750",
+     "weightG": 750,
+     "weightLabel": "750g · 5+1 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 385000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "mqz-khay-6-mon-qua-say",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Khay 6 món quả sấy hoa mai",
+   "cat": "set",
+   "type": "hop-qua",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/mqz/mqz-setk6-500-45.jpg",
+     "thumb": "/assets/products/mqz/mqz-setk6-500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Khay 6 món quả sấy hoa mai · 500g · 6 ngăn",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQZ-SETK6-500",
+     "weightG": 500,
+     "weightLabel": "500g · 6 ngăn",
+     "verify": false,
+     "note": "",
+     "price": 185000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
    "id": "vz-gf-coc",
    "brand": "viza-food",
    "label": "Good Good",
@@ -714,6 +3335,14 @@
      "h": 1000,
      "alt": "Combo xoài muối ớt + cóc muối ớt",
      "kind": "combo"
+    },
+    {
+     "src": "/assets/products/dxmo300-45.jpg",
+     "thumb": "/assets/products/dxmo300-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo muối ớt GoodGood · 300g",
+     "kind": "mau-bao-bi-2"
     }
    ],
    "verify": false,
@@ -738,6 +3367,16 @@
      "price": 89000,
      "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-DXM-300-GG",
+     "weightG": 300,
+     "weightLabel": "300g",
+     "verify": false,
+     "note": "",
+     "price": 99000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -757,11 +3396,29 @@
      "h": 1000,
      "alt": "Hai túi trắng xoài sấy dẻo",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/products/ggx-100-45.jpg",
+     "thumb": "/assets/products/ggx-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo GoodGood · 100g",
+     "kind": "mau-bao-bi-2"
     }
    ],
    "verify": false,
    "note": "Combo 2: 169.000đ · Combo 3: 239.000đ.",
    "variants": [
+    {
+     "code": "MQ-DXO-100-GG",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 49000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
     {
      "code": "VZ-GG-XD-200",
      "weightG": 200,
@@ -1107,6 +3764,88 @@
    ]
   },
   {
+   "id": "mang-cut-say-thang-hoa-goodgood",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Măng cụt sấy thăng hoa GoodGood",
+   "cat": "thanghoa",
+   "type": "mang-cut-thang-hoa",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/ggx-mangcut-45.jpg",
+     "thumb": "/assets/products/ggx-mangcut-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Măng cụt sấy thăng hoa GoodGood · 100g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/ggx-mangcut-poster-45.jpg",
+     "thumb": "/assets/products/ggx-mangcut-poster-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Măng cụt sấy thăng hoa GoodGood · 100g (mặt sau)",
+     "kind": "mat-sau"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQ-THMC-100-GG",
+     "weightG": 100,
+     "weightLabel": "100g",
+     "verify": false,
+     "note": "",
+     "price": 269000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "du-du-say-deo",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Đu đủ sấy dẻo GoodGood",
+   "cat": "deo",
+   "type": "du-du-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/ggx-dudu-45.jpg",
+     "thumb": "/assets/products/ggx-dudu-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Đu đủ sấy dẻo GoodGood · 80g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/dd080-45.jpg",
+     "thumb": "/assets/products/dd080-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Đu đủ sấy dẻo GoodGood · 80g (mặt sau)",
+     "kind": "mat-sau"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQ-DDU-080-GG",
+     "weightG": 80,
+     "weightLabel": "80g",
+     "verify": false,
+     "note": "",
+     "price": 45000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
    "id": "vz-ch-xth",
    "brand": "viza-food",
    "label": "Cheers+",
@@ -1228,6 +3967,22 @@
      "h": 1000,
      "alt": "Combo 3 túi xoài sấy dẻo Cheers+ 200g",
      "kind": "combo"
+    },
+    {
+     "src": "/assets/products/chx-xanh-45.jpg",
+     "thumb": "/assets/products/chx-xanh-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Cheers+ · 250g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/chx-xanh-back-45.jpg",
+     "thumb": "/assets/products/chx-xanh-back-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Cheers+ · 250g (mặt sau)",
+     "kind": "mat-sau"
     }
    ],
    "verify": false,
@@ -1242,6 +3997,26 @@
      "price": 75000,
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-DXC-250-CHX",
+     "weightG": 250,
+     "weightLabel": "250g · nhãn xanh lá",
+     "verify": true,
+     "note": "Ghép theo màu nhãn ở cửa hàng, cần chủ shop xác nhận đúng mẫu túi.",
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXC-300-CHX",
+     "weightG": 300,
+     "weightLabel": "300g · nhãn xanh lá",
+     "verify": true,
+     "note": "Ghép theo màu nhãn ở cửa hàng, cần chủ shop xác nhận đúng mẫu túi.",
+     "price": 105000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -1253,7 +4028,24 @@
    "cat": "deo",
    "type": "xoai-deo",
    "pack": "",
-   "images": [],
+   "images": [
+    {
+     "src": "/assets/products/chx-do-45.jpg",
+     "thumb": "/assets/products/chx-do-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Cheers+ · 250g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/products/chx-do-back-45.jpg",
+     "thumb": "/assets/products/chx-do-back-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Cheers+ · 250g (mặt sau)",
+     "kind": "mat-sau"
+    }
+   ],
    "verify": true,
    "note": "Chưa có ảnh riêng túi băng đỏ (ảnh cũ là túi lá xoài, đã chuyển sang VZ-CH-XDL-200 ngày 31/10). Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 139.000đ · Combo 3: 195.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 195.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
@@ -1266,6 +4058,26 @@
      "price": 75000,
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-DXC-250-CHD",
+     "weightG": 250,
+     "weightLabel": "250g · nhãn đỏ",
+     "verify": true,
+     "note": "Ghép theo màu nhãn ở cửa hàng, cần chủ shop xác nhận đúng mẫu túi.",
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXC-300-CHD",
+     "weightG": 300,
+     "weightLabel": "300g · nhãn đỏ",
+     "verify": true,
+     "note": "Ghép theo màu nhãn ở cửa hàng, cần chủ shop xác nhận đúng mẫu túi.",
+     "price": 105000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ],
    "parkedImages": [
@@ -1448,6 +4260,39 @@
    ]
   },
   {
+   "id": "xoai-say-deo-yummy",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Xoài sấy dẻo Yummy",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/ymx-hu150-45.jpg",
+     "thumb": "/assets/products/ymx-hu150-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Yummy · 150g · hũ",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "",
+   "variants": [
+    {
+     "code": "MQ-DXO-150-YM",
+     "weightG": 150,
+     "weightLabel": "150g · hũ",
+     "verify": false,
+     "note": "",
+     "price": 55000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
    "id": "vz-ps-gd",
    "brand": "viza-food",
    "label": "Premium Shrinking Dried Durian",
@@ -1610,6 +4455,30 @@
      "h": 1000,
      "alt": "Combo xoài sấy dẻo Fresh & Healthy 100g + 250g",
      "kind": "combo"
+    },
+    {
+     "src": "/assets/products/fhx-dayxanh-100r-45.jpg",
+     "thumb": "/assets/products/fhx-dayxanh-100r-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Fresh & Healthy · 100g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/fhx-dayxanh-100-45.jpg",
+     "thumb": "/assets/products/fhx-dayxanh-100-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Fresh & Healthy · 100g (mặt sau)",
+     "kind": "mat-sau"
+    },
+    {
+     "src": "/assets/products/fhx-trong-45.jpg",
+     "thumb": "/assets/products/fhx-trong-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Fresh & Healthy · 200g",
+     "kind": "mau-bao-bi-2"
     }
    ],
    "verify": false,
@@ -1624,6 +4493,46 @@
      "price": 49000,
      "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-DXO-100-FHG",
+     "weightG": 100,
+     "weightLabel": "100g · túi trắng đáy xanh",
+     "verify": false,
+     "note": "",
+     "price": 49000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXO-200-FHX",
+     "weightG": 200,
+     "weightLabel": "200g · túi xanh lá",
+     "verify": false,
+     "note": "",
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXO-200-FHG",
+     "weightG": 200,
+     "weightLabel": "200g · túi trắng đáy xanh",
+     "verify": false,
+     "note": "",
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXO-200-FHT",
+     "weightG": 200,
+     "weightLabel": "200g · túi trắng trong",
+     "verify": false,
+     "note": "",
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     },
     {
      "code": "VZ-FH-XD-250",
@@ -1644,6 +4553,16 @@
      "price": 149000,
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-DXO-500-FH",
+     "weightG": 500,
+     "weightLabel": "500g · túi trắng trong",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -1696,6 +4615,14 @@
      "h": 1000,
      "alt": "Túi vàng xoài sấy dẻo 100g",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/products/fhx-vang-45.jpg",
+     "thumb": "/assets/products/fhx-vang-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Fresh & Healthy · 500g",
+     "kind": "mau-bao-bi-2"
     }
    ],
    "verify": false,
@@ -1710,6 +4637,16 @@
      "price": 49000,
      "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-DXO-500-FHV",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -1786,6 +4723,22 @@
      "h": 1000,
      "alt": "Túi mít sấy trong bộ sản phẩm Fresh & Healthy",
      "kind": "phoi-canh"
+    },
+    {
+     "src": "/assets/products/gm500-45.jpg",
+     "thumb": "/assets/products/gm500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mít sấy giòn Fresh & Healthy · 500g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/gm500_back-45.jpg",
+     "thumb": "/assets/products/gm500_back-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Mít sấy giòn Fresh & Healthy · 500g (mặt sau)",
+     "kind": "mat-sau"
     }
    ],
    "verify": false,
@@ -1800,6 +4753,16 @@
      "price": 85000,
      "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH)",
      "priceCheckedAt": "2026-10-31"
+    },
+    {
+     "code": "MQ-GMI-500-FH",
+     "weightG": 500,
+     "weightLabel": "500g",
+     "verify": false,
+     "note": "",
+     "price": 139000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },
@@ -1840,11 +4803,65 @@
      "h": 1000,
      "alt": "Túi đỏ xoài muối ớt cạnh túi vàng",
      "kind": "hero"
+    },
+    {
+     "src": "/assets/products/fhx-do-45.jpg",
+     "thumb": "/assets/products/fhx-do-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo muối ớt Fresh & Healthy · 100g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/dxmo500-45.jpg",
+     "thumb": "/assets/products/dxmo500-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo muối ớt Fresh & Healthy · 500g",
+     "kind": "mau-bao-bi-2"
+    },
+    {
+     "src": "/assets/products/dxmo500_back-45.jpg",
+     "thumb": "/assets/products/dxmo500_back-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo muối ớt Fresh & Healthy · 500g (mặt sau)",
+     "kind": "mat-sau"
     }
    ],
    "verify": true,
    "note": "Khối lượng chưa rõ.",
    "variants": [
+    {
+     "code": "MQ-DXM-100-FHR",
+     "weightG": 100,
+     "weightLabel": "100g · túi đỏ",
+     "verify": false,
+     "note": "",
+     "price": 49000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXM-200-FHR",
+     "weightG": 200,
+     "weightLabel": "200g · túi đỏ",
+     "verify": false,
+     "note": "",
+     "price": 89000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXM-500-FH",
+     "weightG": 500,
+     "weightLabel": "500g · túi cam",
+     "verify": false,
+     "note": "",
+     "price": 149000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
+    },
     {
      "code": "VZ-FH-XDMO-XX",
      "weightG": null,
@@ -2513,6 +5530,39 @@
      "price": 305000,
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
+    }
+   ]
+  },
+  {
+   "id": "xoai-say-deo-hop-giay-viza",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Xoài sấy dẻo Viza Food hộp giấy",
+   "cat": "deo",
+   "type": "xoai-deo",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/products/vzx-xoai150-45.jpg",
+     "thumb": "/assets/products/vzx-xoai150-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy dẻo Viza Food hộp giấy · 150g · hộp giấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Tạm hết hàng (giống ở cửa hàng). Liên hệ để được báo khi có hàng.",
+   "variants": [
+    {
+     "code": "MQ-DXO-150-VZ",
+     "weightG": 150,
+     "weightLabel": "150g · hộp giấy",
+     "verify": false,
+     "note": "",
+     "price": 55000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
+     "priceCheckedAt": "2026-11-01"
     }
    ]
   },

@@ -86,6 +86,9 @@ function buyOptions(p) {
 
 function buyBlock(p) {
   const opts = buyOptions(p);
+  if (!opts.length && p.variants.some((v) => data.buy?.[v.code]?.oos)) {
+    return `<div class="dm-buy dm-buy--oos"><button type="button" class="dm-buy__add" disabled>Hết hàng</button><a class="dm-buy__ask" href="${esc(data.contact)}" target="_blank" rel="noopener">Báo khi có hàng</a></div>`;
+  }
   if (!opts.length) {
     const why = p.variants.every((v) => v.price == null) ? 'Chưa có giá' : 'Chưa bán online';
     return `<div class="dm-buy dm-buy--ask"><a class="dm-buy__ask" href="${esc(data.contact)}" target="_blank" rel="noopener">Liên hệ</a><span>${why}</span></div>`;
@@ -125,6 +128,18 @@ function card(p) {
   </article>`;
 }
 
+// Thương hiệu của shop có một nhãn nên chia theo nhóm hàng: thăng hoa, sấy dẻo, ô mai, giòn/khô, hạt, set quà, combo.
+const OWN_CAT_ORDER = ['thanghoa', 'deo', 'omai', 'gion', 'hat', 'set', 'combo', 'giavi'];
+function ownGroups(items) {
+  const order = [...OWN_CAT_ORDER, ...data.categories.map((c) => c.id).filter((id) => !OWN_CAT_ORDER.includes(id))];
+  return order.map((id) => {
+    const inCat = items.filter((p) => p.cat === id);
+    if (!inCat.length) return '';
+    return `<div class="dm-label dm-label--cat"><h3 class="dm-label__h">${esc(cats.get(id)?.name || id)} <span>${inCat.length}</span></h3>
+      <div class="dm-grid">${inCat.map(card).join('')}</div></div>`;
+  }).join('');
+}
+
 function renderGrid(list) {
   const out = [];
   for (const b of data.brands) {
@@ -136,7 +151,7 @@ function renderGrid(list) {
         <div class="dm-brand__mark">${b.kind === 'own' ? 'MQ' : 'VZ'}</div>
         <div><p class="dm-brand__kind">${esc(b.kindLabel)}</p><h2>${esc(b.name)}</h2><p class="dm-brand__owner">${esc(b.owner)} · ${inBrand.length} sản phẩm · ${labels.length} nhãn</p>${b.partnerNote ? `<p class="dm-brand__partner">${esc(b.partnerNote)}</p>` : ''}</div>
       </header>
-      ${labels.map((l) => {
+      ${b.kind === 'own' && labels.length === 1 ? ownGroups(inBrand) : labels.map((l) => {
         const items = inBrand.filter((p) => p.label === l);
         return `<div class="dm-label">${b.kind === 'own' && labels.length === 1 ? '' : `<h3 class="dm-label__h">${esc(l)} <span>${items.length}</span></h3>`}
           <div class="dm-grid">${items.map(card).join('')}</div></div>`;
