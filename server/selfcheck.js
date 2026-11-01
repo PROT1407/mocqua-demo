@@ -784,7 +784,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v27/);
+    assert.match(sw, /mocqua-shell-v28/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
     const cbp = await (await fetch(base + '/combo')).text();
@@ -889,8 +889,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
         assert.equal(dmj.products.flatMap((x) => x.variants).find((v) => v.code === sku).price, price, sku + ' danh mục');
       }
       for (const p of shopAll) if ((p.comboOf || []).includes('MQ-GMI-300-FH')) assert.doesNotMatch(p.short + p.long, /(85|65)\.000đ/, p.id);
-      // Đợt giá xoài 01/11 (chủ shop duyệt đề xuất): F&H 250g 99k, Cheers+ 200g 89k, GG muối ớt 300g 125k, Cheers+ thăng hoa 159k; gói nhỏ 29k giữ nguyên.
-      for (const [sku, price] of [['VZ-FH-XD-250', 99000], ['MQ-DXC-200-CHA', 89000], ['MQ-DXM-300-GG', 125000], ['MQ-THXO-120-CH', 159000], ['MQ-DXM-S-GG', 29000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(priceOf.get(sku), price, sku);
+      // Đợt giá xoài 01/11 (chủ shop duyệt đề xuất): F&H 250g 99k, Cheers+ 200g 89k, GG muối ớt 300g 125k, Cheers+ thăng hoa 159k. Túi vuông nhỏ MQ-DXM-S-GG: chủ shop chốt 80g, 45k (01/11, đổi từ 29k) như các túi vuông 80g khác.
+      for (const [sku, price] of [['VZ-FH-XD-250', 99000], ['MQ-DXC-200-CHA', 89000], ['MQ-DXM-300-GG', 125000], ['MQ-THXO-120-CH', 159000], ['MQ-DXM-S-GG', 45000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(priceOf.get(sku), price, sku);
+      const dxmS = byId.get('xoai-say-deo-muoi-ot-goodgood');
+      assert.deepEqual([dxmS.variants.find((v) => v.sku === 'MQ-DXM-S-GG').w, dxmS.variants.find((v) => v.sku === 'MQ-DXM-S-GG').g], ['80g', 80]);
+      assert.match(dxmS.short, /túi 300g, 200g và túi vuông nhỏ 80g\./);
+      assert.doesNotMatch(JSON.stringify(shopAll), /50–100g/);
       const dmv = new Map(dmj.products.flatMap((x) => x.variants).map((v) => [v.code, v.price]));
       for (const [code, price] of [['VZ-FH-XD-250', 99000], ['VZ-CH-XDL-200', 89000], ['VZ-CH-XDR-200', 89000], ['VZ-CH-XDT-200', 89000], ['MQ-DXM-300-GG', 125000], ['VZ-CH-XTH-120', 159000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(dmv.get(code), price, code + ' danh mục');
       for (const [id, total, price] of [['vz-ch-cb3x', '267.000đ', '239.000đ'], ['vz-mix-cb3-thang-hoa', '627.000đ', '558.000đ']]) {
@@ -983,7 +987,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(xd, /"fit45":\["\/assets\/shelf\/viza-ke-20\.webp"/);
     }
     // Cửa hàng có thì danh mục cũng có: mọi mã đang bán ở /cua-hang đều có thẻ danh mục (trùng mã, nối tay hoặc lựa chọn combo).
-    // Riêng gói nhỏ 29k MQ-DXM-S-GG chưa rõ khối lượng, chờ chủ shop xác nhận.
+    // Riêng túi vuông nhỏ 80g MQ-DXM-S-GG (45k) chưa có thẻ danh mục (danh mục chỉ có túi cam 100g/200g/300g).
     const { getShopCatalog } = await import('./catalog.js');
     const reach = new Set(Object.values(buy).flatMap((b) => [b.sku, ...b.options.map((o) => o.sku)]));
     const missing = getShopCatalog().products.flatMap((p) => p.variants.map((v) => v.sku)).filter((sku) => !reach.has(sku) && sku !== 'MQ-DXM-S-GG');
