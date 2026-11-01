@@ -1,7 +1,7 @@
 import { esc, vnd } from './format.js';
 import { brandOrder } from './catalog.js';
 import { STATUSES, getSettings } from './db.js';
-import { bannerText, ORDER_TIERS, isComboProduct } from './promo.js';
+import { bannerText, isComboProduct, promoTiers, tierTitle, shortMoney } from './promo.js';
 import { shopContact } from './contact.js';
 import { catalogHeroBySku } from './dm-buy.js';
 import { dealBySku } from './deals.js';
@@ -74,9 +74,9 @@ function promoBar(page) {
   try {
     text = bannerText(getSettings());
   } catch {
-    text = 'Miễn phí giao từ 300k · Giảm 5% đơn từ 500k · Giảm 8% đơn từ 1 triệu';
+    text = 'Giảm 3% + miễn ship đơn từ 300k · Giảm 7% đơn từ 500k · Giảm 12% đơn từ 1 triệu';
   }
-  return `<div class="promobar" role="note"><div class="wrap"><b>${esc(text)}</b> <small>Combo đã có giá riêng, không giảm thêm.</small></div></div>`;
+  return `<div class="promobar" role="note"><div class="wrap"><b>${esc(text)}</b> <small>Combo cũng được giảm theo đơn.</small></div></div>`;
 }
 
 function header(page) {
@@ -234,8 +234,7 @@ export function productCard(product, { eager = false, cls = '' } = {}) {
 
 function tierCopy(catalog) {
   const s = catalog.settings;
-  const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
-  return `Tiền hàng từ ${vnd(s.freeShip)} được miễn phí giao. ${tiers.map((t) => `Từ ${vnd(t.min)} giảm ${t.pct}%`).join(', ')} — tự trừ trong giỏ. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn.`;
+  return `${promoTiers(s).map((t) => `Từ ${vnd(t.min)} ${t.pct ? `giảm ${t.pct}%${t.ship ? ' và miễn phí giao' : ''}` : 'miễn phí giao'}`).join(', ')} — tự trừ trong giỏ. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.`;
 }
 
 export function homePage(catalog) {
@@ -442,11 +441,8 @@ export function shopPage(catalog, query) {
       <div class="grid grid--feat${kieu === '2' ? ' bento' : ''}">${featured.map((p, i) => productCard(p, { eager: i < 4, cls: kieu !== '2' ? '' : i === 0 ? 'card--hero' : (i === featured.length - 1 && featured.length === 8 ? 'card--wide' : '') })).join('')}</div>
     </section>`
     : '';
-  const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
-  const short = (n) => (n >= 1000000 && n % 1000000 === 0 ? `${n / 1000000} triệu` : n >= 1000 ? `${Math.round(n / 1000)}k` : vnd(n));
   const tierBox = `<ul class="tiers" aria-label="Ưu đãi theo đơn">
-      <li><b>Miễn phí giao</b><span>đơn từ ${esc(short(catalog.settings.freeShip))}</span></li>
-      ${tiers.map((t) => `<li><b>Giảm ${esc(t.pct)}%</b><span>đơn từ ${esc(short(t.min))}</span></li>`).join('')}
+      ${promoTiers(catalog.settings).map((t) => `<li><b>${esc(tierTitle(t))}</b><span>đơn từ ${esc(shortMoney(t.min))}</span></li>`).join('')}
     </ul>`;
   if (!final.length) {
     html = `<div class="empty"><h2>Chưa có món nào khớp.</h2><p>Bỏ bớt bộ lọc, hoặc tìm một tên quả khác.</p><a class="btn" href="/cua-hang">Xem tất cả</a></div>`;
@@ -485,7 +481,7 @@ export function shopPage(catalog, query) {
       <nav class="kieu" aria-label="Kiểu bố cục"><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q }))}"${kieu === '1' ? ' aria-current="true"' : ''}>Kiểu 1 · Lưới đều</a><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q, kieu: '2' }))}"${kieu === '2' ? ' aria-current="true"' : ''}>Kiểu 2 · Tạp chí</a></nav>
       <p>${esc(sub)}</p>
       ${tierBox}
-      <p class="tiers__note">Tự trừ trong giỏ. Combo đã có giá riêng, không giảm thêm nhưng vẫn tính vào mức đơn.</p>
+      <p class="tiers__note">Tự trừ trong giỏ. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.</p>
     </header>
     <div class="filters">
       <form class="find find--bar" action="/cua-hang" method="get">
@@ -524,8 +520,8 @@ export function productPage(product, catalog) {
     'Đổi trong 7 ngày nếu ẩm, mốc hoặc giao sai',
     `Giao toàn quốc · miễn phí từ ${vnd(catalog.settings.freeShip)}`,
     isComboProduct(product)
-      ? 'Combo đã có giá riêng, không giảm thêm — vẫn được tính vào mức giảm của đơn'
-      : 'Đơn từ 500.000đ giảm 5%, từ 1.000.000đ giảm 8% (tự trừ trong giỏ)',
+      ? `Combo cũng được giảm theo đơn: ${promoTiers(catalog.settings).map((t) => `${t.pct ? `−${t.pct}%${t.ship ? ' + miễn ship' : ''}` : 'Miễn ship'} từ ${vnd(t.min)}`).join(' · ')} (tự trừ trong giỏ)`
+      : `${promoTiers(catalog.settings).map((t) => `${t.pct ? `−${t.pct}%${t.ship ? ' + miễn ship' : ''}` : 'Miễn ship'} từ ${vnd(t.min)}`).join(' · ')} (tự trừ trong giỏ)`,
   ];
   const sections = [
     product.intro ? `<section><h2>Người bán nói</h2><p>${esc(product.intro)}</p></section>` : '',
@@ -756,8 +752,6 @@ export function comboPage(catalog) {
     </section>`;
   }).join('');
   const s = catalog.settings;
-  const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
-  const short = (n) => (n >= 1000000 && n % 1000000 === 0 ? `${n / 1000000} triệu` : `${Math.round(n / 1000)}k`);
   const body = `<main id="main" class="wrap combo">
     <header class="pagehead cbhead">
       <h1>Combo</h1>
@@ -766,7 +760,7 @@ export function comboPage(catalog) {
     </header>
     ${heroHtml}
     ${groups}
-    <p class="cbnote">Miễn phí giao từ ${esc(short(s.freeShip))}${tiers.map((t) => ` · giảm ${esc(t.pct)}% đơn từ ${esc(short(t.min))}`).join('')}. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn.</p>
+    <p class="cbnote">${esc(bannerText(s))}. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.</p>
   </main>`;
   return layout({
     title: 'Combo trái cây sấy | Mộc Quả',
@@ -931,7 +925,7 @@ export function orderPage(order, qr) {
       <h2>Trong đơn</h2>
       <ul class="lines">${lines}${gifts}</ul>
       <p class="sumrow"><span>Tiền hàng</span><b>${vnd(order.summary.subtotal)}</b></p>
-      ${order.summary.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${order.summary.discountPct ? order.summary.discountPct + '% ' : ''}theo đơn<small> (không áp cho combo)</small></span><b>−${vnd(order.summary.discount)}</b></p>` : ''}
+      ${order.summary.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${order.summary.discountPct ? order.summary.discountPct + '% ' : ''}theo đơn${order.summary.discountBase && order.summary.discountBase < order.summary.subtotal ? '<small> (không áp cho combo)</small>' : ''}</span><b>−${vnd(order.summary.discount)}</b></p>` : ''}
       <p class="sumrow"><span>Giao hàng</span><b>${order.summary.ship ? vnd(order.summary.ship) : 'Miễn phí'}</b></p>
       <p class="sumrow sumrow--total"><span>Tổng</span><b>${vnd(order.summary.total)}</b></p>
     </section>

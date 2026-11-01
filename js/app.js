@@ -88,7 +88,7 @@ MQ.chips=(p,sel,cls='wchips')=>`<div class="${cls}" role="group" aria-label="Ch�
 MQ.dealTag=()=>'';  // không còn khuyến mãi tặng kèm (31/10/2026)
 MQ.isComboP=p=>!!(p&&((Array.isArray(p.comboOf)&&p.comboOf.length)||String(p.id||'').startsWith('combo-')||/^combo\s/i.test(String(p.name||'').trim())));
 MQ.cardPerk=(p,v)=>MQ.cardPerk0(p,v);
-MQ.cardPerk0=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label||'Xem combo')}</a></p>`:MQ.isComboP(p)?'<p class="perk">Combo giá riêng · không giảm thêm</p>':'';
+MQ.cardPerk0=(p,v)=>p.combo?`<p class="perk perk--deal"><a class="deal" href="san-pham.html?id=${p.combo.id}">${MQ.esc(p.combo.label||'Xem combo')}</a></p>`:MQ.isComboP(p)?'<p class="perk">Combo giá riêng · cũng được giảm theo đơn</p>':'';
 MQ.card=(p,opts={})=>{
   const w=MQ.wish.has(p.id);
   if(p.soon){const v=MQ.vars(p)[0];return `<article class="pcard pcard--soon" data-id="${p.id}">
@@ -146,7 +146,7 @@ MQ.SHIP_METHODS=[
   {id:'gift',name:'Giao quà hẹn giờ',eta:'đúng ngày & khung giờ bạn chọn',fee:40000}
 ];
 /* ---------- khuyến mãi minh bạch (tự động) ---------- */
-MQ.TIERS=[{min:1000000,pct:8},{min:500000,pct:5}];   // giảm theo giá trị đơn (tiền hàng trước giảm); combo không giảm thêm nhưng vẫn tính vào mức
+MQ.TIERS=[{min:1000000,pct:12},{min:500000,pct:7},{min:300000,pct:3}];   // giảm theo giá trị đơn (tiền hàng trước giảm); kế hoạch A: combo cũng được giảm theo đơn và vẫn tính vào mức
 MQ.r1k=v=>Math.round(v/1000)*1000;
 MQ.fl1k=v=>Math.floor(v/1000)*1000;
 MQ.isComboItem=i=>MQ.isComboP(MQ.byId(i.id));
@@ -154,17 +154,17 @@ MQ.gnEligible=()=>false;
 MQ.gnNote=()=>'';
 MQ.promo=items=>{
   const sub=items.reduce((s,i)=>s+i.qty*i.price,0);
-  const elig=items.filter(i=>!MQ.isComboItem(i)).reduce((s,i)=>s+i.qty*i.price,0);
+  const elig=sub; // kế hoạch A: combo cũng được giảm theo đơn
   const base=sub,tier=MQ.TIERS.find(t=>base>=t.min),tierDisc=tier?MQ.fl1k(elig*tier.pct/100):0;
   const up=[...MQ.TIERS].reverse().find(t=>base<t.min);
   return {sub,zipN:0,zq:null,qtyDisc:0,comboN:0,comboDisc:0,base,elig,tier,tierDisc,up,gifts:[],zipNeed:null};
 };
 /* gợi ý tiến độ: giao miễn phí → bậc giảm kế tiếp */
 MQ.progress=P=>{const b=P.base,low=MQ.TIERS[MQ.TIERS.length-1];
-  if(!P.sub)return {text:`Miễn phí giao từ <b>${MQ.fmt(MQ.FREE_SHIP)}</b> · đơn từ <b>${MQ.fmt(low.min)}</b> giảm 5%, từ 1 triệu giảm 8%.`,pct:0};
-  if(b<MQ.FREE_SHIP)return {text:`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b> · thêm ${MQ.fmt(low.min-b)} để được giảm 5%.`,pct:b/MQ.FREE_SHIP*100};
+  if(!P.sub)return {text:MQ.TIERS.slice().reverse().map(t=>`đơn từ <b>${MQ.fmt(t.min)}</b> giảm ${t.pct}%${t.min===MQ.FREE_SHIP?' + miễn phí giao':''}`).join(' · ').replace(/^đ/,'Đ')+'.',pct:0};
+  if(b<MQ.FREE_SHIP)return {text:low.min===MQ.FREE_SHIP?`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>giảm ${low.pct}% và miễn phí giao hàng</b>.`:`Thêm <b>${MQ.fmt(MQ.FREE_SHIP-b)}</b> để được <b>miễn phí giao hàng</b> · thêm ${MQ.fmt(low.min-b)} để được giảm ${low.pct}%.`,pct:b/MQ.FREE_SHIP*100};
   if(P.up)return {text:`${P.tier?`Đang giảm <b>${P.tier.pct}%</b> · `:'Đã miễn phí giao · '}Thêm <b>${MQ.fmt(P.up.min-b)}</b> để được giảm <b>${P.up.pct}%</b>.`,pct:b/P.up.min*100};
-  return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng (combo không giảm thêm).`,pct:100};
+  return {text:`Bạn đang nhận ưu đãi cao nhất: <b>giảm ${P.tier.pct}%</b> + miễn phí giao hàng (combo cũng được giảm).`,pct:100};
 };
 MQ.calc=(items,couponCode,shipId='std')=>{
   const P=MQ.promo(items),sub=P.sub;
@@ -184,7 +184,7 @@ MQ.calc=(items,couponCode,shipId='std')=>{
   if(cdisc&&tierDisc){ if(cdisc>tierDisc){note=`Mã ${cp.code} có lợi hơn nên thay cho ưu đãi giảm ${P.tier.pct}% theo đơn`;tierDisc=0}else{note=`Ưu đãi giảm ${P.tier.pct}% theo đơn có lợi hơn mã ${cp.code} (không cộng dồn)`;cdisc=0} }
   const disc=P.qtyDisc+P.comboDisc+tierDisc+cdisc;
   const rows=[];
-  if(tierDisc)rows.push({k:'tier',label:`Giảm ${P.tier.pct}% đơn từ ${MQ.fmt(P.tier.min)} (không áp cho combo)`,v:tierDisc});
+  if(tierDisc)rows.push({k:'tier',label:`Giảm ${P.tier.pct}% đơn từ ${MQ.fmt(P.tier.min)} (gồm cả combo)`,v:tierDisc});
   if(cdisc)rows.push({k:'coupon',label:`Mã ${cp.code}`,v:cdisc});
   const total=Math.max(0,sub-disc+ship);
   return {sub,ship,disc,qtyDisc:P.qtyDisc,tierDisc,cdisc,rows,gifts:P.gifts,promo:P,total,coupon:cp,msg,note,points:Math.floor(total/10000)};
@@ -224,7 +224,7 @@ function header(){
   const omai=live.filter(p=>p.cat==='omai').sort((a,b)=>(a.rank||99)-(b.rank||99));
   return `
 <div class="tbar"><div class="wrap tbar__in">
-  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Miễn phí giao từ <b>300k</b><i>·</i>Giảm <b>5%</b> đơn từ 500k<i>·</i>Giảm <b>8%</b> đơn từ 1 triệu<i>·</i>Combo không giảm thêm</span><span class="tp-s">Freeship 300k<i>·</i>500k <b>−5%</b> · 1tr <b>−8%</b></span></a>
+  <a class="tbar__msg tbar__promo" href="chinh-sach.html#khuyen-mai"><svg><use href="#i-truck"/></svg><span class="tp-l">Giảm <b>3%</b> + miễn ship đơn từ 300k<i>·</i>Giảm <b>7%</b> đơn từ 500k<i>·</i>Giảm <b>12%</b> đơn từ 1 triệu<i>·</i>Combo cũng được giảm</span><span class="tp-s">300k <b>−3%</b> + freeship<i>·</i>500k <b>−7%</b> · 1tr <b>−12%</b></span></a>
   <span class="tbar__msg tbar__demo">Hotline &amp; Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</span>
   <nav class="tbar__links" aria-label="Liên kết nhanh"><a href="cau-chuyen.html"${act('story')}>Câu chuyện</a><a href="tra-cuu-don.html">Tra cứu đơn</a><a href="yeu-thich.html">Yêu thích <span class="hcount" data-wish-count>0</span></a><a href="tai-khoan.html">Tài khoản</a></nav>
 </div></div>
@@ -317,7 +317,7 @@ function footer(){
     <div class="drawer__row"><span>Tạm tính</span><b data-subtotal>0đ</b></div>
     <div data-dr-disc></div>
     <div class="drawer__row drawer__row--total" data-dr-totrow hidden><span>Sau ưu đãi</span><b data-dr-total></b></div>
-    <p class="drawer__note">Giảm theo đơn tự áp dụng (combo không giảm thêm) · phí giao hàng tính ở bước thanh toán.</p>
+    <p class="drawer__note">Giảm theo đơn tự áp dụng (combo cũng được giảm) · phí giao hàng tính ở bước thanh toán.</p>
     <div class="drawer__btns"><a href="gio-hang.html" class="btn btn--line">Xem giỏ hàng</a><a href="thanh-toan.html" class="btn btn--gold">Thanh toán</a></div>
     <p class="drawer__demo">Tư vấn qua Zalo ${MQ.HOTLINE} · ${MQ.HOTLINE2}</p>
   </footer>

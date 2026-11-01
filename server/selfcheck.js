@@ -98,7 +98,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
 
     // Chiết khấu theo đơn: món lẻ (không combo) để kiểm từng mức.
     const { isComboProduct, orderDiscount, ORDER_TIERS } = await import('./promo.js');
-    assert.deepEqual(ORDER_TIERS.map((t) => [t.min, t.pct]), [[1000000, 8], [500000, 5]]);
+    assert.deepEqual(ORDER_TIERS.map((t) => [t.min, t.pct]), [[1000000, 12], [500000, 7], [300000, 3]]);
     const single = shop.products
       .filter((p) => !isComboProduct(p) && !p.oos)
       .flatMap((p) => p.variants.filter((v) => v.price > 0 && v.price <= 60000))
@@ -112,46 +112,67 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.equal(a.discount, 0);
     assert.equal(a.ship, shop.settings.shipFee);
     assert.equal(a.total, a.subtotal + shop.settings.shipFee);
-    assert.match(a.hint, /Thêm \d[\d.]*k để được giảm 5%/);
+    assert.match(a.hint, /Thêm \d[\d.]*k để được giảm 3% và miễn phí giao hàng\./);
+
+    // Từ 300k: giảm 3% + miễn ship.
+    const a3 = await quote([{ sku: single.sku, qty: qtyFor(300000) }]);
+    assert.ok(a3.subtotal >= 300000 && a3.subtotal < 500000, String(a3.subtotal));
+    assert.equal(a3.discountPct, 3);
+    assert.equal(a3.discount, Math.floor((a3.subtotal * 3) / 100 / 1000) * 1000);
+    assert.equal(a3.ship, 0);
+    assert.equal(a3.total, a3.subtotal - a3.discount);
+    assert.match(a3.hint, /Đơn được miễn phí giao\. Đang giảm 3%\. Thêm \d[\d.]*k để được giảm 7%/);
+    assert.match(a3.discountLabel, /^Giảm 3% đơn từ 300\.000đ/);
 
     const b = await quote([{ sku: single.sku, qty: qtyFor(500000) }]);
     assert.ok(b.subtotal >= 500000 && b.subtotal < 1000000, String(b.subtotal));
-    assert.equal(b.discountPct, 5);
-    assert.equal(b.discount, Math.floor((b.subtotal * 5) / 100 / 1000) * 1000);
+    assert.equal(b.discountPct, 7);
+    assert.equal(b.discount, Math.floor((b.subtotal * 7) / 100 / 1000) * 1000);
     assert.equal(b.ship, 0);
     assert.equal(b.total, b.subtotal - b.discount);
-    assert.match(b.hint, /Thêm \d[\d.]*k để được giảm 8%/);
+    assert.match(b.hint, /Thêm \d[\d.]*k để được giảm 12%/);
 
     const comboProduct = shop.products.find((p) => isComboProduct(p) && !p.oos && p.variants.some((v) => v.price > 0));
     const combo = comboProduct.variants.find((v) => v.price > 0);
     const c = await quote([{ sku: single.sku, qty: qtyFor(1000000 - combo.price) }, { sku: combo.sku, qty: 1 }]);
     const singlesC = c.subtotal - combo.price;
     assert.ok(c.subtotal >= 1000000);
-    assert.equal(c.discountPct, 8);
-    assert.equal(c.discountBase, singlesC);
-    assert.equal(c.discount, Math.floor((singlesC * 8) / 100 / 1000) * 1000, 'combo không được giảm');
+    assert.equal(c.discountPct, 12);
+    assert.ok(singlesC > 0);
+    // Kế hoạch A: combo cũng được giảm theo đơn → % trên toàn bộ tiền hàng.
+    assert.equal(c.discountBase, c.subtotal);
+    assert.equal(c.comboSubtotal, combo.price);
+    assert.equal(c.discount, Math.floor((c.subtotal * 12) / 100 / 1000) * 1000, 'combo cũng được giảm');
+    assert.match(c.discountLabel, /\(gồm cả combo\)$/);
     assert.equal(c.total, c.subtotal - c.discount);
     assert.equal(c.items.find((i) => i.sku === combo.sku).combo, true);
 
-    // combo kéo đơn qua mức nhưng chỉ giảm phần món lẻ
+    // combo kéo đơn qua mức và cũng được giảm
     const lift = await quote([{ sku: single.sku, qty: qtyFor(500000 - combo.price) }, { sku: combo.sku, qty: 1 }]);
     if (lift.subtotal - combo.price < 500000 && lift.subtotal < 1000000) {
-      assert.equal(lift.discountPct, 5);
-      assert.equal(lift.discount, Math.floor(((lift.subtotal - combo.price) * 5) / 100 / 1000) * 1000);
+      assert.equal(lift.discountPct, 7);
+      assert.equal(lift.discount, Math.floor((lift.subtotal * 7) / 100 / 1000) * 1000);
     }
     const onlyCombo = await quote([{ sku: combo.sku, qty: Math.ceil(500000 / combo.price) }]);
-    assert.ok(onlyCombo.discountPct >= 5);
-    assert.equal(onlyCombo.discount, 0);
+    assert.ok(onlyCombo.discountPct >= 7);
+    assert.equal(onlyCombo.discount, Math.floor((onlyCombo.subtotal * onlyCombo.discountPct) / 100 / 1000) * 1000);
     assert.equal(onlyCombo.ship, 0);
 
     // hàm thuần
-    assert.deepEqual(orderDiscount([{ line: 499000 }]), { subtotal: 499000, base: 499000, comboSubtotal: 0, pct: 0, discount: 0 });
-    assert.equal(orderDiscount([{ line: 500000 }]).discount, 25000);
-    assert.equal(orderDiscount([{ line: 520000 }]).discount, 26000);
-    assert.equal(orderDiscount([{ line: 999999 }]).discount, 49000);
-    assert.equal(orderDiscount([{ line: 1000000 }]).discount, 80000);
-    assert.equal(orderDiscount([{ line: 2500000 }]).discount, 200000, 'không có mức 2 triệu');
-    assert.deepEqual(orderDiscount([{ line: 840000 }, { line: 210000, combo: true }]), { subtotal: 1050000, base: 840000, comboSubtotal: 210000, pct: 8, discount: 67000 });
+    assert.deepEqual(orderDiscount([{ line: 299000 }]), { subtotal: 299000, base: 299000, comboSubtotal: 0, pct: 0, discount: 0 });
+    assert.equal(orderDiscount([{ line: 300000 }]).discount, 9000);
+    assert.equal(orderDiscount([{ line: 499000 }]).discount, 14000);
+    assert.equal(orderDiscount([{ line: 500000 }]).discount, 35000);
+    assert.equal(orderDiscount([{ line: 520000 }]).discount, 36000);
+    assert.equal(orderDiscount([{ line: 999999 }]).discount, 69000);
+    assert.equal(orderDiscount([{ line: 1000000 }]).discount, 120000);
+    assert.equal(orderDiscount([{ line: 2500000 }]).discount, 300000, 'không có mức 2 triệu');
+    assert.deepEqual(orderDiscount([{ line: 840000 }, { line: 210000, combo: true }]), { subtotal: 1050000, base: 1050000, comboSubtotal: 210000, pct: 12, discount: 126000 });
+    // Combo kéo đơn qua mức 300k và cũng được giảm 3%.
+    assert.deepEqual(orderDiscount([{ line: 100000 }, { line: 239000, combo: true }]), { subtotal: 339000, base: 339000, comboSubtotal: 239000, pct: 3, discount: 10000 });
+    const { bannerText, promoTiers } = await import('./promo.js');
+    assert.equal(bannerText(shop.settings), 'Giảm 3% + miễn ship đơn từ 300k · Giảm 7% đơn từ 500k · Giảm 12% đơn từ 1 triệu');
+    assert.deepEqual(promoTiers({ freeShip: 250000 }).map((t) => [t.min, t.pct, t.ship]), [[250000, 0, true], [300000, 3, false], [500000, 7, false], [1000000, 12, false]]);
 
     const orderRes = await fetch(base + '/api/orders', {
       method: 'POST',
@@ -193,7 +214,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.equal(discOrder.total, b.total);
     assert.match(discOrder.vietqr.url, new RegExp(`amount=${b.total}(&|$)`));
     const discPage = await (await fetch(base + '/don/' + discOrder.code)).text();
-    assert.match(discPage, /Giảm 5% theo đơn/);
+    assert.match(discPage, /Giảm 7% theo đơn/);
 
     const contactPage = await (await fetch(base + '/lien-he.html')).text();
     assert.match(contactPage, /0931330248/);
@@ -258,7 +279,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.ok(listedOrder, 'admin phải thấy đơn vừa đặt');
     assert.equal(listedOrder.status, 'cho_ck');
     const listedDisc = orders.orders.find((item) => item.code === discOrder.code);
-    assert.equal(listedDisc.summary.discountPct, 5);
+    assert.equal(listedDisc.summary.discountPct, 7);
     assert.equal(listedDisc.summary.discount, b.discount);
 
     const marked = await fetch(base + '/api/admin/orders/' + order.code, {
@@ -377,7 +398,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(csv, new RegExp(order.code));
     assert.match(csv, /0909123456/);
     assert.match(csv, /Giảm theo đơn/);
-    assert.match(csv, new RegExp(`${discOrder.code}.*,Giảm,.*Giảm 5% theo đơn`));
+    assert.match(csv, new RegExp(`${discOrder.code}.*,Giảm,.*Giảm 7% theo đơn`));
 
     const mergeRes = await fetch(base + '/api/admin/backup?mode=merge', {
       method: 'POST',
@@ -784,7 +805,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v29/);
+    assert.match(sw, /mocqua-shell-v30/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -828,11 +849,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const inc = tl.split('<section class="incombo"')[1].split('</section>')[0];
     assert.match(inc, /Có trong combo/);
     assert.match(inc, /class="cbmini"[\s\S]*href="\/san-pham\/vz-gg-cb3-deo"[\s\S]*class="cbmini__save">Tiết kiệm 15k<\/span>[\s\S]*<b>120\.000đ<\/b> <span class="was">mua lẻ <s>135\.000đ<\/s><\/span>[\s\S]*data-add-sku="VZ-GG-CB3D-240"/);
-    // Combo không giảm theo mức nhưng vẫn tính vào mức đơn; miễn phí giao từ 300k.
+    // Kế hoạch A: combo cũng được giảm theo đơn và tính vào mức đơn; miễn phí giao từ 300k.
     const th = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }, { sku: 'VZ-YM-CB2SR-200', qty: 1 }, { sku: 'MQ-THSR-105-YM', qty: 1 }] }) })).json();
-    // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: chỉ món lẻ được giảm 8%.
+    // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: cả đơn giảm 12% = 135.000đ.
     assert.equal(th.subtotal, 1131000);
-    assert.equal(th.discount, Math.floor((199000 * 8) / 100 / 1000) * 1000);
+    assert.equal(th.discount, 135000);
+    assert.match(th.hint, /Combo cũng được giảm theo đơn/);
     assert.equal(th.ship, 0);
     // Combo Cheers 3 túi + combo 6 túi xoài: ảnh ghép đủ túi, hiện trọn; không còn ảnh/video "Mua 5 tặng 1" hay poster khuyến mãi.
     const ch3 = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
@@ -1100,12 +1122,30 @@ test('combo: tiết kiệm từ giá lẻ thật, gợi ý đổi/thêm combo tr
       assert.equal(after.total, qb.total - n.save, n.sku);
       assert.equal(after.discount, Math.floor((after.discountBase * after.discountPct) / 100 / 1000) * 1000);
     }
-    // Đổi làm rớt mức 8% → tổng thật tăng: không gợi ý. 3 Cheers + 15 túi 100g = 1.002.000đ; đổi xong 974.000đ chỉ còn giảm 5%.
+    // Đổi làm rớt mức 12% → không gợi ý. 3 Cheers + 15 túi 100g = 1.002.000đ; đổi xong 974.000đ chỉ còn giảm 7%.
     const edge = [{ sku: 'MQ-DXC-200-CHA', qty: 3 }, { sku: 'MQ-DXO-100-GG', qty: 15 }];
     const qe = await quote(edge);
     assert.equal(qe.subtotal, 1002000);
     assert.ok(!qe.nudges.some((n) => n.sku === 'VZ-CH-CB3X-600'), 'không gợi ý khi đổi làm tăng tổng');
     for (const n of qe.nudges) assert.ok(n.save > 0);
+    // Không bao giờ gợi ý đổi/ghép làm rớt mức % hay mất miễn ship, kể cả khi tổng có rẻ hơn.
+    const ch = [{ sku: 'MQ-DXC-200-CHA', qty: 3 }];
+    const isNow = (list) => list.length === 1 && list[0].sku === 'MQ-DXC-200-CHA' && list[0].qty === 3;
+    const cheaper = (list) => (isNow(list) ? 500000 : 400000);
+    assert.ok(cartNudges(ch, deals, cheaper).some((n) => n.sku === 'VZ-CH-CB3X-600'));
+    assert.ok(!cartNudges(ch, deals, cheaper, { levelOf: (list) => ({ pct: isNow(list) ? 7 : 3, freeShip: true }) }).some((n) => n.sku === 'VZ-CH-CB3X-600'), 'rớt mức %');
+    assert.ok(!cartNudges(ch, deals, cheaper, { levelOf: (list) => ({ pct: 3, freeShip: isNow(list) }) }).some((n) => n.sku === 'VZ-CH-CB3X-600'), 'mất miễn ship');
+    assert.ok(cartNudges(ch, deals, cheaper, { levelOf: () => ({ pct: 7, freeShip: true }) }).some((n) => n.sku === 'VZ-CH-CB3X-600'));
+    // Giỏ thật quanh các mức: mọi gợi ý giữ nguyên hoặc tăng mức %, và tổng giảm đúng số báo.
+    for (const extra of [0, 6, 7, 14, 15]) {
+      const cart = [{ sku: 'MQ-DXC-200-CHA', qty: 3 }, ...(extra ? [{ sku: 'MQ-DXO-100-GG', qty: extra }] : [])];
+      const q0 = await quote(cart);
+      for (const n of q0.nudges.filter((x) => x.kind === 'swap')) {
+        const q1 = await quote(applyNudge(cart, n));
+        assert.ok(q1.discountPct >= q0.discountPct && (q0.ship > 0 || q1.ship === 0), `${extra}: ${n.sku}`);
+        assert.equal(q1.total, q0.total - n.save);
+      }
+    }
     // Giỏ chỉ có combo: không gợi ý.
     assert.deepEqual((await quote([{ sku: 'VZ-CH-CB3X-600', qty: 1 }])).nudges, []);
 
@@ -1123,7 +1163,9 @@ test('combo: tiết kiệm từ giá lẻ thật, gợi ý đổi/thêm combo tr
     // Giỏ (client) có câu gợi ý đổi combo và thanh miễn ship.
     const cartJs = await (await fetch(base + '/static/js/cart.js')).text();
     assert.match(cartJs, /Đổi sang combo, tiết kiệm/);
-    assert.match(cartJs, /nữa được miễn ship/);
+    assert.match(cartJs, /nữa được \$\{perk\}/);
+    assert.match(cartJs, /giảm \$\{bar\.withPct\}% \+ miễn ship/);
+    assert.equal(q3.shipBar.withPct, 3);
   } finally {
     server.close();
   }

@@ -23,10 +23,11 @@ function nudgeLine(n, i) {
 
 function shipLine(bar) {
   if (!bar) return '';
+  const perk = bar.withPct ? `giảm ${bar.withPct}% + miễn ship` : 'miễn ship';
   if (!bar.need) return `<div class="shipbar is-done"><p><span>Đơn được miễn ship</span></p><div class="shipbar__track"><i style="width:100%"></i></div></div>`;
   const s = bar.suggest;
   return `<div class="shipbar">
-    <p><span>Còn <b>${kShort(bar.need)}</b> nữa được miễn ship</span><small>từ ${kShort(bar.freeShip)}</small></p>
+    <p><span>Còn <b>${kShort(bar.need)}</b> nữa được ${perk}</span><small>từ ${kShort(bar.freeShip)}</small></p>
     <div class="shipbar__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${bar.pct}" aria-label="Tiến tới miễn ship"><i style="width:${bar.pct}%"></i></div>
     ${s ? `<div class="shipbar__pick"><img src="${esc(s.img)}" alt="" width="40" height="40" loading="lazy"><span>Vừa đủ: <a href="${esc(s.href)}">${esc(s.name)}</a> · ${money(s.price)}${s.save ? ` <em>tiết kiệm ${kShort(s.save)}</em>` : ''}</span><button type="button" class="textbtn" data-ship-add="${esc(s.sku)}">+ Thêm</button></div>` : ''}
   </div>`;
@@ -41,7 +42,7 @@ function line(item, gift) {
     ${img}
     <div>
       <b>${esc(item.name)}</b>
-      <small>${esc(item.w || '')}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}${item.combo ? ' · combo giá riêng, không giảm thêm' : ''}</small>
+      <small>${esc(item.w || '')}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}${item.combo ? ' · combo, cũng được giảm theo đơn' : ''}</small>
       ${gift ? '' : `<button type="button" class="textbtn" data-del="${item.sku}">Bỏ</button>`}
     </div>
     ${qty}
@@ -84,7 +85,7 @@ async function draw() {
     <p class="hint">${(data.shipBar ? data.cartHint : data.hint) || ''}</p>
     <div class="totals">
       <p><span>Tiền hàng</span><b>${money(data.subtotal)}</b></p>
-      ${data.discount ? `<p class="totals__discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(không áp cho combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
+      ${data.discount ? `<p class="totals__discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(gồm cả combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
       <p><span>Giao hàng</span><b>${data.ship ? money(data.ship) : 'Miễn phí'}</b></p>
       <p class="totals__due"><span>Cần trả</span><b>${money(data.total)}</b></p>
     </div>

@@ -181,3 +181,25 @@ Cùng khối lượng = cùng giá; túi lớn hơn không rẻ hơn túi nhỏ.
 ## 01/11/2026 20:40 — túi vuông nhỏ xoài muối ớt GoodGood (đã áp dụng)
 
 Chủ shop: "cố định túi nhỏ dạng vuông này là 80 gr". `MQ-DXM-S-GG` đổi nhãn "Gói nhỏ 50–100g" → **80g** (túi vuông nhỏ 80g), giá 29.000đ → **45.000đ**, bằng các túi vuông 80g GoodGood khác (`MQ-DTH-080-GG`, `MQ-DCM-080-GG`, `MQ-DME-080-GG`, `MQ-DTL-080-GG`, `MQ-DDU-080-GG` đều 45k). Không có combo nào chứa mã này; danh mục chưa có thẻ riêng cho túi vuông 80g.
+
+## 01/11/2026 21:47 — mức ưu đãi theo giá trị đơn mới (chủ shop duyệt)
+
+| Tiền hàng (trước giảm, chưa cộng phí giao) | Trước | Sau |
+|---|---|---|
+| từ 300.000đ | miễn phí giao | **−3% + miễn phí giao** |
+| từ 500.000đ | −5% | **−7%** (vẫn miễn ship) |
+| từ 1.000.000đ | −8% | **−12%** (vẫn miễn ship) |
+
+~~Combo giữ quy tắc cũ: không giảm % thêm nhưng vẫn tính vào mức đơn.~~ → thay bằng **kế hoạch A** (bên dưới). Tiền giảm làm tròn xuống nghìn đồng. Gợi ý đổi/ghép combo trong giỏ không bao giờ làm rớt mức % hay mất miễn ship.
+
+## 01/11/2026 22:00 — Kế hoạch A (đang chạy): combo cũng được giảm theo đơn
+
+Chủ shop chọn: "cứ cho giảm theo đơn nữa ngoài combo khách dc hưởng … tạm gọi đây là kế hoạch a". % theo mức (300k −3% + miễn ship, 500k −7%, 1 triệu −12%) trừ trên **toàn bộ tiền hàng, gồm cả combo**; combo vẫn tính vào mức đơn. Gợi ý đổi/ghép combo trong giỏ tính tiết kiệm theo quy tắc này và không bao giờ làm rớt mức % hay mất miễn ship.
+
+## Kế hoạch B — để thử sau 1–3 tháng chạy kế hoạch A (CHƯA làm)
+
+- Món lẻ / set / hộp quà: giảm đủ theo mức 3% / 7% / 12%.
+- Combo: giảm theo đơn **tối đa thêm 3%** (dù đơn đạt 7% hay 12%), vì combo đã có giá riêng rẻ hơn tổng giá lẻ.
+- Combo vẫn tính vào mức đơn; miễn ship từ 300k giữ nguyên.
+- Cách thử: so sánh 1–3 tháng A với B về giá trị đơn trung bình, tỷ lệ đơn có combo, biên lợi nhuận trên combo. Khi làm: `orderDiscount` tách `base` lẻ (pct đầy đủ) và phần combo (min(pct, 3)).
+
