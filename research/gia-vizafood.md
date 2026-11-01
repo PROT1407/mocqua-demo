@@ -45,7 +45,7 @@ Kiểm tra: 2026-10-31. Giá lẻ làm tròn đuôi 9k; combo 2 ≈ 2×giá −6
 | VZ-FH-XDH-100 | Fresh & Healthy – Xoài sấy dẻo (túi hồng cam) | 100g | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) – cùng giá F&H 100g, khác túi | đã có: MQ-DXO-100-FHX |
 | VZ-FH-XDV-100 | Fresh & Healthy – Xoài sấy dẻo (túi vàng) | 100g | 35.000đ | 65.000đ | 95.000đ | 35.000đ |  | Giá cửa hàng Mộc Quả (MQ-DXO-100-FHX) – cùng giá F&H 100g, khác túi | đã có: MQ-DXO-100-FHX |
 | VZ-FH-CB-350 | Fresh & Healthy – Combo xoài sấy dẻo 100g + 250g | 100g + 250g = 350g | 115.000đ | — | — | 32.857đ |  | Combo = tổng giá lẻ 124.000đ (F&H 100g + 250g) −6%; chủ shop xác nhận 31/10 | thẻ vz-fh-cb350 |
-| VZ-FH-MIT-300 | Fresh & Healthy – Mít sấy | 300g (200–300g) | 85.000đ | 159.000đ | 229.000đ | 28.333đ |  | Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) | đã có: MQ-GMI-300-FH |
+| VZ-FH-MIT-300 | Fresh & Healthy – Mít sấy | 200g (túi mới) | 65.000đ | 125.000đ | 175.000đ | 32.500đ |  | Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) – chủ shop đặt 65k cho túi 200g (01/11/2026) | đã có: MQ-GMI-300-FH |
 | VZ-FH-MITV-XX | Fresh & Healthy – Mít sấy (túi vàng có cửa sổ) | Chưa rõ | — | — | — | — | bỏ qua | Chưa rõ khối lượng, chưa có ảnh | không |
 | VZ-FH-XDMO-XX | Fresh & Healthy – Xoài sấy dẻo muối ớt (túi đỏ) | Chưa rõ | — | — | — | — | bỏ qua | Chưa rõ khối lượng (shop có F&H muối ớt 100/200/500g nhưng không biết mã này là cỡ nào) | không |
 | VZ-FH-SRTH-XX | Fresh & Healthy – Sầu riêng sấy thăng hoa | Chưa rõ | 185.000đ | 349.000đ | 495.000đ | — | tạm tính | Giá cửa hàng Mộc Quả (MQ-THSR-080-FH) – shop ghi 80g | đã có: MQ-THSR-080-FH |

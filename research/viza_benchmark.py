@@ -11,7 +11,7 @@ NEW={'MQ-DXO-100-FHX':35000,'MQ-DXO-100-FHG':35000,'MQ-DXO-200-FHX':69000,'MQ-DX
  'MQ-DXC-200-CHA':73000,'MQ-DXO-150-VZ':52000,'MQ-DCM-080-GG':30000,
  'MQ-DXC-250-CHD':89000,'MQ-DXC-250-CHX':89000,'MQ-DXC-300-CHD':105000,'MQ-DXC-300-CHX':105000,
  'MQ-THXO-120-CH':229000,'MQ-THSR-105-YM':245000,
- 'MQ-GMI-300-FH':85000,'MQ-GMI-500-FH':140000,
+ 'MQ-GMI-300-FH':65000,'MQ-GMI-500-FH':140000,
  'MQ-DTH-080-GG':30000,'MQ-DMC-080':55000,'MQ-DME-080-GG':15000,'MQ-DTL-080-GG':35000,'MQ-DDU-080-GG':30000}
 # Giá cố định theo quyết định chủ shop (18/10/2026, gấp đôi giá benchmark) — luôn ghi đè NEW, chạy lại không mất.
 OVERRIDES={'MQ-DXM-S-GG':27000,  # gói nhỏ 50–100g (vốn ~12k): chuẩn dacsancaocap Xoài sấy dẻo 0.5kg 170k → quy đổi ~75g ≈32k −5k; thấp hơn túi 100g 35k vì ruột 50–100g

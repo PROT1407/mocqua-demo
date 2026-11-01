@@ -4750,7 +4750,7 @@
     }
    ],
    "verify": false,
-   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 200g. Combo 2: 159.000đ · Combo 3: 225.000đ.",
+   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 200g. Combo 2: 125.000đ · Combo 3: 175.000đ.",
    "variants": [
     {
      "code": "VZ-FH-MIT-300",
@@ -4758,8 +4758,8 @@
      "weightLabel": "200g",
      "verify": false,
      "note": "",
-     "price": 85000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH)",
+     "price": 65000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) – chủ shop đặt 65.000đ cho túi 200g (01/11/2026)",
      "priceCheckedAt": "2026-11-01"
     },
     {
@@ -5830,7 +5830,7 @@
      "weightLabel": "200g + 100g",
      "verify": false,
      "note": "",
-     "price": 183000,
+     "price": 165000,
      "priceSource": "Combo trộn vị = tổng giá lẻ −6%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
      "priceCheckedAt": "2026-11-01"
     }
@@ -5896,7 +5896,7 @@
      "weightLabel": "200g + 200g + 100g",
      "verify": false,
      "note": "",
-     "price": 198000,
+     "price": 181000,
      "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
      "priceCheckedAt": "2026-11-01"
     }
@@ -6028,7 +6028,7 @@
      "weightLabel": "105g + 200g",
      "verify": false,
      "note": "",
-     "price": 220000,
+     "price": 201000,
      "priceSource": "Combo trộn vị = tổng giá lẻ −6%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
      "priceCheckedAt": "2026-11-01"
     }
@@ -6061,7 +6061,7 @@
      "weightLabel": "100g + 100g + 200g + 100g",
      "verify": false,
      "note": "",
-     "price": 251000,
+     "price": 233000,
      "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
      "priceCheckedAt": "2026-11-01"
     }
