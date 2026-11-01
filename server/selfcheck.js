@@ -784,7 +784,53 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v22/);
+    assert.match(sw, /mocqua-shell-v23/);
+    assert.match(sw, /'\/combo'/);
+    // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
+    const cbp = await (await fetch(base + '/combo')).text();
+    assert.match(shop, /<a href="\/combo"[^>]*>Combo<\/a>/);
+    assert.match(cbp, /<a href="\/combo" aria-current="page">Combo<\/a>/);
+    assert.equal((cbp.match(/class="cbhero"/g) || []).length, 1);
+    for (const h of ['Ăn vặt mỗi ngày', 'Cặp đôi cùng vị', 'Quà biếu']) assert.match(cbp, new RegExp('<h2 id="cbg-[a-z-]+">' + h + '</h2>'));
+    assert.doesNotMatch(cbp, /tặng 1|Mua \d+ tặng|giá gốc/i);
+    const shopAll = (await import('./catalog.js')).getShopCatalog().products;
+    const priceOf = new Map(shopAll.flatMap((p) => p.variants.map((v) => [v.sku, v.price])));
+    const mixed = shopAll.filter((p) => p.mixed);
+    assert.ok(mixed.length >= 8, 'đủ combo trộn vị');
+    for (const p of mixed) {
+      const sum = p.comboOf.reduce((t, sku) => t + priceOf.get(sku), 0);
+      assert.ok(p.comboOf.every((sku) => priceOf.get(sku) > 0), p.id + ': món lẻ phải đang bán');
+      const pct = p.comboOf.length >= 3 ? 11 : 6;
+      const price = p.variants[0].price;
+      assert.equal(price, Math.round((sum * (100 - pct)) / 100 / 1000) * 1000, p.id + ' giá combo');
+      assert.match(cbp, new RegExp('data-add-sku="' + p.variants[0].sku + '"'));
+      assert.ok(cbp.includes('Tiết kiệm ' + (sum - price) / 1000 + 'k'), p.id + ' tiết kiệm');
+      // Ảnh combo hiện trọn (khung 4:5, is-45), có ảnh từng túi; có thẻ danh mục cùng mã.
+      const pg = await (await fetch(base + '/san-pham/' + p.id)).text();
+      assert.match(pg, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/[a-z0-9-]+-[23]tui\.webp"/);
+      assert.ok(buy[p.variants[0].sku]?.sku === p.variants[0].sku, p.id + ' có trên danh mục');
+      // Không tự gắn thành lựa chọn trên thẻ lẻ ở danh mục.
+      for (const b of Object.values(buy)) if (b.sku !== p.variants[0].sku) assert.ok(!b.options.some((o) => o.sku === p.variants[0].sku), p.id);
+    }
+    // Combo trộn vị không vào lưới cửa hàng; chỉ dải "Combo gợi ý" (3–4 thẻ) ở cả hai kiểu, khi chưa lọc.
+    for (const page of [shop, shop2]) {
+      assert.equal((page.match(/class="cbstrip"/g) || []).length, 1);
+      const strip = page.split('class="cbstrip"')[1].split('</section>')[0];
+      const n = (strip.match(/class="cbcard"/g) || []).length;
+      assert.ok(n >= 3 && n <= 4, 'dải combo ' + n);
+      assert.match(strip, /href="\/combo"/);
+    }
+    assert.doesNotMatch(filteredShop, /class="cbstrip"/);
+    assert.doesNotMatch(shop.split('class="cbstrip"')[1].split('</section>').slice(1).join(''), /vz-mix-cb/);
+    // Trang lẻ có trong combo: dòng "Có trong combo".
+    const tl = await (await fetch(base + '/san-pham/thanh-long-say-deo')).text();
+    assert.match(tl, /class="incombo">Có trong combo <a href="\/san-pham\/vz-gg-cb3-deo">/);
+    // Combo không giảm theo mức nhưng vẫn tính vào mức đơn; miễn phí giao từ 300k.
+    const th = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }, { sku: 'VZ-YM-CB2SR-200', qty: 1 }, { sku: 'MQ-THSR-105-YM', qty: 1 }] }) })).json();
+    // 546k + 374k combo + 199k lẻ = 1.119.000đ ≥ 1 triệu: chỉ món lẻ được giảm 8%.
+    assert.equal(th.subtotal, 1119000);
+    assert.equal(th.discount, Math.floor((199000 * 8) / 100 / 1000) * 1000);
+    assert.equal(th.ship, 0);
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);

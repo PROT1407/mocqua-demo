@@ -84,6 +84,7 @@ function header(page) {
     <a class="logo" href="/">Mộc Quả <small>trái cây sấy</small></a>
     <nav class="top__nav" aria-label="Điều hướng">
       <a href="/cua-hang"${page === 'shop' ? ' aria-current="page"' : ''}>Cửa hàng</a>
+      <a href="/combo"${page === 'combo' ? ' aria-current="page"' : ''}>Combo</a>
       <a href="/danh-muc"${page === 'catalog' ? ' aria-current="page"' : ''}>Danh mục</a>
       <a href="/so-sanh"${page === 'compare' ? ' aria-current="page"' : ''}>So sánh</a>
       <a href="/tra-cuu"${page === 'track' ? ' aria-current="page"' : ''}>Tra cứu</a>
@@ -150,7 +151,7 @@ function crossSell(product, catalog) {
   const push = (p) => { if (p && out.length < 4 && !out.some((o) => o.p.id === p.id)) out.push({ p, combo: comboInfo(p) }); };
   const byKey = (key) => live.find((p) => p.id === key || p.variants.some((v) => v.sku === key));
   (product.kem || []).forEach((key) => push(byKey(key)));
-  const combos = live.filter((p) => p.comboOf.some((sku) => skus.has(sku)));
+  const combos = live.filter((p) => !p.mixed && p.comboOf.some((sku) => skus.has(sku)));
   combos.sort((a, b) => a.comboOf.length - b.comboOf.length || a.rank - b.rank).slice(0, 2).forEach((p) => push(p));
   if (product.comboOf.length) product.comboOf.forEach((sku) => push(byKey(sku)));
   (product.related || []).forEach((id) => push(byKey(id)));
@@ -325,7 +326,8 @@ export function shopPage(catalog, query) {
   const kieu = String(query.kieu || '') === '2' ? '2' : '1';
   const link = (o) => shopHref({ ...o, kieu });
   const nq = q ? q.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd') : '';
-  let pool = catalog.products;
+  // Combo trộn vị (mixed) chỉ hiện ở dải "Combo gợi ý" và trang /combo; lưới cửa hàng giữ nguyên.
+  let pool = catalog.products.filter((p) => !p.mixed);
   if (nq) {
     pool = pool.filter((p) => [p.name, p.brandName, p.fruitName, p.catName, p.catShort, p.short]
       .join(' ')
@@ -479,6 +481,7 @@ export function shopPage(catalog, query) {
       <div class="chiprow"><span class="chiprow__k">Hãng</span><div class="chiprow__s">${brandChips}</div></div>
     </div>
     ${featHtml}
+    ${filtered ? '' : comboStrip(catalog)}
     <p class="count">${final.length} món</p>
     ${html}
   </main>`;
@@ -541,6 +544,7 @@ export function productPage(product, catalog) {
         <h1>${esc(product.name)}</h1>
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
         <p class="lead lead--left">${esc(product.short)}</p>
+        ${inComboLink(product, catalog)}
         ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
@@ -574,6 +578,164 @@ export function productPage(product, catalog) {
     page: 'product',
     body,
     scripts: ['/static/js/product.js'],
+  });
+}
+
+// ---------- Trang /combo: combo trộn vị + combo cùng loại có sẵn ----------
+// Chỉ đổi cách trình bày; mã, giá, nút mua là của sản phẩm combo trong js/data.js. Id ẩn/hết hàng thì bỏ qua.
+const COMBO_PAGE = {
+  hero: 'vz-ym-cb-sr',
+  groups: [
+    { id: 'an-vat', h: 'Ăn vặt mỗi ngày', p: 'Túi vừa ăn, nhiều vị, để sẵn trên bàn làm việc.', ids: ['vz-gg-cb3-deo', 'vz-mix-cb3-an-vat', 'vz-ch-cb3x', 'combo-xoai-say-deo-100g'] },
+    { id: 'cap-doi', h: 'Cặp đôi cùng vị', p: 'Hai túi đi cùng nhau: cùng quả khác vị, hoặc hai vị hợp nhau.', ids: ['vz-gg-cb-xmx', 'vz-mix-cb-xth', 'vz-mix-cb-msr', 'vz-gg-cb-xc'] },
+    { id: 'qua-bieu', h: 'Quà biếu', p: 'Thăng hoa, hạt hộp giấy, sầu riêng: gói sẵn là thành quà.', ids: ['vz-mix-cb3-thang-hoa', 'vz-mix-cb3-hat-sr', 'vz-ps-cb3', 'vz-combo-5-hop-hat'] },
+  ],
+};
+// Combo không ghi comboOf (6 túi cùng loại): món lẻ để tính "Tiết kiệm".
+const COMBO_ITEMS = { 'combo-xoai-say-deo-100g': Array(6).fill('MQ-DXO-100-GG') };
+// Ảnh riêng cho trang /combo khi ảnh sản phẩm có chữ khuyến mãi hoặc món không thuộc combo (ảnh ghép từ ảnh túi lẻ).
+const COMBO_IMG = {
+  'vz-ch-cb3x': '/assets/products/vz/vz-ch-cb3x-3tui.webp',
+  'combo-xoai-say-deo-100g': '/assets/products/vz/combo-xoai-6tui.webp',
+};
+
+function shopSkuIndex(catalog) {
+  const m = new Map();
+  for (const p of catalog.products) for (const v of p.variants) m.set(v.sku, { p, v });
+  return m;
+}
+
+// Món trong combo, tổng giá lẻ (giá thật đang bán), giá combo, tiết kiệm. Thiếu giá một món thì không ghi tiết kiệm.
+function comboInfo(p, idx) {
+  const def = p.variants.find((v) => v.sku === p.defaultSku) || p.variants[0];
+  const skus = COMBO_ITEMS[p.id] || p.comboOf;
+  const lines = [];
+  for (const sku of skus) {
+    const hit = idx.get(sku);
+    const key = hit ? hit.p.id + '|' + hit.v.sku : sku;
+    const prev = lines.find((l) => l.key === key);
+    if (prev) { prev.n += 1; continue; }
+    lines.push({ key, n: 1, sku, price: hit?.v.price || 0, name: hit ? hit.p.name : sku, w: hit ? hit.v.w : '', href: hit ? `/san-pham/${encodeURIComponent(hit.p.id)}` : '' });
+  }
+  const priced = lines.every((l) => l.price > 0);
+  const sum = lines.reduce((t, l) => t + l.price * l.n, 0);
+  const price = def?.price || 0;
+  return { lines, sum: priced ? sum : 0, price, save: priced && price > 0 && price < sum ? sum - price : 0, count: skus.length, w: def?.w || '' };
+}
+
+const kShort = (n) => (n % 1000 === 0 ? `${n / 1000}k` : vnd(n));
+
+function comboImg(p) {
+  if (COMBO_IMG[p.id]) return { src: COMBO_IMG[p.id], srcset: '' };
+  const { hero, img } = cardImage(p);
+  return { src: hero?.thumb || img, srcset: hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1200w"` : '' };
+}
+
+function comboCard(p, idx, { eager = false, sizes = '(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px' } = {}) {
+  const info = comboInfo(p, idx);
+  const href = `/san-pham/${encodeURIComponent(p.id)}`;
+  const { src, srcset } = comboImg(p);
+  const canBuy = p.defaultSku && info.price > 0 && !p.oos;
+  return `<article class="cbcard">
+    <a class="cbcard__img" href="${href}"><img src="${esc(src)}"${srcset}${srcset ? ` sizes="${sizes}"` : ''} alt="${esc(p.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600"><span class="cbcard__n">${info.count} túi</span></a>
+    <div class="cbcard__body">
+      <h3><a href="${href}">${esc(p.name)}</a></h3>
+      <ul class="cbcard__items">${info.lines.map((l) => `<li>${l.n > 1 ? `<b>${l.n} ×</b> ` : ''}${esc(l.name)}${l.w ? ` <span>${esc(l.w)}</span>` : ''}</li>`).join('')}</ul>
+      <div class="cbcard__foot">
+        <p class="cbcard__price"><b>${esc(vnd(info.price))}</b>${info.save ? `<span class="cbcard__save">Tiết kiệm ${esc(kShort(info.save))}</span><small>so với mua lẻ ${esc(vnd(info.sum))}</small>` : ''}</p>
+        ${canBuy ? `<button type="button" class="btn btn--small" data-add-sku="${esc(p.defaultSku)}" aria-label="Thêm ${esc(p.name)} vào giỏ">Thêm combo</button>` : `<a class="btn btn--small btn--ghost" href="${href}">Xem</a>`}
+      </div>
+    </div>
+  </article>`;
+}
+
+function comboLive(catalog) {
+  const byId = new Map(catalog.products.filter((p) => !p.oos && p.priceFrom > 0).map((p) => [p.id, p]));
+  return (id) => byId.get(id);
+}
+
+// Dải nhỏ "Combo gợi ý" ở /cua-hang (cả hai kiểu, chỉ khi chưa lọc).
+function comboStrip(catalog) {
+  const get = comboLive(catalog);
+  const idx = shopSkuIndex(catalog);
+  const picks = [COMBO_PAGE.hero, ...COMBO_PAGE.groups.map((g) => g.ids[0]), 'vz-gg-cb-xmx'].map(get).filter(Boolean)
+    .filter((p, i, a) => a.indexOf(p) === i).slice(0, 4);
+  if (!picks.length) return '';
+  return `<section class="cbstrip" aria-labelledby="cbstrip-h">
+      <div class="cbstrip__h"><h2 id="cbstrip-h">Combo gợi ý</h2><a href="/combo">Xem tất cả combo <span aria-hidden="true">→</span></a></div>
+      <div class="cbstrip__list">${picks.map((p) => comboCard(p, idx)).join('')}</div>
+    </section>`;
+}
+
+// "Có trong combo …" trên trang sản phẩm lẻ: các combo đang bán có chứa một mã của trang này.
+function inCombos(product, catalog) {
+  if (isComboProduct(product)) return [];
+  const skus = new Set(product.variants.map((v) => v.sku));
+  return catalog.products.filter((p) => p.id !== product.id && !p.oos && !p.hidden && p.priceFrom > 0
+    && (COMBO_ITEMS[p.id] || p.comboOf).some((sku) => skus.has(sku)))
+    .sort((a, b) => (b.mixed - a.mixed) || a.rank - b.rank);
+}
+
+function inComboLink(product, catalog) {
+  const list = inCombos(product, catalog).slice(0, 3);
+  if (!list.length) return '';
+  const idx = shopSkuIndex(catalog);
+  return `<p class="incombo">Có trong combo ${list.map((p) => {
+    const info = comboInfo(p, idx);
+    return `<a href="/san-pham/${encodeURIComponent(p.id)}">${esc(p.name.replace(/^Combo\s+/i, ''))}${info.save ? ` <span>· tiết kiệm ${esc(kShort(info.save))}</span>` : ''}</a>`;
+  }).join(', ')} · <a href="/combo">Xem các combo</a></p>`;
+}
+
+export function comboPage(catalog) {
+  const get = comboLive(catalog);
+  const idx = shopSkuIndex(catalog);
+  const hero = get(COMBO_PAGE.hero);
+  let heroHtml = '';
+  if (hero) {
+    const info = comboInfo(hero, idx);
+    const { src } = comboImg(hero);
+    const big = hero.variants.find((v) => v.sku === hero.defaultSku)?.img || src;
+    heroHtml = `<section class="cbhero" aria-labelledby="cbhero-h">
+      <a class="cbhero__img" href="/san-pham/${encodeURIComponent(hero.id)}"><img src="${esc(big)}" alt="${esc(hero.name)}" width="1200" height="1500" fetchpriority="high"></a>
+      <div class="cbhero__txt">
+        <p class="kicker">Combo nổi bật · ${info.count} túi</p>
+        <h2 id="cbhero-h">${esc(hero.name)}</h2>
+        <p class="cbhero__lead">${esc(hero.short)}</p>
+        <ul class="cbhero__items">${info.lines.map((l) => `<li><a href="${esc(l.href)}">${esc(l.name)}</a><span>${esc(l.w)} · ${esc(vnd(l.price))}</span></li>`).join('')}</ul>
+        <p class="cbhero__price"><b>${esc(vnd(info.price))}</b>${info.save ? ` <span class="cbcard__save">Tiết kiệm ${esc(kShort(info.save))}</span> <small>so với mua lẻ ${esc(vnd(info.sum))}</small>` : ''}</p>
+        <div class="cbhero__act">
+          <button type="button" class="btn" data-add-sku="${esc(hero.defaultSku)}">Thêm combo vào giỏ</button>
+          <a class="btn btn--ghost" href="/san-pham/${encodeURIComponent(hero.id)}">Xem chi tiết</a>
+        </div>
+      </div>
+    </section>`;
+  }
+  const groups = COMBO_PAGE.groups.map((g) => {
+    const items = g.ids.map(get).filter(Boolean);
+    if (!items.length) return '';
+    return `<section class="cbgroup" id="${esc(g.id)}" aria-labelledby="cbg-${esc(g.id)}">
+      <div class="cbgroup__h"><h2 id="cbg-${esc(g.id)}">${esc(g.h)}</h2><p>${esc(g.p)}</p></div>
+      <div class="cbgrid">${items.map((p, i) => comboCard(p, idx, { eager: g === COMBO_PAGE.groups[0] && i < 2 })).join('')}</div>
+    </section>`;
+  }).join('');
+  const s = catalog.settings;
+  const tiers = [...ORDER_TIERS].sort((x, y) => x.min - y.min);
+  const short = (n) => (n >= 1000000 && n % 1000000 === 0 ? `${n / 1000000} triệu` : `${Math.round(n / 1000)}k`);
+  const body = `<main id="main" class="wrap combo">
+    <header class="pagehead cbhead">
+      <h1>Combo</h1>
+      <p>Ghép sẵn từ các túi đang bán ở cửa hàng, nguyên bao bì. Giá combo rẻ hơn tổng giá lẻ, số tiết kiệm tính từ giá lẻ thật.</p>
+      <nav class="cbjump" aria-label="Nhóm combo">${COMBO_PAGE.groups.map((g) => `<a href="#${esc(g.id)}">${esc(g.h)}</a>`).join('')}</nav>
+    </header>
+    ${heroHtml}
+    ${groups}
+    <p class="cbnote">Miễn phí giao từ ${esc(short(s.freeShip))}${tiers.map((t) => ` · giảm ${esc(t.pct)}% đơn từ ${esc(short(t.min))}`).join('')}. Combo đã có giá riêng nên không giảm thêm, nhưng vẫn được tính vào mức đơn.</p>
+  </main>`;
+  return layout({
+    title: 'Combo trái cây sấy | Mộc Quả',
+    description: 'Combo trộn vị Mộc Quả: ăn vặt mỗi ngày, cặp đôi cùng vị, quà biếu. Giá combo tính từ giá lẻ thật.',
+    page: 'combo',
+    body,
   });
 }
 
