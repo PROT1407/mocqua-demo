@@ -805,7 +805,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v30/);
+    assert.match(sw, /mocqua-shell-v31/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -934,6 +934,14 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(fm.note, /^Lưu ý: Mẫu bao bì vàng này đã hết/);
       assert.equal(fm.images[1].src, '/assets/catalog/fhx-mit200-moi.webp');
       assert.equal(fm.variants[0].weightLabel, '200g');
+      // Rà soát giá 03/11/2026 (mục 1–6).
+      assert.equal(priceOf.get('MQZ-THSR-200'), 429000);
+      assert.equal(priceOf.get('VZ-PS-CB3-300'), 529000);
+      assert.equal(dmp.get('vz-gg-me').variants[0].code, 'VZ-GG-ME-80');
+      assert.equal(dmp.get('vz-gg-me').variants[0].weightLabel, '80g');
+      assert.equal(dmp.get('vz-ym-srth').variants[0].weightLabel, '105g');
+      assert.match(dmp.get('vz-fh-xdv').note, /^100g: Combo 2: 95\.000đ/);
+      for (const id of ['mqz-ddy', 'mqz-thxo']) assert.equal(dmp.has(id), false, id);
     }
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();

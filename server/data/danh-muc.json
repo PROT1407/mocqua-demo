@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated": "2026-11-01",
+ "updated": "2026-11-03",
  "brands": [
   {
    "id": "moc-qua",
@@ -261,72 +261,6 @@
    ]
   },
   {
-   "id": "mqz-ddy",
-   "brand": "moc-qua",
-   "label": "Mộc Quả",
-   "name": "Dâu tây sấy (hũ thiếc)",
-   "cat": "thanghoa",
-   "type": "dau-tay-thang-hoa",
-   "pack": "Hũ nắp thiếc",
-   "images": [
-    {
-     "src": "/assets/catalog/mqz-ddy.webp",
-     "thumb": "/assets/catalog/mqz-ddy-sm.webp",
-     "w": 495,
-     "h": 990,
-     "alt": "Hũ nắp thiếc dâu tây sấy",
-     "kind": "hero"
-    }
-   ],
-   "verify": true,
-   "note": "Chưa rõ có gộp vào MQZ-THDT-100 hay là sản phẩm riêng. Chờ anh Huy xác nhận. Giá tạm tính. Combo 2: 245.000đ · Combo 3: 345.000đ.",
-   "variants": [
-    {
-     "code": "MQZ-DDY",
-     "weightG": null,
-     "weightLabel": "Chưa rõ",
-     "verify": true,
-     "note": "",
-     "price": 129000,
-     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
-     "priceCheckedAt": "2026-10-31"
-    }
-   ]
-  },
-  {
-   "id": "mqz-thxo",
-   "brand": "moc-qua",
-   "label": "Mộc Quả",
-   "name": "Xoài sấy thăng hoa (hũ thiếc)",
-   "cat": "thanghoa",
-   "type": "xoai-thang-hoa",
-   "pack": "Hũ nắp thiếc",
-   "images": [
-    {
-     "src": "/assets/catalog/mqz-thxo.webp",
-     "thumb": "/assets/catalog/mqz-thxo-sm.webp",
-     "w": 555,
-     "h": 990,
-     "alt": "Hũ nắp thiếc xoài sấy thăng hoa",
-     "kind": "hero"
-    }
-   ],
-   "verify": true,
-   "note": "Khối lượng chưa rõ. Giá tạm tính. Combo 2: 355.000đ · Combo 3: 505.000đ.",
-   "variants": [
-    {
-     "code": "MQZ-THXO",
-     "weightG": null,
-     "weightLabel": "Chưa rõ",
-     "verify": true,
-     "note": "",
-     "price": 189000,
-     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
-     "priceCheckedAt": "2026-10-31"
-    }
-   ]
-  },
-  {
    "id": "mqz-xxx",
    "brand": "moc-qua",
    "label": "Mộc Quả",
@@ -402,7 +336,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 375.000đ · Combo 3: 529.000đ.",
+   "note": "500g: Combo 2: 375.000đ · Combo 3: 529.000đ.",
    "variants": [
     {
      "code": "MQZ-DXO-500",
@@ -992,9 +926,9 @@
      "weightLabel": "Túi lớn · 200g",
      "verify": false,
      "note": "",
-     "price": 209000,
-     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
-     "priceCheckedAt": "2026-11-01"
+     "price": 429000,
+     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang) – chủ shop duyệt rà soát giá 03/11/2026: 209k → 429k (≈ 2 × 229k −6%, túi lớn không rẻ hơn túi 100g)",
+     "priceCheckedAt": "2026-11-03"
     }
    ]
   },
@@ -3407,7 +3341,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 169.000đ · Combo 3: 239.000đ.",
+   "note": "200g: Combo 2: 169.000đ · Combo 3: 239.000đ.",
    "variants": [
     {
      "code": "MQ-DXO-100-GG",
@@ -3530,9 +3464,9 @@
    "note": "Combo 2: 85.000đ · Combo 3: 119.000đ.",
    "variants": [
     {
-     "code": "VZ-GG-ME-100",
-     "weightG": 100,
-     "weightLabel": "100g",
+     "code": "VZ-GG-ME-80",
+     "weightG": 80,
+     "weightLabel": "80g",
      "verify": false,
      "note": "",
      "price": 45000,
@@ -3978,7 +3912,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
+   "note": "200g, 250g: Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDL-200",
@@ -4047,7 +3981,7 @@
     }
    ],
    "verify": true,
-   "note": "Chưa có ảnh riêng túi băng đỏ (ảnh cũ là túi lá xoài, đã chuyển sang VZ-CH-XDL-200 ngày 31/10). Có thể trùng mẫu túi lá xoài. Cần kiểm tra. Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
+   "note": "Chưa có ảnh riêng túi băng đỏ (ảnh cũ là túi lá xoài, đã chuyển sang VZ-CH-XDL-200 ngày 31/10). Có thể trùng mẫu túi lá xoài. Cần kiểm tra. 200g, 250g: Combo 2: 169.000đ · Combo 3: 239.000đ. Có trong combo: Combo 3 túi xoài sấy dẻo Cheers+ 200g 239.000đ (VZ-CH-CB3X-600), chọn màu túi ở ô Ghi chú.",
    "variants": [
     {
      "code": "VZ-CH-XDR-200",
@@ -4216,8 +4150,8 @@
    "variants": [
     {
      "code": "VZ-YM-SRTH-100",
-     "weightG": 100,
-     "weightLabel": "100g",
+     "weightG": 105,
+     "weightLabel": "105g",
      "verify": false,
      "note": "",
      "price": 199000,
@@ -4319,7 +4253,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 535.000đ, tiết kiệm 62.000đ.",
+   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
    "variants": [
     {
      "code": "VZ-PS-GD-100",
@@ -4360,7 +4294,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 535.000đ, tiết kiệm 62.000đ.",
+   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
    "variants": [
     {
      "code": "VZ-PS-RY-100",
@@ -4401,7 +4335,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 535.000đ, tiết kiệm 62.000đ.",
+   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
    "variants": [
     {
      "code": "VZ-PS-YD-100",
@@ -4626,7 +4560,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2: 95.000đ · Combo 3: 129.000đ.",
+   "note": "100g: Combo 2: 95.000đ · Combo 3: 129.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XDV-100",
@@ -4750,7 +4684,7 @@
     }
    ],
    "verify": false,
-   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 200g. Combo 2: 139.000đ · Combo 3: 199.000đ.",
+   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 200g. 200g: Combo 2: 139.000đ · Combo 3: 199.000đ.",
    "variants": [
     {
      "code": "VZ-FH-MIT-300",
@@ -6266,6 +6200,82 @@
     "date": "2026-10-31",
     "mergedInto": null,
     "reason": "Chủ shop yêu cầu gỡ thẻ mít sấy Hoa Hậu (31/10). Ảnh combo mít Hoa Hậu + sầu riêng vẫn ở thư viện ảnh thẻ VZ-GG-KF-100. Gác, không xoá."
+   }
+  },
+  {
+   "id": "mqz-ddy",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Dâu tây sấy (hũ thiếc)",
+   "cat": "thanghoa",
+   "type": "dau-tay-thang-hoa",
+   "pack": "Hũ nắp thiếc",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-ddy.webp",
+     "thumb": "/assets/catalog/mqz-ddy-sm.webp",
+     "w": 495,
+     "h": 990,
+     "alt": "Hũ nắp thiếc dâu tây sấy",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Chưa rõ có gộp vào MQZ-THDT-100 hay là sản phẩm riêng. Chờ anh Huy xác nhận. Giá tạm tính. Combo 2: 245.000đ · Combo 3: 345.000đ.",
+   "variants": [
+    {
+     "code": "MQZ-DDY",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": "",
+     "price": 129000,
+     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
+     "priceCheckedAt": "2026-10-31"
+    }
+   ],
+   "parked": {
+    "date": "2026-11-03",
+    "mergedInto": null,
+    "reason": "Chủ shop duyệt rà soát giá 03/11/2026: tạm ẩn khỏi Danh mục vì mục \"Chưa rõ\" khối lượng, giá tạm tính lệch với sản phẩm đang bán ở cửa hàng (MQZ-DDY-500 205.000đ / MQZ-DDY-500-HV 209.000đ). Giữ nguyên dữ liệu; khi xác nhận được thì đưa lại vào products."
+   }
+  },
+  {
+   "id": "mqz-thxo",
+   "brand": "moc-qua",
+   "label": "Mộc Quả",
+   "name": "Xoài sấy thăng hoa (hũ thiếc)",
+   "cat": "thanghoa",
+   "type": "xoai-thang-hoa",
+   "pack": "Hũ nắp thiếc",
+   "images": [
+    {
+     "src": "/assets/catalog/mqz-thxo.webp",
+     "thumb": "/assets/catalog/mqz-thxo-sm.webp",
+     "w": 555,
+     "h": 990,
+     "alt": "Hũ nắp thiếc xoài sấy thăng hoa",
+     "kind": "hero"
+    }
+   ],
+   "verify": true,
+   "note": "Khối lượng chưa rõ. Giá tạm tính. Combo 2: 355.000đ · Combo 3: 505.000đ.",
+   "variants": [
+    {
+     "code": "MQZ-THXO",
+     "weightG": null,
+     "weightLabel": "Chưa rõ",
+     "verify": true,
+     "note": "",
+     "price": 189000,
+     "priceSource": "Giá tạm tính Mộc Quả (giả định ~100g), chờ xác nhận",
+     "priceCheckedAt": "2026-10-31"
+    }
+   ],
+   "parked": {
+    "date": "2026-11-03",
+    "mergedInto": null,
+    "reason": "Chủ shop duyệt rà soát giá 03/11/2026: tạm ẩn khỏi Danh mục vì mục \"Chưa rõ\" khối lượng, giá tạm tính lệch với sản phẩm đang bán ở cửa hàng (MQZ-THXO-100 185.000đ). Giữ nguyên dữ liệu; khi xác nhận được thì đưa lại vào products."
    }
   }
  ]

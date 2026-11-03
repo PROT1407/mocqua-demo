@@ -11,7 +11,7 @@ export const CATALOG_TO_SHOP = {
   'VZ-GG-KF-100': 'MQ-GSR-100-GG',
   'VZ-GG-THOM-80': 'MQ-DTH-080-GG',
   // Cùng cách SKU_ALIAS đang nối GoodGood 100g (thanh long, mãng cầu, cóc) với túi 80g của cửa hàng.
-  'VZ-GG-ME-100': 'MQ-DME-080-GG',
+  'VZ-GG-ME-80': 'MQ-DME-080-GG',
   'VZ-CH-XTH-120': 'MQ-THXO-120-CH',
   'VZ-CH-SRTH-100': 'MQ-THSR-110-CH',
   // Cửa hàng có 1 mã Cheers+ 200g; 3 mẫu túi giao theo hàng có sẵn (khách ghi mẫu muốn ở ô Ghi chú).
