@@ -544,7 +544,7 @@ export function productPage(product, catalog) {
     photos: product.photos || [],
     fit45: product.fit45 || [],
     variants: product.variants.map((v) => ({
-      sku: v.sku, w: v.w, g: v.g, price: v.price, pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back,
+      sku: v.sku, w: v.w, g: v.g, price: v.price, pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),
     })),
   };
   const body = `<main id="main" class="wrap">

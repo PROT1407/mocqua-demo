@@ -42,7 +42,7 @@ function pick(group, pack) {
 function gallery(variant) {
   const list = [];
   if (variant.img) list.push({ src: variant.img, alt: `${data.name}, bao bì ${variant.label}`, kind: 'Bao bì' });
-  if (variant.back && variant.back !== variant.img) list.push({ src: variant.back, alt: `${data.name}, mặt sau`, kind: 'Mặt sau' });
+  if (variant.back && variant.back !== variant.img) list.push({ src: variant.back, alt: `${data.name}, ${variant.backKind || 'mặt sau'}`, kind: variant.backKind || 'Mặt sau' });
   for (const photo of data.photos || []) {
     if (photo.src && !list.some((x) => x.src === photo.src)) list.push({ src: photo.src, alt: photo.alt || data.name, kind: photo.kind || 'Ảnh' });
   }
