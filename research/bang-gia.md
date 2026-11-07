@@ -81,3 +81,4 @@ Xoài muối ớt trong các combo này là túi GoodGood 200g `MQ-DXM-200-GG` =
 - **7/11/2026**: Chủ shop xác nhận túi mít sấy giòn Fresh & Healthy `MQ-GMI-300-FH` là **300g** (trước ghi 200g), giá giữ **74.000đ**. Combo mới `VZ-MIX-CB2XMI-500` (mít 300g + xoài dẻo F&H vàng 200g): 74.000 + 89.000 = 163.000 × 0,94 = 153.220 → **153.000đ**, tiết kiệm 10.000đ.
 - **7/11/2026**: Tên hiển thị túi Fresh & Healthy `MQ-GMI-300-FH` / `MQ-GMI-500-FH` là **mít thái sấy giòn**. Giá giữ 74.000đ và 139.000đ.
 - **8/11/2026**: Chủ shop chốt xoài sấy thăng hoa Cheers+ `MQ-THXO-120-CH` = **100g**, **130.000đ** (trước ghi 110g, 159.000đ). Mã SKU giữ nguyên. Combo `VZ-MIX-CB3TH-315` tính lại 269.000 + 199.000 + 130.000 = 598.000 × 0,89 = 532.220 → **532.000đ**.
+- **8/11/2026**: Chủ shop chốt lại `MQ-THXO-120-CH` = **100g**, **145.000đ** (trước 159.000đ, rồi 130.000đ một lúc). Combo `VZ-MIX-CB3TH-315` tính lại 269.000 + 199.000 + 145.000 = 613.000 × 0,89 = 545.570 → **546.000đ**.
