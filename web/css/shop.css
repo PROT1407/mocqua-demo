@@ -265,6 +265,7 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .price { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; }
 .unit { color: var(--muted); }
 .choiceset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+.choiceset[hidden] { display: none; }
 .choiceset legend { font-weight: 600; padding: 0; }
 .choices, .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .choice, .swatch {
