@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated": "2026-11-03",
+ "updated": "2026-11-07",
  "brands": [
   {
    "id": "moc-qua",
@@ -4416,7 +4416,7 @@
     }
    ],
    "verify": false,
-   "note": "100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 250g: Combo 2: 185.000đ · Combo 3: 265.000đ | 500g: Combo 2: 279.000đ · Combo 3: 399.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 139.000đ (VZ-FH-CB-350).",
+   "note": "100g: Combo 2: 95.000đ · Combo 3: 129.000đ | 250g: Combo 2: 185.000đ · Combo 3: 265.000đ | 500g: Combo 2: 279.000đ · Combo 3: 399.000đ. Có trong combo: Combo xoài sấy dẻo Fresh & Healthy 100g + 250g 139.000đ (VZ-FH-CB-350). Túi vàng 200g và trắng/vàng 300g cùng giá theo khối lượng: 200g 89.000đ, 300g 105.000đ.",
    "variants": [
     {
      "code": "VZ-FH-XD-100",
@@ -4467,6 +4467,36 @@
      "price": 89000,
      "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
      "priceCheckedAt": "2026-11-01"
+    },
+    {
+     "code": "MQ-DXO-200-FHV",
+     "weightG": 200,
+     "weightLabel": "200g · túi kem đáy vàng",
+     "verify": false,
+     "note": "",
+     "price": 89000,
+     "priceSource": "Cùng khối lượng cùng giá túi trắng 200g (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    },
+    {
+     "code": "MQ-DXO-300-FHT",
+     "weightG": 300,
+     "weightLabel": "300g · túi trắng trong",
+     "verify": false,
+     "note": "",
+     "price": 105000,
+     "priceSource": "Cùng khối lượng cùng giá xoài Cheers+ 300g (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    },
+    {
+     "code": "MQ-DXO-300-FHV",
+     "weightG": 300,
+     "weightLabel": "300g · túi kem đáy vàng",
+     "verify": false,
+     "note": "",
+     "price": 105000,
+     "priceSource": "Cùng khối lượng cùng giá túi trắng 300g (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
     },
     {
      "code": "VZ-FH-XD-250",
@@ -5998,6 +6028,95 @@
      "price": 241000,
      "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
      "priceCheckedAt": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "id": "combo-xoai-mangcut-saurieng",
+   "brand": "viza-food",
+   "label": "Viza Food",
+   "name": "Combo 3 vị: xoài sấy dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb3xms-3tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3xms-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy kem đáy vàng, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy GoodGood 100g",
+     "kind": "hero"
+    },
+    {
+     "src": "/assets/catalog/vz-mix-cb3xms-200t-3tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3xms-200t-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy trắng trong, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy GoodGood 100g",
+     "kind": "phu"
+    },
+    {
+     "src": "/assets/catalog/vz-mix-cb3xms-100-3tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3xms-100-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy 100g kem đáy vàng, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy GoodGood 100g",
+     "kind": "phu"
+    }
+   ],
+   "verify": false,
+   "note": "3 túi: xoài dẻo F&H (100g vàng / 200g trắng hoặc vàng / 300g trắng hoặc vàng) + măng cụt thăng hoa GoodGood 100g + sầu riêng sấy GoodGood 100g. Không gồm túi xoài 500g.",
+   "variants": [
+    {
+     "code": "MQ-CB3-XMS-200-V",
+     "weightG": 400,
+     "weightLabel": "Xoài 200g vàng + măng cụt 100g + sầu riêng 100g",
+     "verify": false,
+     "note": "",
+     "price": 417000,
+     "priceSource": "89.000 + 269.000 + 110.000 = 468.000 × 0,89 = 416.520 → 417.000đ (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    },
+    {
+     "code": "MQ-CB3-XMS-200-T",
+     "weightG": 400,
+     "weightLabel": "Xoài 200g trắng + măng cụt 100g + sầu riêng 100g",
+     "verify": false,
+     "note": "",
+     "price": 417000,
+     "priceSource": "Cùng giá bản túi vàng 200g: 468.000 × 0,89 → 417.000đ (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    },
+    {
+     "code": "MQ-CB3-XMS-100",
+     "weightG": 300,
+     "weightLabel": "Xoài 100g vàng + măng cụt 100g + sầu riêng 100g",
+     "verify": false,
+     "note": "",
+     "price": 381000,
+     "priceSource": "49.000 + 269.000 + 110.000 = 428.000 × 0,89 = 380.920 → 381.000đ (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    },
+    {
+     "code": "MQ-CB3-XMS-300-V",
+     "weightG": 500,
+     "weightLabel": "Xoài 300g vàng + măng cụt 100g + sầu riêng 100g",
+     "verify": false,
+     "note": "",
+     "price": 431000,
+     "priceSource": "105.000 + 269.000 + 110.000 = 484.000 × 0,89 = 430.760 → 431.000đ (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    },
+    {
+     "code": "MQ-CB3-XMS-300-T",
+     "weightG": 500,
+     "weightLabel": "Xoài 300g trắng + măng cụt 100g + sầu riêng 100g",
+     "verify": false,
+     "note": "",
+     "price": 431000,
+     "priceSource": "Cùng giá bản túi vàng 300g: 484.000 × 0,89 → 431.000đ (chủ shop 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
     }
    ]
   }

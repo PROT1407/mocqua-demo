@@ -11,6 +11,12 @@ export const COMBO_SLOTS_BY_SKU = {
   'MQ-CBX-100-FH': Array(6).fill([FH100]),
   // Trộn 2 nhãn: khách ghi số túi mỗi màu, ô nào cũng nhận túi 100g của một trong hai nhãn.
   'MQ-CBX-100-MIX': Array(6).fill([GG100, FH100]),
+  // Combo 3 vị xoài dẻo F&H + măng cụt thăng hoa 100g + sầu riêng sấy 100g. Cùng khối lượng xoài = cùng giá, trắng hay vàng.
+  'MQ-CB3-XMS-100': [['MQ-DXO-100-FHV'], ['MQ-THMC-100-GG'], ['MQ-GSR-100-GG']],
+  'MQ-CB3-XMS-200-T': [['MQ-DXO-200-FHT'], ['MQ-THMC-100-GG'], ['MQ-GSR-100-GG']],
+  'MQ-CB3-XMS-200-V': [['MQ-DXO-200-FHV'], ['MQ-THMC-100-GG'], ['MQ-GSR-100-GG']],
+  'MQ-CB3-XMS-300-T': [['MQ-DXO-300-FHT'], ['MQ-THMC-100-GG'], ['MQ-GSR-100-GG']],
+  'MQ-CB3-XMS-300-V': [['MQ-DXO-300-FHV'], ['MQ-THMC-100-GG'], ['MQ-GSR-100-GG']],
 };
 
 function skuIndex(catalog) {
