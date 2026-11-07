@@ -807,7 +807,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v37/);
+    assert.match(sw, /mocqua-shell-v38/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -950,7 +950,9 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.doesNotMatch(dmp.get('vz-ch-cb3x').note, /đỏ hoặc xanh/);
       // Mít túi vàng hết bao bì: ghi chú cho khách, ảnh túi mới ngay sau ảnh túi cũ. Chủ shop xác nhận túi MQ-GMI-300-FH là 300g (07/11/2026), giá giữ 74k.
       const mit = await (await fetch(base + '/san-pham/mit-say-gion')).text();
-      assert.match(mit, /class="pdp__notice" role="note">Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh &amp; Healthy mới, đóng gói 300g\./);
+      assert.match(mit, /<h1>Mít thái sấy giòn Fresh &amp; Healthy<\/h1>/);
+      assert.equal(byId.get('mit-say-gion').name, 'Mít thái sấy giòn Fresh & Healthy');
+      assert.match(mit, /class="pdp__notice" role="note">Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít thái sấy giòn Fresh &amp; Healthy mới, đóng gói 300g\./);
       assert.match(mit, /"photos":\[\{"src":"\/assets\/products\/fhx-mit200-moi\.webp"/);
       assert.equal(byId.get('mit-say-gion').variants.find((v) => v.sku === 'MQ-GMI-300-FH').w, '300g');
       assert.equal(byId.get('mit-say-gion').variants.find((v) => v.sku === 'MQ-GMI-300-FH').g, 300);
@@ -980,6 +982,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(dmp.get('vz-fh-xd').note, /250g: Combo 2: 185\.000đ · Combo 3: 265\.000đ/);
       assert.match(dmp.get('vz-ch-xth').note, /Combo 2: 299\.000đ · Combo 3: 425\.000đ/);
       const fm = dmp.get('vz-fh-mit');
+      assert.equal(fm.name, 'Mít thái sấy giòn');
       assert.match(fm.note, /^Lưu ý: Mẫu bao bì vàng này đã hết/);
       assert.equal(fm.images[1].src, '/assets/catalog/fhx-mit200-moi.webp');
       assert.equal(fm.variants[0].weightLabel, '300g');

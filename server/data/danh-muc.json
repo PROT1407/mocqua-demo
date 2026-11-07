@@ -4659,7 +4659,7 @@
    "id": "vz-fh-mit",
    "brand": "viza-food",
    "label": "Fresh & Healthy",
-   "name": "Mít sấy",
+   "name": "Mít thái sấy giòn",
    "cat": "gion",
    "type": "mit-say",
    "pack": "",
@@ -4709,7 +4709,7 @@
      "thumb": "/assets/products/gm500-45.jpg",
      "w": 1200,
      "h": 1500,
-     "alt": "Mít sấy giòn Fresh & Healthy · 500g",
+     "alt": "Mít thái sấy giòn Fresh & Healthy · 500g",
      "kind": "mau-bao-bi-2"
     },
     {
@@ -4717,12 +4717,12 @@
      "thumb": "/assets/products/gm500_back-45.jpg",
      "w": 1200,
      "h": 1500,
-     "alt": "Mít sấy giòn Fresh & Healthy · 500g (mặt sau)",
+     "alt": "Mít thái sấy giòn Fresh & Healthy · 500g (mặt sau)",
      "kind": "mat-sau"
     }
    ],
    "verify": false,
-   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 300g. 300g: Combo 2: 139.000đ · Combo 3: 199.000đ.",
+   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít thái sấy giòn Fresh & Healthy mới, đóng gói 300g. 300g: Combo 2: 139.000đ · Combo 3: 199.000đ.",
    "variants": [
     {
      "code": "VZ-FH-MIT-300",
@@ -5771,7 +5771,7 @@
    "id": "vz-mix-cb-msr",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo mít sấy giòn 300g + sầu riêng sấy GoodGood 100g",
+   "name": "Combo mít thái sấy giòn 300g + sầu riêng sấy GoodGood 100g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -5789,7 +5789,7 @@
      "thumb": "/assets/catalog/vz-mix-cb-msr-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Ảnh ghép: Túi mít sấy giòn 300g, Túi sầu riêng sấy GoodGood 100g, túi đỏ đứng cạnh nhau",
+     "alt": "Ảnh ghép: Túi mít thái sấy giòn 300g, Túi sầu riêng sấy GoodGood 100g, túi đỏ đứng cạnh nhau",
      "kind": "phu"
     }
    ],
@@ -5845,7 +5845,7 @@
    "id": "vz-mix-cb3-an-vat",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo ăn vặt: xoài dẻo 200g + mít giòn 300g + hạt điều 100g",
+   "name": "Combo ăn vặt: xoài dẻo 200g + mít thái sấy giòn 300g + hạt điều 100g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -5855,7 +5855,7 @@
      "thumb": "/assets/catalog/vz-mix-cb3-an-vat-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi xoài sấy dẻo Fresh & Healthy 200g, túi xanh, Túi mít sấy giòn Fresh & Healthy 300g, Hộp hạt điều rang muối Viza Food 100g đứng cạnh nhau",
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy 200g, túi xanh, Túi mít thái sấy giòn Fresh & Healthy 300g, Hộp hạt điều rang muối Viza Food 100g đứng cạnh nhau",
      "kind": "hero"
     }
    ],
@@ -5977,7 +5977,7 @@
    "id": "vz-mix-cb-ch-mit",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo sầu riêng thăng hoa Cheers+ 105g + mít sấy giòn 300g",
+   "name": "Combo sầu riêng thăng hoa Cheers+ 105g + mít thái sấy giòn 300g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -6010,7 +6010,7 @@
    "id": "vz-mix-cb4-kita-fh",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo 4 túi: sầu riêng KITA + xoài dẻo, mít giòn, xoài muối ớt Fresh & Healthy",
+   "name": "Combo 4 túi: sầu riêng KITA + xoài dẻo, mít thái sấy giòn, xoài muối ớt Fresh & Healthy",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -6288,7 +6288,7 @@
    "id": "vz-mix-cb-xmi",
    "brand": "viza-food",
    "label": "Fresh & Healthy",
-   "name": "Combo mít sấy giòn Fresh & Healthy 300g + xoài sấy dẻo Fresh & Healthy 200g",
+   "name": "Combo mít thái sấy giòn Fresh & Healthy 300g + xoài sấy dẻo Fresh & Healthy 200g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -6298,7 +6298,7 @@
      "thumb": "/assets/catalog/vz-mix-cb2xmi-anh-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi mít sấy giòn Fresh & Healthy và túi xoài sấy dẻo Fresh & Healthy đứng cạnh nhau",
+     "alt": "Túi mít thái sấy giòn Fresh & Healthy và túi xoài sấy dẻo Fresh & Healthy đứng cạnh nhau",
      "kind": "hero"
     }
    ],
