@@ -807,7 +807,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v36/);
+    assert.match(sw, /mocqua-shell-v37/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -992,17 +992,18 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(dmp.get('vz-ch-xth').images[0].thumb, '/assets/catalog/chx-xoai-thanghoa-anh-sm.webp');
       assert.equal(byId.get('xoai-say-thang-hoa').variants[0].price, 159000);
       assert.equal(byId.get('xoai-say-thang-hoa').variants[0].g, 110);
-      // Thanh long ruột đỏ túi zip: 119.000đ và ảnh túi thật có nhãn. Hộp PET giữ 205.000đ và ảnh hộp.
+      // Thanh long ruột đỏ túi zip: trả về ảnh túi cũ và 199.000đ. Hộp PET giữ 205.000đ. Không còn ảnh nhãn dán nhầm.
       const dtl = await (await fetch(base + '/san-pham/mqz-thanh-long-say-deo')).text();
-      assert.match(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g","g":500,"price":119000[^}]*"img":"\/assets\/products\/mqz\/mqz-dtl-500-anh\.webp"/);
-      assert.doesNotMatch(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g"[^}]*199000/);
+      assert.match(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g","g":500,"price":199000[^}]*"img":"\/assets\/products\/mqz\/mqz-dtl-500-45\.jpg"/);
+      assert.doesNotMatch(dtl, /mqz-dtl-500-anh\.webp/);
+      assert.doesNotMatch(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g"[^}]*119000/);
       assert.match(dtl, /"sku":"MQZ-DTL-500-HV"[^}]*"price":205000[^}]*"img":"\/assets\/products\/mqz\/mqz-dtl-500-hv-45\.jpg"/);
       const dtlP = byId.get('mqz-thanh-long-say-deo');
       assert.equal(dtlP.own, true);
       assert.equal(dtlP.maker, 'mocqua');
-      assert.equal(priceOf.get('MQZ-DTL-500'), 119000);
+      assert.equal(priceOf.get('MQZ-DTL-500'), 199000);
       assert.equal(priceOf.get('MQZ-DTL-500-HV'), 205000);
-      assert.equal(dmv.get('MQZ-DTL-500'), 119000);
+      assert.equal(dmv.get('MQZ-DTL-500'), 199000);
       assert.equal(dmv.get('MQZ-DTL-500-HV'), 205000);
       // Rà soát giá 03/11/2026 (mục 1–6).
       assert.equal(priceOf.get('MQZ-THSR-200'), 429000);
