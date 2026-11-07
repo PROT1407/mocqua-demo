@@ -1034,11 +1034,11 @@
      "kind": "hero"
     },
     {
-     "src": "/assets/products/mqz/mqz-dtl-500-45.jpg",
-     "thumb": "/assets/products/mqz/mqz-dtl-500-45.jpg",
+     "src": "/assets/products/mqz/mqz-dtl-500-anh.webp",
+     "thumb": "/assets/products/mqz/mqz-dtl-500-anh.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Thanh long ruột đỏ sấy dẻo · Túi zip · 500g",
+     "alt": "Thanh long ruột đỏ sấy dẻo · Túi zip · 500g, nhãn Mộc Quả",
      "kind": "mau-bao-bi-2"
     }
    ],
@@ -1061,9 +1061,9 @@
      "weightLabel": "Túi zip · 500g",
      "verify": false,
      "note": "",
-     "price": 199000,
-     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
-     "priceCheckedAt": "2026-11-01"
+     "price": 119000,
+     "priceSource": "Chủ shop 7/11/2026: túi zip 199.000đ → 119.000đ. Hộp PET giữ 205.000đ.",
+     "priceCheckedAt": "2026-11-07"
     }
    ]
   },
