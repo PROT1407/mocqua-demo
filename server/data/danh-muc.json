@@ -6204,12 +6204,20 @@
    "pack": "",
    "images": [
     {
+     "src": "/assets/catalog/vz-mix-cb2ymmc-anh.webp",
+     "thumb": "/assets/catalog/vz-mix-cb2ymmc-anh-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi măng cụt sấy thăng hoa GoodGood và túi sầu riêng sấy thăng hoa Yummy đứng cạnh nhau",
+     "kind": "hero"
+    },
+    {
      "src": "/assets/catalog/vz-mix-cb2ymmc-2tui.webp",
      "thumb": "/assets/catalog/vz-mix-cb2ymmc-2tui-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi sầu riêng sấy thăng hoa Yummy 105g và túi măng cụt sấy thăng hoa GoodGood 100g đứng cạnh nhau",
-     "kind": "hero"
+     "alt": "Ảnh ghép: Túi sầu riêng sấy thăng hoa Yummy 105g và túi măng cụt sấy thăng hoa GoodGood 100g đứng cạnh nhau",
+     "kind": "phu"
     }
    ],
    "verify": false,
