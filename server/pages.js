@@ -563,6 +563,7 @@ export function productPage(product, catalog) {
         <h1>${esc(product.name)}</h1>
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
         <p class="lead lead--left">${esc(product.short)}</p>
+        ${product.combo ? `<p class="fine"><a href="/san-pham/${encodeURIComponent(product.combo.id)}">${esc(product.combo.label || 'Xem combo')}</a></p>` : ''}
         ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
@@ -607,7 +608,7 @@ const COMBO_PAGE = {
   groups: [
     { id: 'an-vat', h: 'Ăn vặt mỗi ngày', p: 'Túi vừa ăn, nhiều vị, để sẵn trên bàn làm việc.', ids: ['vz-gg-cb3-deo', 'vz-mix-cb3-an-vat', 'vz-mix-cb4-kita-fh', 'vz-ch-cb3x', 'combo-xoai-say-deo-100g'] },
     { id: 'cap-doi', h: 'Cặp đôi cùng vị', p: 'Hai túi đi cùng nhau: cùng quả khác vị, hoặc hai vị hợp nhau.', ids: ['vz-gg-cb-xmx', 'vz-mix-cb-xth', 'vz-mix-cb-msr', 'vz-gg-cb-xc'] },
-    { id: 'qua-bieu', h: 'Quà biếu', p: 'Thăng hoa, hạt hộp giấy, sầu riêng: gói sẵn là thành quà.', ids: ['vz-mix-cb3-thang-hoa', 'vz-mix-cb3-sr-xoai', 'vz-mix-cb-ch-mit', 'vz-mix-cb3-hat-sr', 'vz-ps-cb3', 'vz-combo-5-hop-hat'] },
+    { id: 'qua-bieu', h: 'Quà biếu', p: 'Thăng hoa, hạt hộp giấy, sầu riêng: gói sẵn là thành quà.', ids: ['combo-xoai-mangcut-saurieng', 'vz-mix-cb3-thang-hoa', 'vz-mix-cb3-sr-xoai', 'vz-mix-cb-ch-mit', 'vz-mix-cb3-hat-sr', 'vz-ps-cb3', 'vz-combo-5-hop-hat'] },
   ],
 };
 // Combo không ghi comboOf (6 túi cùng loại): món lẻ để tính "Tiết kiệm".

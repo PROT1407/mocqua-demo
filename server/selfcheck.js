@@ -805,7 +805,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v31/);
+    assert.match(sw, /mocqua-shell-v32/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -888,7 +888,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(xmx, /vz-gg-cb2xm-2tui\.webp/);
       const byId = new Map(shopAll.map((p) => [p.id, p]));
       assert.equal(byId.get('vz-mix-cb3-sr-xoai').comboOf.join(','), ['MQ-THSR-080-FH', 'MQ-DXM-200-GG', 'MQ-DXO-200-GG'].join(','));
-      assert.equal(byId.get('vz-mix-cb3-sr-xoai').variants[0].price, 300000);
+      assert.equal(byId.get('vz-mix-cb3-sr-xoai').variants[0].price, 239000);
       assert.equal(byId.get('vz-mix-cb4-kita-fh').comboOf.join(','), ['MQ-GSR-100-KT', 'MQ-DXO-100-FHV', 'MQ-GMI-300-FH', 'MQ-DXM-100-FHR'].join(','));
       assert.equal(byId.get('vz-mix-cb4-kita-fh').variants[0].price, 241000);
       assert.equal(byId.get('vz-mix-cb-ch-mit').comboOf.join(','), ['MQ-THSR-110-CH', 'MQ-GMI-300-FH'].join(','));
