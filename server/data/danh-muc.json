@@ -3789,12 +3789,20 @@
    "pack": "",
    "images": [
     {
+     "src": "/assets/products/tx120-45.jpg",
+     "thumb": "/assets/products/tx120-45.jpg",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Xoài sấy thăng hoa Cheers+ · 110g",
+     "kind": "hero"
+    },
+    {
      "src": "/assets/catalog/chx-xoai-thanghoa-anh.webp",
      "thumb": "/assets/catalog/chx-xoai-thanghoa-anh-sm.webp",
      "w": 1200,
      "h": 1500,
      "alt": "Túi Cheers+ Freeze Dried Mango, cô gái áo dài và nón lá dưới cành xoài",
-     "kind": "hero"
+     "kind": "phu"
     },
     {
      "src": "/assets/catalog/vz-ch-xth-2.webp",
