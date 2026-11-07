@@ -807,7 +807,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v39/);
+    assert.match(sw, /mocqua-shell-v40/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -853,9 +853,9 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(inc, /class="cbmini"[\s\S]*href="\/san-pham\/vz-gg-cb3-deo"[\s\S]*class="cbmini__save">Tiết kiệm 15k<\/span>[\s\S]*<b>120\.000đ<\/b> <span class="was">mua lẻ <s>135\.000đ<\/s><\/span>[\s\S]*data-add-sku="VZ-GG-CB3D-240"/);
     // Kế hoạch A: combo cũng được giảm theo đơn và tính vào mức đơn; miễn phí giao từ 300k.
     const th = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-MIX-CB3TH-315', qty: 1 }, { sku: 'VZ-YM-CB2SR-200', qty: 1 }, { sku: 'MQ-THSR-105-YM', qty: 1 }] }) })).json();
-    // 558k + 374k combo + 199k lẻ = 1.131.000đ ≥ 1 triệu: cả đơn giảm 12% = 135.000đ.
-    assert.equal(th.subtotal, 1131000);
-    assert.equal(th.discount, 135000);
+    // 532k + 374k combo + 199k lẻ = 1.105.000đ ≥ 1 triệu: cả đơn giảm 12% = 132.000đ.
+    assert.equal(th.subtotal, 1105000);
+    assert.equal(th.discount, 132000);
     assert.match(th.hint, /Combo cũng được giảm theo đơn/);
     assert.equal(th.ship, 0);
     // Combo Cheers 3 túi + combo 6 túi xoài: ảnh ghép đủ túi, hiện trọn; không còn ảnh/video "Mua 5 tặng 1" hay poster khuyến mãi.
@@ -965,22 +965,22 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
         assert.equal(dmj.products.flatMap((x) => x.variants).find((v) => v.code === sku).price, price, sku + ' danh mục');
       }
       for (const p of shopAll) if ((p.comboOf || []).includes('MQ-GMI-300-FH')) assert.doesNotMatch(p.short + p.long, /(85|65)\.000đ/, p.id);
-      // Đợt giá xoài 01/11 (chủ shop duyệt đề xuất): F&H 250g 99k, Cheers+ 200g 89k, GG muối ớt 300g 125k, Cheers+ thăng hoa 159k. Túi vuông nhỏ MQ-DXM-S-GG: chủ shop chốt 80g, 45k (01/11, đổi từ 29k) như các túi vuông 80g khác.
-      for (const [sku, price] of [['VZ-FH-XD-250', 99000], ['MQ-DXC-200-CHA', 89000], ['MQ-DXM-300-GG', 125000], ['MQ-THXO-120-CH', 159000], ['MQ-DXM-S-GG', 45000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(priceOf.get(sku), price, sku);
+      // Đợt giá xoài 01/11 (chủ shop duyệt đề xuất): F&H 250g 99k, Cheers+ 200g 89k, GG muối ớt 300g 125k. Cheers+ thăng hoa MQ-THXO-120-CH: chủ shop chốt 08/11 túi 100g, 130k (trước ghi 110g, 159k). Túi vuông nhỏ MQ-DXM-S-GG: chủ shop chốt 80g, 45k (01/11, đổi từ 29k) như các túi vuông 80g khác.
+      for (const [sku, price] of [['VZ-FH-XD-250', 99000], ['MQ-DXC-200-CHA', 89000], ['MQ-DXM-300-GG', 125000], ['MQ-THXO-120-CH', 130000], ['MQ-DXM-S-GG', 45000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 532000]]) assert.equal(priceOf.get(sku), price, sku);
       const dxmS = byId.get('xoai-say-deo-muoi-ot-goodgood');
       assert.deepEqual([dxmS.variants.find((v) => v.sku === 'MQ-DXM-S-GG').w, dxmS.variants.find((v) => v.sku === 'MQ-DXM-S-GG').g], ['80g', 80]);
       assert.match(dxmS.short, /túi 300g, 200g và túi vuông nhỏ 80g\./);
       assert.doesNotMatch(JSON.stringify(shopAll), /50–100g/);
       const dmv = new Map(dmj.products.flatMap((x) => x.variants).map((v) => [v.code, v.price]));
-      for (const [code, price] of [['VZ-FH-XD-250', 99000], ['VZ-CH-XDL-200', 89000], ['VZ-CH-XDR-200', 89000], ['VZ-CH-XDT-200', 89000], ['MQ-DXM-300-GG', 125000], ['VZ-CH-XTH-120', 159000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 558000]]) assert.equal(dmv.get(code), price, code + ' danh mục');
-      for (const [id, total, price] of [['vz-ch-cb3x', '267.000đ', '239.000đ'], ['vz-mix-cb3-thang-hoa', '627.000đ', '558.000đ']]) {
+      for (const [code, price] of [['VZ-FH-XD-250', 99000], ['VZ-CH-XDL-200', 89000], ['VZ-CH-XDR-200', 89000], ['VZ-CH-XDT-200', 89000], ['MQ-DXM-300-GG', 125000], ['VZ-CH-XTH-120', 130000], ['VZ-CH-CB3X-600', 239000], ['VZ-FH-CB-350', 139000], ['VZ-MIX-CB3TH-315', 532000]]) assert.equal(dmv.get(code), price, code + ' danh mục');
+      for (const [id, total, price] of [['vz-ch-cb3x', '267.000đ', '239.000đ'], ['vz-mix-cb3-thang-hoa', '598.000đ', '532.000đ']]) {
         const p = shopAll.find((x) => x.id === id);
         assert.ok(p.short.includes(price + ' (mua lẻ') && p.short.includes('= ' + total), id);
         assert.equal(p.comboOf.reduce((a, sku) => a + priceOf.get(sku), 0), Number(total.replace(/\D/g, '')), id);
       }
       assert.match(dmp.get('vz-ch-xdt').note, /Combo 2: 169\.000đ · Combo 3: 239\.000đ/);
       assert.match(dmp.get('vz-fh-xd').note, /250g: Combo 2: 185\.000đ · Combo 3: 265\.000đ/);
-      assert.match(dmp.get('vz-ch-xth').note, /Combo 2: 299\.000đ · Combo 3: 425\.000đ/);
+      assert.match(dmp.get('vz-ch-xth').note, /Combo 2: 244\.000đ · Combo 3: 347\.000đ/);
       const fm = dmp.get('vz-fh-mit');
       assert.equal(fm.name, 'Mít thái sấy giòn');
       assert.match(fm.note, /^Lưu ý: Mẫu bao bì vàng này đã hết/);
@@ -990,14 +990,23 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       // Xoài sấy thăng hoa Cheers+: ảnh cũ tx120 là nền đầu (thẻ cửa hàng + PDP). Ảnh áo dài chỉ là ảnh thêm.
       const xth = await (await fetch(base + '/san-pham/xoai-say-thang-hoa')).text();
       assert.match(xth, /<img id="pdp-main" class="is-45" src="\/assets\/products\/tx120-45\.jpg"/);
-      assert.match(xth, /"sku":"MQ-THXO-120-CH","w":"110g","g":110,"price":159000[^}]*"img":"\/assets\/products\/tx120-45\.jpg"/);
+      assert.match(xth, /"sku":"MQ-THXO-120-CH","w":"100g","g":100,"price":130000[^}]*"img":"\/assets\/products\/tx120-45\.jpg"/);
       assert.match(xth, /"photos":\[\{"src":"\/assets\/products\/chx-xoai-thanghoa-anh\.webp"/);
       assert.doesNotMatch(xth, /id="pdp-main"[^>]*chx-xoai-thanghoa-anh/);
       assert.equal(dmp.get('vz-ch-xth').images[0].src, '/assets/products/tx120-45.jpg');
       assert.equal(dmp.get('vz-ch-xth').images[1].src, '/assets/catalog/chx-xoai-thanghoa-anh.webp');
       assert.match(shop, /href="\/san-pham\/xoai-say-thang-hoa">\s*<img src="\/assets\/products\/tx120-45\.jpg"/);
-      assert.equal(byId.get('xoai-say-thang-hoa').variants[0].price, 159000);
-      assert.equal(byId.get('xoai-say-thang-hoa').variants[0].g, 110);
+      assert.equal(byId.get('xoai-say-thang-hoa').variants[0].price, 130000);
+      assert.equal(byId.get('xoai-say-thang-hoa').variants[0].w, '100g');
+      assert.equal(byId.get('xoai-say-thang-hoa').variants[0].g, 100);
+      assert.equal(dmp.get('vz-ch-xth').variants[0].weightLabel, '100g');
+      assert.equal(dmp.get('vz-ch-xth').variants[0].weightG, 100);
+      const cb3 = byId.get('vz-mix-cb3-thang-hoa').variants[0];
+      assert.equal(cb3.sku, 'VZ-MIX-CB3TH-315');
+      assert.equal(cb3.price, 532000);
+      assert.equal(cb3.w, '100g + 105g + 100g');
+      assert.equal(cb3.g, 305);
+      assert.doesNotMatch(byId.get('vz-mix-cb3-thang-hoa').short + byId.get('xoai-say-thang-hoa').variants[0].w, /110g/);
       // Thanh long ruột đỏ túi zip: trả về ảnh túi cũ và 199.000đ. Hộp PET giữ 205.000đ. Không còn ảnh nhãn dán nhầm.
       const dtl = await (await fetch(base + '/san-pham/mqz-thanh-long-say-deo')).text();
       assert.match(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g","g":500,"price":199000[^}]*"img":"\/assets\/products\/mqz\/mqz-dtl-500-45\.jpg"/);
@@ -1139,7 +1148,7 @@ test('combo: tiết kiệm từ giá lẻ thật, gợi ý đổi/thêm combo tr
     const by = new Map(deals.map((d) => [d.sku, d]));
     assert.deepEqual([by.get('VZ-CH-CB3X-600').sum, by.get('VZ-CH-CB3X-600').save], [267000, 28000]);
     assert.deepEqual([by.get('VZ-FH-CB-350').sum, by.get('VZ-FH-CB-350').save], [148000, 9000]);
-    assert.deepEqual([by.get('VZ-MIX-CB3TH-315').sum, by.get('VZ-MIX-CB3TH-315').save], [627000, 69000]);
+    assert.deepEqual([by.get('VZ-MIX-CB3TH-315').sum, by.get('VZ-MIX-CB3TH-315').save], [598000, 66000]);
     assert.deepEqual([by.get('MQ-CBX-100-GG').sum, by.get('MQ-CBX-100-GG').save], [294000, 35000]);
     // Combo 2 vị khách tự chọn (không rõ món) không có số tiết kiệm.
     assert.ok(!by.has('VZ-PS-CB2-200'));

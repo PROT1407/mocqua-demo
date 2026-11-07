@@ -3793,7 +3793,7 @@
      "thumb": "/assets/products/tx120-45.jpg",
      "w": 1200,
      "h": 1500,
-     "alt": "Xoài sấy thăng hoa Cheers+ · 110g",
+     "alt": "Xoài sấy thăng hoa Cheers+ · 100g",
      "kind": "hero"
     },
     {
@@ -3822,17 +3822,17 @@
     }
    ],
    "verify": false,
-   "note": "Có 2 mẫu túi. Combo 2: 299.000đ · Combo 3: 425.000đ.",
+   "note": "Có 2 mẫu túi. Combo 2: 244.000đ · Combo 3: 347.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XTH-120",
-     "weightG": 110,
-     "weightLabel": "110g",
+     "weightG": 100,
+     "weightLabel": "100g",
      "verify": false,
      "note": "",
-     "price": 159000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop duyệt đề xuất giá 01/11/2026: 145k → 159k",
-     "priceCheckedAt": "2026-11-01"
+     "price": 130000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop chốt 08/11/2026: túi 100g (trước ghi 110g), 159k → 130k",
+     "priceCheckedAt": "2026-11-08"
     }
    ]
   },
@@ -5896,7 +5896,7 @@
      "thumb": "/assets/catalog/vz-mix-cb3-thang-hoa-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi măng cụt sấy thăng hoa GoodGood 100g, Túi sầu riêng sấy thăng hoa Yummy 105g, Túi xoài sấy thăng hoa Cheers+ 110g đứng cạnh nhau",
+     "alt": "Túi măng cụt sấy thăng hoa GoodGood 100g, Túi sầu riêng sấy thăng hoa Yummy 105g, Túi xoài sấy thăng hoa Cheers+ 100g đứng cạnh nhau",
      "kind": "hero"
     }
    ],
@@ -5905,13 +5905,13 @@
    "variants": [
     {
      "code": "VZ-MIX-CB3TH-315",
-     "weightG": 315,
-     "weightLabel": "100g + 105g + 110g",
+     "weightG": 305,
+     "weightLabel": "100g + 105g + 100g",
      "verify": false,
      "note": "",
-     "price": 558000,
-     "priceSource": "Combo trộn vị = tổng giá lẻ 627.000đ −11%, làm tròn nghìn (chủ shop duyệt đề xuất giá 01/11/2026)",
-     "priceCheckedAt": "2026-11-01"
+     "price": 532000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ 598.000đ × 0,89, làm tròn nghìn (xoài Cheers+ MQ-THXO-120-CH 100g = 130.000đ, chủ shop chốt 08/11/2026)",
+     "priceCheckedAt": "2026-11-08"
     }
    ]
   },
