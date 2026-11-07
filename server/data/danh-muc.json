@@ -6237,12 +6237,20 @@
    "pack": "",
    "images": [
     {
+     "src": "/assets/catalog/vz-mix-cb3ymmcmo-anh.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3ymmcmo-anh-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi sầu riêng Yummy, túi xoài muối ớt GoodGood và túi măng cụt GoodGood đứng cạnh nhau trên nền trắng",
+     "kind": "hero"
+    },
+    {
      "src": "/assets/catalog/vz-mix-cb3ymmcmo-3tui.webp",
      "thumb": "/assets/catalog/vz-mix-cb3ymmcmo-3tui-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi sầu riêng Yummy 105g, túi xoài muối ớt GoodGood 200g và túi măng cụt GoodGood 100g đứng cạnh nhau",
-     "kind": "hero"
+     "alt": "Ảnh ghép: Túi sầu riêng Yummy 105g, túi xoài muối ớt GoodGood 200g và túi măng cụt GoodGood 100g đứng cạnh nhau",
+     "kind": "phu"
     }
    ],
    "verify": false,

@@ -878,6 +878,16 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal(mc.variants[0].price, 337000);
     assert.equal(mc.variants[0].sku, 'VZ-MIX-CB2MC-300');
     assert.match(cbp, /href="\/san-pham\/vz-mix-cb-mcmo"><img src="\/assets\/catalog\/vz-mix-cb2mcmo-anh-sm\.webp"/);
+    // Combo 3 túi Yummy + muối ớt + măng cụt: ảnh chủ shop là ảnh chính, ảnh ghép cũ xuống ảnh phụ. Giá 496.000đ.
+    const ymmcmo = await (await fetch(base + '/san-pham/vz-mix-cb-ymmcmo')).text();
+    assert.match(ymmcmo, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-mix-cb3ymmcmo-anh\.webp"/);
+    assert.match(ymmcmo, /"fit45":\["\/assets\/products\/vz\/vz-mix-cb3ymmcmo-anh\.webp","\/assets\/products\/vz\/vz-mix-cb3ymmcmo-3tui\.webp"/);
+    assert.match(ymmcmo, /"sku":"VZ-MIX-CB3YMC-405","w":"105g \+ 200g \+ 100g","g":405,"price":496000[^}]*"img":"\/assets\/products\/vz\/vz-mix-cb3ymmcmo-anh\.webp","back":"\/assets\/products\/vz\/vz-mix-cb3ymmcmo-3tui\.webp","backKind":"Ảnh ghép"/);
+    const y3 = shopAll.find((p) => p.id === 'vz-mix-cb-ymmcmo');
+    assert.equal(y3.comboOf.join(','), ['MQ-THSR-105-YM', 'MQ-DXM-200-GG', 'MQ-THMC-100-GG'].join(','));
+    assert.equal(y3.variants[0].price, 496000);
+    assert.equal(y3.variants[0].sku, 'VZ-MIX-CB3YMC-405');
+    assert.match(cbp, /href="\/san-pham\/vz-mix-cb-ymmcmo"><img src="\/assets\/catalog\/vz-mix-cb3ymmcmo-anh-sm\.webp"/);
     assert.doesNotMatch(x6, /vzx-combo100|combo-xoai-100g/);
     assert.doesNotMatch(shop, /vzx-combo100|vz-ch-cb3x\.webp/);
     {
@@ -891,7 +901,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       const dmj = JSON.parse(fs.readFileSync(new URL('./data/danh-muc.json', import.meta.url), 'utf8'));
       const dmp = new Map(dmj.products.map((x) => [x.id, x]));
       const want = { 'vz-gg-cb-xmx': 'vz-gg-cb2xm-anh', 'vz-ym-cb-sr': 'vz-ym-cb2sr-anh', 'vz-mix-cb-xth': 'vz-mix-cb2xt-anh', 'vz-mix-cb-msr': 'vz-mix-cb2ms-anh',
-        'vz-mix-cb3-sr-xoai': 'vz-mix-cb3sx-anh', 'vz-mix-cb-ch-mit': 'vz-mix-cb2cm-anh', 'vz-mix-cb4-kita-fh': 'vz-mix-cb4kf-anh', 'vz-mix-cb-mcmo': 'vz-mix-cb2mcmo-anh' };
+        'vz-mix-cb3-sr-xoai': 'vz-mix-cb3sx-anh', 'vz-mix-cb-ch-mit': 'vz-mix-cb2cm-anh', 'vz-mix-cb4-kita-fh': 'vz-mix-cb4kf-anh', 'vz-mix-cb-mcmo': 'vz-mix-cb2mcmo-anh', 'vz-mix-cb-ymmcmo': 'vz-mix-cb3ymmcmo-anh' };
       for (const [id, f] of Object.entries(want)) {
         const pg = await (await fetch(base + '/san-pham/' + id)).text();
         assert.match(pg, new RegExp('<img id="pdp-main" class="is-45" src="/assets/products/vz/' + f + '\\.webp"'), id);
