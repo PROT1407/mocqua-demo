@@ -805,7 +805,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v34/);
+    assert.match(sw, /mocqua-shell-v35/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -868,6 +868,16 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(x6, /"sku":"MQ-CBX-100-GG","w":"Combo 6 túi 100g","g":600,"price":259000[^}]*"img":"\/assets\/products\/vz\/combo-xoai-6tui\.webp"/);
     assert.match(x6, /"sku":"MQ-CBX-100-MIX","w":"Combo 6 túi 100g","g":600,"price":259000[^}]*"img":"\/assets\/products\/vz\/combo-xoai-6tui-tron\.webp"/);
     assert.match(cbp, /\/assets\/products\/vz\/combo-xoai-6tui\.webp/);
+    // Combo măng cụt + muối ớt: ảnh chủ shop là ảnh chính, ảnh ghép cũ xuống ảnh phụ. Một biến thể nên thẻ /combo dùng ảnh chủ shop. Giá 337.000đ.
+    const mcmo = await (await fetch(base + '/san-pham/vz-mix-cb-mcmo')).text();
+    assert.match(mcmo, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-mix-cb2mcmo-anh\.webp"/);
+    assert.match(mcmo, /"fit45":\["\/assets\/products\/vz\/vz-mix-cb2mcmo-anh\.webp","\/assets\/products\/vz\/vz-mix-cb2mcmo-2tui\.webp"/);
+    assert.match(mcmo, /"sku":"VZ-MIX-CB2MC-300","w":"100g \+ 200g","g":300,"price":337000[^}]*"img":"\/assets\/products\/vz\/vz-mix-cb2mcmo-anh\.webp","back":"\/assets\/products\/vz\/vz-mix-cb2mcmo-2tui\.webp","backKind":"Ảnh ghép"/);
+    const mc = shopAll.find((p) => p.id === 'vz-mix-cb-mcmo');
+    assert.equal(mc.comboOf.join(','), ['MQ-THMC-100-GG', 'MQ-DXM-200-GG'].join(','));
+    assert.equal(mc.variants[0].price, 337000);
+    assert.equal(mc.variants[0].sku, 'VZ-MIX-CB2MC-300');
+    assert.match(cbp, /href="\/san-pham\/vz-mix-cb-mcmo"><img src="\/assets\/catalog\/vz-mix-cb2mcmo-anh-sm\.webp"/);
     assert.doesNotMatch(x6, /vzx-combo100|combo-xoai-100g/);
     assert.doesNotMatch(shop, /vzx-combo100|vz-ch-cb3x\.webp/);
     {
@@ -881,7 +891,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       const dmj = JSON.parse(fs.readFileSync(new URL('./data/danh-muc.json', import.meta.url), 'utf8'));
       const dmp = new Map(dmj.products.map((x) => [x.id, x]));
       const want = { 'vz-gg-cb-xmx': 'vz-gg-cb2xm-anh', 'vz-ym-cb-sr': 'vz-ym-cb2sr-anh', 'vz-mix-cb-xth': 'vz-mix-cb2xt-anh', 'vz-mix-cb-msr': 'vz-mix-cb2ms-anh',
-        'vz-mix-cb3-sr-xoai': 'vz-mix-cb3sx-anh', 'vz-mix-cb-ch-mit': 'vz-mix-cb2cm-anh', 'vz-mix-cb4-kita-fh': 'vz-mix-cb4kf-anh' };
+        'vz-mix-cb3-sr-xoai': 'vz-mix-cb3sx-anh', 'vz-mix-cb-ch-mit': 'vz-mix-cb2cm-anh', 'vz-mix-cb4-kita-fh': 'vz-mix-cb4kf-anh', 'vz-mix-cb-mcmo': 'vz-mix-cb2mcmo-anh' };
       for (const [id, f] of Object.entries(want)) {
         const pg = await (await fetch(base + '/san-pham/' + id)).text();
         assert.match(pg, new RegExp('<img id="pdp-main" class="is-45" src="/assets/products/vz/' + f + '\\.webp"'), id);
