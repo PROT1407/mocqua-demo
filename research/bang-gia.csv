@@ -23,11 +23,11 @@ MQ-DXC-250-CHX,Đỏ,xoai-chin-cay,xanh,250g,250,cheers,89000,dang-ban,
 MQ-DXC-300-CHD,Đỏ,xoai-chin-cay,do,300g,300,cheers,105000,dang-ban,
 MQ-DXC-300-CHX,Đỏ,xoai-chin-cay,xanh,300g,300,cheers,105000,dang-ban,
 MQ-THXO-120-CH,Xoài sấy thăng hoa,xoai-say-thang-hoa,,110g,110,cheers,159000,dang-ban,
-MQ-GSR-100-GG,Sầu riêng sấy GoodGood,sau-rieng-say-goodgood,,100g,100,goodgood,110000,dang-ban,Giá lẻ để ghép combo 3 vị
+MQ-GSR-100-GG,Sầu riêng sấy GoodGood,sau-rieng-say-goodgood,,100g,100,goodgood,110000,dang-ban,Giữ 110.000đ. Combo 3 vị xoài + măng cụt dùng sầu riêng F&H 80g 90k, không dùng túi này.
 MQ-GSR-100-KT,Sầu riêng sấy KITA,sau-rieng-say-kita,,100g,100,kita,99000,dang-ban,
 MQ-GSR-100-VZ,Sầu riêng sấy Viza Food,sau-rieng-say-viza-food,,100g,100,vizafood,110000,dang-ban,
 MQ-THSR-105-YM,Sầu riêng sấy thăng hoa Yummy,sau-rieng-say-thang-hoa-yummy,,105g,105,yummy,199000,dang-ban,
-MQ-THSR-080-FH,Sầu riêng sấy thăng hoa Fresh & Healthy,sau-rieng-say-thang-hoa-fh,,80g,80,fh,159000,dang-ban,
+MQ-THSR-080-FH,Sầu riêng sấy thăng hoa Fresh & Healthy,sau-rieng-say-thang-hoa-fh,,80g,80,fh,90000,dang-ban,Chủ shop chốt 7/11/2026: 159000 → 90000. Không gộp với GoodGood 110k hay Yummy/Cheers.
 MQ-THSR-110-CH,Sầu riêng sấy thăng hoa Cheers+,sau-rieng-say-thang-hoa-cheers,,105g,105,cheers,149000,dang-ban,
 MQ-GMI-300-FH,Mít sấy giòn Fresh & Healthy,mit-say-gion,,200g,200,fh,74000,dang-ban,
 MQ-GMI-500-FH,Mít sấy giòn Fresh & Healthy,mit-say-gion,,500g,500,fh,139000,dang-ban,
@@ -179,14 +179,14 @@ VZ-GG-CB3D-240,Combo 3 vị sấy dẻo GoodGood 80g: thơm + thanh long + đu �
 VZ-MIX-CB3DG-600,Combo ăn vặt: xoài dẻo 200g + mít giòn 200g + hạt điều 100g,vz-mix-cb3-an-vat,,200g + 200g + 100g,500,fh,189000,dang-ban,
 VZ-MIX-CB3TH-315,Combo quà 3 vị sấy thăng hoa: măng cụt + sầu riêng + xoài,vz-mix-cb3-thang-hoa,,100g + 105g + 110g,315,goodgood,558000,dang-ban,
 VZ-MIX-CB3HS-300,Combo quà biếu: hạt dẻ cười + hạt sen + sầu riêng sấy,vz-mix-cb3-hat-sr,,3 × 100g,300,vizabox,271000,dang-ban,
-VZ-MIX-CB3SX-480,Combo sầu riêng thăng hoa Fresh & Healthy 80g + 2 túi xoài GoodGood 200g,vz-mix-cb3-sr-xoai,,80g + 200g + 200g,480,fh,300000,dang-ban,
+VZ-MIX-CB3SX-480,Combo sầu riêng thăng hoa Fresh & Healthy 80g + 2 túi xoài GoodGood 200g,vz-mix-cb3-sr-xoai,,80g + 200g + 200g,480,fh,239000,dang-ban,"90+89+89=268k × 0,89 = 238,52k → 239.000đ"
 VZ-MIX-CB2CM-305,Combo sầu riêng thăng hoa Cheers+ 105g + mít sấy giòn 200g,vz-mix-cb-ch-mit,,105g + 200g,305,cheers,210000,dang-ban,
 VZ-MIX-CB4KF-500,"Combo 4 túi: sầu riêng KITA + xoài dẻo, mít giòn, xoài muối ớt Fresh & Healthy",vz-mix-cb4-kita-fh,,100g + 100g + 200g + 100g,500,fh,241000,dang-ban,
 MQ-DXO-200-FHV,Xoài sấy dẻo Fresh & Healthy,xoai-say-deo,vang,200g,200,fh,89000,them-moi,"Túi kem–đáy vàng 200g, cùng giá túi trắng 200g"
 MQ-DXO-300-FHT,Xoài sấy dẻo Fresh & Healthy,xoai-say-deo,trong,300g,300,fh,105000,them-moi,"Túi trắng trong 300g, cùng giá Cheers+ 300g"
 MQ-DXO-300-FHV,Xoài sấy dẻo Fresh & Healthy,xoai-say-deo,vang,300g,300,fh,105000,them-moi,"Túi kem–đáy vàng 300g, cùng giá túi trắng 300g"
-MQ-CB3-XMS-100,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g,combo-xoai-mangcut-saurieng,vang,Xoài 100g + măng cụt 100g + sầu riêng 100g,300,viza,381000,them-moi,"49+269+110=428k × 0,89 = 380,92k → 381.000đ"
-MQ-CB3-XMS-200-T,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g,combo-xoai-mangcut-saurieng,trong,Xoài 200g trắng + măng cụt 100g + sầu riêng 100g,400,viza,417000,them-moi,"89+269+110=468k × 0,89 = 416,52k → 417.000đ"
-MQ-CB3-XMS-200-V,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g,combo-xoai-mangcut-saurieng,vang,Xoài 200g vàng + măng cụt 100g + sầu riêng 100g,400,viza,417000,them-moi,Cùng giá bản túi trắng 200g
-MQ-CB3-XMS-300-T,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g,combo-xoai-mangcut-saurieng,trong,Xoài 300g trắng + măng cụt 100g + sầu riêng 100g,500,viza,431000,them-moi,"105+269+110=484k × 0,89 = 430,76k → 431.000đ"
-MQ-CB3-XMS-300-V,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g,combo-xoai-mangcut-saurieng,vang,Xoài 300g vàng + măng cụt 100g + sầu riêng 100g,500,viza,431000,them-moi,Cùng giá bản túi trắng 300g
+MQ-CB3-XMS-100,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,vang,Xoài 100g + măng cụt 100g + sầu riêng F&H 80g,280,viza,363000,them-moi,"49+269+90=408k × 0,89 = 363,12k → 363.000đ"
+MQ-CB3-XMS-200-T,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,trong,Xoài 200g trắng + măng cụt 100g + sầu riêng F&H 80g,380,viza,399000,them-moi,"89+269+90=448k × 0,89 = 398,72k → 399.000đ"
+MQ-CB3-XMS-200-V,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,vang,Xoài 200g vàng + măng cụt 100g + sầu riêng F&H 80g,380,viza,399000,them-moi,Cùng giá bản túi trắng 200g
+MQ-CB3-XMS-300-T,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,trong,Xoài 300g trắng + măng cụt 100g + sầu riêng F&H 80g,480,viza,413000,them-moi,"105+269+90=464k × 0,89 = 412,96k → 413.000đ"
+MQ-CB3-XMS-300-V,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,vang,Xoài 300g vàng + măng cụt 100g + sầu riêng F&H 80g,480,viza,413000,them-moi,Cùng giá bản túi trắng 300g

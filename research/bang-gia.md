@@ -28,15 +28,17 @@ nếu 3+ món:  giá_combo ≈ tổng_lẻ × 0,89
 làm tròn tới 1.000đ
 ```
 
-Ví dụ đã chốt 7/11/2026 (combo 3 vị xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy GoodGood 100g):
+Ví dụ đã chốt 7/11/2026 (combo 3 vị xoài dẻo + măng cụt thăng hoa 100g + sầu riêng sấy thăng hoa Fresh & Healthy 80g). Sầu riêng trong combo này là túi xanh F&H `MQ-THSR-080-FH` = **90.000đ** (chủ shop chốt 7/11/2026, đổi từ 159.000đ). Không dùng sầu riêng GoodGood 100g (110.000đ), không dùng Yummy 105g (199.000đ) hay Cheers+ 105g (149.000đ).
 
 | Cách ghép | Tổng lẻ | × 0,89 | Giá combo |
 |---|---:|---:|---:|
-| Xoài 100g (49k) + măng cụt 100g (269k) + sầu riêng 100g (110k) | 428.000 | 380.920 | **381.000** |
-| Xoài 200g (89k, trắng hoặc vàng) + măng cụt 100g + sầu riêng 100g | 468.000 | 416.520 | **417.000** |
-| Xoài 300g (105k, trắng hoặc vàng) + măng cụt 100g + sầu riêng 100g | 484.000 | 430.760 | **431.000** |
+| Xoài 100g (49k) + măng cụt 100g (269k) + sầu riêng F&H 80g (90k) | 408.000 | 363.120 | **363.000** |
+| Xoài 200g (89k, trắng hoặc vàng) + măng cụt 100g + sầu riêng F&H 80g | 448.000 | 398.720 | **399.000** |
+| Xoài 300g (105k, trắng hoặc vàng) + măng cụt 100g + sầu riêng F&H 80g | 464.000 | 412.960 | **413.000** |
 
 Không đưa túi xoài 500g (149k) vào các combo này. Túi 500g chỉ ghi thêm trên trang xoài (đã bán 149.000đ).
+
+Combo đã có `VZ-MIX-CB3SX-480` (F&H 80g + xoài muối ớt GoodGood 200g + xoài dẻo GoodGood 200g) tính lại theo 90k: 90 + 89 + 89 = 268.000 × 0,89 = 238.520 → **239.000đ**.
 
 ## Xoài sấy dẻo Fresh & Healthy — túi trắng / túi vàng
 
@@ -62,4 +64,5 @@ Giữ nguyên **259.000đ**. Ba lựa chọn: vàng GoodGood (`MQ-CBX-100-GG`), 
 
 ## Nhật ký
 
-- **7/11/2026**: Lập file từ giá đang bán trên `main` (183 mã). Thêm kế hoạch: túi xoài F&H vàng 200g (89k), trắng/vàng 300g (105k); combo 3 vị xoài + măng cụt 100g + sầu riêng 100g giá 381k / 417k / 431k tùy túi xoài 100/200/300g.
+- **7/11/2026**: Lập file từ giá đang bán trên `main` (183 mã). Thêm kế hoạch: túi xoài F&H vàng 200g (89k), trắng/vàng 300g (105k); combo 3 vị xoài + măng cụt 100g + sầu riêng.
+- **7/11/2026**: Chủ shop chốt sầu riêng thăng hoa Fresh & Healthy 80g `MQ-THSR-080-FH` = **90.000đ** (đổi từ 159.000đ). Combo 3 vị dùng túi F&H này, không dùng GoodGood 110k: giá **363.000 / 399.000 / 413.000**. Combo `VZ-MIX-CB3SX-480` tính lại **239.000đ**. GoodGood đỏ 100g vẫn 110.000đ; Yummy 105g vẫn 199.000đ; Cheers+ 105g vẫn 149.000đ.

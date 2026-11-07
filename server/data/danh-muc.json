@@ -4870,17 +4870,17 @@
     }
    ],
    "verify": true,
-   "note": "Có 2 kiểu: túi in \"new\" và túi zip trong dán tem. Khối lượng chưa rõ. Combo 2: 299.000đ · Combo 3: 425.000đ.",
+   "note": "Có 2 kiểu: túi in \"new\" và túi zip trong dán tem. Túi 80g, chủ shop chốt 90.000đ ngày 07/11/2026. Combo 2: 169.000đ · Combo 3: 240.000đ.",
    "variants": [
     {
      "code": "VZ-FH-SRTH-XX",
-     "weightG": null,
-     "weightLabel": "Chưa rõ",
-     "verify": true,
+     "weightG": 80,
+     "weightLabel": "80g",
+     "verify": false,
      "note": "",
-     "price": 159000,
-     "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
-     "priceCheckedAt": "2026-10-31"
+     "price": 90000,
+     "priceSource": "Chủ shop chốt 07/11/2026: 159.000đ → 90.000đ (MQ-THSR-080-FH)",
+     "priceCheckedAt": "2026-11-07"
     }
    ]
   },
@@ -5959,9 +5959,9 @@
      "weightLabel": "80g + 200g + 200g",
      "verify": false,
      "note": "",
-     "price": 300000,
-     "priceSource": "Combo trộn vị = tổng giá lẻ −11%, làm tròn nghìn (giá cửa hàng 01/11/2026)",
-     "priceCheckedAt": "2026-11-01"
+     "price": 239000,
+     "priceSource": "90.000 + 89.000 + 89.000 = 268.000 × 0,89 = 238.520 → 239.000đ (chủ shop chốt sầu riêng F&H 80g 90.000đ, 07/11/2026)",
+     "priceCheckedAt": "2026-11-07"
     }
    ]
   },
@@ -6035,7 +6035,7 @@
    "id": "combo-xoai-mangcut-saurieng",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo 3 vị: xoài sấy dẻo + măng cụt thăng hoa 100g + sầu riêng sấy 100g",
+   "name": "Combo 3 vị: xoài sấy dẻo + măng cụt thăng hoa 100g + sầu riêng sấy thăng hoa Fresh & Healthy 80g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -6045,7 +6045,7 @@
      "thumb": "/assets/catalog/vz-mix-cb3xms-3tui-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi xoài sấy dẻo Fresh & Healthy kem đáy vàng, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy GoodGood 100g",
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy kem đáy vàng, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy thăng hoa Fresh & Healthy 80g",
      "kind": "hero"
     },
     {
@@ -6053,7 +6053,7 @@
      "thumb": "/assets/catalog/vz-mix-cb3xms-200t-3tui-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi xoài sấy dẻo Fresh & Healthy trắng trong, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy GoodGood 100g",
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy trắng trong, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy thăng hoa Fresh & Healthy 80g",
      "kind": "phu"
     },
     {
@@ -6061,61 +6061,61 @@
      "thumb": "/assets/catalog/vz-mix-cb3xms-100-3tui-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi xoài sấy dẻo Fresh & Healthy 100g kem đáy vàng, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy GoodGood 100g",
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy 100g kem đáy vàng, túi măng cụt sấy thăng hoa GoodGood 100g và túi sầu riêng sấy thăng hoa Fresh & Healthy 80g",
      "kind": "phu"
     }
    ],
    "verify": false,
-   "note": "3 túi: xoài dẻo F&H (100g vàng / 200g trắng hoặc vàng / 300g trắng hoặc vàng) + măng cụt thăng hoa GoodGood 100g + sầu riêng sấy GoodGood 100g. Không gồm túi xoài 500g.",
+   "note": "3 túi: xoài dẻo F&H (100g vàng / 200g trắng hoặc vàng / 300g trắng hoặc vàng) + măng cụt thăng hoa GoodGood 100g + sầu riêng thăng hoa Fresh & Healthy 80g (90.000đ). Không gồm túi xoài 500g và không gồm sầu riêng GoodGood.",
    "variants": [
     {
      "code": "MQ-CB3-XMS-200-V",
-     "weightG": 400,
-     "weightLabel": "Xoài 200g vàng + măng cụt 100g + sầu riêng 100g",
+     "weightG": 380,
+     "weightLabel": "Xoài 200g vàng + măng cụt 100g + sầu riêng F&H 80g",
      "verify": false,
      "note": "",
-     "price": 417000,
-     "priceSource": "89.000 + 269.000 + 110.000 = 468.000 × 0,89 = 416.520 → 417.000đ (chủ shop 07/11/2026)",
+     "price": 399000,
+     "priceSource": "89.000 + 269.000 + 90.000 = 448.000 × 0,89 = 398.720 → 399.000đ (chủ shop 07/11/2026)",
      "priceCheckedAt": "2026-11-07"
     },
     {
      "code": "MQ-CB3-XMS-200-T",
-     "weightG": 400,
-     "weightLabel": "Xoài 200g trắng + măng cụt 100g + sầu riêng 100g",
+     "weightG": 380,
+     "weightLabel": "Xoài 200g trắng + măng cụt 100g + sầu riêng F&H 80g",
      "verify": false,
      "note": "",
-     "price": 417000,
-     "priceSource": "Cùng giá bản túi vàng 200g: 468.000 × 0,89 → 417.000đ (chủ shop 07/11/2026)",
+     "price": 399000,
+     "priceSource": "Cùng giá bản túi vàng 200g: 448.000 × 0,89 → 399.000đ (chủ shop 07/11/2026)",
      "priceCheckedAt": "2026-11-07"
     },
     {
      "code": "MQ-CB3-XMS-100",
-     "weightG": 300,
-     "weightLabel": "Xoài 100g vàng + măng cụt 100g + sầu riêng 100g",
+     "weightG": 280,
+     "weightLabel": "Xoài 100g vàng + măng cụt 100g + sầu riêng F&H 80g",
      "verify": false,
      "note": "",
-     "price": 381000,
-     "priceSource": "49.000 + 269.000 + 110.000 = 428.000 × 0,89 = 380.920 → 381.000đ (chủ shop 07/11/2026)",
+     "price": 363000,
+     "priceSource": "49.000 + 269.000 + 90.000 = 408.000 × 0,89 = 363.120 → 363.000đ (chủ shop 07/11/2026)",
      "priceCheckedAt": "2026-11-07"
     },
     {
      "code": "MQ-CB3-XMS-300-V",
-     "weightG": 500,
-     "weightLabel": "Xoài 300g vàng + măng cụt 100g + sầu riêng 100g",
+     "weightG": 480,
+     "weightLabel": "Xoài 300g vàng + măng cụt 100g + sầu riêng F&H 80g",
      "verify": false,
      "note": "",
-     "price": 431000,
-     "priceSource": "105.000 + 269.000 + 110.000 = 484.000 × 0,89 = 430.760 → 431.000đ (chủ shop 07/11/2026)",
+     "price": 413000,
+     "priceSource": "105.000 + 269.000 + 90.000 = 464.000 × 0,89 = 412.960 → 413.000đ (chủ shop 07/11/2026)",
      "priceCheckedAt": "2026-11-07"
     },
     {
      "code": "MQ-CB3-XMS-300-T",
-     "weightG": 500,
-     "weightLabel": "Xoài 300g trắng + măng cụt 100g + sầu riêng 100g",
+     "weightG": 480,
+     "weightLabel": "Xoài 300g trắng + măng cụt 100g + sầu riêng F&H 80g",
      "verify": false,
      "note": "",
-     "price": 431000,
-     "priceSource": "Cùng giá bản túi vàng 300g: 484.000 × 0,89 → 431.000đ (chủ shop 07/11/2026)",
+     "price": 413000,
+     "priceSource": "Cùng giá bản túi vàng 300g: 464.000 × 0,89 → 413.000đ (chủ shop 07/11/2026)",
      "priceCheckedAt": "2026-11-07"
     }
    ]
