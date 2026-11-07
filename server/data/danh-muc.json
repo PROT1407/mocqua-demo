@@ -3822,7 +3822,7 @@
     }
    ],
    "verify": false,
-   "note": "Có 2 mẫu túi. Combo 2: 244.000đ · Combo 3: 347.000đ.",
+   "note": "Có 2 mẫu túi. Combo 2: 273.000đ · Combo 3: 387.000đ.",
    "variants": [
     {
      "code": "VZ-CH-XTH-120",
@@ -3830,8 +3830,8 @@
      "weightLabel": "100g",
      "verify": false,
      "note": "",
-     "price": 130000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop chốt 08/11/2026: túi 100g (trước ghi 110g), 159k → 130k",
+     "price": 145000,
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop chốt 08/11/2026: túi 100g, 145k (trước 159k, rồi 130k một lúc)",
      "priceCheckedAt": "2026-11-08"
     }
    ]
@@ -5909,8 +5909,8 @@
      "weightLabel": "100g + 105g + 100g",
      "verify": false,
      "note": "",
-     "price": 532000,
-     "priceSource": "Combo trộn vị = tổng giá lẻ 598.000đ × 0,89, làm tròn nghìn (xoài Cheers+ MQ-THXO-120-CH 100g = 130.000đ, chủ shop chốt 08/11/2026)",
+     "price": 546000,
+     "priceSource": "Combo trộn vị = tổng giá lẻ 613.000đ × 0,89, làm tròn nghìn (xoài Cheers+ MQ-THXO-120-CH 100g = 145.000đ, chủ shop chốt 08/11/2026)",
      "priceCheckedAt": "2026-11-08"
     }
    ]
