@@ -805,7 +805,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v32/);
+    assert.match(sw, /mocqua-shell-v34/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -862,7 +862,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.doesNotMatch(ch3, /vz-ch-cb3x\.webp/);
     const x6 = await (await fetch(base + '/san-pham/combo-xoai-say-deo-100g')).text();
     assert.match(x6, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/combo-xoai-6tui\.webp"/);
-    for (const f of ['combo-xoai-6tui-xanh', 'combo-xoai-6tui-tron']) assert.match(x6, new RegExp('"fit45":\\[[^\\]]*/assets/products/vz/' + f + '\\.webp'));
+    for (const f of ['combo-xoai-6tui-xanh-anh', 'combo-xoai-6tui-xanh', 'combo-xoai-6tui-tron']) assert.match(x6, new RegExp('"fit45":\\[[^\\]]*/assets/products/vz/' + f + '\\.webp'));
+    // Ảnh chủ shop gửi: ảnh chính của nhãn xanh, ảnh ghép cũ lùi xuống ảnh phụ. Vàng và trộn giữ ảnh cũ, giá 259.000đ.
+    assert.match(x6, /"sku":"MQ-CBX-100-FH","w":"Combo 6 túi 100g","g":600,"price":259000[^}]*"img":"\/assets\/products\/vz\/combo-xoai-6tui-xanh-anh\.webp","back":"\/assets\/products\/vz\/combo-xoai-6tui-xanh\.webp","backKind":"Ảnh ghép"/);
+    assert.match(x6, /"sku":"MQ-CBX-100-GG","w":"Combo 6 túi 100g","g":600,"price":259000[^}]*"img":"\/assets\/products\/vz\/combo-xoai-6tui\.webp"/);
+    assert.match(x6, /"sku":"MQ-CBX-100-MIX","w":"Combo 6 túi 100g","g":600,"price":259000[^}]*"img":"\/assets\/products\/vz\/combo-xoai-6tui-tron\.webp"/);
+    assert.match(cbp, /\/assets\/products\/vz\/combo-xoai-6tui\.webp/);
     assert.doesNotMatch(x6, /vzx-combo100|combo-xoai-100g/);
     assert.doesNotMatch(shop, /vzx-combo100|vz-ch-cb3x\.webp/);
     {

@@ -119,6 +119,7 @@ function presentVariant(mq, product, variant, price) {
     note: variant.note || '',
     img: resolveImg(variant.img, true),
     back: resolveImg(variant.back, true),
+    ...(variant.backKind ? { backKind: variant.backKind } : {}),
     group: packs ? variant.w : variant.sku,
   };
 }
