@@ -57,6 +57,17 @@ Giá 300g khớp xoài Cheers+ 300g (cùng khối lượng thì cùng giá).
 
 Giữ nguyên **259.000đ**. Ba lựa chọn: vàng GoodGood (`MQ-CBX-100-GG`), xanh Fresh & Healthy (`MQ-CBX-100-FH`), trộn 2 nhãn (`MQ-CBX-100-MIX`). Không đổi giá khi thêm màu.
 
+## Combo Yummy 105g, xoài muối ớt GoodGood 200g, măng cụt GoodGood 100g
+
+Xoài muối ớt trong các combo này là túi GoodGood 200g `MQ-DXM-200-GG` = **89.000đ** (không dùng túi F&H, không dùng túi GoodGood 80g hay 300g). Yummy `MQ-THSR-105-YM` = 199.000đ. Măng cụt `MQ-THMC-100-GG` = 269.000đ. Không đổi giá túi lẻ.
+
+| Combo | Túi | Tổng lẻ | Công thức | Giá combo | Tiết kiệm |
+|---|---|---:|---|---:|---:|
+| `VZ-MIX-CB2YM-305` | Yummy 105g + muối ớt 200g | 288.000 | × 0,94 = 270.720 | **271.000** | 17.000 |
+| `VZ-MIX-CB2MC-300` | Măng cụt 100g + muối ớt 200g | 358.000 | × 0,94 = 336.520 | **337.000** | 21.000 |
+| `VZ-MIX-CB2YMC-205` | Yummy 105g + măng cụt 100g | 468.000 | × 0,94 = 439.920 | **440.000** | 28.000 |
+| `VZ-MIX-CB3YMC-405` | Yummy 105g + muối ớt 200g + măng cụt 100g | 557.000 | × 0,89 = 495.730 | **496.000** | 61.000 |
+
 ## File đi kèm
 
 - `bang-gia.csv` — một dòng một mã SKU, cột `status`: `dang-ban` hoặc `them-moi`.
@@ -66,3 +77,4 @@ Giữ nguyên **259.000đ**. Ba lựa chọn: vàng GoodGood (`MQ-CBX-100-GG`), 
 
 - **7/11/2026**: Lập file từ giá đang bán trên `main` (183 mã). Thêm kế hoạch: túi xoài F&H vàng 200g (89k), trắng/vàng 300g (105k); combo 3 vị xoài + măng cụt 100g + sầu riêng.
 - **7/11/2026**: Chủ shop chốt sầu riêng thăng hoa Fresh & Healthy 80g `MQ-THSR-080-FH` = **90.000đ** (đổi từ 159.000đ). Combo 3 vị dùng túi F&H này, không dùng GoodGood 110k: giá **363.000 / 399.000 / 413.000**. Combo `VZ-MIX-CB3SX-480` tính lại **239.000đ**. GoodGood đỏ 100g vẫn 110.000đ; Yummy 105g vẫn 199.000đ; Cheers+ 105g vẫn 149.000đ.
+- **7/11/2026**: Thêm 4 combo ghép Yummy 105g (199k), xoài muối ớt GoodGood 200g (89k) và măng cụt GoodGood 100g (269k). Giá túi lẻ không đổi. `VZ-MIX-CB2YM-305` **271.000đ**, `VZ-MIX-CB2MC-300` **337.000đ**, `VZ-MIX-CB2YMC-205` **440.000đ**, `VZ-MIX-CB3YMC-405` **496.000đ**.

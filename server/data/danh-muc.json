@@ -6119,6 +6119,138 @@
      "priceCheckedAt": "2026-11-07"
     }
    ]
+  },
+  {
+   "id": "vz-mix-cb-ymo",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Combo sầu riêng thăng hoa Yummy 105g + xoài muối ớt GoodGood 200g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb2ymo-2tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb2ymo-2tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi sầu riêng sấy thăng hoa Yummy 105g và túi xoài sấy dẻo muối ớt GoodGood 200g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "199.000 + 89.000 = 288.000 × 0,94 = 270.720 → 271.000đ.",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB2YM-305",
+     "weightG": 305,
+     "weightLabel": "105g + 200g",
+     "verify": false,
+     "note": "",
+     "price": 271000,
+     "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb-mcmo",
+   "brand": "viza-food",
+   "label": "Good Good",
+   "name": "Combo măng cụt thăng hoa GoodGood 100g + xoài muối ớt GoodGood 200g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb2mcmo-2tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb2mcmo-2tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi măng cụt sấy thăng hoa GoodGood 100g và túi xoài sấy dẻo muối ớt GoodGood 200g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "269.000 + 89.000 = 358.000 × 0,94 = 336.520 → 337.000đ.",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB2MC-300",
+     "weightG": 300,
+     "weightLabel": "100g + 200g",
+     "verify": false,
+     "note": "",
+     "price": 337000,
+     "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb-ymmc",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Combo sầu riêng thăng hoa Yummy 105g + măng cụt thăng hoa GoodGood 100g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb2ymmc-2tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb2ymmc-2tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi sầu riêng sấy thăng hoa Yummy 105g và túi măng cụt sấy thăng hoa GoodGood 100g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "199.000 + 269.000 = 468.000 × 0,94 = 439.920 → 440.000đ.",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB2YMC-205",
+     "weightG": 205,
+     "weightLabel": "105g + 100g",
+     "verify": false,
+     "note": "",
+     "price": 440000,
+     "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb-ymmcmo",
+   "brand": "viza-food",
+   "label": "Yummy",
+   "name": "Combo 3 túi: sầu riêng Yummy 105g + xoài muối ớt GoodGood 200g + măng cụt GoodGood 100g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb3ymmcmo-3tui.webp",
+     "thumb": "/assets/catalog/vz-mix-cb3ymmcmo-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi sầu riêng Yummy 105g, túi xoài muối ớt GoodGood 200g và túi măng cụt GoodGood 100g đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "199.000 + 89.000 + 269.000 = 557.000 × 0,89 = 495.730 → 496.000đ.",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB3YMC-405",
+     "weightG": 405,
+     "weightLabel": "105g + 200g + 100g",
+     "verify": false,
+     "note": "",
+     "price": 496000,
+     "priceSource": "Combo 3 món = tổng giá lẻ × 0,89, làm tròn 1.000đ (7/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    }
+   ]
   }
  ],
  "gallery": [
