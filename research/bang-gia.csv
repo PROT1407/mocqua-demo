@@ -29,7 +29,7 @@ MQ-GSR-100-VZ,Sầu riêng sấy Viza Food,sau-rieng-say-viza-food,,100g,100,viz
 MQ-THSR-105-YM,Sầu riêng sấy thăng hoa Yummy,sau-rieng-say-thang-hoa-yummy,,105g,105,yummy,199000,dang-ban,
 MQ-THSR-080-FH,Sầu riêng sấy thăng hoa Fresh & Healthy,sau-rieng-say-thang-hoa-fh,,80g,80,fh,90000,dang-ban,Chủ shop chốt 7/11/2026: 159000 → 90000. Không gộp với GoodGood 110k hay Yummy/Cheers.
 MQ-THSR-110-CH,Sầu riêng sấy thăng hoa Cheers+,sau-rieng-say-thang-hoa-cheers,,105g,105,cheers,149000,dang-ban,
-MQ-GMI-300-FH,Mít sấy giòn Fresh & Healthy,mit-say-gion,,200g,200,fh,74000,dang-ban,
+MQ-GMI-300-FH,Mít sấy giòn Fresh & Healthy,mit-say-gion,,300g,300,fh,74000,dang-ban,Chủ shop xác nhận 7/11/2026: túi này là 300g (trước ghi 200g). Giá giữ 74.000đ.
 MQ-GMI-500-FH,Mít sấy giòn Fresh & Healthy,mit-say-gion,,500g,500,fh,139000,dang-ban,
 MQ-DTH-080-GG,Thơm (dứa) sấy dẻo,thom-say-deo,,80g,80,goodgood,45000,dang-ban,
 MQ-DCM-080-GG,Cóc sấy dẻo muối ớt GoodGood,coc-say-deo-muoi-ot-goodgood,,80g · túi xanh,80,goodgood,45000,dang-ban,
@@ -61,7 +61,7 @@ MQZ-OMDA-500,Xí muội đào hồng,mqz-xi-muoi-dao-hong,,500g,500,mq,99000,dan
 MQZ-DHS-500-HV,Hạt sen sấy dẻo,mqz-hat-sen-say-deo,,Hộp vuông PET · 500g,500,mq,125000,dang-ban,
 MQZ-DHS-500,Hạt sen sấy dẻo,mqz-hat-sen-say-deo,,Túi zip · 500g,500,mq,119000,dang-ban,
 MQZ-DTL-500-HV,Thanh long ruột đỏ sấy dẻo,mqz-thanh-long-say-deo,,Hộp vuông PET · 500g,500,mq,205000,dang-ban,
-MQZ-DTL-500,Thanh long ruột đỏ sấy dẻo,mqz-thanh-long-say-deo,,Túi zip · 500g,500,mq,199000,dang-ban,
+MQZ-DTL-500,Thanh long ruột đỏ sấy dẻo,mqz-thanh-long-say-deo,,Túi zip · 500g,500,mq,119000,dang-ban,Chủ shop 7/11/2026: túi zip 199000 → 119000. Hộp PET MQZ-DTL-500-HV giữ 205000.
 MQZ-DCD-500-HV,Chanh dây sấy dẻo,mqz-chanh-day-say-deo,,Hộp vuông PET · 500g,500,mq,185000,dang-ban,
 MQZ-DCD-500,Chanh dây sấy dẻo,mqz-chanh-day-say-deo,,Túi zip · 500g,500,mq,179000,dang-ban,
 MQZ-DDY-500-HV,Dâu tây Đà Lạt sấy dẻo,mqz-dau-tay-say-deo,,Hộp vuông PET · 500g,500,mq,209000,dang-ban,
@@ -174,14 +174,14 @@ MQ-CBH-5X100-VZ,Combo 5 hộp hạt Viza Food,vz-combo-5-hop-hat,,Combo 5 hộp 
 VZ-GG-CB2XM-400,Combo xoài GoodGood 200g: muối ớt + nguyên vị,vz-gg-cb-xmx,,2 × 200g,400,goodgood,167000,dang-ban,
 VZ-YM-CB2SR-200,Combo đôi sầu riêng thăng hoa Yummy: túi đỏ + Monthong,vz-ym-cb-sr,,105g + ~100g,205,yummy,374000,dang-ban,
 VZ-MIX-CB2XT-180,Combo xoài dẻo Fresh & Healthy 100g + thơm dẻo GoodGood 80g,vz-mix-cb-xth,,100g + 80g,180,fh,88000,dang-ban,
-VZ-MIX-CB2MS-400,Combo mít sấy giòn 200g + sầu riêng sấy GoodGood 100g,vz-mix-cb-msr,,200g + 100g,300,fh,173000,dang-ban,
+VZ-MIX-CB2MS-400,Combo mít sấy giòn 300g + sầu riêng sấy GoodGood 100g,vz-mix-cb-msr,,300g + 100g,400,fh,173000,dang-ban,Mít trong combo là MQ-GMI-300-FH 300g. Giá và mã SKU giữ nguyên.
 VZ-GG-CB3D-240,Combo 3 vị sấy dẻo GoodGood 80g: thơm + thanh long + đu đủ,vz-gg-cb3-deo,,3 × 80g,240,goodgood,120000,dang-ban,
-VZ-MIX-CB3DG-600,Combo ăn vặt: xoài dẻo 200g + mít giòn 200g + hạt điều 100g,vz-mix-cb3-an-vat,,200g + 200g + 100g,500,fh,189000,dang-ban,
+VZ-MIX-CB3DG-600,Combo ăn vặt: xoài dẻo 200g + mít giòn 300g + hạt điều 100g,vz-mix-cb3-an-vat,,200g + 300g + 100g,600,fh,189000,dang-ban,Mít trong combo là MQ-GMI-300-FH 300g. Giá và mã SKU giữ nguyên.
 VZ-MIX-CB3TH-315,Combo quà 3 vị sấy thăng hoa: măng cụt + sầu riêng + xoài,vz-mix-cb3-thang-hoa,,100g + 105g + 110g,315,goodgood,558000,dang-ban,
 VZ-MIX-CB3HS-300,Combo quà biếu: hạt dẻ cười + hạt sen + sầu riêng sấy,vz-mix-cb3-hat-sr,,3 × 100g,300,vizabox,271000,dang-ban,
 VZ-MIX-CB3SX-480,Combo sầu riêng thăng hoa Fresh & Healthy 80g + 2 túi xoài GoodGood 200g,vz-mix-cb3-sr-xoai,,80g + 200g + 200g,480,fh,239000,dang-ban,"90+89+89=268k × 0,89 = 238,52k → 239.000đ"
-VZ-MIX-CB2CM-305,Combo sầu riêng thăng hoa Cheers+ 105g + mít sấy giòn 200g,vz-mix-cb-ch-mit,,105g + 200g,305,cheers,210000,dang-ban,
-VZ-MIX-CB4KF-500,"Combo 4 túi: sầu riêng KITA + xoài dẻo, mít giòn, xoài muối ớt Fresh & Healthy",vz-mix-cb4-kita-fh,,100g + 100g + 200g + 100g,500,fh,241000,dang-ban,
+VZ-MIX-CB2CM-305,Combo sầu riêng thăng hoa Cheers+ 105g + mít sấy giòn 300g,vz-mix-cb-ch-mit,,105g + 300g,405,cheers,210000,dang-ban,Mít trong combo là MQ-GMI-300-FH 300g. Giá và mã SKU giữ nguyên.
+VZ-MIX-CB4KF-500,"Combo 4 túi: sầu riêng KITA + xoài dẻo, mít giòn, xoài muối ớt Fresh & Healthy",vz-mix-cb4-kita-fh,,100g + 100g + 300g + 100g,600,fh,241000,dang-ban,Mít trong combo là MQ-GMI-300-FH 300g. Giá và mã SKU giữ nguyên.
 MQ-DXO-200-FHV,Xoài sấy dẻo Fresh & Healthy,xoai-say-deo,vang,200g,200,fh,89000,them-moi,"Túi kem–đáy vàng 200g, cùng giá túi trắng 200g"
 MQ-DXO-300-FHT,Xoài sấy dẻo Fresh & Healthy,xoai-say-deo,trong,300g,300,fh,105000,them-moi,"Túi trắng trong 300g, cùng giá Cheers+ 300g"
 MQ-DXO-300-FHV,Xoài sấy dẻo Fresh & Healthy,xoai-say-deo,vang,300g,300,fh,105000,them-moi,"Túi kem–đáy vàng 300g, cùng giá túi trắng 300g"
@@ -190,6 +190,7 @@ MQ-CB3-XMS-200-T,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu
 MQ-CB3-XMS-200-V,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,vang,Xoài 200g vàng + măng cụt 100g + sầu riêng F&H 80g,380,viza,399000,them-moi,Cùng giá bản túi trắng 200g
 MQ-CB3-XMS-300-T,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,trong,Xoài 300g trắng + măng cụt 100g + sầu riêng F&H 80g,480,viza,413000,them-moi,"105+269+90=464k × 0,89 = 412,96k → 413.000đ"
 MQ-CB3-XMS-300-V,Combo 3 vị: xoài dẻo + măng cụt thăng hoa 100g + sầu riêng thăng hoa F&H 80g,combo-xoai-mangcut-saurieng,vang,Xoài 300g vàng + măng cụt 100g + sầu riêng F&H 80g,480,viza,413000,them-moi,Cùng giá bản túi trắng 300g
+VZ-MIX-CB2XMI-500,Combo mít sấy giòn Fresh & Healthy 300g + xoài sấy dẻo Fresh & Healthy 200g,vz-mix-cb-xmi,,300g + 200g,500,fh,153000,them-moi,"74.000 + 89.000 = 163.000 × 0,94 = 153.220 → 153.000đ"
 VZ-MIX-CB2YM-305,Combo sầu riêng thăng hoa Yummy 105g + xoài muối ớt GoodGood 200g,vz-mix-cb-ymo,,105g + 200g,305,yummy,271000,them-moi,"Yummy 105g 199k + muối ớt GG 200g 89k = 288k × 0,94 = 270,72k → 271.000đ"
 VZ-MIX-CB2MC-300,Combo măng cụt thăng hoa GoodGood 100g + xoài muối ớt GoodGood 200g,vz-mix-cb-mcmo,,100g + 200g,300,goodgood,337000,them-moi,"Măng cụt 100g 269k + muối ớt GG 200g 89k = 358k × 0,94 = 336,52k → 337.000đ"
 VZ-MIX-CB2YMC-205,Combo sầu riêng thăng hoa Yummy 105g + măng cụt thăng hoa GoodGood 100g,vz-mix-cb-ymmc,,105g + 100g,205,yummy,440000,them-moi,"Yummy 105g 199k + măng cụt 100g 269k = 468k × 0,94 = 439,92k → 440.000đ"

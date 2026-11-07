@@ -607,7 +607,7 @@ const COMBO_PAGE = {
   hero: 'vz-ym-cb-sr',
   groups: [
     { id: 'an-vat', h: 'Ăn vặt mỗi ngày', p: 'Túi vừa ăn, nhiều vị, để sẵn trên bàn làm việc.', ids: ['vz-gg-cb3-deo', 'vz-mix-cb3-an-vat', 'vz-mix-cb4-kita-fh', 'vz-ch-cb3x', 'combo-xoai-say-deo-100g'] },
-    { id: 'cap-doi', h: 'Cặp đôi cùng vị', p: 'Hai túi đi cùng nhau: cùng quả khác vị, hoặc hai vị hợp nhau.', ids: ['vz-gg-cb-xmx', 'vz-mix-cb-xth', 'vz-mix-cb-msr', 'vz-gg-cb-xc', 'vz-mix-cb-ymo', 'vz-mix-cb-mcmo', 'vz-mix-cb-ymmc'] },
+    { id: 'cap-doi', h: 'Cặp đôi cùng vị', p: 'Hai túi đi cùng nhau: cùng quả khác vị, hoặc hai vị hợp nhau.', ids: ['vz-gg-cb-xmx', 'vz-mix-cb-xth', 'vz-mix-cb-msr', 'vz-gg-cb-xc', 'vz-mix-cb-ymo', 'vz-mix-cb-mcmo', 'vz-mix-cb-ymmc', 'vz-mix-cb-xmi'] },
     { id: 'qua-bieu', h: 'Quà biếu', p: 'Thăng hoa, hạt hộp giấy, sầu riêng: gói sẵn là thành quà.', ids: ['combo-xoai-mangcut-saurieng', 'vz-mix-cb3-thang-hoa', 'vz-mix-cb-ymmcmo', 'vz-mix-cb3-sr-xoai', 'vz-mix-cb-ch-mit', 'vz-mix-cb3-hat-sr', 'vz-ps-cb3', 'vz-combo-5-hop-hat'] },
   ],
 };

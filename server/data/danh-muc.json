@@ -1034,11 +1034,11 @@
      "kind": "hero"
     },
     {
-     "src": "/assets/products/mqz/mqz-dtl-500-45.jpg",
-     "thumb": "/assets/products/mqz/mqz-dtl-500-45.jpg",
+     "src": "/assets/products/mqz/mqz-dtl-500-anh.webp",
+     "thumb": "/assets/products/mqz/mqz-dtl-500-anh.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Thanh long ruột đỏ sấy dẻo · Túi zip · 500g",
+     "alt": "Thanh long ruột đỏ sấy dẻo · Túi zip · 500g, nhãn Mộc Quả",
      "kind": "mau-bao-bi-2"
     }
    ],
@@ -1061,9 +1061,9 @@
      "weightLabel": "Túi zip · 500g",
      "verify": false,
      "note": "",
-     "price": 199000,
-     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
-     "priceCheckedAt": "2026-11-01"
+     "price": 119000,
+     "priceSource": "Chủ shop 7/11/2026: túi zip 199.000đ → 119.000đ. Hộp PET giữ 205.000đ.",
+     "priceCheckedAt": "2026-11-07"
     }
    ]
   },
@@ -3789,12 +3789,20 @@
    "pack": "",
    "images": [
     {
+     "src": "/assets/catalog/chx-xoai-thanghoa-anh.webp",
+     "thumb": "/assets/catalog/chx-xoai-thanghoa-anh-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi Cheers+ Freeze Dried Mango, cô gái áo dài và nón lá dưới cành xoài",
+     "kind": "hero"
+    },
+    {
      "src": "/assets/catalog/vz-ch-xth-2.webp",
      "thumb": "/assets/catalog/vz-ch-xth-2-sm.webp",
      "w": 1000,
      "h": 1000,
      "alt": "Túi Cheers+ xoài sấy thăng hoa, mặt trước (mẫu áo dài)",
-     "kind": "hero"
+     "kind": "phu"
     },
     {
      "src": "/assets/catalog/vz-ch-xth.webp",
@@ -4669,7 +4677,7 @@
      "thumb": "/assets/catalog/fhx-mit200-moi-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi Mít sấy Jackfruit Chips Fresh & Healthy mới 200g (đang giao), mặt trước và mặt sau",
+     "alt": "Túi Mít sấy Jackfruit Chips Fresh & Healthy mới 300g (đang giao), mặt trước và mặt sau",
      "kind": "mau-bao-bi-2"
     },
     {
@@ -4714,16 +4722,16 @@
     }
    ],
    "verify": false,
-   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 200g. 200g: Combo 2: 139.000đ · Combo 3: 199.000đ.",
+   "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít sấy Fresh & Healthy mới, đóng gói 300g. 300g: Combo 2: 139.000đ · Combo 3: 199.000đ.",
    "variants": [
     {
      "code": "VZ-FH-MIT-300",
-     "weightG": 200,
-     "weightLabel": "200g",
+     "weightG": 300,
+     "weightLabel": "300g",
      "verify": false,
      "note": "",
      "price": 74000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) – chủ shop đặt 74.000đ cho túi 200g (01/11/2026)",
+     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) – chủ shop đặt 74.000đ; túi này là 300g (07/11/2026, trước ghi 200g)",
      "priceCheckedAt": "2026-11-01"
     },
     {
@@ -5763,7 +5771,7 @@
    "id": "vz-mix-cb-msr",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo mít sấy giòn 200g + sầu riêng sấy GoodGood 100g",
+   "name": "Combo mít sấy giòn 300g + sầu riêng sấy GoodGood 100g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -5781,7 +5789,7 @@
      "thumb": "/assets/catalog/vz-mix-cb-msr-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Ảnh ghép: Túi mít sấy giòn 200g, Túi sầu riêng sấy GoodGood 100g, túi đỏ đứng cạnh nhau",
+     "alt": "Ảnh ghép: Túi mít sấy giòn 300g, Túi sầu riêng sấy GoodGood 100g, túi đỏ đứng cạnh nhau",
      "kind": "phu"
     }
    ],
@@ -5790,8 +5798,8 @@
    "variants": [
     {
      "code": "VZ-MIX-CB2MS-400",
-     "weightG": 300,
-     "weightLabel": "200g + 100g",
+     "weightG": 400,
+     "weightLabel": "300g + 100g",
      "verify": false,
      "note": "",
      "price": 173000,
@@ -5837,7 +5845,7 @@
    "id": "vz-mix-cb3-an-vat",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo ăn vặt: xoài dẻo 200g + mít giòn 200g + hạt điều 100g",
+   "name": "Combo ăn vặt: xoài dẻo 200g + mít giòn 300g + hạt điều 100g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -5847,7 +5855,7 @@
      "thumb": "/assets/catalog/vz-mix-cb3-an-vat-sm.webp",
      "w": 1200,
      "h": 1500,
-     "alt": "Túi xoài sấy dẻo Fresh & Healthy 200g, túi xanh, Túi mít sấy giòn Fresh & Healthy 200g, Hộp hạt điều rang muối Viza Food 100g đứng cạnh nhau",
+     "alt": "Túi xoài sấy dẻo Fresh & Healthy 200g, túi xanh, Túi mít sấy giòn Fresh & Healthy 300g, Hộp hạt điều rang muối Viza Food 100g đứng cạnh nhau",
      "kind": "hero"
     }
    ],
@@ -5856,8 +5864,8 @@
    "variants": [
     {
      "code": "VZ-MIX-CB3DG-600",
-     "weightG": 500,
-     "weightLabel": "200g + 200g + 100g",
+     "weightG": 600,
+     "weightLabel": "200g + 300g + 100g",
      "verify": false,
      "note": "",
      "price": 189000,
@@ -5969,7 +5977,7 @@
    "id": "vz-mix-cb-ch-mit",
    "brand": "viza-food",
    "label": "Viza Food",
-   "name": "Combo sầu riêng thăng hoa Cheers+ 105g + mít sấy giòn 200g",
+   "name": "Combo sầu riêng thăng hoa Cheers+ 105g + mít sấy giòn 300g",
    "cat": "combo",
    "type": "combo-trai-cay",
    "pack": "",
@@ -5988,8 +5996,8 @@
    "variants": [
     {
      "code": "VZ-MIX-CB2CM-305",
-     "weightG": 305,
-     "weightLabel": "105g + 200g",
+     "weightG": 405,
+     "weightLabel": "105g + 300g",
      "verify": false,
      "note": "",
      "price": 210000,
@@ -6021,8 +6029,8 @@
    "variants": [
     {
      "code": "VZ-MIX-CB4KF-500",
-     "weightG": 500,
-     "weightLabel": "100g + 100g + 200g + 100g",
+     "weightG": 600,
+     "weightLabel": "100g + 100g + 300g + 100g",
      "verify": false,
      "note": "",
      "price": 241000,
@@ -6272,6 +6280,39 @@
      "note": "",
      "price": 496000,
      "priceSource": "Combo 3 món = tổng giá lẻ × 0,89, làm tròn 1.000đ (7/11/2026)",
+     "priceCheckedAt": "2026-11-07"
+    }
+   ]
+  },
+  {
+   "id": "vz-mix-cb-xmi",
+   "brand": "viza-food",
+   "label": "Fresh & Healthy",
+   "name": "Combo mít sấy giòn Fresh & Healthy 300g + xoài sấy dẻo Fresh & Healthy 200g",
+   "cat": "combo",
+   "type": "combo-trai-cay",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-mix-cb2xmi-anh.webp",
+     "thumb": "/assets/catalog/vz-mix-cb2xmi-anh-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "Túi mít sấy giòn Fresh & Healthy và túi xoài sấy dẻo Fresh & Healthy đứng cạnh nhau",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "74.000 + 89.000 = 163.000 × 0,94 = 153.220 → 153.000đ.",
+   "variants": [
+    {
+     "code": "VZ-MIX-CB2XMI-500",
+     "weightG": 500,
+     "weightLabel": "300g + 200g",
+     "verify": false,
+     "note": "",
+     "price": 153000,
+     "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
      "priceCheckedAt": "2026-11-07"
     }
    ]
