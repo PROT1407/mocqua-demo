@@ -807,7 +807,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v38/);
+    assert.match(sw, /mocqua-shell-v39/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -987,12 +987,15 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(fm.images[1].src, '/assets/catalog/fhx-mit200-moi.webp');
       assert.equal(fm.variants[0].weightLabel, '300g');
       assert.equal(fm.variants[0].weightG, 300);
-      // Xoài sấy thăng hoa Cheers+: ảnh chủ shop thay tx120-45.jpg làm ảnh chính.
+      // Xoài sấy thăng hoa Cheers+: ảnh cũ tx120 là nền đầu (thẻ cửa hàng + PDP). Ảnh áo dài chỉ là ảnh thêm.
       const xth = await (await fetch(base + '/san-pham/xoai-say-thang-hoa')).text();
-      assert.match(xth, /<img id="pdp-main" class="is-45" src="\/assets\/products\/chx-xoai-thanghoa-anh\.webp"/);
-      assert.doesNotMatch(xth, /id="pdp-main"[^>]*tx120-45\.jpg/);
-      assert.equal(dmp.get('vz-ch-xth').images[0].src, '/assets/catalog/chx-xoai-thanghoa-anh.webp');
-      assert.equal(dmp.get('vz-ch-xth').images[0].thumb, '/assets/catalog/chx-xoai-thanghoa-anh-sm.webp');
+      assert.match(xth, /<img id="pdp-main" class="is-45" src="\/assets\/products\/tx120-45\.jpg"/);
+      assert.match(xth, /"sku":"MQ-THXO-120-CH","w":"110g","g":110,"price":159000[^}]*"img":"\/assets\/products\/tx120-45\.jpg"/);
+      assert.match(xth, /"photos":\[\{"src":"\/assets\/products\/chx-xoai-thanghoa-anh\.webp"/);
+      assert.doesNotMatch(xth, /id="pdp-main"[^>]*chx-xoai-thanghoa-anh/);
+      assert.equal(dmp.get('vz-ch-xth').images[0].src, '/assets/products/tx120-45.jpg');
+      assert.equal(dmp.get('vz-ch-xth').images[1].src, '/assets/catalog/chx-xoai-thanghoa-anh.webp');
+      assert.match(shop, /href="\/san-pham\/xoai-say-thang-hoa">\s*<img src="\/assets\/products\/tx120-45\.jpg"/);
       assert.equal(byId.get('xoai-say-thang-hoa').variants[0].price, 159000);
       assert.equal(byId.get('xoai-say-thang-hoa').variants[0].g, 110);
       // Thanh long ruột đỏ túi zip: trả về ảnh túi cũ và 199.000đ. Hộp PET giữ 205.000đ. Không còn ảnh nhãn dán nhầm.
