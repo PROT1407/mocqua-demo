@@ -804,6 +804,8 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(shop, /class="card__img"[^>]*>\s*<img [^>]*loading="lazy"[^>]*width="480" height="600"/);
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
+    // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
+    assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
     assert.match(sw, /mocqua-shell-v36/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);

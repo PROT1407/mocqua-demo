@@ -244,8 +244,9 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .crumbs a { color: var(--olive-dark); }
 .pdp { display: grid; gap: 22px; padding-top: 12px; }
 .pdp__stage { position: relative; background: var(--paper); border-radius: 24px; overflow: hidden; }
-.pdp__stage img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-/* Ảnh trong data.fit45 (vd. ảnh 3 túi combo) hiện trọn khung 4:5; ảnh khác giữ khung như cũ. */
+/* height: auto thắng thuộc tính height="1125" trên thẻ img. Nếu không, khung cao 1125px
+   trong khi rộng ~360px trên điện thoại, object-fit: cover phóng giữa túi và cắt mất zip, hai bên, đáy. */
+.pdp__stage img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; background: var(--paper); }
 .pdp__stage img.is-45 { height: auto; }
 .pdp__kind {
   position: absolute; left: 12px; bottom: 12px; background: var(--paper);
