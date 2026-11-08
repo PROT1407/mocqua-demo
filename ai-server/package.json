@@ -1,0 +1,16 @@
+{
+  "name": "mocqua-ai-server",
+  "private": true,
+  "type": "module",
+  "description": "API Gemini dùng chung cho Mộc Quả và H79 Gold. Khóa API chỉ nằm trên server.",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --test test/api.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
