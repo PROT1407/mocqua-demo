@@ -17,7 +17,7 @@ import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
 import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
-import { catalogBuyMap } from './dm-buy.js';
+import { catalogBuyMap, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage } from './pages.js';
 import { notifyNewOrder, sampleTelegramText, sendTelegram, telegramSettings } from './telegram.js';
@@ -274,7 +274,7 @@ export function createApp() {
   // Danh mục tra cứu sản phẩm: Thương hiệu → Nhãn → Sản phẩm → Khối lượng
   app.get('/api/danh-muc', (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.json(catalogWithPrices());
+    res.json(withShopLinks(catalogWithPrices()));
   });
   app.get('/api/admin/catalog-prices.json', requireAdmin, (req, res) => {
     const body = JSON.stringify({ kind: 'mocqua-catalog-prices', version: 1, exportedAt: new Date().toISOString(), rows: listCatalogPrices() }, null, 2);

@@ -14,15 +14,17 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN } = {}) {
     const id = clean(product?.id);
     const brand = clean(product?.label);
     const category = clean(cats.get(product?.cat) || product?.cat);
-    const url = id ? `${origin}/san-pham/${encodeURIComponent(id)}` : '';
     for (const variant of product?.variants || []) {
       const sku = clean(variant?.code);
       if (!sku) continue;
+      const shopId = clean(variant?.shopId);
+      const url = shopId ? `${origin}/san-pham/${encodeURIComponent(shopId)}` : '';
       const grams = Number(variant?.weightG);
       const weight = clean(variant?.weightLabel) || (Number.isFinite(grams) && grams > 0 ? `${grams}g` : '');
       const price = Number.isInteger(variant?.price) && variant.price >= 0 ? variant.price : null;
       lines.push({
         id,
+        shopId,
         name,
         brand,
         category,

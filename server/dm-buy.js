@@ -1,7 +1,7 @@
 // Nút "Thêm vào giỏ" ở /danh-muc: nối mã danh mục với mã bán ở cửa hàng (js/data.js).
 // Mã danh mục trùng mã cửa hàng (hoặc có trong MQ.SKU_ALIAS) thì dùng luôn; còn lại tra bảng CATALOG_TO_SHOP bên dưới.
 // Chỉ nối khi cùng hãng, cùng sản phẩm, cùng khối lượng và cùng giá. Không chắc thì để "Liên hệ".
-import { getShopCatalog, lookupSku } from './catalog.js';
+import { getShopCatalog, lookupSku, getProductPage } from './catalog.js';
 import { catalogData } from './danhmuc.js';
 import { isComboProduct } from './promo.js';
 
@@ -112,4 +112,37 @@ export function catalogHeroBySku() {
     }
   }
   return heroCache;
+}
+
+// Gắn slug trang /san-pham/<id> cho JSON công khai. Không đổi giá, không đổi trang HTML.
+// Ưu tiên mã bán thật (trùng SKU, bảng CATALOG_TO_SHOP, hoặc alias), rồi tới id danh mục nếu đó cũng là trang cửa hàng.
+export function withShopLinks(catalog) {
+  const shop = getShopCatalog();
+  const bySku = new Map();
+  for (const product of shop.products) {
+    for (const variant of product.variants) if (variant.sku) bySku.set(variant.sku, product.id);
+  }
+  const shopIds = new Set(shop.products.map((product) => product.id));
+  const pageId = (id) => {
+    const found = getProductPage(String(id || ''));
+    if (!found?.product) return '';
+    const slug = found.redirect || found.product.id;
+    return shopIds.has(slug) ? slug : '';
+  };
+  const products = (catalog.products || []).map((product) => {
+    const variants = (product.variants || []).map((variant) => {
+      const code = String(variant.code || '');
+      const mapped = CATALOG_TO_SHOP[code];
+      const looked = lookupSku(code);
+      const shopId = bySku.get(code)
+        || (mapped && bySku.get(mapped))
+        || (looked && shopIds.has(looked.id) ? looked.id : '')
+        || pageId(product.id);
+      return shopId ? { ...variant, shopId } : { ...variant };
+    });
+    const ids = [...new Set(variants.map((variant) => variant.shopId).filter(Boolean))];
+    const shared = ids.length === 1 && variants.every((variant) => variant.shopId === ids[0]) ? ids[0] : '';
+    return shared ? { ...product, shopId: shared, variants } : { ...product, variants };
+  });
+  return { ...catalog, products };
 }

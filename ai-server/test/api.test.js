@@ -63,7 +63,7 @@ test('Mộc Quả: thiếu khóa, thiếu câu hỏi, CORS, và trả reply khi 
         label: 'Cheers+',
         cat: 'thanghoa',
         images: [{ src: '/secret.webp' }],
-        variants: [{ code: 'MQ-THXO-120-CH', weightLabel: '100g', weightG: 100, price: 145000, priceSource: 'nội bộ' }],
+        variants: [{ code: 'MQ-THXO-120-CH', weightLabel: '100g', weightG: 100, price: 145000, priceSource: 'nội bộ', shopId: 'xoai-say-thang-hoa' }],
       }, {
         id: 'mit-say-gion',
         name: 'Mít sấy giòn',
@@ -123,7 +123,8 @@ test('Mộc Quả: thiếu khóa, thiếu câu hỏi, CORS, và trả reply khi 
   assert.match(seen[0].system, /Sản phẩm liên quan/);
   assert.match(seen[0].system, /145000/);
   assert.match(seen[0].system, /100g/);
-  assert.match(seen[0].system, /https:\/\/mocqua\.onrender\.com\/san-pham\/vz-ch-xth/);
+  assert.match(seen[0].system, /https:\/\/mocqua\.onrender\.com\/san-pham\/xoai-say-thang-hoa/);
+  assert.doesNotMatch(seen[0].system, /\/san-pham\/vz-ch-xth/);
   assert.doesNotMatch(seen[0].system, /nội bộ|secret\.webp/);
   const userText = seen[0].contents[0].parts[0].text;
   assert.doesNotMatch(userText, /145000|nội bộ|secret\.webp/);
@@ -185,13 +186,14 @@ test('danh mục công khai chỉ giữ tên, nhãn, khối lượng, giá và l
       cat: 'deo',
       note: 'ghi chú nội bộ',
       images: [{ src: '/assets/secret.jpg' }],
-      variants: [{ code: 'MQ-DXO-200-FHV', weightLabel: '200g', weightG: 200, price: 89000, priceSource: 'không đưa cho model' }],
+      variants: [{ code: 'MQ-DXO-200-FHV', weightLabel: '200g', weightG: 200, price: 89000, priceSource: 'không đưa cho model', shopId: 'xoai-say-deo' }],
     }],
   });
   assert.equal(lines[0].name, 'Xoài sấy dẻo');
   assert.equal(lines[0].brand, 'Fresh & Healthy');
   assert.equal(lines[0].weight, '200g');
   assert.equal(lines[0].price, 89000);
+  assert.equal(lines[0].shopId, 'xoai-say-deo');
   assert.equal(lines[0].url, 'https://mocqua.onrender.com/san-pham/xoai-say-deo');
   const text = formatCatalog(lines);
   assert.match(text, /89000/);
@@ -204,13 +206,18 @@ test('câu hỏi khớp tên thì đưa món đó lên trước, giá lấy từ
     categories: [{ id: 'thanghoa', name: 'Sấy thăng hoa' }],
     products: [
       { id: 'mit-say-gion', name: 'Mít sấy giòn', label: 'Fresh & Healthy', cat: 'thanghoa', variants: [{ code: 'A', weightLabel: '300g', weightG: 300, price: 74000 }] },
-      { id: 'vz-ch-xth', name: 'Xoài sấy thăng hoa', label: 'Cheers+', cat: 'thanghoa', variants: [{ code: 'B', weightLabel: '100g', weightG: 100, price: 145000 }] },
+      { id: 'vz-ch-xth', name: 'Xoài sấy thăng hoa', label: 'Cheers+', cat: 'thanghoa', variants: [{ code: 'B', weightLabel: '100g', weightG: 100, price: 145000, shopId: 'xoai-say-thang-hoa' }] },
     ],
   });
   const related = relatedItems(items, 'Xoài sấy thăng hoa Cheers+ giá bao nhiêu?');
   assert.equal(related[0].id, 'vz-ch-xth');
   assert.equal(related[0].price, 145000);
-  assert.equal(related[0].weight, '100g');
+  assert.equal(related[0].url, 'https://mocqua.onrender.com/san-pham/xoai-say-thang-hoa');
+  const bare = compactCatalog({
+    products: [{ id: 'vz-ch-xth', name: 'Xoài sấy thăng hoa', label: 'Cheers+', variants: [{ code: 'B', weightLabel: '100g', weightG: 100, price: 145000 }] }],
+  });
+  assert.equal(bare[0].url, '');
+  assert.doesNotMatch(formatCatalog(bare), /san-pham/);
 });
 
 test('danh mục lỗi thì thử lại một lần, rồi giữ bản gần nhất', async () => {
@@ -223,7 +230,7 @@ test('danh mục lỗi thì thử lại một lần, rồi giữ bản gần nh�
       name: 'Xoài sấy thăng hoa',
       label: 'Cheers+',
       cat: 'thanghoa',
-      variants: [{ code: 'B', weightLabel: '100g', weightG: 100, price: 145000 }],
+      variants: [{ code: 'B', weightLabel: '100g', weightG: 100, price: 145000, shopId: 'xoai-say-thang-hoa' }],
     }],
   };
   const load = createCatalogSource({

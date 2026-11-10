@@ -1020,6 +1020,18 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(cb3.w, '100g + 105g + 100g');
       assert.equal(cb3.g, 305);
       assert.doesNotMatch(byId.get('vz-mix-cb3-thang-hoa').short + byId.get('xoai-say-thang-hoa').variants[0].w, /110g/);
+      const liveDm = await (await fetch(base + '/api/danh-muc')).json();
+      const shopIds = new Set(shopAll.map((p) => p.id));
+      const liveXth = liveDm.products.find((p) => p.id === 'vz-ch-xth');
+      assert.equal(liveXth.shopId, 'xoai-say-thang-hoa');
+      assert.equal(liveXth.variants[0].shopId, 'xoai-say-thang-hoa');
+      for (const product of liveDm.products) {
+        if (product.shopId) assert.ok(shopIds.has(product.shopId), product.id + ' shopId');
+        for (const variant of product.variants) {
+          if (!variant.shopId) continue;
+          assert.ok(shopIds.has(variant.shopId), variant.code + ' → ' + variant.shopId);
+        }
+      }
       // Thanh long ruột đỏ túi zip: trả về ảnh túi cũ và 199.000đ. Hộp PET giữ 205.000đ. Không còn ảnh nhãn dán nhầm.
       const dtl = await (await fetch(base + '/san-pham/mqz-thanh-long-say-deo')).text();
       assert.match(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g","g":500,"price":199000[^}]*"img":"\/assets\/products\/mqz\/mqz-dtl-500-45\.jpg"/);
