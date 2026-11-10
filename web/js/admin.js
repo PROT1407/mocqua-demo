@@ -422,6 +422,17 @@ panels.refs.addEventListener('submit', async (event) => {
 
 api('/api/admin/me').then(enter).catch(() => {});
 
+document.querySelector('#tg-test')?.addEventListener('click', async () => {
+  const msg = document.querySelector('#tg-test-msg');
+  if (msg) msg.textContent = 'Đang gửi…';
+  try {
+    await api('/api/admin/telegram-test', { method: 'POST', body: '{}' });
+    if (msg) msg.textContent = 'Đã gửi tin thử. Mở Telegram để kiểm tra.';
+  } catch (error) {
+    if (msg) msg.textContent = error.message;
+  }
+});
+
 // Danh mục tra cứu: giá bán lẻ, nguồn giá, ngày kiểm theo từng mã khối lượng.
 async function loadCatalog() {
   const data = await api('/api/danh-muc');

@@ -989,7 +989,9 @@ export function adminPage() {
         <div class="backup-actions">
           <a class="btn btn--small" href="/api/admin/backup.json">Xuất tất cả (JSON)</a>
           <a class="btn btn--small btn--ghost" href="/api/admin/backup.csv">Xuất đơn (CSV)</a>
+          <button class="btn btn--small btn--ghost" type="button" id="tg-test">Gửi thử thông báo</button>
         </div>
+        <p class="fine" id="tg-test-msg" role="status"></p>
         <p class="fine">JSON để nhập lại. CSV chỉ để mở bằng Excel.</p>
         <details>
           <summary>Nhập lại từ file JSON</summary>
