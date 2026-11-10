@@ -12,6 +12,9 @@ process.env.BANK_BIN = '000000';
 process.env.BANK_NAME = 'Ngan hang thu';
 process.env.ACCOUNT_NO = '0000000000';
 process.env.ACCOUNT_NAME = 'MOC QUA TEST';
+delete process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+delete process.env.GOOGLE_SHEETS_SECRET;
+delete process.env.AI_SERVER_HEALTH_URL;
 
 function cookieOf(res) {
   const list = typeof res.headers.getSetCookie === 'function' ? res.headers.getSetCookie() : [res.headers.get('set-cookie')];
@@ -277,14 +280,26 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.equal(anonTelegram.status, 401);
     const savedToken = process.env.TELEGRAM_BOT_TOKEN;
     const savedChat = process.env.TELEGRAM_CHAT_ID;
+    const savedSheetUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    const savedSheetSecret = process.env.GOOGLE_SHEETS_SECRET;
     delete process.env.TELEGRAM_BOT_TOKEN;
     delete process.env.TELEGRAM_CHAT_ID;
+    delete process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    delete process.env.GOOGLE_SHEETS_SECRET;
     const trial = await fetch(base + '/api/admin/telegram-test', { method: 'POST', headers: auth });
     if (savedToken == null) delete process.env.TELEGRAM_BOT_TOKEN;
     else process.env.TELEGRAM_BOT_TOKEN = savedToken;
     if (savedChat == null) delete process.env.TELEGRAM_CHAT_ID;
     else process.env.TELEGRAM_CHAT_ID = savedChat;
-    assert.equal(trial.status, 503);
+    if (savedSheetUrl == null) delete process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    else process.env.GOOGLE_SHEETS_WEBHOOK_URL = savedSheetUrl;
+    if (savedSheetSecret == null) delete process.env.GOOGLE_SHEETS_SECRET;
+    else process.env.GOOGLE_SHEETS_SECRET = savedSheetSecret;
+    assert.equal(trial.status, 200);
+    const trialBody = await trial.json();
+    assert.equal(trialBody.telegram.status, 'unconfigured');
+    assert.equal(trialBody.sheets.status, 'unconfigured');
+    assert.equal(trialBody.telegram.sent, 0);
 
     const orders = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
     const listedOrder = orders.orders.find((item) => item.code === order.code);
@@ -372,6 +387,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(adminHtml, /Xuất tất cả \(JSON\)/);
     assert.match(adminHtml, /Xuất đơn \(CSV\)/);
     assert.match(adminHtml, /Gửi thử thông báo/);
+    assert.match(adminHtml, /Không tạo đơn thật/);
     assert.match(adminHtml, /không giữ file/);
     assert.match(adminHtml, /Thêm đơn còn thiếu/);
     assert.match(adminHtml, /Thay toàn bộ đơn bằng file/);
@@ -508,6 +524,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(csp, /frame-ancestors 'none'/);
     assert.match(csp, /img\.vietqr\.io/);
     assert.match(csp, /script-src 'self'/);
+    assert.match(csp, /connect-src 'self' https:\/\/ai-server-u9ob\.onrender\.com/);
     assert.match(csp, /fonts\.googleapis\.com/);
     assert.doesNotMatch(csp, /unsafe-eval/);
     assert.equal(homeRes.headers.get('strict-transport-security'), null);
@@ -517,10 +534,15 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(homeHtml, /apple-mobile-web-app-title/);
     assert.match(homeHtml, /name="theme-color" content="#F7F1E8"/);
     assert.match(homeHtml, /\/static\/js\/pwa\.js/);
+    assert.match(homeHtml, /name="mq-ai-health" content="https:\/\/ai-server-u9ob\.onrender\.com\/health"/);
     assert.doesNotMatch(homeHtml, /test-pass|test-secret/);
 
     const secureHealth = await fetch(base + '/api/health', { headers: { 'x-forwarded-proto': 'https' } });
     assert.match(secureHealth.headers.get('strict-transport-security') || '', /max-age=15552000/);
+    const healthz = await fetch(base + '/healthz');
+    assert.equal(healthz.status, 200);
+    assert.equal(healthz.headers.get('cache-control'), 'no-store');
+    assert.deepEqual(await healthz.json(), { ok: true });
 
     const manifestRes = await fetch(base + '/manifest.webmanifest');
     assert.equal(manifestRes.status, 200);
@@ -820,7 +842,16 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v42/);
+    assert.match(sw, /mocqua-shell-v43/);
+    const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
+    assert.match(pwa, /mq_ai_warm_at/);
+    assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
+    assert.match(pwa, /keepalive:\s*true/);
+    assert.match(pwa, /page-admin/);
+    assert.match(pwa, /\.catch\(\(\) => \{\}\)/);
+    const adminJs = await (await fetch(base + '/static/js/admin.js')).text();
+    assert.match(adminJs, /Telegram: \$\{telegram\}\. Google Sheet: \$\{sheets\}\./);
+    assert.match(adminJs, /không cấu hình/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.

@@ -6,6 +6,7 @@ import { shopContact } from './contact.js';
 import { catalogHeroBySku } from './dm-buy.js';
 import { dealBySku } from './deals.js';
 import { bankConfig } from './vietqr.js';
+import { aiHealthUrl } from './warmup.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 // Câu mở đầu cho băng tiêu đề từng nhóm ở /cua-hang (chỉ trang Cửa hàng dùng).
@@ -44,6 +45,7 @@ function layout({ title, description, page, body, scripts = [], styles = [] }) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F7F1E8">
+<meta name="mq-ai-health" content="${esc(aiHealthUrl())}">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mộc Quả">
@@ -992,6 +994,7 @@ export function adminPage() {
           <button class="btn btn--small btn--ghost" type="button" id="tg-test">Gửi thử thông báo</button>
         </div>
         <p class="fine" id="tg-test-msg" role="status"></p>
+        <p class="fine">Nút này gửi tin thử lên Telegram và ghi một dòng TEST lên Google Sheet. Không tạo đơn thật.</p>
         <p class="fine">JSON để nhập lại. CSV chỉ để mở bằng Excel.</p>
         <details>
           <summary>Nhập lại từ file JSON</summary>

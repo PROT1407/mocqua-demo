@@ -20,7 +20,8 @@ import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPr
 import { catalogBuyMap, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage } from './pages.js';
-import { notifyNewOrder, sampleTelegramText, sendTelegram, telegramSettings } from './telegram.js';
+import { notifyNewOrder } from './telegram.js';
+import { notifySheets, sendTestNotifications } from './sheets.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
 
@@ -114,6 +115,11 @@ export function createApp() {
   });
   app.use('/icons', express.static(path.join(ROOT, 'web', 'icons'), { index: false, maxAge: '7d' }));
 
+  app.get('/healthz', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.status(200).json({ ok: true });
+  });
+
   app.get('/api/health', (req, res) => {
     res.json({ ok: true, bankReady: bankConfig().ready });
   });
@@ -132,6 +138,7 @@ export function createApp() {
       pay: req.body?.pay,
     });
     notifyNewOrder(order);
+    notifySheets(order);
     const qr = vietqrFor(order.summary.total, order.code);
     res.status(201).json({
       code: order.code,
@@ -187,17 +194,7 @@ export function createApp() {
   });
 
   app.post('/api/admin/telegram-test', requireAdmin, wrap(async (_req, res) => {
-    const settings = telegramSettings();
-    if (!settings.enabled) {
-      res.status(503).json({ error: 'Chưa đặt TELEGRAM_BOT_TOKEN và TELEGRAM_CHAT_ID trên máy chủ.' });
-      return;
-    }
-    const result = await sendTelegram(sampleTelegramText(), { settings });
-    if (!result.sent) {
-      res.status(502).json({ error: 'Telegram không nhận tin. Kiểm tra token và chat id.' });
-      return;
-    }
-    res.json({ ok: true, sent: result.sent });
+    res.json(await sendTestNotifications());
   }));
 
   app.get('/api/admin/orders', requireAdmin, (req, res) => {
