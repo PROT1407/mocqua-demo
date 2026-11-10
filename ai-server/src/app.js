@@ -1,5 +1,6 @@
 import express from 'express';
 import { createCatalogSource } from './catalog.js';
+import { createMessenger, facebookReady, facebookSettings, validSignature, verifyChallenge } from './facebook.js';
 import { generateReply, resolveModel } from './gemini.js';
 import { buildAssistant, readChat } from './prompt.js';
 
@@ -22,12 +23,63 @@ export function createApp({
     max: positiveInt(process.env.RATE_LIMIT_MAX, 30),
     windowMs: positiveInt(process.env.RATE_LIMIT_WINDOW_MS, 10 * 60 * 1000),
   },
+  facebook = {},
 } = {}) {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
+  const fb = { ...facebookSettings(), ...(facebook.settings || {}) };
+  const messenger = createMessenger({
+    settings: fb,
+    generate: facebook.generate || generate,
+    loadCatalog: facebook.loadCatalog || loadCatalog,
+    sendOwner: facebook.sendOwner,
+    fetchImpl: facebook.fetchImpl,
+    apiKey: facebook.apiKey ?? apiKey,
+    model: facebook.model || model,
+    now: facebook.now,
+  });
+  let facebookTail = Promise.resolve();
+  app.locals.drainFacebook = () => facebookTail;
+
+  app.get('/webhook/facebook', (req, res) => {
+    const result = verifyChallenge(req.query, fb);
+    if (!result.ok) {
+      res.sendStatus(403);
+      return;
+    }
+    res.status(200).type('text/plain').send(result.challenge);
+  });
+
+  app.post('/webhook/facebook', express.raw({ type: () => true, limit: '256kb' }), (req, res) => {
+    if (!facebookReady(fb)) {
+      res.status(200).json({ ok: true, skipped: true });
+      return;
+    }
+    const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body || '');
+    if (!validSignature(raw, req.get('x-hub-signature-256'), fb.appSecret)) {
+      res.sendStatus(403);
+      return;
+    }
+    let payload = {};
+    try {
+      payload = JSON.parse(raw.toString('utf8') || '{}');
+    } catch {
+      res.status(200).json({ ok: true });
+      return;
+    }
+    res.status(200).json({ ok: true });
+    const job = messenger(payload).catch((error) => {
+      console.error('facebook', String(error?.message || 'error').replace(/access_token=[^&\s]+/gi, 'access_token=<hidden>'));
+    });
+    facebookTail = facebookTail.then(() => job, () => job);
+  });
+
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/webhook/facebook')) return next();
+    return corsAllowlist(req, res, next);
+  });
   app.use(express.json({ limit: '32kb' }));
-  app.use(corsAllowlist);
   const limitPosts = rateLimiter(rateLimit.max, rateLimit.windowMs);
 
   app.get('/', (_req, res) => {

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "check": "node --test test/api.test.js"
+    "check": "node --test test/api.test.js test/facebook.test.js"
   },
   "dependencies": {
     "express": "^4.21.2"
