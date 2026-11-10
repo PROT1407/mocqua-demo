@@ -1,7 +1,7 @@
 import express from 'express';
-import { createCatalogSource, formatCatalog } from './catalog.js';
+import { createCatalogSource } from './catalog.js';
 import { generateReply, resolveModel } from './gemini.js';
-import { SYSTEM_PROMPT, buildContents, readChat } from './prompt.js';
+import { buildAssistant, readChat } from './prompt.js';
 
 const ALLOWED_ORIGINS = new Set([
   'https://mocqua.com',
@@ -30,6 +30,10 @@ export function createApp({
   app.use(corsAllowlist);
   const limitPosts = rateLimiter(rateLimit.max, rateLimit.windowMs);
 
+  app.get('/', (_req, res) => {
+    res.json({ ok: true, service: 'mocqua-ai-server' });
+  });
+
   app.get('/health', (_req, res) => {
     res.json({ ok: true });
   });
@@ -52,16 +56,12 @@ export function createApp({
     }
     try {
       const catalog = await loadCatalog();
+      const turn = buildAssistant(chat.message, chat.history, catalog);
       const reply = await generate({
         apiKey,
         model,
-        system: SYSTEM_PROMPT,
-        contents: buildContents(chat.message, chat.history, {
-          ok: catalog.ok && catalog.items.length > 0,
-          stale: catalog.stale,
-          updated: catalog.updated,
-          text: formatCatalog(catalog.items),
-        }),
+        system: turn.system,
+        contents: turn.contents,
       });
       res.json({ reply });
     } catch (err) {
@@ -91,7 +91,7 @@ function safeModel() {
   try {
     return resolveModel();
   } catch {
-    return 'gemini-2.5-flash';
+    return 'gemini-3.5-flash-lite';
   }
 }
 

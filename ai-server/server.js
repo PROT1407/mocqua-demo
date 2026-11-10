@@ -1,8 +1,11 @@
 import { createApp } from './src/app.js';
+import { createCatalogSource } from './src/catalog.js';
 
 const port = Number(process.env.PORT);
 const listenPort = Number.isInteger(port) && port > 0 ? port : 10000;
+const loadCatalog = createCatalogSource();
 
-createApp().listen(listenPort, '0.0.0.0', () => {
+createApp({ loadCatalog }).listen(listenPort, '0.0.0.0', () => {
   console.log(`ai-server listening on 0.0.0.0:${listenPort}`);
 });
+loadCatalog().catch(() => {});
