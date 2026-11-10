@@ -273,6 +273,18 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(secureCookie, /SameSite=Lax/);
     assert.match(secureCookie, /Secure/);
     const auth = { cookie, 'content-type': 'application/json' };
+    const anonTelegram = await fetch(base + '/api/admin/telegram-test', { method: 'POST' });
+    assert.equal(anonTelegram.status, 401);
+    const savedToken = process.env.TELEGRAM_BOT_TOKEN;
+    const savedChat = process.env.TELEGRAM_CHAT_ID;
+    delete process.env.TELEGRAM_BOT_TOKEN;
+    delete process.env.TELEGRAM_CHAT_ID;
+    const trial = await fetch(base + '/api/admin/telegram-test', { method: 'POST', headers: auth });
+    if (savedToken == null) delete process.env.TELEGRAM_BOT_TOKEN;
+    else process.env.TELEGRAM_BOT_TOKEN = savedToken;
+    if (savedChat == null) delete process.env.TELEGRAM_CHAT_ID;
+    else process.env.TELEGRAM_CHAT_ID = savedChat;
+    assert.equal(trial.status, 503);
 
     const orders = await (await fetch(base + '/api/admin/orders', { headers: auth })).json();
     const listedOrder = orders.orders.find((item) => item.code === order.code);
@@ -359,6 +371,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     const adminHtml = await (await fetch(base + '/admin')).text();
     assert.match(adminHtml, /Xuất tất cả \(JSON\)/);
     assert.match(adminHtml, /Xuất đơn \(CSV\)/);
+    assert.match(adminHtml, /Gửi thử thông báo/);
     assert.match(adminHtml, /không giữ file/);
     assert.match(adminHtml, /Thêm đơn còn thiếu/);
     assert.match(adminHtml, /Thay toàn bộ đơn bằng file/);
@@ -807,7 +820,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v41/);
+    assert.match(sw, /mocqua-shell-v42/);
     assert.match(sw, /'\/static\/js\/cart-core\.js'/);
     assert.match(sw, /'\/combo'/);
     // Trang /combo: menu có link Combo, banner 1 combo nổi bật, 3 nhóm; thẻ có danh sách món, giá combo, "Tiết kiệm" tính từ giá lẻ thật, nút thêm.
@@ -1007,6 +1020,18 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(cb3.w, '100g + 105g + 100g');
       assert.equal(cb3.g, 305);
       assert.doesNotMatch(byId.get('vz-mix-cb3-thang-hoa').short + byId.get('xoai-say-thang-hoa').variants[0].w, /110g/);
+      const liveDm = await (await fetch(base + '/api/danh-muc')).json();
+      const shopIds = new Set(shopAll.map((p) => p.id));
+      const liveXth = liveDm.products.find((p) => p.id === 'vz-ch-xth');
+      assert.equal(liveXth.shopId, 'xoai-say-thang-hoa');
+      assert.equal(liveXth.variants[0].shopId, 'xoai-say-thang-hoa');
+      for (const product of liveDm.products) {
+        if (product.shopId) assert.ok(shopIds.has(product.shopId), product.id + ' shopId');
+        for (const variant of product.variants) {
+          if (!variant.shopId) continue;
+          assert.ok(shopIds.has(variant.shopId), variant.code + ' → ' + variant.shopId);
+        }
+      }
       // Thanh long ruột đỏ túi zip: trả về ảnh túi cũ và 199.000đ. Hộp PET giữ 205.000đ. Không còn ảnh nhãn dán nhầm.
       const dtl = await (await fetch(base + '/san-pham/mqz-thanh-long-say-deo')).text();
       assert.match(dtl, /"sku":"MQZ-DTL-500","w":"Túi zip · 500g","g":500,"price":199000[^}]*"img":"\/assets\/products\/mqz\/mqz-dtl-500-45\.jpg"/);

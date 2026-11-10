@@ -1,7 +1,7 @@
 const MODEL_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$/;
 
 export function resolveModel(value = process.env.GEMINI_MODEL) {
-  const model = String(value || 'gemini-2.5-flash').trim();
+  const model = String(value || 'gemini-3.5-flash-lite').trim();
   if (!MODEL_NAME.test(model)) throw new Error('model');
   return model;
 }

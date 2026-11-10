@@ -17,9 +17,10 @@ import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
 import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
-import { catalogBuyMap } from './dm-buy.js';
+import { catalogBuyMap, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage } from './pages.js';
+import { notifyNewOrder, sampleTelegramText, sendTelegram, telegramSettings } from './telegram.js';
 
 dotenv.config({ path: path.join(ROOT, '.env') });
 
@@ -130,6 +131,7 @@ export function createApp() {
       customer,
       pay: req.body?.pay,
     });
+    notifyNewOrder(order);
     const qr = vietqrFor(order.summary.total, order.code);
     res.status(201).json({
       code: order.code,
@@ -183,6 +185,20 @@ export function createApp() {
     const bank = bankConfig();
     res.json({ ok: true, bankReady: bank.ready, bankName: bank.bankName || '' });
   });
+
+  app.post('/api/admin/telegram-test', requireAdmin, wrap(async (_req, res) => {
+    const settings = telegramSettings();
+    if (!settings.enabled) {
+      res.status(503).json({ error: 'Chưa đặt TELEGRAM_BOT_TOKEN và TELEGRAM_CHAT_ID trên máy chủ.' });
+      return;
+    }
+    const result = await sendTelegram(sampleTelegramText(), { settings });
+    if (!result.sent) {
+      res.status(502).json({ error: 'Telegram không nhận tin. Kiểm tra token và chat id.' });
+      return;
+    }
+    res.json({ ok: true, sent: result.sent });
+  }));
 
   app.get('/api/admin/orders', requireAdmin, (req, res) => {
     res.json({ statuses: STATUSES, orders: listOrders() });
@@ -258,7 +274,7 @@ export function createApp() {
   // Danh mục tra cứu sản phẩm: Thương hiệu → Nhãn → Sản phẩm → Khối lượng
   app.get('/api/danh-muc', (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.json(catalogWithPrices());
+    res.json(withShopLinks(catalogWithPrices()));
   });
   app.get('/api/admin/catalog-prices.json', requireAdmin, (req, res) => {
     const body = JSON.stringify({ kind: 'mocqua-catalog-prices', version: 1, exportedAt: new Date().toISOString(), rows: listCatalogPrices() }, null, 2);
