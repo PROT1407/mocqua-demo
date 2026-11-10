@@ -86,7 +86,9 @@ export function createApp({
     res.json({ ok: true, service: 'mocqua-ai-server' });
   });
 
+  // Rẻ: không đọc danh mục, không gọi Gemini. Cửa hàng gọi GET này để đánh thức máy.
   app.get('/health', (_req, res) => {
+    res.set('Cache-Control', 'no-store');
     res.json({ ok: true });
   });
 

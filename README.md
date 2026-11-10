@@ -41,6 +41,9 @@ Xem `.env.example`.
 | `ACCOUNT_NO` | Số tài khoản. Mặc định `19029781376018` |
 | `ACCOUNT_NAME` | Tên chủ tài khoản trên VietQR. Mặc định `NGUYEN NGOC HUY` |
 | `DB_PATH` | File SQLite. Mặc định `data/mocqua.sqlite` |
+| `GOOGLE_SHEETS_WEBHOOK_URL` | URL Web app Apps Script. Trống thì không ghi Sheet. Xem `docs/thong-bao-don-va-facebook.md` |
+| `GOOGLE_SHEETS_SECRET` | Chuỗi chung với Script property cùng tên. Trống thì vẫn gửi nếu có URL |
+| `AI_SERVER_HEALTH_URL` | Địa chỉ GET để trang cửa hàng đánh thức ai-server. Trống thì dùng `https://ai-server-u9ob.onrender.com/health` |
 
 Biến `BANK_*` / `ACCOUNT_*` để trống thì máy chủ dùng tài khoản Techcombank ở trên, nên mã QR vẫn hiện. Đặt biến trên máy chạy thật nếu cần đổi tài khoản. Đây là số nhận tiền công khai, khác với `ADMIN_PASSWORD`.
 
@@ -76,6 +79,8 @@ Trang `/danh-muc`: tra cứu Thương hiệu → Nhãn → Sản phẩm → Kh�
 Trang chạy gói free của Render (Singapore), ví dụ https://mocqua.onrender.com. Đĩa trên gói này là bộ nhớ tạm. File SQLite mất khi deploy, khi máy chủ khởi động lại, và khi máy ngủ (khoảng 15 phút không có khách) rồi tỉnh lại. Cách chạy này không gắn đĩa trả phí và không chuyển sang Postgres.
 
 Thói quen của chủ shop: sau mỗi đợt đơn, và luôn trước khi bấm deploy, vào `/admin` rồi bấm **Xuất tất cả (JSON)**. Giữ file đó trên máy. Khi trang lên lại mà danh sách đơn trống, chọn file → **Thêm đơn còn thiếu** → **Nhập bản sao**.
+
+Muốn giữ một bản đơn ngoài Render thì nối Google Sheet (mục 3 trong `docs/thong-bao-don-va-facebook.md`). Muốn máy đỡ ngủ trong giờ bán thì chỉ ping `https://mocqua.onrender.com/healthz` khoảng 7h–23h, không ping cả ai-server suốt ngày, vì cả workspace free chỉ có 750 giờ máy mỗi tháng (mục 4 trong file đó).
 
 - **Xuất tất cả (JSON)** là bản đầy đủ: mọi đơn, món trong đơn, giá đã sửa và cài đặt giao hàng. Dùng file này để nhập lại.
 - **Xuất đơn (CSV)** để mở bằng Excel. Không dùng CSV để nhập lại.

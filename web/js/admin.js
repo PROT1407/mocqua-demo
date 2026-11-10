@@ -422,14 +422,26 @@ panels.refs.addEventListener('submit', async (event) => {
 
 api('/api/admin/me').then(enter).catch(() => {});
 
+function channelStatus(status) {
+  if (status === 'ok') return 'ok';
+  if (status === 'unconfigured') return 'không cấu hình';
+  return 'lỗi';
+}
+
 document.querySelector('#tg-test')?.addEventListener('click', async () => {
   const msg = document.querySelector('#tg-test-msg');
+  const button = document.querySelector('#tg-test');
   if (msg) msg.textContent = 'Đang gửi…';
+  if (button) button.disabled = true;
   try {
-    await api('/api/admin/telegram-test', { method: 'POST', body: '{}' });
-    if (msg) msg.textContent = 'Đã gửi tin thử. Mở Telegram để kiểm tra.';
+    const data = await api('/api/admin/telegram-test', { method: 'POST', body: '{}' });
+    const telegram = channelStatus(data.telegram?.status);
+    const sheets = channelStatus(data.sheets?.status);
+    if (msg) msg.textContent = `Telegram: ${telegram}. Google Sheet: ${sheets}.`;
   } catch (error) {
     if (msg) msg.textContent = error.message;
+  } finally {
+    if (button) button.disabled = false;
   }
 });
 

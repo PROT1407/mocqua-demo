@@ -38,7 +38,7 @@ curl -s -X POST http://127.0.0.1:10000/api/mocqua \
   -d '{"message":"Xoài sấy thăng hoa Cheers+ giá bao nhiêu?","history":[]}'
 ```
 
-`/health` trả `{ "ok": true }`. `/api/h79gold` trả 503 vì chưa nối logic vàng. `/api/mocqua` trả `{ "reply": "..." }` khi đã có `GEMINI_API_KEY`; nếu thiếu khóa thì 503, không làm sập tiến trình.
+`/health` trả `{ "ok": true }`, không đọc danh mục và không gọi Gemini. Trang cửa hàng gọi GET này (có CORS từ `https://mocqua.onrender.com`) để đánh thức máy, tối đa một lần mỗi 10 phút trên mỗi trình duyệt. Không gắn monitor 24/7 cho service này: workspace Render free chỉ có 750 giờ máy/tháng. Cách ping cửa hàng trong giờ bán nằm ở `docs/thong-bao-don-va-facebook.md`. `/api/h79gold` trả 503 vì chưa nối logic vàng. `/api/mocqua` trả `{ "reply": "..." }` khi đã có `GEMINI_API_KEY`; nếu thiếu khóa thì 503, không làm sập tiến trình.
 
 Chỉ các origin sau được gọi từ trình duyệt tới `/api/mocqua`: `https://mocqua.com`, `https://www.mocqua.com`, `https://mocqua.onrender.com`, `https://h79gold.com`, `https://www.h79gold.com`, `http://localhost:3000`, `http://127.0.0.1:3000`. Webhook Facebook không dùng danh sách này.
 

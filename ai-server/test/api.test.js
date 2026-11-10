@@ -32,6 +32,11 @@ test('GET /health và cổng H79 chưa nối', async () => {
     const health = await fetch(base + '/health');
     assert.equal(health.status, 200);
     assert.deepEqual(await health.json(), { ok: true });
+    const fromShop = await fetch(base + '/health', { headers: { origin: 'https://mocqua.onrender.com' } });
+    assert.equal(fromShop.status, 200);
+    assert.deepEqual(await fromShop.json(), { ok: true });
+    assert.equal(fromShop.headers.get('access-control-allow-origin'), 'https://mocqua.onrender.com');
+    assert.equal(fromShop.headers.get('cache-control'), 'no-store');
     const root = await fetch(base + '/');
     assert.deepEqual(await root.json(), { ok: true, service: 'mocqua-ai-server' });
 
