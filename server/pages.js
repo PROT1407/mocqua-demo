@@ -1,7 +1,9 @@
 import { esc, vnd } from './format.js';
 import { brandOrder } from './catalog.js';
 import { STATUSES, getSettings } from './db.js';
-import { bannerText, isComboProduct, promoTiers, tierTitle, shortMoney } from './promo.js';
+import { bannerText, isComboProduct, ORDER_TIERS, promoTiers, tierTitle, shortMoney } from './promo.js';
+import { chooserOptions, giftBox, listGiftBoxes, swapPool } from './giftbox.js';
+import { quoteBox } from '../web/js/giftbox-core.js';
 import { shopContact } from './contact.js';
 import { catalogHeroBySku } from './dm-buy.js';
 import { dealBySku } from './deals.js';
@@ -209,7 +211,7 @@ function cardImage(product) {
   return { hero, img, src: hero?.thumb || img, native45: /-45\.jpg$/.test(img) };
 }
 
-export function productCard(product, { eager = false, cls = '' } = {}) {
+export function productCard(product, { eager = false, cls = '', giftTune = false } = {}) {
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
   const { hero, img } = cardImage(product);
   const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
@@ -230,6 +232,7 @@ export function productCard(product, { eager = false, cls = '' } = {}) {
       ${canBuy
         ? `<button type="button" class="btn btn--small" data-add-sku="${esc(product.defaultSku)}">Cho vào giỏ</button>`
         : `<a class="btn btn--small btn--ghost" href="${href}">${product.oos ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
+      ${giftTune ? `<a class="textlink" href="/hop-qua/${encodeURIComponent(product.id)}">Đổi vị</a>` : ''}
     </div>
   </article>`;
 }
@@ -405,6 +408,8 @@ export function shopPage(catalog, query) {
   const filtered = !!(q || wantedCat || wantedFruit || wantedLine);
   // Không lọc: mỗi nhóm có băng tiêu đề kiểu tạp chí, mobile vuốt ngang. Đang lọc: lưới thường.
   const editorial = kieu === '2' && !filtered && multiCat;
+  const giftIds = wantedCat === 'set' ? new Set(listGiftBoxes().map((box) => box.id)) : new Set();
+  const card = (p, extra = {}) => productCard(p, { ...extra, giftTune: giftIds.has(p.id) });
   let bandNo = 0;
   let html = '';
   for (const cat of cats) {
@@ -430,11 +435,13 @@ export function shopPage(catalog, query) {
       </div>
       <div class="gband__pics" aria-hidden="true">${pics.map((p) => `<img src="${esc(cardImage(p).src)}" alt="" loading="lazy" decoding="async" width="480" height="600"${cardImage(p).native45 ? '' : ' class="fit"'}>`).join('')}</div>
     </section>
-    <div class="grid grid--row">${items.map((p) => productCard(p)).join('')}<a class="rowmore" href="${esc(all)}">Xem tất cả<br><b>${items.length} món</b> <span aria-hidden="true">→</span></a></div>`;
+    ${cat === 'set' ? '<p class="setlink"><a href="/hop-qua">Đổi vị trong hộp</a> — chạm từng ngăn, giá cập nhật ngay. Từ 20 hộp tính giá sỉ.</p>' : ''}
+    <div class="grid grid--row">${items.map((p) => card(p)).join('')}<a class="rowmore" href="${esc(all)}">Xem tất cả<br><b>${items.length} món</b> <span aria-hidden="true">→</span></a></div>`;
       continue;
     }
     if (multiCat) html += `<h2 class="ghead" id="nhom-${esc(cat)}">${esc(name)} <small>${items.length} món</small></h2>`;
-    html += `<div class="grid${editorial ? ' grid--row' : ''}">${items.map((p) => productCard(p)).join('')}</div>`;
+    if (cat === 'set') html += `<p class="setlink"><a href="/hop-qua">Đổi vị trong hộp</a> — chạm từng ngăn, giá cập nhật ngay. Từ 20 hộp tính giá sỉ.</p>`;
+    html += `<div class="grid${editorial ? ' grid--row' : ''}">${items.map((p) => card(p)).join('')}</div>`;
   }
   const featured = filtered ? [] : FEATURED.map((id) => final.find((p) => p.id === id)).filter(Boolean);
   const featHtml = featured.length
@@ -565,6 +572,7 @@ export function productPage(product, catalog) {
         <h1>${esc(product.name)}</h1>
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
         <p class="lead lead--left">${esc(product.short)}</p>
+        ${product.cat === 'set' && giftBox(product.id) ? `<p class="setlink"><a href="/hop-qua/${esc(product.id)}">Đổi vị trong hộp</a> — chọn từng ngăn, giá cập nhật ngay.</p>` : ''}
         ${product.combo ? `<p class="fine"><a href="/san-pham/${encodeURIComponent(product.combo.id)}">${esc(product.combo.label || 'Xem combo')}</a></p>` : ''}
         ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
@@ -758,7 +766,7 @@ export function comboPage(catalog) {
   const body = `<main id="main" class="wrap combo">
     <header class="pagehead cbhead">
       <h1>Combo</h1>
-      <p>Ghép sẵn từ các túi đang bán ở cửa hàng, nguyên bao bì. Giá combo rẻ hơn tổng giá lẻ, số tiết kiệm tính từ giá lẻ thật.</p>
+      <p>Ghép sẵn từ các túi đang bán ở cửa hàng, nguyên bao bì. Giá combo rẻ hơn tổng giá lẻ, số tiết kiệm tính từ giá lẻ thật. Hộp quà nhiều ngăn thì <a href="/hop-qua">đổi vị từng ngăn</a>.</p>
       <nav class="cbjump" aria-label="Nhóm combo">${COMBO_PAGE.groups.map((g) => `<a href="#${esc(g.id)}">${esc(g.h)}</a>`).join('')}</nav>
     </header>
     ${heroHtml}
@@ -871,8 +879,14 @@ function copyButton(value, label) {
   return `<button type="button" class="btn btn--small btn--ghost" data-copy="${esc(value)}">${esc(label)}</button>`;
 }
 
+function contentsNote(item) {
+  if (!Array.isArray(item.contents) || !item.contents.length) return '';
+  const si = item.wholesalePct ? ` · giá sỉ −${item.wholesalePct}%` : '';
+  return `<small class="contents">${esc(item.contents.map((row) => `${row.name} ${row.grams}g`).join(' · '))}${si}</small>`;
+}
+
 export function orderPage(order, qr) {
-  const lines = order.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small></span><b>${vnd(item.line)}</b></li>`).join('');
+  const lines = order.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small>${contentsNote(item)}</span><b>${vnd(item.line)}</b></li>`).join('');
   const gifts = (order.gifts || []).map((g) => `<li class="giftline"><span><b>${esc(g.name)}</b><small>${esc(g.w)} · × ${g.qty}${g.retail ? ' · giá bán ' + vnd(g.retail) : ''}</small></span><b>0đ</b></li>`).join('');
   const due = `<p class="due"><span>Cần trả</span><b data-amount="${order.summary.total}">${vnd(order.summary.total)}</b></p>`;
   let pay = '';
@@ -929,6 +943,7 @@ export function orderPage(order, qr) {
       <ul class="lines">${lines}${gifts}</ul>
       <p class="sumrow"><span>Tiền hàng</span><b>${vnd(order.summary.subtotal)}</b></p>
       ${order.summary.discount ? `<p class="sumrow sumrow--discount"><span>Giảm ${order.summary.discountPct ? order.summary.discountPct + '% ' : ''}theo đơn${order.summary.discountBase && order.summary.discountBase < order.summary.subtotal ? '<small> (không áp cho combo)</small>' : ''}</span><b>−${vnd(order.summary.discount)}</b></p>` : ''}
+      ${order.summary.siNote ? `<p class="hint">${esc(order.summary.siNote)}</p>` : ''}
       <p class="sumrow"><span>Giao hàng</span><b>${order.summary.ship ? vnd(order.summary.ship) : 'Miễn phí'}</b></p>
       <p class="sumrow sumrow--total"><span>Tổng</span><b>${vnd(order.summary.total)}</b></p>
     </section>
@@ -1155,6 +1170,122 @@ export function offlinePage() {
     description: 'Mộc Quả cần mạng để đặt hàng.',
     page: 'offline',
     body,
+  });
+}
+
+function giftPayload(box, options) {
+  return {
+    id: box.id,
+    sku: box.sku,
+    name: box.name,
+    listed: box.listed,
+    baseFruit: box.baseFruit,
+    tiers: ORDER_TIERS.map((tier) => ({ min: tier.min, pct: tier.pct })),
+    slots: box.slots.map((slot) => ({
+      i: slot.i,
+      label: slot.label,
+      grams: slot.grams,
+      kind: slot.kind,
+      locked: slot.locked,
+      sku: slot.sku,
+      name: slot.name,
+      img: slot.img,
+      w: slot.w,
+      price: slot.price,
+      packGrams: slot.packGrams,
+      retail: slot.retail,
+    })),
+    options,
+  };
+}
+
+export function giftIndexPage() {
+  const boxes = listGiftBoxes();
+  const cards = boxes.map((box) => `<article class="card">
+    <a class="card__img" href="/hop-qua/${esc(box.id)}"><img src="${esc(box.img)}" alt="${esc(box.name)}" width="480" height="600"></a>
+    <div class="card__body">
+      <h3><a href="/hop-qua/${esc(box.id)}">${esc(box.name)}</a></h3>
+      <p class="card__meta">${esc(box.w)} · ${box.slots.length} ngăn</p>
+      <p class="card__price">${esc(vnd(box.listed))}</p>
+      <a class="btn btn--small" href="/hop-qua/${esc(box.id)}">Đổi vị</a>
+    </div>
+  </article>`).join('');
+  const body = `<main id="main" class="wrap giftbox">
+    <header class="pagehead">
+      <p class="kicker">Set quà</p>
+      <h1>Đổi vị trong hộp</h1>
+      <p>Chạm một ngăn để đổi túi cùng loại. Ảnh hộp giữ nguyên. Giá lấy từ danh mục đang bán. Từ 20 hộp tính giá sỉ −12%, từ 50 hộp −15% — mỗi mức chỉ một lần, không cộng thêm giảm theo đơn.</p>
+    </header>
+    <div class="grid">${cards}</div>
+    <p class="fine">Đơn công ty, in logo hoặc xuất VAT: xem <a href="/chinh-sach.html#khuyen-mai">giá sỉ trong chính sách</a>.</p>
+  </main>`;
+  return layout({
+    title: 'Đổi vị hộp quà | Mộc Quả',
+    description: 'Tự chọn vị trong hộp quà Mộc Quả. Giá cập nhật theo danh mục. Từ 20 hộp tính giá sỉ.',
+    page: 'gift',
+    body,
+  });
+}
+
+export function giftBuilderPage(id) {
+  const pool = swapPool();
+  const box = giftBox(id, pool);
+  if (!box) return null;
+  const options = chooserOptions(pool, [box]);
+  const view = quoteBox({ unit: box.listed, qty: 1, tiers: ORDER_TIERS });
+  const slots = box.slots.map((slot) => `<li class="gslot" data-slot="${slot.i}">
+    <span class="gslot__img">${slot.img ? `<img src="${esc(slot.img)}" alt="" width="64" height="64">` : ''}</span>
+    <span>
+      <b>${esc(slot.name)}</b>
+      <small>${esc(slot.locked ? `${slot.label} · ${slot.grams}g` : `${slot.w} · ngăn ${slot.grams}g`)}</small>
+    </span>
+    ${slot.locked
+      ? '<span class="gslot__lock">Giữ nguyên</span>'
+      : `<button type="button" class="btn btn--small" data-swap="${slot.i}">Đổi vị</button>`}
+  </li>`).join('');
+  const body = `<main id="main" class="wrap giftbox">
+    <nav class="crumbs" aria-label="Đường dẫn"><a href="/hop-qua">Hộp quà</a> <a href="/san-pham/${esc(box.id)}">${esc(box.name)}</a></nav>
+    <div class="giftbox__top">
+      <div class="pdp__stage"><img src="${esc(box.img)}" alt="${esc(box.name)}" width="900" height="1125"></div>
+      <div class="giftbox__buy">
+        <p class="kicker">Hộp quà</p>
+        <h1>${esc(box.name)}</h1>
+        <p class="giftbox__lead">${esc(box.w)}. Ảnh hộp không đổi khi đổi vị.</p>
+        <ul class="gslots">${slots}</ul>
+        <div class="qtyrow">
+          <div class="stepper">
+            <button type="button" data-qty-dec aria-label="Giảm số hộp">−</button>
+            <input id="gift-qty" type="number" min="1" max="99" value="1" inputmode="numeric" aria-label="Số hộp">
+            <button type="button" data-qty-inc aria-label="Tăng số hộp">+</button>
+          </div>
+          <div class="qchips">
+            <button type="button" data-qty="1">1</button>
+            <button type="button" data-qty="20">20 · sỉ</button>
+            <button type="button" data-qty="50">50 · sỉ</button>
+          </div>
+        </div>
+        <p class="giftbox__prices" aria-live="polite">
+          <span>Đơn giá <b id="gift-unit">${esc(vnd(view.pay))}</b> <s id="gift-was" hidden></s></span>
+          <span>Thành tiền <b id="gift-line">${esc(vnd(view.pay))}</b></span>
+        </p>
+        <p class="giftnote" id="gift-note">${esc(view.note)}</p>
+        <button class="btn" type="button" id="gift-add">Cho hộp này vào giỏ</button>
+        <p class="fine">Đơn công ty, in logo hoặc xuất VAT: xem <a href="/chinh-sach.html#khuyen-mai">giá sỉ trong chính sách</a>.</p>
+      </div>
+    </div>
+    <dialog class="chooser" id="gift-chooser" aria-labelledby="gift-chooser-title">
+      <form method="dialog" class="chooser__bar"><h2 id="gift-chooser-title">Đổi vị</h2><button value="cancel">Đóng</button></form>
+      <input id="gift-q" placeholder="Tìm vị" aria-label="Tìm vị">
+      <div id="gift-options" class="chooser__list"></div>
+    </dialog>
+    ${jsonScript('gift-data', giftPayload(box, options))}
+  </main>`;
+  return layout({
+    title: `${box.name} — đổi vị | Mộc Quả`,
+    description: `Đổi vị trong ${box.name}. Giá tính từ danh mục đang bán.`,
+    page: 'gift',
+    body,
+    scripts: ['/static/js/giftbox.js'],
   });
 }
 

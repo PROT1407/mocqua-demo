@@ -3,11 +3,15 @@
 // Áp gợi ý combo lên giỏ [{ sku, qty }]: bớt các món lẻ trong nudge.remove, thêm 1 combo (nudge.sku).
 // Thứ tự món giữ nguyên; món về 0 thì bỏ; combo đã có trong giỏ thì cộng số lượng.
 export function applyNudge(items, nudge) {
-  const out = items.map((it) => ({ sku: it.sku, qty: it.qty }));
+  const out = items.map((it) => {
+    const row = { sku: it.sku, qty: it.qty };
+    if (Array.isArray(it.slots) && it.slots.length) row.slots = it.slots;
+    return row;
+  });
   for (const r of nudge.remove || []) {
     let need = r.qty;
     for (const it of out) {
-      if (it.sku !== r.sku || need <= 0) continue;
+      if (it.slots || it.sku !== r.sku || need <= 0) continue;
       const take = Math.min(it.qty, need);
       it.qty -= take;
       need -= take;

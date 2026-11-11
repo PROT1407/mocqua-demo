@@ -65,7 +65,26 @@ function lineItem(item, label) {
   if (img) next.img = img;
   if (item.combo === true) next.combo = true;
   if (item.retail != null) next.retail = intField(item.retail, 0, 100000000, `Giá gốc ${label}`);
+  if (item.contents != null) next.contents = readContents(item.contents, label);
   return next;
+}
+
+function readContents(contents, label) {
+  if (!Array.isArray(contents) || contents.length > 12) fail(`Vị trong ${label} chưa đúng.`);
+  if (!contents.length) return undefined;
+  return contents.map((row, index) => {
+    if (!plain(row)) fail(`Vị ${index + 1} của ${label} chưa đúng.`);
+    const next = {
+      name: text(row.name, 120, { required: true }),
+      grams: intField(row.grams, 1, 5000, `Gram vị ${index + 1} của ${label}`),
+    };
+    if (row.sku) {
+      const sku = text(row.sku, 80);
+      if (!SKU_RE.test(sku)) fail(`Mã vị trong ${label} chưa đúng.`);
+      next.sku = sku;
+    }
+    return next;
+  });
 }
 
 function readOrder(order, index, seen) {
@@ -109,6 +128,7 @@ function readOrder(order, index, seen) {
       discountPct: intField(order.summary.discountPct ?? 0, 0, 100, `Mức giảm ${code}`),
       discountBase: intField(order.summary.discountBase ?? 0, 0, 100000000, `Tiền được giảm ${code}`),
       hint: text(order.summary.hint, 400),
+      ...(order.summary.siNote ? { siNote: text(order.summary.siNote, 240) } : {}),
     },
     note: text(order.note, 400),
     createdAt: iso(order.createdAt, `Ngày đặt ${code}`),

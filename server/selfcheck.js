@@ -842,7 +842,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v43/);
+    assert.match(sw, /mocqua-shell-v44/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);

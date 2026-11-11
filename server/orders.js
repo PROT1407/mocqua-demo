@@ -53,6 +53,7 @@ export function placeOrder({ items, customer, pay }) {
       ship: priced.ship,
       total: priced.total,
       hint: priced.hint,
+      ...(priced.siNote ? { siNote: priced.siNote } : {}),
     },
     note: customer.note,
     createdAt: now,

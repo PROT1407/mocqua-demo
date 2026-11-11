@@ -53,6 +53,10 @@ function itemText(item) {
   if (item?.qty != null && item.qty !== '') parts.push(String(item.qty));
   const price = item?.price ?? item?.line;
   if (price != null && price !== '') parts.push(String(price));
+  const contents = Array.isArray(item?.contents)
+    ? item.contents.map((row) => [row?.name, row?.grams ? `${row.grams}g` : ''].filter(Boolean).join(' ')).filter(Boolean).join(', ')
+    : '';
+  if (contents) parts.push(contents);
   return parts.join(' · ');
 }
 

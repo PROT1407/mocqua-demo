@@ -1,4 +1,4 @@
-import { money, read, write, add, setQty, clearCart, refresh, toast } from './store.js';
+import { money, read, write, add, setQty, clearCart, refresh, toast, lineKey } from './store.js';
 import { applyNudge, kShort } from './cart-core.js';
 
 let nudges = [];
@@ -33,17 +33,26 @@ function shipLine(bar) {
   </div>`;
 }
 
+function contentsOf(item) {
+  if (!Array.isArray(item.contents) || !item.contents.length) return '';
+  return `<small class="contents">${esc(item.contents.map((row) => `${row.name} ${row.grams}g`).join(' · '))}</small>`;
+}
+
 function line(item, gift) {
   const img = item.img ? `<img src="${esc(item.img)}" alt="">` : '<span class="ph"></span>';
+  const key = esc(lineKey(item));
   const qty = gift
     ? `<span class="giftqty">× ${item.qty}</span>`
-    : `<div class="stepper"><button type="button" data-dec="${item.sku}" aria-label="Giảm">−</button><span>${item.qty}</span><button type="button" data-inc="${item.sku}" aria-label="Tăng">+</button></div>`;
+    : `<div class="stepper"><button type="button" data-dec="${key}" aria-label="Giảm">−</button><span>${item.qty}</span><button type="button" data-inc="${key}" aria-label="Tăng">+</button></div>`;
+  const si = !gift && item.wholesalePct ? `<small>Giá sỉ −${item.wholesalePct}%</small>` : '';
   return `<li class="${gift ? 'giftline' : ''}">
     ${img}
     <div>
       <b>${esc(item.name)}</b>
       <small>${esc(item.w || '')}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}${item.combo ? ' · combo, cũng được giảm theo đơn' : ''}</small>
-      ${gift ? '' : `<button type="button" class="textbtn" data-del="${item.sku}">Bỏ</button>`}
+      ${contentsOf(item)}
+      ${si}
+      ${gift ? '' : `<button type="button" class="textbtn" data-del="${key}">Bỏ</button>`}
     </div>
     ${qty}
     <strong>${gift ? '0đ' : money(item.line)}</strong>
@@ -85,7 +94,8 @@ async function draw() {
     <p class="hint">${(data.shipBar ? data.cartHint : data.hint) || ''}</p>
     <div class="totals">
       <p><span>Tiền hàng</span><b>${money(data.subtotal)}</b></p>
-      ${data.discount ? `<p class="totals__discount"><span>Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(gồm cả combo)</small>' : ''}</span><b>−${money(data.discount)}</b></p>` : ''}
+      ${data.discount ? `<p class="totals__discount"><span>${data.siNote && data.discountLabel ? esc(data.discountLabel) : `Giảm ${data.discountPct}% theo đơn${data.comboSubtotal ? ' <small>(gồm cả combo)</small>' : ''}`}</span><b>−${money(data.discount)}</b></p>` : ''}
+      ${data.siNote ? `<p class="hint">${esc(data.siNote)}</p>` : ''}
       <p><span>Giao hàng</span><b>${data.ship ? money(data.ship) : 'Miễn phí'}</b></p>
       <p class="totals__due"><span>Cần trả</span><b>${money(data.total)}</b></p>
     </div>
@@ -97,12 +107,12 @@ root.addEventListener('click', (event) => {
   const inc = event.target.closest('[data-inc]');
   const del = event.target.closest('[data-del]');
   if (dec) {
-    const item = read().find((row) => row.sku === dec.dataset.dec);
+    const item = read().find((row) => lineKey(row) === dec.dataset.dec);
     setQty(dec.dataset.dec, (item?.qty || 1) - 1);
     draw();
   }
   if (inc) {
-    const item = read().find((row) => row.sku === inc.dataset.inc);
+    const item = read().find((row) => lineKey(row) === inc.dataset.inc);
     setQty(inc.dataset.inc, (item?.qty || 0) + 1);
     draw();
   }
