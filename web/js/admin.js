@@ -46,7 +46,12 @@ async function loadOrders() {
     const options = data.statuses.map(([id, label]) => `<option value="${id}"${id === order.status ? ' selected' : ''}>${label}</option>`).join('');
     const when = new Date(order.createdAt).toLocaleString('vi-VN', { hour12: false });
     const pay = order.payMethod === 'cod' ? 'Khi nhận' : 'Chuyển khoản';
-    const lines = order.items.map((item) => `<li>${item.qty} × ${esc(item.name)} · ${esc(item.w)} · ${money(item.line)}${item.combo ? ' · combo' : ''}</li>`).join('');
+    const lines = order.items.map((item) => {
+      const taste = Array.isArray(item.contents) && item.contents.length
+        ? ` — ${item.contents.map((row) => `${row.name} ${row.grams}g`).join(', ')}`
+        : '';
+      return `<li>${item.qty} × ${esc(item.name)} · ${esc(item.w)} · ${money(item.line)}${item.combo ? ' · combo' : ''}${esc(taste)}</li>`;
+    }).join('');
     const gifts = (order.gifts || []).map((item) => `<li>${item.qty} × ${esc(item.name)} · 0đ</li>`).join('');
     const c = order.customer;
     return `<article class="order" data-code="${esc(order.code)}">

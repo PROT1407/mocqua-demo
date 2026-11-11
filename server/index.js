@@ -19,7 +19,7 @@ import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCs
 import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
 import { catalogBuyMap, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
-import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage } from './pages.js';
+import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage, giftIndexPage, giftBuilderPage } from './pages.js';
 import { notifyNewOrder } from './telegram.js';
 import { notifySheets, sendTestNotifications } from './sheets.js';
 
@@ -357,6 +357,17 @@ export function createApp() {
   });
   app.get(['/cua-hang', '/cua-hang.html'], (req, res) => {
     html(res, 200, shopPage(getShopCatalog(), req.query));
+  });
+  app.get('/hop-qua', (req, res) => {
+    html(res, 200, giftIndexPage());
+  });
+  app.get('/hop-qua/:id', (req, res) => {
+    const page = giftBuilderPage(String(req.params.id || ''));
+    if (!page) {
+      html(res, 404, errorPage('Hộp này không đổi vị được.'));
+      return;
+    }
+    html(res, 200, page);
   });
   app.get('/combo', (req, res) => {
     html(res, 200, comboPage(getShopCatalog()));

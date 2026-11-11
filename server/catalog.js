@@ -262,6 +262,11 @@ export function getShopCatalog() {
   };
 }
 
+export function getRawProduct(id) {
+  const { byId } = loadBase();
+  return byId.get(id) || null;
+}
+
 export function getProductPage(id) {
   const { mq, byId } = loadBase();
   const alias = mq.ID_ALIAS || {};

@@ -1,9 +1,10 @@
-const CACHE = 'mocqua-shell-v43';
+const CACHE = 'mocqua-shell-v44';
 
 const SHELL = [
   '/',
   '/cua-hang',
   '/combo',
+  '/hop-qua',
   '/gio-hang',
   '/thanh-toan',
   '/tra-cuu',
@@ -15,6 +16,8 @@ const SHELL = [
   '/static/js/cart.js',
   '/static/js/cart-core.js',
   '/static/js/checkout.js',
+  '/static/js/giftbox.js',
+  '/static/js/giftbox-core.js',
   '/favicon.svg',
   '/manifest.webmanifest',
   '/icons/icon-192.png',

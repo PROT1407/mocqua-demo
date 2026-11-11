@@ -801,3 +801,49 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
   .cbmini__img { width: 56px; height: 70px; }
 }
 .pdp__stage .savebadge { top: 14px; bottom: auto; } /* góc dưới trái là nhãn loại ảnh (Bao bì…) */
+
+.setlink { margin: 0 0 14px; }
+.setlink a { color: var(--olive-dark); font-weight: 600; }
+.contents { display: block; margin-top: 4px; }
+.page-gift { padding-bottom: 28px; }
+.giftbox__top { display: grid; gap: 18px; }
+.giftbox__lead, .giftnote { color: var(--muted); }
+.gslots { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.gslot {
+  display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; align-items: center;
+  background: var(--paper); border-radius: 16px; padding: 8px;
+}
+.gslot__img, .gslot__img img, .opt img, .ph {
+  width: 64px; height: 64px; object-fit: cover; border-radius: 12px; background: var(--cream-2);
+}
+.gslot b, .opt b { display: block; }
+.gslot small, .opt small { color: var(--muted); }
+.gslot__lock { color: var(--muted); font-size: 13px; }
+.qtyrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.qchips { display: flex; gap: 8px; }
+.qchips button, .stepper input {
+  min-height: 44px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); padding: 0 14px;
+}
+.qchips button.is-on { background: var(--olive); color: white; border-color: var(--olive); }
+.stepper input { width: 64px; text-align: center; }
+.giftbox__prices { display: grid; gap: 4px; font-size: 18px; }
+.giftbox__prices b { font-size: 28px; letter-spacing: -0.03em; }
+.giftbox__prices s { color: var(--muted); font-size: 16px; margin-left: 6px; }
+.chooser {
+  border: 0; padding: 0; width: min(520px, 100%); max-height: min(85vh, 720px);
+  margin: auto auto 0; border-radius: 20px 20px 0 0; background: var(--cream); color: var(--ink);
+}
+.chooser::backdrop { background: rgba(44, 33, 24, .45); }
+.chooser__bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px 0; }
+.chooser__bar button { min-height: 44px; border: 0; background: transparent; color: var(--olive-dark); font-weight: 600; }
+.chooser input { width: calc(100% - 28px); margin: 8px 14px; }
+.chooser__list { display: grid; gap: 8px; padding: 0 14px 18px; overflow: auto; max-height: 60vh; }
+.opt {
+  display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: center; text-align: left;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 8px; min-height: 64px;
+}
+.opt.is-on { border-color: var(--olive); }
+@media (min-width: 800px) {
+  .giftbox__top { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: start; }
+  .chooser { margin: auto; border-radius: 20px; }
+}

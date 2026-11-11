@@ -30,7 +30,11 @@ export function formatNewOrder(order, { shopUrl = process.env.SHOP_PUBLIC_URL ||
   const pay = order.payMethod === 'cod' ? 'Khi nhận hàng' : order.payMethod === 'vietqr' ? 'Chuyển khoản' : String(order.payMethod || '');
   const lines = (order.items || []).map((item) => {
     const name = [item.name, item.w].filter(Boolean).join(' ');
-    return `- ${name} × ${item.qty} = ${money(item.line)}`;
+    const bits = Array.isArray(item.contents)
+      ? item.contents.map((row) => [row?.name, row?.grams ? `${row.grams}g` : ''].filter(Boolean).join(' ')).filter(Boolean)
+      : [];
+    const extra = bits.length ? `\n  ${bits.join(', ')}` : '';
+    return `- ${name} × ${item.qty} = ${money(item.line)}${extra}`;
   });
   const discount = summary.discount
     ? `${money(summary.discount)}${summary.discountPct ? ` (${summary.discountPct}%)` : ''}`

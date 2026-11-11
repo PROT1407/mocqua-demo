@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning server/index.js",
     "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
-    "check": "node --disable-warning=ExperimentalWarning --test server/selfcheck.js server/telegram.test.js server/sheets.test.js"
+    "check": "node --disable-warning=ExperimentalWarning --test server/selfcheck.js server/telegram.test.js server/sheets.test.js server/giftbox.test.js"
   },
   "dependencies": {
     "dotenv": "^16.6.1",
