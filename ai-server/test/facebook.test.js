@@ -335,7 +335,7 @@ test('im lặng tính từ tin cuối, và có trần chờ', { timeout: 4000 },
   });
 });
 
-test('một cụm tính một lượt, mặc định 20 lượt mỗi 10 phút', { timeout: 4000 }, async () => {
+test('một cụm tính một lượt, mặc định 40 lượt mỗi 10 phút', { timeout: 4000 }, async () => {
   const { app, calls, clock } = clockedApp();
   await withServer(app, async (base) => {
     for (const text of ['chào shop', 'có xoài ko', 'giá sao', 'còn không', 'ship không']) {
@@ -343,24 +343,65 @@ test('một cụm tính một lượt, mặc định 20 lượt mỗi 10 phút',
     }
     await clock.advance(4000);
     assert.equal(calls.generate, 1);
+    assert.equal(replies(calls).some((text) => text.includes('nhắn hơi nhanh')), false);
 
-    for (let i = 0; i < 19; i += 1) {
+    for (let i = 0; i < 39; i += 1) {
       await send(base, textEvent('U5', `câu ${i}`));
       await clock.advance(4000);
     }
-    assert.equal(calls.generate, 20);
+    assert.equal(calls.generate, 40);
 
     await send(base, textEvent('U5', 'thêm một câu'));
     await send(base, textEvent('U5', 'và một câu nữa'));
     await waitTick();
-    assert.equal(calls.generate, 20);
+    assert.equal(calls.generate, 40);
     assert.deepEqual(replies(calls).filter((text) => text.includes('nhắn hơi nhanh')), [
       'Anh/chị nhắn hơi nhanh. Mộc Quả trả lời tiếp sau ít phút.',
     ]);
 
     await send(base, textEvent('U6', 'chào shop'));
     await clock.advance(4000);
-    assert.equal(calls.generate, 21);
+    assert.equal(calls.generate, 41);
+    await app.locals.drainFacebook();
+  });
+});
+
+test('Facebook bỏ slogan sau câu chào và không kể giảm giá khi hỏi ship', { timeout: 4000 }, async () => {
+  const { app, calls, clock } = clockedApp({
+    generate: async ({ contents } = {}) => {
+      const text = contents?.[0]?.parts?.[0]?.text || '';
+      if (text.includes('chào shop') && !text.includes('Hội thoại trước')) {
+        return 'Chào anh/chị.\nQuả của đất · Quà của tình';
+      }
+      return 'Phí giao 30.000đ, miễn phí từ 300.000đ.\nGiảm 3% đơn từ 300.000đ.\nGiảm 7% từ 500.000đ.\nQuả của đất · Quà của tình\nMộc Quả còn nhiều mẫu nữa.';
+    },
+  });
+  await withServer(app, async (base) => {
+    await send(base, textEvent('U40', 'chào shop'));
+    await clock.advance(4000);
+    assert.match(replies(calls)[0], /Quả của đất · Quà của tình/);
+    assert.ok(replies(calls)[0].split('\n').length <= 3);
+
+    await send(base, textEvent('U40', 'ship sao'));
+    await clock.advance(4000);
+    const ship = replies(calls)[1];
+    assert.match(ship, /30\.000đ/);
+    assert.doesNotMatch(ship, /Quả của đất|Giảm 3%|Giảm 7%/);
+    assert.ok(ship.split('\n').filter(Boolean).length <= 3);
+    await app.locals.drainFacebook();
+  });
+});
+
+test('2 đến 5 tin sát nhau vẫn được trả lời bình thường', { timeout: 4000 }, async () => {
+  const { app, calls, clock } = clockedApp({ rateMax: 3 });
+  await withServer(app, async (base) => {
+    for (const text of ['chào shop', 'có mít ko', 'mít thái', 'giá sao', 'ship sao']) {
+      await send(base, textEvent('U5B', text));
+    }
+    await clock.advance(4000);
+    assert.equal(calls.generate, 1);
+    assert.deepEqual(replies(calls), ['Giá lấy từ danh mục.']);
+    assert.equal(calls.prompts[0].includes('chào shop') && calls.prompts[0].includes('ship sao'), true);
     await app.locals.drainFacebook();
   });
 });
@@ -509,5 +550,101 @@ test('nút bấm, đơn hàng và ảnh không bị hoãn 4 giây', { timeout: 4
     assert.match(JSON.stringify(calls.graph), /sẽ xem ảnh/);
     assert.equal(clock.pending(), 0);
     assert.equal(calls.generate, 1);
+  });
+});
+
+const WARM_FALLBACK = 'Mộc Quả đã nhận tin của anh/chị, nhân viên sẽ trả lời ngay ạ. Anh/chị cũng có thể xem hàng tại https://mocqua.onrender.com.';
+
+test('Gemini lỗi thì báo chủ một lần và trả lời ấm cho khách', { timeout: 4000 }, async () => {
+  let hits = 0;
+  const { app, calls, clock } = clockedApp({
+    generate: async () => {
+      hits += 1;
+      throw new Error('429 RESOURCE_EXHAUSTED access_token=super-secret-key bot123:ABCDEF');
+    },
+  });
+  await withServer(app, async (base) => {
+    await send(base, textEvent('U20', 'chào shop'));
+    await send(base, textEvent('U20', 'có xoài access_token=leaked-token'));
+    await clock.advance(4000);
+    assert.equal(hits, 1);
+    assert.deepEqual(replies(calls), [WARM_FALLBACK]);
+    assert.equal(calls.owner.length, 1);
+    assert.match(calls.owner[0], /Gemini lỗi/);
+    assert.match(calls.owner[0], /PSID: U20/);
+    assert.match(calls.owner[0], /chào shop/);
+    assert.match(calls.owner[0], /có xoài/);
+    assert.match(calls.owner[0], /access_token=<hidden>/);
+    assert.doesNotMatch(calls.owner[0], /leaked-token|super-secret-key|RESOURCE_EXHAUSTED|bot123|bot<hidden>/);
+
+    await send(base, textEvent('U20', 'giá sao'));
+    await clock.advance(4000);
+    await send(base, textEvent('U21', 'chào shop'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 1);
+    assert.equal(replies(calls).length, 3);
+
+    await clock.advance(52_000);
+    await send(base, textEvent('U21', 'nhắc lại'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 2);
+    assert.match(calls.owner[1], /PSID: U21/);
+
+    await clock.advance(60_000);
+    await send(base, textEvent('U20', 'lại nữa'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 2);
+
+    await send(base, textEvent('U22', 'mít'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 3);
+    assert.match(calls.owner[2], /PSID: U22/);
+
+    await clock.advance(60_000);
+    await send(base, textEvent('U23', 'y'.repeat(500)));
+    await clock.advance(4000);
+    const snippet = calls.owner.at(-1).split('Khách nhắn: ')[1];
+    assert.equal(snippet.length, 300);
+    assert.equal(snippet, 'y'.repeat(300));
+    await app.locals.drainFacebook();
+  });
+});
+
+test('thiếu khóa hoặc danh mục lỗi cũng báo chủ, Gemini ổn thì không báo', { timeout: 4000 }, async () => {
+  const missing = clockedApp({ apiKey: '' });
+  await withServer(missing.app, async (base) => {
+    await send(base, textEvent('U30', 'có xoài không'));
+    await missing.clock.advance(4000);
+    assert.equal(missing.calls.generate, 0);
+    assert.deepEqual(replies(missing.calls), [WARM_FALLBACK]);
+    assert.equal(missing.calls.owner.length, 1);
+    assert.match(missing.calls.owner[0], /PSID: U30/);
+    assert.doesNotMatch(missing.calls.owner[0], /test-key/);
+    await send(base, textEvent('U30', 'giá sao'));
+    await missing.clock.advance(4000);
+    assert.equal(missing.calls.owner.length, 1);
+    await missing.app.locals.drainFacebook();
+  });
+
+  const broken = clockedApp({
+    loadCatalog: async () => { throw new Error('shop-down access_token=nope'); },
+  });
+  await withServer(broken.app, async (base) => {
+    await send(base, textEvent('U31', 'giá mít'));
+    await broken.clock.advance(4000);
+    assert.equal(broken.calls.generate, 0);
+    assert.deepEqual(replies(broken.calls), [WARM_FALLBACK]);
+    assert.match(broken.calls.owner[0], /PSID: U31/);
+    assert.doesNotMatch(broken.calls.owner[0], /shop-down|access_token=nope/);
+    await broken.app.locals.drainFacebook();
+  });
+
+  const ok = clockedApp();
+  await withServer(ok.app, async (base) => {
+    await send(base, textEvent('U32', 'có xoài không'));
+    await ok.clock.advance(4000);
+    assert.deepEqual(replies(ok.calls), ['Giá lấy từ danh mục.']);
+    assert.deepEqual(ok.calls.owner, []);
+    await ok.app.locals.drainFacebook();
   });
 });

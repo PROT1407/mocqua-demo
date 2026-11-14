@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
 import { compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
-import { CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SYSTEM_PROMPT, buildAssistant, readChat } from '../src/prompt.js';
+import { CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SLOGAN, SYSTEM_PROMPT, buildAssistant, readChat, shapeReply } from '../src/prompt.js';
 import { generateReply, resolveModel } from '../src/gemini.js';
 
 function listen(app) {
@@ -264,6 +265,55 @@ test('danh mục lỗi thì thử lại một lần, rồi giữ bản gần nh�
   const held = await load(3_000);
   assert.equal(held.stale, true);
   assert.equal(calls, 4);
+});
+
+test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
+  const payload = JSON.parse(readFileSync(new URL('../../server/data/danh-muc.json', import.meta.url), 'utf8'));
+  const items = compactCatalog(payload);
+  const priceOf = (sku) => items.find((item) => item.sku === sku)?.price;
+  assert.equal(priceOf('VZ-FH-MIT-300'), 74000);
+  assert.equal(priceOf('MQ-GMI-500-FH'), 139000);
+  assert.equal(priceOf('MQZ-GMI-500'), 159000);
+  for (const query of ['mít thái', 'mit thai', 'mít', 'mít sấy']) {
+    const found = relatedItems(items, query);
+    const skus = new Set(found.map((item) => item.sku));
+    assert.equal(skus.has('VZ-FH-MIT-300'), true, query);
+    assert.equal(skus.has('MQ-GMI-500-FH'), true, query);
+    assert.equal(skus.has('MQZ-GMI-500'), true, query);
+  }
+  const weighed = relatedItems(items, 'mít sấy 300gr');
+  assert.equal(weighed[0].sku, 'VZ-FH-MIT-300');
+  assert.equal(weighed[0].price, 74000);
+  assert.equal(weighed[0].weight, '300g');
+  const built = buildAssistant('mít thái', [], { ok: true, stale: false, items, updated: payload.updated });
+  assert.match(built.system, /Sản phẩm liên quan/);
+  assert.match(built.system, /Không nói “chưa có thông tin”/);
+  assert.match(built.system, /74000/);
+  assert.match(built.system, /139000/);
+  assert.match(built.system, /159000/);
+  assert.match(built.system, /Mít thái sấy giòn/);
+  assert.match(built.system, /Mít sấy giòn/);
+  assert.doesNotMatch(SYSTEM_PROMPT, /74000|139000|159000/);
+});
+
+test('bỏ slogan trừ lời chào đầu, và trả lời tối đa 3 dòng', () => {
+  assert.equal(SLOGAN, 'Quả của đất · Quà của tình');
+  assert.match(SYSTEM_PROMPT, /Quả của đất · Quà của tình/);
+  assert.match(SYSTEM_PROMPT, /tối đa 3 dòng/);
+  assert.match(SYSTEM_PROMPT, /Phí giao hàng 30\.000đ/);
+  assert.match(SYSTEM_PROMPT, /Không nhắc giảm 3%/);
+  const withSlogan = `Mít thái sấy giòn 300g là 74.000đ.\n${SLOGAN}`;
+  assert.equal(shapeReply(withSlogan, { message: 'mít thái' }), 'Mít thái sấy giòn 300g là 74.000đ.');
+  assert.match(shapeReply(withSlogan, { allowSlogan: true, message: 'chào shop' }), /Quả của đất · Quà của tình/);
+  assert.equal(shapeReply('Giá 74.000đ. Quả của đất, quà của tình', { message: 'giá sao' }), 'Giá 74.000đ.');
+  const long = ['Dòng một.', 'Dòng hai.', 'Dòng ba.', 'Dòng bốn không được hiện.'].join('\n');
+  const clamped = shapeReply(long, { message: 'giá mít' });
+  assert.deepEqual(clamped.split('\n'), ['Dòng một.', 'Dòng hai.', 'Dòng ba.']);
+  assert.equal(shapeReply('Một. Hai. Ba. Bốn không hiện.', { message: 'giá mít' }), 'Một. Hai. Ba.');
+  const ship = shapeReply('Phí giao 30.000đ, miễn phí từ 300.000đ. Giảm 3% đơn từ 300.000đ. Giảm 7% từ 500.000đ.', { message: 'ship sao' });
+  assert.match(ship, /30\.000đ/);
+  assert.doesNotMatch(ship, /Giảm 3%|Giảm 7%/);
+  assert.ok(ship.split('\n').filter(Boolean).length <= 3);
 });
 
 test('prompt không nhét giá sản phẩm có sẵn, và từ chối câu quá dài', () => {
