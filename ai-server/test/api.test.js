@@ -4,6 +4,7 @@ import test from 'node:test';
 import { createApp } from '../src/app.js';
 import { compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
 import { CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SLOGAN, SYSTEM_PROMPT, buildAssistant, readChat, shapeReply } from '../src/prompt.js';
+import { shopAddressReply, shopInfo } from '../src/shop-info.js';
 import { generateReply, resolveModel } from '../src/gemini.js';
 
 function listen(app) {
@@ -425,6 +426,22 @@ test('prompt không nhét giá sản phẩm có sẵn, và từ chối câu quá
   assert.equal(resolveModel(), 'gemini-3.5-flash-lite');
   if (previous == null) delete process.env.GEMINI_MODEL;
   else process.env.GEMINI_MODEL = previous;
+});
+
+test('hỏi địa chỉ shop thì trả đúng câu từ cấu hình', () => {
+  const expected = 'Địa chỉ: 376/15, phường Bàn Cờ, Quận 3, TP.HCM. Hotline đặt hàng: 0919 997 283.';
+  assert.equal(shopAddressReply(), expected);
+  assert.equal(shopInfo.hotlineTel, '0919997283');
+  assert.match(SYSTEM_PROMPT, /376\/15, phường Bàn Cờ, Quận 3, TP\.HCM/);
+  assert.match(SYSTEM_PROMPT, /0919 997 283/);
+  for (const message of ['địa chỉ', 'Địa chỉ?', 'xin địa chỉ', 'shop ở đâu', 'cửa hàng ở đâu', 'địa chỉ shop']) {
+    const reply = shapeReply('Gemini bịa số 0900000000 và đường khác.', { message });
+    assert.equal(reply, expected, message);
+    assert.ok(reply.split('\n').filter(Boolean).length <= 3, message);
+  }
+  const giving = shapeReply('Mộc Quả ghi nhận.', { message: 'địa chỉ giao 12 đường Lê Lợi phường Bến Nghé' });
+  assert.notEqual(giving, expected);
+  assert.doesNotMatch(giving, /Bàn Cờ/);
 });
 
 test('Gemini nhận khóa ở header, không gắn vào URL', async () => {
