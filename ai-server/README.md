@@ -50,6 +50,8 @@ Webhook: `https://ai-server-u9ob.onrender.com/webhook/facebook`
 
 Biến trên service **ai-server** (không phải cửa hàng): `FB_VERIFY_TOKEN`, `FB_APP_SECRET`, `FB_PAGE_ACCESS_TOKEN`, và `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` nếu muốn báo chủ shop khi khách nhắn đặt hàng hoặc xin gặp người. Thiếu biến Facebook thì webhook trả về mà không trả lời khách.
 
+Khách gửi vài tin sát nhau thì bot chờ khoảng 4 giây sau tin cuối (tối đa khoảng 12 giây kể từ tin đầu) rồi trả lời một lần. Một cụm tính là một lượt. Mỗi khách mặc định 20 lượt trong 10 phút. Chỉnh bằng `FB_RATE_MAX` và `FB_RATE_WINDOW_MS`. Quá giới hạn thì bot nhắc một lần trong cửa sổ đó.
+
 Cách nối trang nằm trong `docs/thong-bao-don-va-facebook.md`.
 
 ## Render

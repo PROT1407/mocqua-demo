@@ -38,6 +38,13 @@ export function createApp({
     apiKey: facebook.apiKey ?? apiKey,
     model: facebook.model || model,
     now: facebook.now,
+    env: facebook.env || process.env,
+    rateMax: facebook.rateMax,
+    rateWindowMs: facebook.rateWindowMs,
+    quietMs: facebook.quietMs,
+    maxWaitMs: facebook.maxWaitMs,
+    schedule: facebook.schedule,
+    clearSchedule: facebook.clearSchedule,
   });
   let facebookTail = Promise.resolve();
   app.locals.drainFacebook = () => facebookTail;
