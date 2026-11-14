@@ -2,7 +2,7 @@ import express from 'express';
 import { createCatalogSource } from './catalog.js';
 import { createMessenger, facebookReady, facebookSettings, validSignature, verifyChallenge } from './facebook.js';
 import { generateReply, resolveModel } from './gemini.js';
-import { buildAssistant, readChat } from './prompt.js';
+import { buildAssistant, isFirstGreeting, readChat, shapeReply } from './prompt.js';
 
 const ALLOWED_ORIGINS = new Set([
   'https://mocqua.com',
@@ -20,7 +20,7 @@ export function createApp({
   apiKey = process.env.GEMINI_API_KEY || '',
   model = safeModel(),
   rateLimit = {
-    max: positiveInt(process.env.RATE_LIMIT_MAX, 30),
+    max: positiveInt(process.env.RATE_LIMIT_MAX, 60),
     windowMs: positiveInt(process.env.RATE_LIMIT_WINDOW_MS, 10 * 60 * 1000),
   },
   facebook = {},
@@ -118,11 +118,14 @@ export function createApp({
     try {
       const catalog = await loadCatalog();
       const turn = buildAssistant(chat.message, chat.history, catalog);
-      const reply = await generate({
+      const reply = shapeReply(await generate({
         apiKey,
         model,
         system: turn.system,
         contents: turn.contents,
+      }), {
+        allowSlogan: isFirstGreeting(chat.history, chat.message),
+        message: chat.message,
       });
       res.json({ reply });
     } catch (err) {

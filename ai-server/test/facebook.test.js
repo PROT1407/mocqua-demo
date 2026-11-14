@@ -335,7 +335,7 @@ test('im lặng tính từ tin cuối, và có trần chờ', { timeout: 4000 },
   });
 });
 
-test('một cụm tính một lượt, mặc định 20 lượt mỗi 10 phút', { timeout: 4000 }, async () => {
+test('một cụm tính một lượt, mặc định 40 lượt mỗi 10 phút', { timeout: 4000 }, async () => {
   const { app, calls, clock } = clockedApp();
   await withServer(app, async (base) => {
     for (const text of ['chào shop', 'có xoài ko', 'giá sao', 'còn không', 'ship không']) {
@@ -343,24 +343,65 @@ test('một cụm tính một lượt, mặc định 20 lượt mỗi 10 phút',
     }
     await clock.advance(4000);
     assert.equal(calls.generate, 1);
+    assert.equal(replies(calls).some((text) => text.includes('nhắn hơi nhanh')), false);
 
-    for (let i = 0; i < 19; i += 1) {
+    for (let i = 0; i < 39; i += 1) {
       await send(base, textEvent('U5', `câu ${i}`));
       await clock.advance(4000);
     }
-    assert.equal(calls.generate, 20);
+    assert.equal(calls.generate, 40);
 
     await send(base, textEvent('U5', 'thêm một câu'));
     await send(base, textEvent('U5', 'và một câu nữa'));
     await waitTick();
-    assert.equal(calls.generate, 20);
+    assert.equal(calls.generate, 40);
     assert.deepEqual(replies(calls).filter((text) => text.includes('nhắn hơi nhanh')), [
       'Anh/chị nhắn hơi nhanh. Mộc Quả trả lời tiếp sau ít phút.',
     ]);
 
     await send(base, textEvent('U6', 'chào shop'));
     await clock.advance(4000);
-    assert.equal(calls.generate, 21);
+    assert.equal(calls.generate, 41);
+    await app.locals.drainFacebook();
+  });
+});
+
+test('Facebook bỏ slogan sau câu chào và không kể giảm giá khi hỏi ship', { timeout: 4000 }, async () => {
+  const { app, calls, clock } = clockedApp({
+    generate: async ({ contents } = {}) => {
+      const text = contents?.[0]?.parts?.[0]?.text || '';
+      if (text.includes('chào shop') && !text.includes('Hội thoại trước')) {
+        return 'Chào anh/chị.\nQuả của đất · Quà của tình';
+      }
+      return 'Phí giao 30.000đ, miễn phí từ 300.000đ.\nGiảm 3% đơn từ 300.000đ.\nGiảm 7% từ 500.000đ.\nQuả của đất · Quà của tình\nMộc Quả còn nhiều mẫu nữa.';
+    },
+  });
+  await withServer(app, async (base) => {
+    await send(base, textEvent('U40', 'chào shop'));
+    await clock.advance(4000);
+    assert.match(replies(calls)[0], /Quả của đất · Quà của tình/);
+    assert.ok(replies(calls)[0].split('\n').length <= 3);
+
+    await send(base, textEvent('U40', 'ship sao'));
+    await clock.advance(4000);
+    const ship = replies(calls)[1];
+    assert.match(ship, /30\.000đ/);
+    assert.doesNotMatch(ship, /Quả của đất|Giảm 3%|Giảm 7%/);
+    assert.ok(ship.split('\n').filter(Boolean).length <= 3);
+    await app.locals.drainFacebook();
+  });
+});
+
+test('2 đến 5 tin sát nhau vẫn được trả lời bình thường', { timeout: 4000 }, async () => {
+  const { app, calls, clock } = clockedApp({ rateMax: 3 });
+  await withServer(app, async (base) => {
+    for (const text of ['chào shop', 'có mít ko', 'mít thái', 'giá sao', 'ship sao']) {
+      await send(base, textEvent('U5B', text));
+    }
+    await clock.advance(4000);
+    assert.equal(calls.generate, 1);
+    assert.deepEqual(replies(calls), ['Giá lấy từ danh mục.']);
+    assert.equal(calls.prompts[0].includes('chào shop') && calls.prompts[0].includes('ship sao'), true);
     await app.locals.drainFacebook();
   });
 });

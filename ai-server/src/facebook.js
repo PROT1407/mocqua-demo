@@ -1,13 +1,13 @@
 import crypto from 'node:crypto';
 import { fold } from './catalog.js';
-import { buildAssistant } from './prompt.js';
+import { buildAssistant, isFirstGreeting, shapeReply } from './prompt.js';
 import { notifyOwner, scrubSecret } from './telegram.js';
 
 const HUMAN = ['gap nhan vien', 'goi lai', 'nguoi that'];
 const PAUSE_MS = 60 * 60 * 1000;
 const HISTORY_TTL_MS = 60 * 60 * 1000;
 const HISTORY_LIMIT = 10;
-const DEFAULT_RATE_MAX = 20;
+const DEFAULT_RATE_MAX = 40;
 const DEFAULT_RATE_WINDOW_MS = 10 * 60 * 1000;
 const DEFAULT_QUIET_MS = 4000;
 const DEFAULT_MAX_WAIT_MS = 12 * 1000;
@@ -239,12 +239,12 @@ export function createMessenger({
       if (markWarned(psid)) await say(psid, RATE_TEXT);
       return;
     }
+    const priorTurns = historyOf(psid);
     let reply = FALLBACK;
     let geminiFailed = !apiKey;
     if (apiKey) {
       try {
         const catalog = await loadCatalog();
-        const priorTurns = historyOf(psid);
         remember(psid, 'user', text);
         const turn = buildAssistant(text, priorTurns, catalog, { consecutive: texts.length > 1 });
         reply = await generate({ apiKey, model, system: turn.system, contents: turn.contents });
@@ -255,6 +255,10 @@ export function createMessenger({
         geminiFailed = true;
       }
     }
+    reply = shapeReply(reply, {
+      allowSlogan: !geminiFailed && isFirstGreeting(priorTurns, text),
+      message: text,
+    });
     if (geminiFailed) await notifyGeminiDown(psid, text);
     remember(psid, 'model', reply);
     await say(psid, reply);
