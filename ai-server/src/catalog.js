@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { listPriceForGrams, resolveSale } from './sale.js';
 
 const DEFAULT_URL = 'https://mocqua.onrender.com/api/danh-muc';
@@ -209,6 +210,31 @@ function clean(value) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
 }
 
+const BUNDLE_URL = new URL('../../server/data/danh-muc.json', import.meta.url);
+const bundleByOrigin = new Map();
+
+function httpError(status) {
+  const err = new Error(`catalog-http-${status}`);
+  err.status = status;
+  return err;
+}
+
+// Bản trong repo, dùng khi máy cửa hàng (phía Cloudflare) trả 429 và bộ nhớ còn trống.
+function readBundle(origin) {
+  if (bundleByOrigin.has(origin)) return bundleByOrigin.get(origin);
+  let data = null;
+  try {
+    const payload = JSON.parse(fs.readFileSync(BUNDLE_URL, 'utf8'));
+    if (payload && Array.isArray(payload.products) && payload.products.length) {
+      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle' };
+    }
+  } catch {
+    data = null;
+  }
+  bundleByOrigin.set(origin, data);
+  return data;
+}
+
 export function createCatalogSource({
   fetchImpl = globalThis.fetch,
   url = process.env.MOCQUA_CATALOG_URL || DEFAULT_URL,
@@ -216,6 +242,7 @@ export function createCatalogSource({
   ttlMs = Number(process.env.CATALOG_TTL_MS) || 10 * 60 * 1000,
   timeoutMs = Number(process.env.CATALOG_TIMEOUT_MS) || 25_000,
   failCooldownMs = Number(process.env.CATALOG_FAIL_COOLDOWN_MS) || 60_000,
+  bundle = true,
 } = {}) {
   let cache = null;
   let pending = null;
@@ -225,10 +252,10 @@ export function createCatalogSource({
     const target = new URL(url);
     if (target.protocol !== 'https:' && target.protocol !== 'http:') throw new Error('catalog-url');
     const response = await fetchImpl(target, {
-      headers: { accept: 'application/json' },
+      headers: { accept: 'application/json', 'user-agent': 'MocQua-ai-server' },
       signal: AbortSignal.timeout(timeoutMs),
     });
-    if (!response.ok) throw new Error(`catalog-http-${response.status}`);
+    if (!response.ok) throw httpError(response.status);
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.products)) throw new Error('catalog-shape');
     return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) };
@@ -238,9 +265,16 @@ export function createCatalogSource({
     try {
       return await pullOnce();
     } catch (err) {
+      // 429: gọi lại ngay làm Cloudflare siết chặt hơn. Lỗi khác thử một lần.
+      if (err?.status === 429) throw err;
       console.error('catalog fetch failed, retrying', err instanceof Error ? err.message : 'error');
       return pullOnce();
     }
+  }
+
+  function remember(data, at) {
+    cache = { at, data };
+    return data;
   }
 
   return async function loadCatalog(now = Date.now()) {
@@ -249,13 +283,18 @@ export function createCatalogSource({
     if (!pending) pending = pull().finally(() => { pending = null; });
     try {
       const data = await pending;
-      cache = { at: now, data };
+      remember(data, now);
       failedAt = 0;
       return { ok: true, stale: false, ...data };
     } catch (err) {
       console.error('catalog fetch failed', err instanceof Error ? err.message : 'error');
       failedAt = now;
       if (cache) return { ok: true, stale: true, ...cache.data };
+      const seeded = bundle ? readBundle(origin) : null;
+      if (seeded) {
+        remember(seeded, now - ttlMs);
+        return { ok: true, stale: true, bundled: true, ...seeded };
+      }
       return { ok: false, stale: false, items: [], updated: '' };
     }
   };

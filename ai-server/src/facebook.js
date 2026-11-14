@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { fold } from './catalog.js';
-import { buildAssistant, isFirstGreeting, shapeReply } from './prompt.js';
+import { buildAssistant, CATALOG_WARM, isFirstGreeting, shapeReply } from './prompt.js';
+import { asksShopAddress, shopAddressReply } from './shop-info.js';
 import { notifyOwner, scrubSecret } from './telegram.js';
 
 const HUMAN = ['gap nhan vien', 'goi lai', 'nguoi that'];
@@ -211,6 +212,29 @@ export function createMessenger({
     return true;
   }
 
+  const catalogAlerts = new Map();
+  let catalogAlertGlobalAt = 0;
+
+  function takeCatalogAlert(psid) {
+    const t = now();
+    const last = catalogAlerts.get(psid) || 0;
+    if (last && t - last < FAIL_ALERT_PSID_MS) return false;
+    if (catalogAlertGlobalAt && t - catalogAlertGlobalAt < FAIL_ALERT_GLOBAL_MS) return false;
+    catalogAlerts.set(psid, t);
+    catalogAlertGlobalAt = t;
+    return true;
+  }
+
+  async function notifyCatalogDown(psid, text) {
+    if (!takeCatalogAlert(psid)) return;
+    const snippet = String(text || '').trim().slice(0, 300);
+    try {
+      await sendOwner(`⚠️ Bot chưa tải được danh mục cửa hàng. Khách vẫn nhận câu xem website.\nPSID: ${psid}\nKhách nhắn: ${snippet}`);
+    } catch (error) {
+      console.error('catalog alert failed', scrubSecret(error));
+    }
+  }
+
   async function notifyGeminiDown(psid, text) {
     if (!takeGeminiAlert(psid)) return;
     const snippet = String(text || '').trim().slice(0, 300);
@@ -240,20 +264,45 @@ export function createMessenger({
       return;
     }
     const priorTurns = historyOf(psid);
+    if (asksShopAddress(text)) {
+      const line = shopAddressReply();
+      remember(psid, 'user', text);
+      remember(psid, 'model', line);
+      await say(psid, line);
+      return;
+    }
     let reply = FALLBACK;
     let geminiFailed = !apiKey;
+    let catalogDown = false;
     if (apiKey) {
+      let catalog;
       try {
-        const catalog = await loadCatalog();
-        remember(psid, 'user', text);
-        const turn = buildAssistant(text, priorTurns, catalog, { consecutive: texts.length > 1 });
-        reply = await generate({ apiKey, model, system: turn.system, contents: turn.contents });
-        geminiFailed = false;
+        catalog = await loadCatalog();
       } catch (error) {
-        console.error('facebook assistant failed', scrubSecret(error));
-        reply = FALLBACK;
-        geminiFailed = true;
+        console.error('catalog', scrubSecret(error));
+        catalog = { ok: false, items: [] };
       }
+      if (catalog?.ok === false) {
+        catalogDown = true;
+      } else {
+        try {
+          remember(psid, 'user', text);
+          const turn = buildAssistant(text, priorTurns, catalog, { consecutive: texts.length > 1 });
+          reply = await generate({ apiKey, model, system: turn.system, contents: turn.contents });
+          geminiFailed = false;
+        } catch (error) {
+          console.error('facebook assistant failed', scrubSecret(error));
+          reply = FALLBACK;
+          geminiFailed = true;
+        }
+      }
+    }
+    if (catalogDown) {
+      remember(psid, 'user', text);
+      remember(psid, 'model', CATALOG_WARM);
+      await say(psid, CATALOG_WARM);
+      await notifyCatalogDown(psid, text);
+      return;
     }
     reply = shapeReply(reply, {
       allowSlogan: !geminiFailed && isFirstGreeting(priorTurns, text),

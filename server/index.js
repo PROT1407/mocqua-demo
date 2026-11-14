@@ -268,9 +268,10 @@ export function createApp() {
     html(res, 200, comparePage(listPriceRefs()));
   });
 
-  // Danh mục tra cứu sản phẩm: Thương hiệu → Nhãn → Sản phẩm → Khối lượng
+  // Danh mục tra cứu. Không gắn limiter của đơn hàng: ai-server gọi GET này.
+  // Cache ngắn để Cloudflare trước onrender.com giữ bản vừa tải, đỡ trả 429 cho máy cùng cụm.
   app.get('/api/danh-muc', (req, res) => {
-    res.set('Cache-Control', 'no-store');
+    res.set('Cache-Control', 'public, max-age=120');
     res.json(withShopLinks(catalogWithPrices()));
   });
   app.get('/api/admin/catalog-prices.json', requireAdmin, (req, res) => {
