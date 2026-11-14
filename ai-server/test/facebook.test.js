@@ -511,3 +511,99 @@ test('nút bấm, đơn hàng và ảnh không bị hoãn 4 giây', { timeout: 4
     assert.equal(calls.generate, 1);
   });
 });
+
+const WARM_FALLBACK = 'Mộc Quả đã nhận tin của anh/chị, nhân viên sẽ trả lời ngay ạ. Anh/chị cũng có thể xem hàng tại https://mocqua.onrender.com.';
+
+test('Gemini lỗi thì báo chủ một lần và trả lời ấm cho khách', { timeout: 4000 }, async () => {
+  let hits = 0;
+  const { app, calls, clock } = clockedApp({
+    generate: async () => {
+      hits += 1;
+      throw new Error('429 RESOURCE_EXHAUSTED access_token=super-secret-key bot123:ABCDEF');
+    },
+  });
+  await withServer(app, async (base) => {
+    await send(base, textEvent('U20', 'chào shop'));
+    await send(base, textEvent('U20', 'có xoài access_token=leaked-token'));
+    await clock.advance(4000);
+    assert.equal(hits, 1);
+    assert.deepEqual(replies(calls), [WARM_FALLBACK]);
+    assert.equal(calls.owner.length, 1);
+    assert.match(calls.owner[0], /Gemini lỗi/);
+    assert.match(calls.owner[0], /PSID: U20/);
+    assert.match(calls.owner[0], /chào shop/);
+    assert.match(calls.owner[0], /có xoài/);
+    assert.match(calls.owner[0], /access_token=<hidden>/);
+    assert.doesNotMatch(calls.owner[0], /leaked-token|super-secret-key|RESOURCE_EXHAUSTED|bot123|bot<hidden>/);
+
+    await send(base, textEvent('U20', 'giá sao'));
+    await clock.advance(4000);
+    await send(base, textEvent('U21', 'chào shop'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 1);
+    assert.equal(replies(calls).length, 3);
+
+    await clock.advance(52_000);
+    await send(base, textEvent('U21', 'nhắc lại'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 2);
+    assert.match(calls.owner[1], /PSID: U21/);
+
+    await clock.advance(60_000);
+    await send(base, textEvent('U20', 'lại nữa'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 2);
+
+    await send(base, textEvent('U22', 'mít'));
+    await clock.advance(4000);
+    assert.equal(calls.owner.length, 3);
+    assert.match(calls.owner[2], /PSID: U22/);
+
+    await clock.advance(60_000);
+    await send(base, textEvent('U23', 'y'.repeat(500)));
+    await clock.advance(4000);
+    const snippet = calls.owner.at(-1).split('Khách nhắn: ')[1];
+    assert.equal(snippet.length, 300);
+    assert.equal(snippet, 'y'.repeat(300));
+    await app.locals.drainFacebook();
+  });
+});
+
+test('thiếu khóa hoặc danh mục lỗi cũng báo chủ, Gemini ổn thì không báo', { timeout: 4000 }, async () => {
+  const missing = clockedApp({ apiKey: '' });
+  await withServer(missing.app, async (base) => {
+    await send(base, textEvent('U30', 'có xoài không'));
+    await missing.clock.advance(4000);
+    assert.equal(missing.calls.generate, 0);
+    assert.deepEqual(replies(missing.calls), [WARM_FALLBACK]);
+    assert.equal(missing.calls.owner.length, 1);
+    assert.match(missing.calls.owner[0], /PSID: U30/);
+    assert.doesNotMatch(missing.calls.owner[0], /test-key/);
+    await send(base, textEvent('U30', 'giá sao'));
+    await missing.clock.advance(4000);
+    assert.equal(missing.calls.owner.length, 1);
+    await missing.app.locals.drainFacebook();
+  });
+
+  const broken = clockedApp({
+    loadCatalog: async () => { throw new Error('shop-down access_token=nope'); },
+  });
+  await withServer(broken.app, async (base) => {
+    await send(base, textEvent('U31', 'giá mít'));
+    await broken.clock.advance(4000);
+    assert.equal(broken.calls.generate, 0);
+    assert.deepEqual(replies(broken.calls), [WARM_FALLBACK]);
+    assert.match(broken.calls.owner[0], /PSID: U31/);
+    assert.doesNotMatch(broken.calls.owner[0], /shop-down|access_token=nope/);
+    await broken.app.locals.drainFacebook();
+  });
+
+  const ok = clockedApp();
+  await withServer(ok.app, async (base) => {
+    await send(base, textEvent('U32', 'có xoài không'));
+    await ok.clock.advance(4000);
+    assert.deepEqual(replies(ok.calls), ['Giá lấy từ danh mục.']);
+    assert.deepEqual(ok.calls.owner, []);
+    await ok.app.locals.drainFacebook();
+  });
+});

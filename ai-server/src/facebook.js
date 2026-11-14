@@ -14,7 +14,9 @@ const DEFAULT_MAX_WAIT_MS = 12 * 1000;
 const RATE_TEXT = 'Anh/chị nhắn hơi nhanh. Mộc Quả trả lời tiếp sau ít phút.';
 const HUMAN_REPLY = 'Mộc Quả đã báo nhân viên. Anh/chị chờ một chút, Mộc Quả sẽ trả lời trực tiếp.';
 const ORDER_REPLY = 'Mộc Quả đã ghi nhận thông tin anh/chị gửi. Mộc Quả sẽ liên hệ để xác nhận. Anh/chị cũng có thể tự đặt trên https://mocqua.onrender.com. Mộc Quả chưa nhận thanh toán trong khung chat này.';
-const FALLBACK = 'Mộc Quả chưa trả lời được lúc này. Anh/chị xem hàng trên https://mocqua.onrender.com nhé.';
+const FALLBACK = 'Mộc Quả đã nhận tin của anh/chị, nhân viên sẽ trả lời ngay ạ. Anh/chị cũng có thể xem hàng tại https://mocqua.onrender.com.';
+const FAIL_ALERT_PSID_MS = 10 * 60 * 1000;
+const FAIL_ALERT_GLOBAL_MS = 60 * 1000;
 
 export function facebookSettings(env = process.env) {
   return {
@@ -84,6 +86,8 @@ export function createMessenger({
   const warned = new Map();
   const bursts = new Map();
   const lanes = new Map();
+  const geminiAlerts = new Map();
+  let geminiAlertGlobalAt = 0;
   const RATE_MAX = positiveInt(rateMax ?? env.FB_RATE_MAX, DEFAULT_RATE_MAX);
   const RATE_WINDOW_MS = positiveInt(rateWindowMs ?? env.FB_RATE_WINDOW_MS, DEFAULT_RATE_WINDOW_MS);
   const QUIET_MS = positiveInt(quietMs, DEFAULT_QUIET_MS);
@@ -192,6 +196,32 @@ export function createMessenger({
     await say(psid, ORDER_REPLY);
   }
 
+  function takeGeminiAlert(psid) {
+    const t = now();
+    if (geminiAlerts.size > 500) {
+      for (const [id, at] of geminiAlerts) {
+        if (t - at >= FAIL_ALERT_PSID_MS) geminiAlerts.delete(id);
+      }
+    }
+    const last = geminiAlerts.get(psid) || 0;
+    if (last && t - last < FAIL_ALERT_PSID_MS) return false;
+    if (geminiAlertGlobalAt && t - geminiAlertGlobalAt < FAIL_ALERT_GLOBAL_MS) return false;
+    geminiAlerts.set(psid, t);
+    geminiAlertGlobalAt = t;
+    return true;
+  }
+
+  async function notifyGeminiDown(psid, text) {
+    if (!takeGeminiAlert(psid)) return;
+    const snippet = String(text || '').trim().slice(0, 300);
+    const notice = scrubSecret(`⚠️ Bot chưa trả lời được (Gemini lỗi).\nPSID: ${psid}\nKhách nhắn: ${snippet}`);
+    try {
+      await sendOwner(notice);
+    } catch (error) {
+      console.error('facebook owner alert failed', scrubSecret(error));
+    }
+  }
+
   async function respond(psid, texts) {
     if (isPaused(psid)) return;
     const text = texts.join('\n').trim();
@@ -210,6 +240,7 @@ export function createMessenger({
       return;
     }
     let reply = FALLBACK;
+    let geminiFailed = !apiKey;
     if (apiKey) {
       try {
         const catalog = await loadCatalog();
@@ -217,10 +248,14 @@ export function createMessenger({
         remember(psid, 'user', text);
         const turn = buildAssistant(text, priorTurns, catalog, { consecutive: texts.length > 1 });
         reply = await generate({ apiKey, model, system: turn.system, contents: turn.contents });
+        geminiFailed = false;
       } catch (error) {
         console.error('facebook assistant failed', scrubSecret(error));
+        reply = FALLBACK;
+        geminiFailed = true;
       }
     }
+    if (geminiFailed) await notifyGeminiDown(psid, text);
     remember(psid, 'model', reply);
     await say(psid, reply);
   }
