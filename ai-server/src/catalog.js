@@ -1,11 +1,45 @@
+import { listPriceForGrams, resolveSale } from './sale.js';
+
 const DEFAULT_URL = 'https://mocqua.onrender.com/api/danh-muc';
 const DEFAULT_ORIGIN = 'https://mocqua.onrender.com';
+
+function asInt(value) {
+  return Number.isInteger(value) ? value : null;
+}
+
+// Lịch khuyến mãi lấy từ dữ liệu danh mục (không chốt số trong câu trả lời).
+// Giá gốc ưu tiên originalPrice/compareAt; không có thì tính từ listPer100g.
+export function saleSchedule(product, variant) {
+  const promo = variant?.promo && typeof variant.promo === 'object' ? variant.promo : null;
+  const endsAt = (typeof promo?.endsAt === 'string' && promo.endsAt)
+    || (typeof product?.promoEndsAt === 'string' && product.promoEndsAt)
+    || '';
+  if (!endsAt || !Number.isFinite(Date.parse(endsAt))) return null;
+  const grams = asInt(variant?.weightG);
+  const explicit = asInt(promo?.originalPrice ?? promo?.compareAt ?? variant?.compareAt);
+  const listPer100g = asInt(product?.listPer100g);
+  const original = explicit ?? listPriceForGrams(listPer100g, grams);
+  const promoPrice = asInt(promo?.price) ?? asInt(variant?.price);
+  if (original == null || promoPrice == null) return null;
+  return {
+    price: promoPrice,
+    grams,
+    listPer100g,
+    promoEndsAt: typeof product?.promoEndsAt === 'string' ? product.promoEndsAt : '',
+    promo: {
+      price: promoPrice,
+      originalPrice: original,
+      endsAt,
+      ...(typeof promo?.label === 'string' ? { label: promo.label } : {}),
+    },
+  };
+}
 
 export function shopOrigin(env = process.env) {
   return String(env.SHOP_PUBLIC_URL || DEFAULT_ORIGIN).replace(/\/$/, '');
 }
 
-export function compactCatalog(payload, { origin = DEFAULT_ORIGIN } = {}) {
+export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Date() } = {}) {
   const cats = new Map((payload?.categories || []).map((c) => [c.id, c.name]));
   const lines = [];
   for (const product of payload?.products || []) {
@@ -22,6 +56,8 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN } = {}) {
       const grams = Number(variant?.weightG);
       const weight = clean(variant?.weightLabel) || (Number.isFinite(grams) && grams > 0 ? `${grams}g` : '');
       const price = Number.isInteger(variant?.price) && variant.price >= 0 ? variant.price : null;
+      const schedule = saleSchedule(product, variant);
+      const sale = schedule ? resolveSale(schedule, now) : { price, compareAt: null, promo: null };
       const aliases = [];
       if (product?.type) aliases.push(clean(String(product.type).replace(/[-_]/g, ' ')));
       if (Array.isArray(product?.aliases)) {
@@ -39,7 +75,8 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN } = {}) {
         sku,
         weight,
         grams: Number.isFinite(grams) ? grams : null,
-        price,
+        price: sale.price,
+        ...(schedule ? { schedule } : {}),
         url,
         aliases,
       });
@@ -49,11 +86,17 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN } = {}) {
   return lines;
 }
 
-export function formatCatalog(lines) {
+function quotedPrice(row, now) {
+  const sale = row?.schedule ? resolveSale(row.schedule, now) : { price: row?.price ?? null, promo: null };
+  if (sale.price == null) return 'chưa có giá';
+  if (!sale.promo) return String(sale.price);
+  return `${sale.price} (khuyến mãi ${sale.promo.price}, giá gốc ${sale.promo.originalPrice}, hết ${sale.promo.label})`;
+}
+
+export function formatCatalog(lines, now = new Date()) {
   if (!lines?.length) return '';
   return lines.map((row) => {
-    const price = row.price == null ? 'chưa có giá' : String(row.price);
-    return [row.brand, row.name, row.weight, price, row.url].filter(Boolean).join(' | ');
+    return [row.brand, row.name, row.weight, quotedPrice(row, now), row.url].filter(Boolean).join(' | ');
   }).join('\n');
 }
 
@@ -116,6 +159,21 @@ function tokenHit(hay, token) {
   return 0;
 }
 
+function asksDurian(message) {
+  const folded = fold(message);
+  return folded.includes('sau rieng') || folded.includes('saurieng') || folded.includes('durian');
+}
+
+// Túi Yummy sầu riêng sấy thăng hoa cỡ khoảng 105g (không phải Monthong, không phải combo).
+function isYummyDurian(item) {
+  const brand = fold(item?.brand);
+  const name = fold(item?.name);
+  const grams = Number(item?.grams);
+  if (!brand.includes('yummy') || !name.includes('sau rieng')) return false;
+  if (name.includes('combo') || name.includes('monthong')) return false;
+  return grams >= 100 && grams <= 110;
+}
+
 export function relatedItems(items, message, limit = 12) {
   const query = queryTokens(message);
   if (!query.length) return [];
@@ -139,7 +197,12 @@ export function relatedItems(items, message, limit = 12) {
     scored.push({ item, score, matched });
   }
   scored.sort((a, b) => b.matched - a.matched || b.score - a.score || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
-  return scored.slice(0, limit).map((row) => row.item);
+  let ranked = scored.map((row) => row.item);
+  if (asksDurian(message)) {
+    const yummy = (items || []).find(isYummyDurian);
+    if (yummy) ranked = [yummy, ...ranked.filter((item) => item.sku !== yummy.sku)];
+  }
+  return ranked.slice(0, limit);
 }
 
 function clean(value) {

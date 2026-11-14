@@ -100,7 +100,9 @@ function render() {
   saveTag.hidden = !deal;
   saveTag.textContent = deal ? `Tiết kiệm ${Math.round(deal.save / 1000)}k` : '';
   if (current.price) {
-    price.textContent = money(current.price);
+    const was = current.compareAt > current.price ? ` <span class="was"><s>${money(current.compareAt)}</s></span>` : '';
+    const badge = current.promo?.label ? ` <span class="kmbadge">${text(current.promo.label)}</span>` : '';
+    price.innerHTML = `${money(current.price)}${was}${badge}`;
     if (deal) price.insertAdjacentHTML('beforeend', ` <span class="was">mua lẻ <s>${money(deal.sum)}</s></span>`);
     unit.textContent = current.g ? `Khoảng ${money(Math.round(current.price / current.g * 100))} / 100g` : '';
   } else {

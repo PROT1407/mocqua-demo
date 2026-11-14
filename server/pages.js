@@ -141,6 +141,15 @@ function priceLabel(product) {
   return (product.priceVaries ? 'từ ' : '') + vnd(product.priceFrom);
 }
 
+function priceHtml(product) {
+  const text = esc(priceLabel(product));
+  const from = product.variants.find((v) => v.price === product.priceFrom);
+  if (!(from?.compareAt > from?.price)) return text;
+  const was = ` <span class="was"><s>${esc(vnd(from.compareAt))}</s></span>`;
+  const badge = from.promo?.label ? ` <span class="kmbadge">${esc(from.promo.label)}</span>` : '';
+  return text + was + badge;
+}
+
 // Combo: gắn { sum, save } của mã mặc định (tổng giá lẻ thật − giá combo) để thẻ hiện nhãn tiết kiệm + "mua lẻ" gạch ngang.
 // Combo có nhiều giá (vd. 2 vị / 3 vị) thì không gắn, vì giá "từ …" không khớp với số tiết kiệm của mã mặc định.
 function attachDeals(catalog) {
@@ -228,7 +237,7 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
       <p class="card__brand">${esc(product.brandName)}</p>
       <h3><a href="${href}">${esc(product.name)}</a></h3>
       <p class="card__meta">${esc(product.weightLabel)}</p>
-      <p class="card__price">${esc(priceLabel(product))}${product.deal ? ` ${wasPrice(product.deal.sum)}` : ''}</p>
+      <p class="card__price">${priceHtml(product)}${product.deal ? ` ${wasPrice(product.deal.sum)}` : ''}</p>
       ${canBuy
         ? `<button type="button" class="btn btn--small" data-add-sku="${esc(product.defaultSku)}">Cho vào giỏ</button>`
         : `<a class="btn btn--small btn--ghost" href="${href}">${product.oos ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
@@ -553,7 +562,10 @@ export function productPage(product, catalog) {
     photos: product.photos || [],
     fit45: product.fit45 || [],
     variants: product.variants.map((v) => ({
-      sku: v.sku, w: v.w, g: v.g, price: v.price, pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),
+      sku: v.sku, w: v.w, g: v.g, price: v.price,
+      ...(v.compareAt != null ? { compareAt: v.compareAt } : {}),
+      ...(v.promo ? { promo: { label: v.promo.label, endsAt: v.promo.endsAt, price: v.promo.price, originalPrice: v.promo.originalPrice } } : {}),
+      pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),
     })),
   };
   const body = `<main id="main" class="wrap">

@@ -15,7 +15,7 @@ function contentsOf(item) {
 }
 
 function rows(data) {
-  const items = data.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}${item.combo ? ' · combo' : ''}</small>${contentsOf(item)}</span><b>${money(item.line)}</b></li>`).join('');
+  const items = data.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}${item.combo ? ' · combo' : ''}${item.compareAt > item.price ? ` · <span class="was"><s>${money(item.compareAt)}</s></span>${item.promo?.label ? ` <span class="kmbadge">${esc(item.promo.label)}</span>` : ''}` : ''}</small>${contentsOf(item)}</span><b>${money(item.line)}</b></li>`).join('');
   const gifts = (data.gifts || []).map((item) => `<li class="giftline"><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small></span><b>0đ</b></li>`).join('');
   return `<ul class="lines">${items}${gifts}</ul>
     <p class="hint">${data.hint || ''}</p>

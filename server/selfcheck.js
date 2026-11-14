@@ -842,7 +842,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v44/);
+    assert.match(sw, /mocqua-shell-v45/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
@@ -1000,10 +1000,33 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(mit, /"photos":\[\{"src":"\/assets\/products\/fhx-mit200-moi\.webp"/);
       assert.equal(byId.get('mit-say-gion').variants.find((v) => v.sku === 'MQ-GMI-300-FH').w, '300g');
       assert.equal(byId.get('mit-say-gion').variants.find((v) => v.sku === 'MQ-GMI-300-FH').g, 300);
-      // Chủ shop đặt giá túi này 74k (01/11, đổi từ 65k); túi 500g giữ 139k; giá combo có mít không đổi khi sửa khối lượng hiển thị.
-      assert.equal(priceOf.get('MQ-GMI-300-FH'), 74000);
-      assert.equal(priceOf.get('MQ-GMI-500-FH'), 139000);
-      assert.equal(buy['VZ-FH-MIT-300'].price, 74000);
+      // Giá lưu trong danh mục vẫn là giá khuyến mãi (300g 74k, 500g 139k). Giá đang bán đổi theo ngày: hết 30/11/2026 ICT thì về giá gốc 33.000đ/100g.
+      const { resolveSale } = await import('../ai-server/src/sale.js');
+      const rawMit = (await import('./catalog.js')).getRawProduct('mit-say-gion');
+      const raw300 = rawMit.variants.find((v) => v.sku === 'MQ-GMI-300-FH');
+      const raw500 = rawMit.variants.find((v) => v.sku === 'MQ-GMI-500-FH');
+      const saleOf = (variant) => resolveSale({
+        price: variant.p, grams: variant.g, listPer100g: rawMit.listPer100g, promoEndsAt: rawMit.promoEndsAt, promo: variant.promo,
+      });
+      assert.equal(raw300.p, 74000);
+      assert.equal(raw500.p, 139000);
+      assert.equal(rawMit.listPer100g, 33000);
+      const on300 = saleOf(raw300);
+      const on500 = saleOf(raw500);
+      assert.equal(priceOf.get('MQ-GMI-300-FH'), on300.price);
+      assert.equal(priceOf.get('MQ-GMI-500-FH'), on500.price);
+      assert.equal(buy['VZ-FH-MIT-300'].price, on300.price);
+      if (on300.promo) {
+        assert.equal(on300.compareAt, 99000);
+        assert.equal(on500.compareAt, 165000);
+        assert.match(mit, /"compareAt":99000/);
+        assert.match(mit, /"compareAt":165000/);
+        assert.match(mit, /KM đến 30\/11/);
+      } else {
+        assert.equal(on300.price, 99000);
+        assert.equal(on500.price, 165000);
+        assert.doesNotMatch(mit, /KM đến 30\/11/);
+      }
       for (const [sku, price] of [['VZ-MIX-CB2MS-400', 173000], ['VZ-MIX-CB2CM-305', 210000], ['VZ-MIX-CB4KF-500', 241000], ['VZ-MIX-CB3DG-600', 189000]]) {
         assert.equal(priceOf.get(sku), price, sku);
         assert.equal(dmj.products.flatMap((x) => x.variants).find((v) => v.code === sku).price, price, sku + ' danh mục');

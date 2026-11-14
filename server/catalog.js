@@ -3,6 +3,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { ROOT } from './paths.js';
 import { getOverrides, getSettings } from './db.js';
+import { resolveSale } from '../ai-server/src/sale.js';
 
 const BRAND_ORDER = ['mq', 'fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'other'];
 
@@ -106,7 +107,18 @@ function weightLabel(variants) {
   return min === max ? fmt(min) : fmt(min) + ' – ' + fmt(max);
 }
 
-function presentVariant(mq, product, variant, price) {
+function saleFor(product, variant, price, overridden, now) {
+  if (overridden || !(price > 0)) return { price, compareAt: null, promo: null };
+  return resolveSale({
+    price,
+    grams: variant.g || variant.weightG || null,
+    listPer100g: product.listPer100g,
+    promoEndsAt: product.promoEndsAt,
+    promo: variant.promo,
+  }, now);
+}
+
+function presentVariant(mq, product, variant, sale) {
   const packs = product.packs || null;
   return {
     sku: variant.sku,
@@ -114,7 +126,9 @@ function presentVariant(mq, product, variant, price) {
     g: variant.g || 0,
     line: variant.line || '',
     lineName: lineName(mq, variant.line),
-    price,
+    price: sale.price,
+    ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
+    ...(sale.promo ? { promo: sale.promo } : {}),
     pack: variant.pk || '',
     note: variant.note || '',
     img: resolveImg(variant.img, true),
@@ -124,12 +138,13 @@ function presentVariant(mq, product, variant, price) {
   };
 }
 
-function presentProduct(mq, product, { detail = false } = {}) {
+function presentProduct(mq, product, { detail = false, now = new Date() } = {}) {
   const overrides = getOverrides();
   const over = overrides.products.get(product.id);
   const variants = (product.variants || []).filter((v) => v.sku).map((variant) => {
-    const price = overrides.prices.has(variant.sku) ? overrides.prices.get(variant.sku) : (variant.p ?? null);
-    return presentVariant(mq, product, variant, price);
+    const overridden = overrides.prices.has(variant.sku);
+    const price = overridden ? overrides.prices.get(variant.sku) : (variant.p ?? null);
+    return presentVariant(mq, product, variant, saleFor(product, variant, price, overridden, now));
   });
   const multiLine = new Set(variants.map((v) => v.line).filter(Boolean)).size > 1;
   for (const variant of variants) {
@@ -237,12 +252,12 @@ export function getShelf() {
   }));
 }
 
-export function getShopCatalog() {
+export function getShopCatalog(now = new Date()) {
   const { mq } = loadBase();
   const settings = getSettings();
   const products = mq.PRODUCTS
     .filter((p) => !p.soon)
-    .map((p) => presentProduct(mq, p))
+    .map((p) => presentProduct(mq, p, { now }))
     .filter((p) => !p.hidden && p.variants.length);
   const gift = products.flatMap((p) => p.variants).find((v) => v.sku === settings.giftSku);
   return {
@@ -267,13 +282,13 @@ export function getRawProduct(id) {
   return byId.get(id) || null;
 }
 
-export function getProductPage(id) {
+export function getProductPage(id, now = new Date()) {
   const { mq, byId } = loadBase();
   const alias = mq.ID_ALIAS || {};
   const realId = alias[id] || id;
   const product = byId.get(realId);
   if (!product || product.soon) return { redirect: alias[id] ? realId : null, product: null };
-  const view = presentProduct(mq, product, { detail: true });
+  const view = presentProduct(mq, product, { detail: true, now });
   if (view.hidden) return { redirect: null, product: null };
   if (alias[id]) return { redirect: realId, product: view };
   return { redirect: null, product: view };
@@ -301,7 +316,7 @@ export function adminProducts() {
   });
 }
 
-export function lookupSku(sku, { allowHidden = false } = {}) {
+export function lookupSku(sku, { allowHidden = false, now = new Date() } = {}) {
   const { mq, bySku } = loadBase();
   const key = (mq.SKU_ALIAS || {})[sku] || sku;
   const hit = bySku.get(key);
@@ -309,10 +324,14 @@ export function lookupSku(sku, { allowHidden = false } = {}) {
   const overrides = getOverrides();
   const hidden = !!overrides.products.get(hit.product.id)?.hidden || !!hit.product.hide;
   if (hidden && !allowHidden) return null;
-  const price = overrides.prices.has(key) ? overrides.prices.get(key) : (hit.variant.p ?? null);
+  const overridden = overrides.prices.has(key);
+  const stored = overridden ? overrides.prices.get(key) : (hit.variant.p ?? null);
+  const sale = saleFor(hit.product, hit.variant, stored, overridden, now);
   return {
     sku: key,
-    price,
+    price: sale.price,
+    ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
+    ...(sale.promo ? { promo: sale.promo } : {}),
     product: hit.product,
     variant: hit.variant,
     name: hit.product.name,

@@ -761,6 +761,12 @@ code { font-family: ui-monospace, monospace; font-size: .95em; }
 .cbhero__img { position: relative; }
 .cbhero__price .was { font-size: 15px; }
 .price .was { display: inline-block; margin-left: 6px; font-size: 15px; vertical-align: middle; }
+.kmbadge {
+  display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
+  background: #f3e6c9; color: #7a4e12; font-size: 11px; font-weight: 600; line-height: 1.5;
+  letter-spacing: .01em; vertical-align: middle; white-space: nowrap;
+}
+.price .kmbadge { font-size: 13px; }
 
 /* Trang món lẻ: thẻ combo nhỏ */
 .incombo { margin: 18px 0 6px; display: grid; gap: 8px; }
