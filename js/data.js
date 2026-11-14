@@ -146,11 +146,16 @@ MQ.PRODUCTS = [
   long:'Túi trắng viền đỏ hoa văn vàng, in "Vacuum Freeze Dried Durian · Sầu riêng sấy thăng hoa". Mặt sau ghi thành phần 100% sầu riêng tươi, sản phẩm của Công ty Cổ phần Vi Za Food; mặt trước ghi "3 pack inside".',
   desc:{intro:'Cheers+ vừa ra thêm sầu riêng sấy thăng hoa, và điều chúng tôi thích nhất là thành phần chỉ một dòng: 100% sầu riêng tươi. Múi sầu riêng giòn xốp, béo ngọt, mùi thơm vừa phải. Bên trong túi 105g chia sẵn 3 gói nhỏ, mở gói nào ăn gói đó nên phần còn lại không bị ỉu, đem chia cho cả nhà hay mang đi làm cũng tiện.',sec:[{k:'huong',h:'Hương vị',p:['Giòn tan, béo và ngọt đậm của sầu riêng chín. Ăn trực tiếp, hoặc như hướng dẫn trên túi: dùng làm nguyên liệu cho kem và bánh trái cây.']},{k:'spec',h:'Thông tin sản phẩm',spec:[['Thương hiệu','Cheers+ · Viza Food (hàng chính hãng)'],['Tên in trên túi','Vacuum Freeze Dried Durian · Sầu riêng sấy thăng hoa'],['Thành phần','100% sầu riêng tươi (theo nhãn)'],['Quy cách','Túi 105g, bên trong 3 gói nhỏ ("3 pack inside")'],['Dấu trên nhãn','Natural Guaranteed 100% · Production technology Japan · Halal'],['Nhà sản xuất','Công ty Cổ phần Vi Za Food, TP. Thủ Đức, TP. Hồ Chí Minh'],['Ngày sản xuất & HSD','Xem trên bao bì']]},{k:'dung',h:'Bảo quản & dùng',p:['Ăn liền. Để nơi khô ráo, thoáng mát, tránh ánh nắng; gói nhỏ đã mở thì nên ăn hết trong ngày.']}]}},
  {id:'mit-say-gion',name:'Mít thái sấy giòn Fresh & Healthy',cat:'gion',fruit:'mit',flavour:'nguyen',maker:'viza',rank:7,
+  // Giá gốc mọi cỡ = 33.000đ/100g, làm tròn nghìn. p là giá khuyến mãi đến hết 30/11/2026 ICT.
+  listPer100g:33000,promoEndsAt:'2026-12-01T00:00:00+07:00',
   related:['vz-mix-cb-xmi'],
   relatedNote:'Túi 300g ghép với xoài sấy dẻo Fresh & Healthy 200g (túi vàng): 153.000đ (mua lẻ 74.000đ + 89.000đ = 163.000đ, tiết kiệm 10.000đ).',
   notice:'Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít thái sấy giòn Fresh & Healthy mới, đóng gói 300g.',
   photos:[['products/fhx-mit200-moi.webp','Túi mới 300g (đang giao)','Túi mít thái sấy giòn Jackfruit Chips Fresh & Healthy mới, mặt trước và mặt sau — mẫu bao bì đang giao, đóng gói 300g'],['products/vz/vz-fh-mit-poster.webp','Ảnh dòng mít F&H','Ảnh giới thiệu dòng mít thái sấy giòn Fresh & Healthy']],fit45:['products/fhx-mit200-moi.webp','products/vz/vz-fh-mit-poster.webp'],
-  variants:[V('MQ-GMI-300-FH','300g',300,'fh',74000,'fhx-mit300'),V('MQ-GMI-500-FH','500g',500,'fh',139000,'gm500','gm500_back')],
+  variants:[
+    Object.assign(V('MQ-GMI-300-FH','300g',300,'fh',74000,'fhx-mit300'),{promo:{price:74000,endsAt:'2026-12-01T00:00:00+07:00'}}),
+    Object.assign(V('MQ-GMI-500-FH','500g',500,'fh',139000,'gm500','gm500_back'),{promo:{price:139000,endsAt:'2026-12-01T00:00:00+07:00'}}),
+  ],
   taste:{ngot:4,chua:0,deo:0,gion:5},
   short:'Múi mít thái vàng giòn rụm, thơm mùi mít chín — dòng Fresh & Healthy "Mít thái sấy giòn · Jackfruit Chips", túi 300g và 500g.',
   long:'Mít thái chín được tách múi, sấy giòn để giữ độ xốp và màu vàng tự nhiên. Món ăn vặt quen thuộc, hợp mọi lứa tuổi.'},

@@ -7,6 +7,7 @@ import path from 'node:path';
 import { ROOT } from './paths.js';
 import { getDb, withTransaction } from './db.js';
 import { problem } from './format.js';
+import { resolveSale } from '../ai-server/src/sale.js';
 
 const FILE = path.join(ROOT, 'server', 'data', 'danh-muc.json');
 let cached;
@@ -30,18 +31,31 @@ export function listCatalogPrices() {
 }
 
 // Gắn giá vào từng khối lượng. Giá/100g tính khi có cả giá và khối lượng.
-export function catalogWithPrices() {
+export function catalogWithPrices(now = new Date()) {
   const data = catalogData();
   const prices = new Map(priceRows().map((r) => [r.code, r]));
   const products = data.products.map((p) => ({
     ...p,
     variants: p.variants.map((v) => {
       const pr = prices.get(v.code);
-      const price = pr ? pr.price ?? null : v.price ?? null;
+      const overridden = Boolean(pr);
+      const stored = overridden ? pr.price ?? null : v.price ?? null;
+      const sale = overridden || !(stored > 0)
+        ? { price: stored, compareAt: null, promo: null }
+        : resolveSale({
+          price: stored,
+          grams: v.weightG,
+          listPer100g: p.listPer100g,
+          promoEndsAt: p.promoEndsAt,
+          promo: v.promo,
+        }, now);
+      const { promo: _storedPromo, ...rest } = v;
       return {
-        ...v,
-        price,
-        per100g: price != null && v.weightG ? Math.round((price * 100) / v.weightG) : null,
+        ...rest,
+        price: sale.price,
+        ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
+        ...(sale.promo ? { promo: sale.promo } : {}),
+        per100g: sale.price != null && v.weightG ? Math.round((sale.price * 100) / v.weightG) : null,
         priceSource: pr ? pr.source || '' : v.priceSource || '',
         priceCheckedAt: pr ? pr.checkedAt || '' : v.priceCheckedAt || '',
       };

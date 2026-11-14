@@ -124,7 +124,7 @@ function card(p) {
         ${p.variants.map((v) => `<li class="dm-w${v.verify ? ' dm-w--warn' : ''}">
           <button type="button" data-cmp-type="${esc(p.type)}" data-cmp-w="${esc(v.weightG ?? 'x')}" title="So sánh ${esc(data.types[p.type] || '')} ${esc(v.weightLabel)}">
             <b>${esc(v.weightLabel)}</b><code>${esc(v.code)}</code>
-            <em>${v.price != null ? `${money(v.price)}${dealOf(v) ? ` · <span class="was">mua lẻ <s>${money(dealOf(v).sum)}</s></span>` : v.per100g != null ? ` · ${money(v.per100g)}/100g` : ''}` : 'Chưa có giá'}</em>
+            <em>${v.price != null ? `${money(v.price)}${v.compareAt > v.price ? ` <span class="was"><s>${money(v.compareAt)}</s></span>` : ''}${v.promo?.label ? ` <span class="kmbadge">${esc(v.promo.label)}</span>` : ''}${dealOf(v) ? ` · <span class="was">mua lẻ <s>${money(dealOf(v).sum)}</s></span>` : (!v.compareAt && v.per100g != null ? ` · ${money(v.per100g)}/100g` : '')}` : 'Chưa có giá'}</em>
           </button></li>`).join('')}
       </ul>
       ${p.note ? `<p class="dm-card__note">${esc(p.note)}</p>` : ''}
@@ -201,7 +201,7 @@ function renderCompare(list) {
             <div><small>${esc(brands.get(p.brand)?.name)} · ${esc(p.label)}${isOwn(p) ? ' <i>★ của shop</i>' : ''}</small><b>${esc(p.name)}</b>${needsCheck(p) ? '<span class="dm-mini-warn">Cần kiểm tra</span>' : ''}</div></div></th>
           <td><span class="dm-wchip${v.verify ? ' dm-wchip--warn' : ''}">${esc(v.weightLabel)}</span></td>
           <td><code>${esc(v.code)}</code></td>
-          <td class="num">${money(v.price)}</td>
+          <td class="num">${money(v.price)}${v.compareAt > v.price ? `<br><span class="was"><s>${money(v.compareAt)}</s></span>` : ''}${v.promo?.label ? `<br><span class="kmbadge">${esc(v.promo.label)}</span>` : ''}</td>
           <td class="num${v.per100g != null && v.per100g === best ? ' is-best' : ''}">${v.per100g != null ? money(v.per100g) : '—'}</td>
           <td class="dm-cmp__src">${src}${v.priceCheckedAt ? `<br><small>${esc(dateVi(v.priceCheckedAt))}</small>` : ''}</td>
         </tr>`;

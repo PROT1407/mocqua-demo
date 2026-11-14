@@ -268,8 +268,9 @@ test('danh mục lỗi thì thử lại một lần, rồi giữ bản gần nh�
 });
 
 test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
+  const during = new Date('2026-11-30T16:59:59.000Z');
   const payload = JSON.parse(readFileSync(new URL('../../server/data/danh-muc.json', import.meta.url), 'utf8'));
-  const items = compactCatalog(payload);
+  const items = compactCatalog(payload, { now: during });
   const priceOf = (sku) => items.find((item) => item.sku === sku)?.price;
   assert.equal(priceOf('VZ-FH-MIT-300'), 74000);
   assert.equal(priceOf('MQ-GMI-500-FH'), 139000);
@@ -285,15 +286,94 @@ test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
   assert.equal(weighed[0].sku, 'VZ-FH-MIT-300');
   assert.equal(weighed[0].price, 74000);
   assert.equal(weighed[0].weight, '300g');
-  const built = buildAssistant('mít thái', [], { ok: true, stale: false, items, updated: payload.updated });
+  const built = buildAssistant('mít thái', [], { ok: true, stale: false, items, updated: payload.updated }, { now: during });
   assert.match(built.system, /Sản phẩm liên quan/);
   assert.match(built.system, /Không nói “chưa có thông tin”/);
-  assert.match(built.system, /74000/);
-  assert.match(built.system, /139000/);
+  assert.match(built.system, /74000 \(khuyến mãi 74000, giá gốc 99000, hết KM đến 30\/11\)/);
+  assert.match(built.system, /139000 \(khuyến mãi 139000, giá gốc 165000, hết KM đến 30\/11\)/);
   assert.match(built.system, /159000/);
   assert.match(built.system, /Mít thái sấy giòn/);
   assert.match(built.system, /Mít sấy giòn/);
-  assert.doesNotMatch(SYSTEM_PROMPT, /74000|139000|159000/);
+  assert.doesNotMatch(SYSTEM_PROMPT, /74000|139000|159000|99000|165000|33000|30\/11/);
+  assert.match(SYSTEM_PROMPT, /Không có mã giảm giá/);
+  assert.match(SYSTEM_PROMPT, /Không nhét khuyến mãi vào câu không liên quan/);
+  assert.match(SYSTEM_PROMPT, /Chỉ nói giá gốc hoặc giải thích thêm khi khách hỏi thêm/);
+  assert.match(SYSTEM_PROMPT, /tối đa 3 dòng/);
+});
+
+test('hỏi sầu riêng thì Yummy đứng đầu phần liên quan', () => {
+  const payload = JSON.parse(readFileSync(new URL('../../server/data/danh-muc.json', import.meta.url), 'utf8'));
+  const items = compactCatalog(payload);
+  const live = payload.products.find((product) => product.id === 'vz-ym-srth').variants[0];
+  assert.equal(live.weightG, 105);
+  for (const query of ['sầu riêng', 'sau rieng', 'có sầu riêng không', 'durian']) {
+    const found = relatedItems(items, query);
+    assert.equal(found[0].sku, 'VZ-YM-SRTH-100', query);
+    assert.equal(found[0].brand, 'Yummy', query);
+    assert.equal(found[0].grams, live.weightG, query);
+    assert.equal(found[0].price, live.price, query);
+    assert.equal(found.filter((item) => item.sku === 'VZ-YM-SRTH-100').length, 1, query);
+    assert.ok(found.slice(1).some((item) => /sầu riêng/i.test(item.name)), query);
+    assert.notEqual(found[0].name, 'Yummy Monthong sầu riêng sấy thăng hoa', query);
+  }
+  const built = buildAssistant('có sầu riêng không', [], { ok: true, stale: false, items, updated: '' });
+  const related = built.system.split('Sản phẩm liên quan (khớp câu hỏi')[1].split('DANH MỤC')[0];
+  const first = related.split('\n').map((line) => line.trim()).find((line) => line.includes(' | '));
+  assert.match(first, new RegExp(`Yummy \\| Sầu riêng sấy thăng hoa \\| 105g \\| ${live.price}`));
+  assert.match(SYSTEM_PROMPT, /sấy thăng hoa, múi nguyên/);
+  assert.match(SYSTEM_PROMPT, /Chỉ kể nguyên vị, độ giòn hay hương khi khách hỏi thêm/);
+  assert.doesNotMatch(SYSTEM_PROMPT, /199000|199\.000/);
+  const mango = relatedItems(items, 'xoài sấy dẻo');
+  assert.notEqual(mango[0]?.sku, 'VZ-YM-SRTH-100');
+});
+
+test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', () => {
+  const during = new Date('2026-11-15T03:00:00.000Z');
+  const after = new Date('2026-11-30T17:00:00.000Z');
+  const payload = JSON.parse(readFileSync(new URL('../../server/data/danh-muc.json', import.meta.url), 'utf8'));
+  const cached = compactCatalog(payload, { now: during });
+  const fresh = compactCatalog(payload, { now: after });
+  const price = (items, sku) => items.find((item) => item.sku === sku)?.price;
+  assert.equal(price(cached, 'VZ-FH-MIT-300'), 74000);
+  assert.equal(price(fresh, 'VZ-FH-MIT-300'), 99000);
+  assert.equal(price(cached, 'MQ-GMI-500-FH'), 139000);
+  assert.equal(price(fresh, 'MQ-GMI-500-FH'), 165000);
+  assert.equal(price(fresh, 'MQZ-GMI-500'), 159000);
+  assert.equal(price(fresh, 'VZ-MIX-CB2XMI-500'), 153000);
+  const beforeText = formatCatalog(cached, during);
+  const afterFromCache = formatCatalog(cached, after);
+  const afterFresh = formatCatalog(fresh, after);
+  assert.equal(afterFromCache, afterFresh);
+  const beforeLines = beforeText.split('\n');
+  const afterLines = afterFresh.split('\n');
+  assert.equal(beforeLines.length, afterLines.length);
+  const changed = beforeLines.filter((line, i) => line !== afterLines[i]);
+  assert.equal(changed.length, 2);
+  assert.ok(changed.every((line) => line.includes('Mít thái sấy giòn')));
+  assert.match(beforeText, /74000 \(khuyến mãi 74000, giá gốc 99000, hết KM đến 30\/11\)/);
+  assert.match(beforeText, /139000 \(khuyến mãi 139000, giá gốc 165000, hết KM đến 30\/11\)/);
+  assert.doesNotMatch(afterFresh, /khuyến mãi|KM đến 30\/11/);
+  assert.match(afterFresh, /Mít thái sấy giòn \| 300g \| 99000$/m);
+  assert.match(afterFresh, /Mít thái sấy giòn \| 500g \| 165000$/m);
+  assert.doesNotMatch(afterFresh, /Mít thái sấy giòn \| 300g \| 74000|Mít thái sấy giòn \| 500g \| 139000/);
+  const xoai = afterLines.filter((line) => line.includes('Xoài'));
+  assert.ok(xoai.length > 0);
+  assert.ok(xoai.every((line) => !line.includes('khuyến mãi')));
+  const own = afterLines.find((line) => line.includes('Mít sấy giòn') && line.includes('500g') && !line.includes('thái'));
+  assert.match(own, /159000/);
+  assert.doesNotMatch(own, /khuyến mãi/);
+  const ask = buildAssistant('có mã giảm giá không', [], { ok: true, stale: false, items: cached, updated: '' }, { now: during });
+  assert.match(ask.system, /không có mã/);
+  assert.match(ask.system, /khuyến mãi 74000, giá gốc 99000/);
+  const later = buildAssistant('mít thái giá sao', [], { ok: true, stale: false, items: cached, updated: '' }, { now: after });
+  const laterCatalog = later.system.split('DANH MỤC ĐANG BÁN')[1].split('\n').slice(1).join('\n');
+  assert.match(laterCatalog, /Mít thái sấy giòn \| 300g \| 99000$/m);
+  assert.match(laterCatalog, /Mít thái sấy giòn \| 500g \| 165000$/m);
+  assert.doesNotMatch(laterCatalog, /khuyến mãi|KM đến 30\/11/);
+  assert.doesNotMatch(laterCatalog, /Mít thái sấy giòn \| 300g \| 74000|Mít thái sấy giòn \| 500g \| 139000/);
+  const ship = shapeReply('Phí giao 30.000đ, miễn phí từ 300.000đ. Mít thái đang khuyến mãi, giá gốc 99.000đ.', { message: 'ship sao' });
+  assert.match(ship, /30\.000đ/);
+  assert.doesNotMatch(ship, /khuyến mãi|giá gốc/);
 });
 
 test('bỏ slogan trừ lời chào đầu, và trả lời tối đa 3 dòng', () => {

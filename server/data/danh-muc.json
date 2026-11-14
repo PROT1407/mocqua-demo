@@ -4731,6 +4731,8 @@
    ],
    "verify": false,
    "note": "Lưu ý: Mẫu bao bì vàng này đã hết, hiện giao túi Mít thái sấy giòn Fresh & Healthy mới, đóng gói 300g. 300g: Combo 2: 139.000đ · Combo 3: 199.000đ.",
+   "listPer100g": 33000,
+   "promoEndsAt": "2026-12-01T00:00:00+07:00",
    "variants": [
     {
      "code": "VZ-FH-MIT-300",
@@ -4739,8 +4741,12 @@
      "verify": false,
      "note": "",
      "price": 74000,
-     "priceSource": "Giá cửa hàng Mộc Quả (MQ-GMI-300-FH) – chủ shop đặt 74.000đ; túi này là 300g (07/11/2026, trước ghi 200g)",
-     "priceCheckedAt": "2026-11-01"
+     "promo": {
+      "price": 74000,
+      "endsAt": "2026-12-01T00:00:00+07:00"
+     },
+     "priceSource": "Giá khuyến mãi đến hết 30/11/2026 ICT (MQ-GMI-300-FH). Giá gốc = 33.000đ/100g, làm tròn nghìn (300g = 99.000đ). Chủ shop đặt 74.000đ; túi này là 300g (07/11/2026, trước ghi 200g).",
+     "priceCheckedAt": "2026-11-15"
     },
     {
      "code": "MQ-GMI-500-FH",
@@ -4749,8 +4755,12 @@
      "verify": false,
      "note": "",
      "price": 139000,
-     "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
-     "priceCheckedAt": "2026-11-01"
+     "promo": {
+      "price": 139000,
+      "endsAt": "2026-12-01T00:00:00+07:00"
+     },
+     "priceSource": "Giá khuyến mãi 139.000đ đến hết 30/11/2026 ICT. Giá gốc = 33.000đ/100g × 500g = 165.000đ. Giá cửa hàng Mộc Quả (mocqua.com/cua-hang).",
+     "priceCheckedAt": "2026-11-15"
     }
    ]
   },

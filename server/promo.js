@@ -143,7 +143,7 @@ export function hintText({ settings, subtotal, pct, hasCombo, base, ship = true 
   return bits.join(' ');
 }
 
-export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}) {
+export function priceItems(rawItems, { allowEmpty = false, extras = false, now = new Date() } = {}) {
   const settings = getSettings();
   let pairs;
   try {
@@ -160,7 +160,7 @@ export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}
       items.push(resolveGiftLine(line).item);
       continue;
     }
-    const hit = lookupSku(line.sku);
+    const hit = lookupSku(line.sku, { now });
     if (!hit) throw problem(400, 'Một món trong giỏ không còn bán. Bạn mở giỏ và bỏ món đó giúp.');
     if (hit.product.oos) throw problem(400, `${hit.name} đang hết hàng đợt này.`);
     if (!(hit.price > 0)) throw problem(400, `${hit.name} chưa có giá bán.`);
@@ -171,6 +171,7 @@ export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}
       w: hit.w,
       qty: line.qty,
       price: hit.price,
+      ...(hit.compareAt != null ? { compareAt: hit.compareAt, promo: hit.promo } : {}),
       img: hit.img,
       combo: isComboProduct(hit.product),
       line: hit.price * line.qty,
@@ -204,7 +205,7 @@ export function priceItems(rawItems, { allowEmpty = false, extras = false } = {}
     banner: bannerText(settings),
     settings: publicSettings(settings),
   };
-  if (extras) Object.assign(out, cartExtras(pairs, items, d, settings, hasCombo));
+  if (extras) Object.assign(out, cartExtras(pairs, items, d, settings, hasCombo, now));
   return out;
 }
 
@@ -221,22 +222,22 @@ function discountLabelFor(d, hasCombo, siQty) {
   return base;
 }
 
-function pricedLine(it) {
+function pricedLine(it, now) {
   if (it.slots) {
     const built = resolveGiftLine(it);
     return { line: built.item.line, combo: false, wholesalePct: built.item.wholesalePct || 0 };
   }
-  const hit = lookupSku(it.sku);
+  const hit = lookupSku(it.sku, { now });
   if (!hit || hit.product.oos || !(hit.price > 0)) return null;
   return { line: hit.price * it.qty, combo: isComboProduct(hit.product), wholesalePct: 0 };
 }
 
-function quickQuote(list, settings) {
+function quickQuote(list, settings, now) {
   const lines = [];
   for (const it of list) {
     let row;
     try {
-      row = pricedLine(it);
+      row = pricedLine(it, now);
     } catch {
       return null;
     }
@@ -247,23 +248,23 @@ function quickQuote(list, settings) {
   const ship = shipFor(d.subtotal, settings);
   return { total: d.subtotal - d.discount + ship, pct: d.pct, freeShip: ship === 0 };
 }
-function quickTotal(list, settings) {
-  const q = quickQuote(list, settings);
+function quickTotal(list, settings, now) {
+  const q = quickQuote(list, settings, now);
   return q ? q.total : Infinity;
 }
 // Mức ưu đãi của giỏ (để gợi ý combo không bao giờ làm rớt mức % hay mất miễn ship).
-function quickLevel(list, settings) {
-  const q = quickQuote(list, settings);
+function quickLevel(list, settings, now) {
+  const q = quickQuote(list, settings, now);
   return q ? { pct: q.pct, freeShip: q.freeShip } : null;
 }
 
 // Chỉ cho /api/quote (trang giỏ): gợi ý combo + thanh miễn ship. Đơn hàng không cần.
-function cartExtras(pairs, items, d, settings, hasCombo) {
-  const catalog = getShopCatalog();
+function cartExtras(pairs, items, d, settings, hasCombo, now) {
+  const catalog = getShopCatalog(now);
   const deals = comboDeals(catalog);
-  const nameOf = (sku) => { const h = lookupSku(sku); return h ? `${h.name} ${h.w}`.trim() : sku; };
+  const nameOf = (sku) => { const h = lookupSku(sku, { now }); return h ? `${h.name} ${h.w}`.trim() : sku; };
   return {
-    nudges: cartNudges(pairs, deals, (list) => quickTotal(list, settings), { nameOf, comboSkus: new Set(items.filter((i) => i.combo).map((i) => i.sku)), levelOf: (list) => quickLevel(list, settings) }).slice(0, 2),
+    nudges: cartNudges(pairs, deals, (list) => quickTotal(list, settings, now), { nameOf, comboSkus: new Set(items.filter((i) => i.combo).map((i) => i.sku)), levelOf: (list) => quickLevel(list, settings, now) }).slice(0, 2),
     shipBar: shipBar(d.subtotal, settings.freeShip, { deals, singles: shipSingles(catalog), inCart: new Set(pairs.map((p) => p.sku)), withPct: (ORDER_TIERS.find((t) => t.min === settings.freeShip) || {}).pct || 0 }),
     cartHint: hintText({ settings, subtotal: d.subtotal, pct: d.pct, hasCombo, base: d.base, ship: false }),
   };

@@ -49,7 +49,7 @@ function line(item, gift) {
     ${img}
     <div>
       <b>${esc(item.name)}</b>
-      <small>${esc(item.w || '')}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}${item.combo ? ' · combo, cũng được giảm theo đơn' : ''}</small>
+      <small>${esc(item.w || '')}${item.compareAt > item.price ? ` <span class="was"><s>${money(item.compareAt)}</s></span>${item.promo?.label ? ` <span class="kmbadge">${esc(item.promo.label)}</span>` : ''}` : ''}${gift && item.retail ? ` · giá bán ${money(item.retail)}` : ''}${item.combo ? ' · combo, cũng được giảm theo đơn' : ''}</small>
       ${contentsOf(item)}
       ${si}
       ${gift ? '' : `<button type="button" class="textbtn" data-del="${key}">Bỏ</button>`}
