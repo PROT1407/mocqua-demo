@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
+import { CATALOG_WARM } from '../src/prompt.js';
 
 const SECRET = 'test-app-secret';
 
@@ -633,9 +634,11 @@ test('thiếu khóa hoặc danh mục lỗi cũng báo chủ, Gemini ổn thì k
     await send(base, textEvent('U31', 'giá mít'));
     await broken.clock.advance(4000);
     assert.equal(broken.calls.generate, 0);
-    assert.deepEqual(replies(broken.calls), [WARM_FALLBACK]);
+    assert.deepEqual(replies(broken.calls), [CATALOG_WARM]);
+    assert.match(broken.calls.owner[0], /danh mục/);
     assert.match(broken.calls.owner[0], /PSID: U31/);
     assert.doesNotMatch(broken.calls.owner[0], /shop-down|access_token=nope/);
+    assert.doesNotMatch(replies(broken.calls)[0], /chưa có thông tin/);
     await broken.app.locals.drainFacebook();
   });
 

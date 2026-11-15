@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
 import { compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
-import { CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SLOGAN, SYSTEM_PROMPT, buildAssistant, readChat, shapeReply } from '../src/prompt.js';
+import { CATALOG_WARM, CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SLOGAN, SYSTEM_PROMPT, buildAssistant, readChat, shapeReply } from '../src/prompt.js';
 import { shopAddressReply, shopInfo } from '../src/shop-info.js';
 import { generateReply, resolveModel } from '../src/gemini.js';
 
@@ -225,6 +225,68 @@ test('câu hỏi khớp tên thì đưa món đó lên trước, giá lấy từ
   });
   assert.equal(bare[0].url, '');
   assert.doesNotMatch(formatCatalog(bare), /san-pham/);
+});
+
+test('catalog 429 không gọi lại ngay, giữ danh mục đã có', async () => {
+  let calls = 0;
+  const load = createCatalogSource({
+    ttlMs: 10_000,
+    failCooldownMs: 60_000,
+    timeoutMs: 50,
+    fetchImpl: async () => {
+      calls += 1;
+      return new Response('slow down', { status: 429, headers: { 'content-type': 'text/plain' } });
+    },
+  });
+  const first = await load(1_000);
+  assert.equal(calls, 1);
+  assert.equal(first.ok, true);
+  assert.equal(first.stale, true);
+  assert.equal(first.bundled, true);
+  assert.ok(first.items.some((item) => item.sku === 'VZ-FH-MIT-300' && item.price > 0));
+  assert.ok(first.items.some((item) => item.sku === 'VZ-YM-SRTH-100' && item.brand === 'Yummy'));
+  const again = await load(2_000);
+  assert.equal(calls, 1);
+  assert.equal(again.stale, true);
+  assert.equal(again.items.length, first.items.length);
+  const missed = createCatalogSource({
+    bundle: false,
+    ttlMs: 10_000,
+    failCooldownMs: 60_000,
+    fetchImpl: async () => new Response('', { status: 429 }),
+  });
+  const empty = await missed(5_000);
+  assert.equal(empty.ok, false);
+  assert.deepEqual(empty.items, []);
+});
+
+test('danh mục không tải được thì không gọi model và không nói chưa có thông tin', async () => {
+  let generated = 0;
+  const owners = [];
+  const app = createApp({
+    apiKey: 'test-key',
+    generate: async () => {
+      generated += 1;
+      return 'chưa có thông tin chi tiết về giá của mít thái';
+    },
+    loadCatalog: async () => ({ ok: false, stale: false, items: [], updated: '' }),
+    notifyOwner: async (text) => { owners.push(text); },
+  });
+  await withServer(app, async (base) => {
+    const res = await fetch(base + '/api/mocqua', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: 'https://mocqua.onrender.com' },
+      body: JSON.stringify({ message: 'mít thái giá sao' }),
+    });
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.reply, CATALOG_WARM);
+    assert.doesNotMatch(body.reply, /chưa có thông tin/);
+    assert.equal(generated, 0);
+    assert.equal(owners.length, 1);
+    assert.match(owners[0], /danh mục/);
+    assert.match(owners[0], /mít thái giá sao/);
+  });
 });
 
 test('danh mục lỗi thì thử lại một lần, rồi giữ bản gần nhất', async () => {

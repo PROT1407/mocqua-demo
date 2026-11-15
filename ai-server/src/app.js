@@ -2,7 +2,9 @@ import express from 'express';
 import { createCatalogSource } from './catalog.js';
 import { createMessenger, facebookReady, facebookSettings, validSignature, verifyChallenge } from './facebook.js';
 import { generateReply, resolveModel } from './gemini.js';
-import { buildAssistant, isFirstGreeting, readChat, shapeReply } from './prompt.js';
+import { asksShopAddress, shopAddressReply } from './shop-info.js';
+import { buildAssistant, CATALOG_WARM, isFirstGreeting, readChat, shapeReply } from './prompt.js';
+import { notifyOwner } from './telegram.js';
 
 const ALLOWED_ORIGINS = new Set([
   'https://mocqua.com',
@@ -24,6 +26,7 @@ export function createApp({
     windowMs: positiveInt(process.env.RATE_LIMIT_WINDOW_MS, 10 * 60 * 1000),
   },
   facebook = {},
+  notifyOwner: alertOwner = notifyOwner,
 } = {}) {
   const app = express();
   app.disable('x-powered-by');
@@ -88,6 +91,18 @@ export function createApp({
   });
   app.use(express.json({ limit: '32kb' }));
   const limitPosts = rateLimiter(rateLimit.max, rateLimit.windowMs);
+  let catalogAlertAt = 0;
+
+  async function alertCatalogDown(message) {
+    const t = Date.now();
+    if (catalogAlertAt && t - catalogAlertAt < 60_000) return;
+    catalogAlertAt = t;
+    try {
+      await alertOwner(`⚠️ Bot chưa tải được danh mục cửa hàng. Khách vẫn nhận câu xem website.\nKhách nhắn: ${String(message || '').slice(0, 300)}`);
+    } catch (error) {
+      console.error('catalog alert failed');
+    }
+  }
 
   app.get('/', (_req, res) => {
     res.json({ ok: true, service: 'mocqua-ai-server' });
@@ -111,12 +126,27 @@ export function createApp({
       res.status(400).json({ error: chat.error });
       return;
     }
+    if (asksShopAddress(chat.message)) {
+      res.json({ reply: shopAddressReply() });
+      return;
+    }
     if (!apiKey) {
       res.status(503).json({ error: 'Trợ lý đang tạm nghỉ vì chưa có khóa Gemini trên máy chủ.' });
       return;
     }
+    let catalog;
     try {
-      const catalog = await loadCatalog();
+      catalog = await loadCatalog();
+    } catch (err) {
+      console.error('catalog', err instanceof Error ? err.message : 'error');
+      catalog = { ok: false, items: [] };
+    }
+    if (catalog?.ok === false) {
+      await alertCatalogDown(chat.message);
+      res.json({ reply: CATALOG_WARM });
+      return;
+    }
+    try {
       const turn = buildAssistant(chat.message, chat.history, catalog);
       const reply = shapeReply(await generate({
         apiKey,
