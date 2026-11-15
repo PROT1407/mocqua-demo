@@ -63,7 +63,10 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(home, /Nguyễn Đình Chiểu/);
     assert.match(home, /Bốn cách sấy/);
     assert.match(home, /Nổi bật &amp; Khuyến mãi/);
-    assert.match(home, /sầu riêng sấy thăng hoa, múi nguyên vị/);
+    assert.match(home, /sấy thăng hoa, múi nguyên/);
+    assert.match(home, /Khuyến mãi/);
+    assert.match(home, /Phiên bản giới hạn/);
+    assert.match(home, /offerstrip/);
     assert.match(home, /P\. Bàn Cờ, TP\.HCM/);
     assert.doesNotMatch(home.split('Nổi bật')[1].split('Ưu đãi theo đơn')[0], /Ri6/);
     assert.match(home, /viza-ke-05/);
@@ -820,7 +823,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(shop, /class="feat"/);
     assert.match(shop, /Nổi bật &amp; Khuyến mãi/);
     const feat = shop.split('id="feat-h"')[1].split('</section>')[0];
-    assert.match(feat, /sầu riêng sấy thăng hoa, múi nguyên vị/);
+    assert.match(feat, /sấy thăng hoa, múi nguyên/);
     assert.match(feat, /hương vị đặc biệt, ngọt thanh, không gắt/);
     assert.doesNotMatch(feat, /Ri6/);
     assert.match(shop, /class="tiers"/);
@@ -851,7 +854,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v45/);
+    assert.match(sw, /mocqua-shell-v46/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);

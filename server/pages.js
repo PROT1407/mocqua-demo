@@ -241,7 +241,7 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
     <a class="card__img${fit}" href="${href}">
       <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
-      ${soldOut ? '<span class="badge badge--oos">Hết hàng</span>' : lead?.limited ? '<span class="badge badge--oos">Phiên bản giới hạn</span>' : product.deal ? saveBadge(product.deal.save) : ''}
+      ${statusBadge(product, lead, soldOut)}
     </a>
     <div class="card__body">
       <p class="card__brand">${esc(product.brandName)}</p>
@@ -257,6 +257,41 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
   </article>`;
 }
 
+function statusBadge(product, lead, soldOut) {
+  if (soldOut) return '<span class="badge badge--oos">Hết hàng</span>';
+  const onSale = lead?.promo || product.variants.some((v) => v.promo && v.compareAt > v.price);
+  if (onSale) return '<span class="badge badge--tag">Khuyến mãi</span>';
+  if (lead?.limited) return '<span class="badge badge--tag">Phiên bản giới hạn</span>';
+  if (product.deal?.save > 0) return '<span class="badge badge--tag">Combo tiết kiệm</span>';
+  if (Number.isInteger(product.featured) && product.featured <= 4) return '<span class="badge badge--tag">Bán chạy</span>';
+  return '';
+}
+
+function homePicks(catalog) {
+  const live = (product) => product.priceFrom > 0 && !product.oos && !product.variants.some((v) => v.sku === product.defaultSku && v.oos);
+  const all = spotlight(catalog).filter(live);
+  const chosen = [];
+  const pull = (pred) => {
+    const hit = all.find((product) => !chosen.includes(product) && pred(product));
+    if (hit) chosen.push(hit);
+  };
+  pull((product) => product.featured === 1);
+  pull((product) => product.featured === 3);
+  pull((product) => product.variants.some((v) => v.promo && v.compareAt > v.price));
+  const limited = catalog.products.find((product) => live(product) && product.variants.some((v) => v.limited));
+  if (limited && !chosen.includes(limited)) chosen.push(limited);
+  for (const product of all) {
+    if (chosen.length >= 6) break;
+    if (!chosen.includes(product)) chosen.push(product);
+  }
+  return chosen;
+}
+
+function offerStrip(catalog) {
+  const settings = catalog.settings;
+  return `<p class="offerstrip">${esc(bannerText(settings))} · Giao ${esc(shortMoney(settings.shipFee))}, miễn phí từ ${esc(shortMoney(settings.freeShip))}</p>`;
+}
+
 function tierCopy(catalog) {
   const s = catalog.settings;
   return `${promoTiers(s).map((t) => `Từ ${vnd(t.min)} ${t.pct ? `giảm ${t.pct}%${t.ship ? ' và miễn phí giao' : ''}` : 'miễn phí giao'}`).join(', ')} — tự trừ trong giỏ. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.`;
@@ -266,7 +301,7 @@ export function homePage(catalog) {
   attachDeals(catalog);
   const byCat = Object.fromEntries(catalog.cats.map((c) => [c.id, { ...c, count: catalog.products.filter((p) => p.cat === c.id).length }]));
   const tiles = PROC.map((id) => byCat[id]).filter(Boolean);
-  const picks = spotlight(catalog).filter((p) => p.priceFrom > 0 && !p.oos);
+  const picks = homePicks(catalog);
   const shots = catalog.shelf.map((s, i) => `<button type="button" class="shot" data-shot="${esc(s.src)}" data-cap="${esc(s.cap)}">
       <img src="${esc(s.thumb)}" alt="${esc(s.cap)}" loading="lazy" width="640" height="480">
       <span>${esc(s.cap)}</span>
@@ -296,6 +331,14 @@ export function homePage(catalog) {
       </a>
     </div>
   </section>
+  <section class="wrap" id="noi-bat">
+    <div class="band__h">
+      <h2>Nổi bật &amp; Khuyến mãi</h2>
+      <a href="/cua-hang">Xem tất cả</a>
+    </div>
+    ${offerStrip(catalog)}
+    <div class="grid">${picks.map((p) => productCard(p, { showPitch: true })).join('')}</div>
+  </section>
   <section class="wrap band" aria-label="Bốn cách sấy">
     <div class="band__h">
       <h2>Bốn cách sấy</h2>
@@ -310,13 +353,6 @@ export function homePage(catalog) {
         <em>${t.count} món</em>
       </a>`).join('')}
     </div>
-  </section>
-  <section class="wrap" id="noi-bat">
-    <div class="band__h">
-      <h2>Nổi bật &amp; Khuyến mãi</h2>
-      <a href="/cua-hang">Xem tất cả</a>
-    </div>
-    <div class="grid">${picks.map((p) => productCard(p, { showPitch: true })).join('')}</div>
   </section>
   <section class="wrap giftband">
     <div>

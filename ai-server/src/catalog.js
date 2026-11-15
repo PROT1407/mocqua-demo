@@ -193,7 +193,32 @@ export function relatedItems(items, message, limit = 12) {
     scored.push({ item, score, matched });
   }
   scored.sort((a, b) => b.matched - a.matched || b.score - a.score || (a.item.featured ?? 9999) - (b.item.featured ?? 9999) || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
-  return scored.map((row) => row.item).slice(0, limit);
+  const ranked = scored.map((row) => row.item);
+  const combo = suggestCombo(items, ranked[0]);
+  if (combo && !ranked.some((item) => item.sku === combo.sku)) ranked.splice(1, 0, combo);
+  return ranked.slice(0, limit);
+}
+
+function isComboRow(item) {
+  return fold(item?.line) === 'combo' || /^combo\b/i.test(item?.name || '');
+}
+
+// Một combo cùng món, để câu trả lời gợi ý đúng một bước. Không thêm luật vào prompt.
+export function suggestCombo(items, focus) {
+  if (!focus || isComboRow(focus)) return null;
+  const words = new Set(tokensOf(focus.name).filter((word) => word.length >= 4));
+  let best = null;
+  let score = 0;
+  for (const item of items || []) {
+    if (!isComboRow(item) || item.oos) continue;
+    const hits = tokensOf(`${item.name} ${item.pitch || ''}`).filter((word) => words.has(word)).length;
+    const rank = hits * 10 - (item.featured ?? 40);
+    if (hits > 0 && rank > score) {
+      score = rank;
+      best = item;
+    }
+  }
+  return best;
 }
 
 function clean(value) {
