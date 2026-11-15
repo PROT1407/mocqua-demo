@@ -62,6 +62,13 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(home, /huydaigia1407@gmail.com/);
     assert.match(home, /Nguyễn Đình Chiểu/);
     assert.match(home, /Bốn cách sấy/);
+    assert.match(home, /Nổi bật &amp; Khuyến mãi/);
+    assert.match(home, /sấy thăng hoa, múi nguyên/);
+    assert.match(home, /Khuyến mãi/);
+    assert.match(home, /Phiên bản giới hạn/);
+    assert.doesNotMatch(home, /offerstrip/);
+    assert.match(home, /P\. Bàn Cờ, TP\.HCM/);
+    assert.doesNotMatch(home.split('Nổi bật')[1].split('Ưu đãi theo đơn')[0], /Ri6/);
     assert.match(home, /viza-ke-05/);
     assert.match(home, /xoai-deo-muoi-ot/);
 
@@ -814,6 +821,11 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(shop, /sau-rieng-say-viza-food/);
     // Bố cục cân đối: mỗi cách sấy một lưới liền, có khối Nổi bật và 3 mức ưu đãi; món ẩn bằng cờ hide trong data.js không hiện.
     assert.match(shop, /class="feat"/);
+    assert.match(shop, /Nổi bật &amp; Khuyến mãi/);
+    const feat = shop.split('id="feat-h"')[1].split('</section>')[0];
+    assert.match(feat, /sấy thăng hoa, múi nguyên/);
+    assert.match(feat, /hương vị đặc biệt, ngọt thanh, không gắt/);
+    assert.doesNotMatch(feat, /Ri6/);
     assert.match(shop, /class="tiers"/);
     assert.doesNotMatch(shop, /class="fhead"/);
     assert.doesNotMatch(shop, /mqz-xxx/);
@@ -842,7 +854,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v45/);
+    assert.match(sw, /mocqua-shell-v47/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
@@ -1075,6 +1087,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(cb3.g, 305);
       assert.doesNotMatch(byId.get('vz-mix-cb3-thang-hoa').short + byId.get('xoai-say-thang-hoa').variants[0].w, /110g/);
       const liveDm = await (await fetch(base + '/api/danh-muc')).json();
+      assert.deepEqual(liveDm.shipping, { shipFee: 30000, freeShip: 300000 });
       const shopIds = new Set(shopAll.map((p) => p.id));
       const liveXth = liveDm.products.find((p) => p.id === 'vz-ch-xth');
       assert.equal(liveXth.shopId, 'xoai-say-thang-hoa');
@@ -1101,7 +1114,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(dmv.get('MQZ-DTL-500-HV'), 205000);
       // Rà soát giá 03/11/2026 (mục 1–6).
       assert.equal(priceOf.get('MQZ-THSR-200'), 429000);
-      assert.equal(priceOf.get('VZ-PS-CB3-300'), 529000);
+      assert.equal(priceOf.get('VZ-PS-CB3-300'), 999000);
       assert.equal(dmp.get('vz-gg-me').variants[0].code, 'VZ-GG-ME-80');
       assert.equal(dmp.get('vz-gg-me').variants[0].weightLabel, '80g');
       assert.equal(dmp.get('vz-ym-srth').variants[0].weightLabel, '105g');
@@ -1111,6 +1124,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
+    assert.match(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"price":999000/);
+    assert.match(cb3, /"bags":3/);
+    assert.match(cb3, /"limited":true/);
+    assert.doesNotMatch(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"oos":true/);
+    assert.match(cb3, /Phiên bản giới hạn/);
+    assert.match(cb3, /3 túi/);
     assert.doesNotMatch(cb3, /viza-ke-02|"shelf":\{/);
     assert.match(cb3, /vz-ps-cb2-2vi\.webp/);
     assert.match(cb3, /<img id="pdp-main" class="is-45"/);

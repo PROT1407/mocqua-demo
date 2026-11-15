@@ -3312,7 +3312,10 @@
      "priceSource": "Giá cửa hàng Mộc Quả (MQ-DXM-300-GG) – chủ shop duyệt đề xuất giá 01/11/2026: 99k → 125k",
      "priceCheckedAt": "2026-11-01"
     }
-   ]
+   ],
+   "featured": 12,
+   "line": "Sấy dẻo",
+   "pitch": "xoài sấy dẻo muối ớt, có túi 200g"
   },
   {
    "id": "vz-gg-xd",
@@ -3363,7 +3366,10 @@
      "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
-   ]
+   ],
+   "featured": 11,
+   "line": "Sấy dẻo",
+   "pitch": "xoài sấy dẻo GoodGood"
   },
   {
    "id": "vz-gg-xdv",
@@ -3563,7 +3569,10 @@
      "priceSource": "Giá theo thị trường Mộc Quả (chủ shop duyệt 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
-   ]
+   ],
+   "featured": 13,
+   "line": "Sấy dẻo",
+   "pitch": "cóc sấy dẻo muối ớt, túi 100g"
   },
   {
    "id": "vz-gg-tl",
@@ -3695,7 +3704,10 @@
      "priceSource": "Combo = tổng giá lẻ −6% (giá thị trường 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
-   ]
+   ],
+   "featured": 14,
+   "line": "Combo",
+   "pitch": "xoài muối ớt kèm cóc muối ớt"
   },
   {
    "id": "mang-cut-say-thang-hoa-goodgood",
@@ -3736,7 +3748,10 @@
      "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
      "priceCheckedAt": "2026-11-01"
     }
-   ]
+   ],
+   "featured": 7,
+   "line": "Sấy thăng hoa",
+   "pitch": "măng cụt sấy thăng hoa"
   },
   {
    "id": "du-du-say-deo",
@@ -3834,7 +3849,10 @@
      "priceSource": "Giá cửa hàng Mộc Quả (MQ-THXO-120-CH) – chủ shop chốt 08/11/2026: túi 100g, 145k (trước 159k, rồi 130k một lúc)",
      "priceCheckedAt": "2026-11-08"
     }
-   ]
+   ],
+   "featured": 4,
+   "line": "Sấy thăng hoa",
+   "pitch": "xoài sấy thăng hoa Cheers+"
   },
   {
    "id": "vz-ch-srth",
@@ -3875,7 +3893,10 @@
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
-   ]
+   ],
+   "featured": 3,
+   "line": "Sấy thăng hoa",
+   "pitch": "sấy thăng hoa, chia sẵn gói nhỏ"
   },
   {
    "id": "vz-ch-xdl",
@@ -3968,7 +3989,10 @@
      "movedTo": null,
      "reason": "Chủ shop: bỏ ảnh combo có chữ khuyến mãi. Ảnh combo mới (3 túi áo dài, ảnh ghép) chỉ hợp túi tròn áo dài nên không đặt ở thẻ lá xoài. File ảnh giữ nguyên."
     }
-   ]
+   ],
+   "featured": 10,
+   "line": "Sấy dẻo",
+   "pitch": "xoài sấy dẻo Cheers+, túi lá xoài"
   },
   {
    "id": "vz-ch-xdr",
@@ -4174,7 +4198,10 @@
      "priceSource": "Giá niêm yết Mộc Quả (rà soát 31/10/2026)",
      "priceCheckedAt": "2026-10-31"
     }
-   ]
+   ],
+   "featured": 1,
+   "line": "Sấy thăng hoa",
+   "pitch": "sấy thăng hoa, múi nguyên"
   },
   {
    "id": "vz-ym-mt",
@@ -4269,7 +4296,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
+   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
    "variants": [
     {
      "code": "VZ-PS-GD-100",
@@ -4310,7 +4337,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
+   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
    "variants": [
     {
      "code": "VZ-PS-RY-100",
@@ -4351,7 +4378,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
+   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
    "variants": [
     {
      "code": "VZ-PS-YD-100",
@@ -4362,6 +4389,54 @@
      "price": 199000,
      "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
      "priceCheckedAt": "2026-10-31"
+    }
+   ]
+  },
+  {
+   "id": "vz-ps-cb3",
+   "brand": "viza-food",
+   "label": "Premium Shrinking Dried Durian",
+   "name": "Combo 3 túi sầu riêng sấy thăng hoa Premium Shrinking (Golden + Royal + Yummy)",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "line": "Sấy thăng hoa",
+   "pitch": "3 túi ba vị, phiên bản giới hạn",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ps-cb3-3tui.webp",
+     "thumb": "/assets/catalog/vz-ps-cb3-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "3 túi Golden, Royal và Yummy Durian",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Giá bán lấy ở từng biến thể. oos:true trên biến thể 3 túi khi hết hàng.",
+   "variants": [
+    {
+     "code": "VZ-PS-CB3-300",
+     "weightG": 300,
+     "weightLabel": "3 túi · 3 × 100g · 3 vị",
+     "bags": 3,
+     "limited": true,
+     "oos": false,
+     "verify": false,
+     "note": "Phiên bản giới hạn. Mỗi túi một vị.",
+     "price": 999000,
+     "priceSource": "Chủ shop chốt giá bộ 3 túi phiên bản giới hạn",
+     "priceCheckedAt": "2026-11-15"
+    },
+    {
+     "code": "VZ-PS-CB2-200",
+     "weightG": 200,
+     "weightLabel": "2 túi · 2 × 100g · 2 vị",
+     "verify": false,
+     "note": "2 vị khác nhau, ghi vị ở ghi chú.",
+     "price": 375000,
+     "priceSource": "Giá combo 2 vị Premium Shrinking giữ nguyên",
+     "priceCheckedAt": "2026-11-15"
     }
    ]
   },
@@ -4544,7 +4619,10 @@
      "priceSource": "Giá cửa hàng Mộc Quả (mocqua.com/cua-hang)",
      "priceCheckedAt": "2026-11-01"
     }
-   ]
+   ],
+   "featured": 9,
+   "line": "Sấy dẻo",
+   "pitch": "xoài sấy dẻo Fresh & Healthy, nhiều mẫu túi"
   },
   {
    "id": "vz-fh-xdh",
@@ -4762,6 +4840,12 @@
      "priceSource": "Giá khuyến mãi 139.000đ đến hết 30/11/2026 ICT. Giá gốc = 33.000đ/100g × 500g = 165.000đ. Giá cửa hàng Mộc Quả (mocqua.com/cua-hang).",
      "priceCheckedAt": "2026-11-15"
     }
+   ],
+   "featured": 5,
+   "line": "Sấy giòn",
+   "pitch": "Mít sấy Thái, hương vị đặc biệt, ngọt thanh, không gắt",
+   "aliases": [
+    "mít sấy Thái"
    ]
   },
   {
@@ -6177,7 +6261,10 @@
      "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
      "priceCheckedAt": "2026-11-07"
     }
-   ]
+   ],
+   "featured": 2,
+   "line": "Combo",
+   "pitch": "Yummy sầu riêng thăng hoa kèm xoài muối ớt"
   },
   {
    "id": "vz-mix-cb-mcmo",
@@ -6218,7 +6305,10 @@
      "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
      "priceCheckedAt": "2026-11-07"
     }
-   ]
+   ],
+   "featured": 8,
+   "line": "Combo",
+   "pitch": "măng cụt thăng hoa kèm xoài muối ớt"
   },
   {
    "id": "vz-mix-cb-ymmc",
@@ -6333,7 +6423,10 @@
      "priceSource": "Combo 2 món = tổng giá lẻ × 0,94, làm tròn 1.000đ (7/11/2026)",
      "priceCheckedAt": "2026-11-07"
     }
-   ]
+   ],
+   "featured": 6,
+   "line": "Combo",
+   "pitch": "mít sấy Thái kèm xoài sấy dẻo Fresh & Healthy"
   }
  ],
  "gallery": [

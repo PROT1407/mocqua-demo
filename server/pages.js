@@ -23,18 +23,7 @@ const CAT_INTRO = {
 };
 const BAND_MIN = 4;
 const EXTRA = ['omai', 'set', 'hat'];
-// Khối "Nổi bật" đầu /cua-hang (chỉ khi chưa lọc) và món đứng đầu mỗi cách sấy. Theo thứ tự này; id ẩn/không có thì bỏ qua.
-// Chỉ đổi thứ tự hiển thị — không đụng mã, giá hay nút mua ở /danh-muc.
-const FEATURED = [
-  'mqz-sau-rieng-ri6-thang-hoa',
-  'sau-rieng-say-thang-hoa-cheers',
-  'vz-ps-cb3',
-  'xoai-say-deo',
-  'mqz-mit-say-gion',
-  'xoai-chin-cay',
-  'combo-xoai-say-deo-100g',
-  'mit-say-gion',
-];
+// Nổi bật lấy từ danh mục (featured = thứ tự). Món đang khuyến mãi mà chưa có số thì xếp sau.
 
 function layout({ title, description, page, body, scripts = [], styles = [] }) {
   const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
@@ -142,6 +131,8 @@ function priceLabel(product) {
 }
 
 function priceHtml(product) {
+  const lead = product.variants.find((v) => v.sku === product.defaultSku);
+  if (lead?.limited && lead.price) return esc(vnd(lead.price));
   const text = esc(priceLabel(product));
   const from = product.variants.find((v) => v.price === product.priceFrom);
   if (!(from?.compareAt > from?.price)) return text;
@@ -220,30 +211,80 @@ function cardImage(product) {
   return { hero, img, src: hero?.thumb || img, native45: /-45\.jpg$/.test(img) };
 }
 
-export function productCard(product, { eager = false, cls = '', giftTune = false } = {}) {
+function onPromo(product) {
+  return (product.variants || []).some((variant) => variant.promo && variant.compareAt > variant.price);
+}
+
+export function spotlight(catalog) {
+  const sorted = catalog.products
+    .filter((product) => Number.isInteger(product.featured) || onPromo(product))
+    .sort((a, b) => (a.featured ?? 500) - (b.featured ?? 500) || a.name.localeCompare(b.name, 'vi'));
+  const seen = new Set();
+  return sorted.filter((product) => {
+    const key = Number.isInteger(product.featured) ? product.featured : product.id;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+export function productCard(product, { eager = false, cls = '', giftTune = false, showPitch = false } = {}) {
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
   const { hero, img } = cardImage(product);
   const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
-  const canBuy = product.defaultSku && product.priceFrom > 0 && !product.oos;
+  const lead = product.variants.find((v) => v.sku === product.defaultSku) || product.variants[0];
+  const soldOut = product.oos || lead?.oos;
+  const canBuy = product.defaultSku && product.priceFrom > 0 && !soldOut;
   // Ảnh không phải 4:5 dựng sẵn (ảnh vuông/ngang/dọc mượn từ /danh-muc): hiện trọn ảnh, căn giữa trong khung 4:5, không cắt.
   const fit = /-45\.jpg$/.test(img) ? '' : ' card__img--fit';
   return `<article class="card${cls ? ` ${cls}` : ''}">
     <a class="card__img${fit}" href="${href}">
       <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
-      ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : product.deal ? saveBadge(product.deal.save) : ''}
+      ${statusBadge(product, lead, soldOut)}
     </a>
     <div class="card__body">
       <p class="card__brand">${esc(product.brandName)}</p>
       <h3><a href="${href}">${esc(product.name)}</a></h3>
-      <p class="card__meta">${esc(product.weightLabel)}</p>
+      ${showPitch && product.pitch ? `<p class="card__meta">${esc(product.pitch)}</p>` : ''}
+      <p class="card__meta">${esc(lead?.w || product.weightLabel)}${lead?.bags > 1 && lead.price ? ` · ${esc(vnd(Math.round(lead.price / lead.bags)))}/túi` : ''}</p>
       <p class="card__price">${priceHtml(product)}${product.deal ? ` ${wasPrice(product.deal.sum)}` : ''}</p>
       ${canBuy
         ? `<button type="button" class="btn btn--small" data-add-sku="${esc(product.defaultSku)}">Cho vào giỏ</button>`
-        : `<a class="btn btn--small btn--ghost" href="${href}">${product.oos ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
+        : `<a class="btn btn--small btn--ghost" href="${href}">${soldOut ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
       ${giftTune ? `<a class="textlink" href="/hop-qua/${encodeURIComponent(product.id)}">Đổi vị</a>` : ''}
     </div>
   </article>`;
+}
+
+function statusBadge(product, lead, soldOut) {
+  if (soldOut) return '<span class="badge badge--oos">Hết hàng</span>';
+  const onSale = lead?.promo || product.variants.some((v) => v.promo && v.compareAt > v.price);
+  if (onSale) return '<span class="badge badge--tag">Khuyến mãi</span>';
+  if (lead?.limited) return '<span class="badge badge--tag">Phiên bản giới hạn</span>';
+  if (product.deal?.save > 0) return '<span class="badge badge--tag">Combo tiết kiệm</span>';
+  if (Number.isInteger(product.featured) && product.featured <= 4) return '<span class="badge badge--tag">Bán chạy</span>';
+  return '';
+}
+
+function homePicks(catalog) {
+  const live = (product) => product.priceFrom > 0 && !product.oos && !product.variants.some((v) => v.sku === product.defaultSku && v.oos);
+  const all = spotlight(catalog).filter(live);
+  const chosen = [];
+  const pull = (pred) => {
+    const hit = all.find((product) => !chosen.includes(product) && pred(product));
+    if (hit) chosen.push(hit);
+  };
+  pull((product) => product.featured === 1);
+  pull((product) => product.featured === 3);
+  pull((product) => product.variants.some((v) => v.promo && v.compareAt > v.price));
+  const limited = catalog.products.find((product) => live(product) && product.variants.some((v) => v.limited));
+  if (limited && !chosen.includes(limited)) chosen.push(limited);
+  for (const product of all) {
+    if (chosen.length >= 6) break;
+    if (!chosen.includes(product)) chosen.push(product);
+  }
+  return chosen;
 }
 
 function tierCopy(catalog) {
@@ -255,7 +296,7 @@ export function homePage(catalog) {
   attachDeals(catalog);
   const byCat = Object.fromEntries(catalog.cats.map((c) => [c.id, { ...c, count: catalog.products.filter((p) => p.cat === c.id).length }]));
   const tiles = PROC.map((id) => byCat[id]).filter(Boolean);
-  const picks = [...catalog.products].filter((p) => p.priceFrom > 0 && !p.oos).sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name, 'vi')).slice(0, 8);
+  const picks = homePicks(catalog);
   const shots = catalog.shelf.map((s, i) => `<button type="button" class="shot" data-shot="${esc(s.src)}" data-cap="${esc(s.cap)}">
       <img src="${esc(s.thumb)}" alt="${esc(s.cap)}" loading="lazy" width="640" height="480">
       <span>${esc(s.cap)}</span>
@@ -285,6 +326,13 @@ export function homePage(catalog) {
       </a>
     </div>
   </section>
+  <section class="wrap" id="noi-bat">
+    <div class="band__h">
+      <h2>Nổi bật &amp; Khuyến mãi</h2>
+      <a href="/cua-hang">Xem tất cả</a>
+    </div>
+    <div class="grid">${picks.map((p) => productCard(p, { showPitch: true })).join('')}</div>
+  </section>
   <section class="wrap band" aria-label="Bốn cách sấy">
     <div class="band__h">
       <h2>Bốn cách sấy</h2>
@@ -299,13 +347,6 @@ export function homePage(catalog) {
         <em>${t.count} món</em>
       </a>`).join('')}
     </div>
-  </section>
-  <section class="wrap">
-    <div class="band__h">
-      <h2>Hay được hỏi</h2>
-      <a href="/cua-hang">Xem tất cả</a>
-    </div>
-    <div class="grid">${picks.map(productCard).join('')}</div>
   </section>
   <section class="wrap giftband">
     <div>
@@ -395,7 +436,7 @@ export function shopPage(catalog, query) {
   const catOrder = [...PROC, ...EXTRA];
   // Mỗi cách sấy là MỘT lưới liền. Trước đây mỗi loại quả là một lưới riêng nên quả chỉ có 1–2 món để lại nửa hàng trống.
   // Trong một cách sấy: món Nổi bật trước, rồi theo quả (quả có món rank tốt nhất lên trước), hãng, rank; combo xếp cuối.
-  const featIdx = (p) => { const i = FEATURED.indexOf(p.id); return i < 0 ? 99 : i; };
+  const featIdx = (p) => (Number.isInteger(p.featured) ? p.featured : 99);
   const fruitRank = new Map();
   for (const p of final) {
     if (isComboProduct(p)) continue;
@@ -452,11 +493,11 @@ export function shopPage(catalog, query) {
     if (cat === 'set') html += `<p class="setlink"><a href="/hop-qua">Đổi vị trong hộp</a> — chạm từng ngăn, giá cập nhật ngay. Từ 20 hộp tính giá sỉ.</p>`;
     html += `<div class="grid${editorial ? ' grid--row' : ''}">${items.map((p) => card(p)).join('')}</div>`;
   }
-  const featured = filtered ? [] : FEATURED.map((id) => final.find((p) => p.id === id)).filter(Boolean);
+  const featured = filtered ? [] : spotlight(catalog);
   const featHtml = featured.length
     ? `<section class="feat" aria-labelledby="feat-h">
-      <div class="feat__h"><h2 id="feat-h">Nổi bật</h2><p>Món tiêu biểu của Mộc Quả và hàng hãng bán chạy.</p></div>
-      <div class="grid grid--feat${kieu === '2' ? ' bento' : ''}">${featured.map((p, i) => productCard(p, { eager: i < 4, cls: kieu !== '2' ? '' : i === 0 ? 'card--hero' : (i === featured.length - 1 && featured.length === 8 ? 'card--wide' : '') })).join('')}</div>
+      <div class="feat__h"><h2 id="feat-h">Nổi bật &amp; Khuyến mãi</h2><p>Món bán chạy và món đang giảm, giá lấy từ danh mục.</p></div>
+      <div class="grid grid--feat${kieu === '2' ? ' bento' : ''}">${featured.map((p, i) => productCard(p, { eager: i < 4, showPitch: true, cls: kieu !== '2' ? '' : i === 0 ? 'card--hero' : '' })).join('')}</div>
     </section>`
     : '';
   const tierBox = `<ul class="tiers" aria-label="Ưu đãi theo đơn">
@@ -563,6 +604,9 @@ export function productPage(product, catalog) {
     fit45: product.fit45 || [],
     variants: product.variants.map((v) => ({
       sku: v.sku, w: v.w, g: v.g, price: v.price,
+      ...(v.bags ? { bags: v.bags } : {}),
+      ...(v.limited ? { limited: true } : {}),
+      ...(v.oos ? { oos: true } : {}),
       ...(v.compareAt != null ? { compareAt: v.compareAt } : {}),
       ...(v.promo ? { promo: { label: v.promo.label, endsAt: v.promo.endsAt, price: v.promo.price, originalPrice: v.promo.originalPrice } } : {}),
       pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),

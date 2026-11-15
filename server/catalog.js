@@ -4,8 +4,10 @@ import vm from 'node:vm';
 import { ROOT } from './paths.js';
 import { getOverrides, getSettings } from './db.js';
 import { resolveSale } from '../ai-server/src/sale.js';
+import { catalogData } from './danhmuc.js';
+import { CATALOG_TO_SHOP } from './dm-buy.js';
 
-const BRAND_ORDER = ['mq', 'fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'other'];
+const BRAND_ORDER = ['fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'psdd', 'ycnuts', 'mq', 'other'];
 
 const SHELF_CAPS = [
   ['viza-ke-01', 'Kệ trái cây sấy Viza Food: xoài, mít, sầu riêng'],
@@ -118,6 +120,41 @@ function saleFor(product, variant, price, overridden, now) {
   }, now);
 }
 
+function catalogStoryBySku() {
+  const { mq, bySku } = loadBase();
+  const map = new Map();
+  const shopSku = (code) => {
+    if (bySku.has(code)) return code;
+    const alias = mq.SKU_ALIAS?.[code];
+    if (alias && bySku.has(alias)) return alias;
+    const mapped = CATALOG_TO_SHOP[code];
+    if (mapped && bySku.has(mapped)) return mapped;
+    return '';
+  };
+  for (const product of catalogData().products || []) {
+    const featured = Number.isInteger(product.featured) ? product.featured : null;
+    const line = typeof product.line === 'string' ? product.line : '';
+    const pitch = typeof product.pitch === 'string' ? product.pitch : '';
+    if (featured == null && !line && !pitch) continue;
+    const story = { featured, line, pitch };
+    for (const variant of product.variants || []) {
+      const sku = shopSku(variant?.code);
+      if (sku && !map.has(sku)) map.set(sku, story);
+    }
+  }
+  return map;
+}
+
+function storyOf(product, stories) {
+  let best = null;
+  for (const variant of product.variants || []) {
+    const story = stories.get(variant.sku);
+    if (!story) continue;
+    if (!best || (story.featured != null && (best.featured == null || story.featured < best.featured))) best = story;
+  }
+  return best;
+}
+
 function presentVariant(mq, product, variant, sale) {
   const packs = product.packs || null;
   return {
@@ -130,12 +167,21 @@ function presentVariant(mq, product, variant, sale) {
     ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
     ...(sale.promo ? { promo: sale.promo } : {}),
     pack: variant.pk || '',
+    bags: Number.isInteger(variant.bags) && variant.bags > 1 ? variant.bags : null,
+    limited: variant.limited === true,
+    oos: variant.oos === true,
     note: variant.note || '',
     img: resolveImg(variant.img, true),
     back: resolveImg(variant.back, true),
     ...(variant.backKind ? { backKind: variant.backKind } : {}),
     group: packs ? variant.w : variant.sku,
   };
+}
+
+let storyCache;
+function stories() {
+  if (!storyCache) storyCache = catalogStoryBySku();
+  return storyCache;
 }
 
 function presentProduct(mq, product, { detail = false, now = new Date() } = {}) {
@@ -169,6 +215,7 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
       cap: SHELF_CAPS.find(([k]) => k === id)[1],
       ...(mq.SHELF_BAGS?.[product.id] ? { bags: [...(mq.SHELF_BAGS[product.id][id] || mq.SHELF_BAGS[product.id]['*'] || [])] } : {}),
     }));
+  const story = storyOf(product, stories()) || {};
   const out = {
     id: product.id,
     name: product.name,
@@ -187,6 +234,9 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
     brandKey,
     brandName: lineName(mq, brandKey) || maker.name || 'Khác',
     own: !!product.own,
+    featured: story.featured ?? null,
+    pitch: story.pitch || '',
+    line: story.line || '',
     badge: product.badge || '',
     oos: !!product.oos,
     rank: product.rank || 99,

@@ -82,7 +82,7 @@ function render() {
   weights.innerHTML = groups().map((variant) => {
     const sample = pick(variant.group, current.pack);
     const on = variant.group === current.group;
-    return `<button type="button" class="choice${on ? ' is-on' : ''}" data-group="${text(variant.group)}"><b>${text(variant.label)}</b><small>${sample.price ? money(sample.price) : 'Liên hệ'}</small></button>`;
+    return `<button type="button" class="choice${on ? ' is-on' : ''}" data-group="${text(variant.group)}"><b>${text(variant.label || variant.w)}</b><small>${sample.price ? money(sample.price) : 'Liên hệ'}</small></button>`;
   }).join('');
   if (data.packs) {
     packWrap.hidden = false;
@@ -102,17 +102,21 @@ function render() {
   if (current.price) {
     const was = current.compareAt > current.price ? ` <span class="was"><s>${money(current.compareAt)}</s></span>` : '';
     const badge = current.promo?.label ? ` <span class="kmbadge">${text(current.promo.label)}</span>` : '';
-    price.innerHTML = `${money(current.price)}${was}${badge}`;
+    const limited = current.limited ? ' <span class="kmbadge">Phiên bản giới hạn</span>' : '';
+    price.innerHTML = `${money(current.price)}${was}${badge}${limited}`;
     if (deal) price.insertAdjacentHTML('beforeend', ` <span class="was">mua lẻ <s>${money(deal.sum)}</s></span>`);
-    unit.textContent = current.g ? `Khoảng ${money(Math.round(current.price / current.g * 100))} / 100g` : '';
+    if (current.bags > 1) unit.textContent = `${current.bags} túi · ${money(Math.round(current.price / current.bags))} / túi`;
+    else unit.textContent = current.g ? `Khoảng ${money(Math.round(current.price / current.g * 100))} / 100g` : '';
   } else {
     price.textContent = 'Liên hệ';
     unit.textContent = 'Món này chưa có giá trên web.';
   }
   stickyPrice.textContent = current.price ? money(current.price) : 'Liên hệ';
-  stickyLabel.textContent = current.label;
+  stickyLabel.textContent = current.label || current.w || '';
+  const gone = data.oos || current.oos || !current.price;
   document.querySelectorAll('[data-add]').forEach((button) => {
-    button.disabled = data.oos || !current.price;
+    button.disabled = gone;
+    button.textContent = data.oos || current.oos ? 'Hết hàng' : 'Cho vào giỏ';
   });
   const url = new URL(location.href);
   url.searchParams.set('sku', current.sku);
@@ -140,7 +144,7 @@ thumbs.addEventListener('click', (event) => {
 });
 
 function buy() {
-  if (data.oos || !current.price) return;
+  if (data.oos || current.oos || !current.price) return;
   const count = Math.max(1, Math.min(99, Math.floor(Number(qty.value) || 1)));
   add(current.sku, count);
   toast('Đã cho vào giỏ.', { href: '/gio-hang', label: 'Xem giỏ' });

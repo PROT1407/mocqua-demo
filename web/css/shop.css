@@ -157,14 +157,23 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .card__body > .textlink { align-self: start; }
 /* Món hết hàng/chưa giá: nút viền cùng cao với nút "Cho vào giỏ" để hàng thẻ thẳng nút. */
 .card__body > .btn--ghost { border: 0; box-shadow: inset 0 0 0 1px var(--line); }
-@media (max-width: 719px) { .card__body h3 { font-size: 15px; } }
+@media (max-width: 719px) {
+  .card__body h3 { font-size: 15px; }
+  .hero { gap: 14px; padding-top: 12px; }
+  .hero__photo > img { aspect-ratio: 16 / 10; max-height: 200px; }
+  .hero__inset { display: none; }
+  .card__meta { white-space: normal; }
+  .card__price { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: baseline; }
+  .card__price .was, .card__price .kmbadge { margin-left: 0; }
+}
 .badge {
   display: inline-flex; align-items: center; border-radius: 999px;
   background: var(--paper); color: var(--brown); font-size: 12px; font-weight: 600;
   padding: 4px 8px;
 }
 .card__img .badge { position: absolute; left: 8px; top: 8px; }
-.badge--oos { left: auto; right: 8px; background: var(--brown); color: var(--cream); }
+.card__img .badge--oos { left: auto; right: 8px; background: var(--brown); color: var(--cream); }
+.card__img .badge--tag { left: auto; right: 8px; max-width: 46%; background: #f3e6c9; color: #5c3a0c; white-space: normal; text-align: right; }
 .badge--deo { box-shadow: inset 0 0 0 1px #C4A574; }
 .badge--thanghoa { box-shadow: inset 0 0 0 1px #8AA08A; }
 .badge--gion { box-shadow: inset 0 0 0 1px #C47A4A; }

@@ -1,14 +1,19 @@
 import { fold } from './catalog.js';
+import { shopContact } from '../../server/contact.js';
 
-// Câu trả lời địa chỉ của bot. Khác khối liên hệ trên website (server/contact.js).
+// Địa chỉ và số điện thoại lấy từ server/contact.js, cùng nguồn với chân trang.
 export const shopInfo = {
-  address: '376/15, phường Bàn Cờ, Quận 3, TP.HCM',
-  hotlineDisplay: '0919 997 283',
-  hotlineTel: '0919997283',
+  address: shopContact.address,
+  hotlineDisplay: shopContact.phones[0].display,
+  hotlineTel: shopContact.phones[0].tel,
+  phones: shopContact.phones,
 };
 
 export function shopAddressReply(info = shopInfo) {
-  return `Địa chỉ: ${info.address}. Hotline đặt hàng: ${info.hotlineDisplay}.`;
+  const phones = info.phones?.length ? info.phones : [{ display: info.hotlineDisplay }];
+  const [hotline, ...rest] = phones;
+  const more = rest.map((phone) => phone.display).filter(Boolean).join(', ');
+  return `Địa chỉ: ${info.address}. Hotline đặt hàng: ${hotline.display}${more ? `, ${more}` : ''}.`;
 }
 
 export function asksShopAddress(message) {

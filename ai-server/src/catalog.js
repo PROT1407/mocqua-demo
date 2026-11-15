@@ -67,23 +67,32 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
           if (text) aliases.push(text);
         }
       }
+      const featured = Number.isInteger(product?.featured) ? product.featured : null;
+      const bags = Number.isInteger(variant?.bags) && variant.bags > 1 ? variant.bags : null;
       lines.push({
         id,
         shopId,
         name,
         brand,
         category,
+        line: clean(product?.line),
+        pitch: clean(product?.pitch),
+        ...(featured != null ? { featured } : {}),
         sku,
         weight,
         grams: Number.isFinite(grams) ? grams : null,
         price: sale.price,
+        ...(bags ? { bags } : {}),
+        ...(variant?.limited === true || product?.limited === true ? { limited: true } : {}),
+        ...(variant?.oos === true || product?.oos === true ? { oos: true } : {}),
         ...(schedule ? { schedule } : {}),
         url,
         aliases,
       });
     }
   }
-  lines.sort((a, b) => a.category.localeCompare(b.category, 'vi') || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
+  const ownLabel = (row) => fold(row.brand) === 'moc qua' ? 1 : 0;
+  lines.sort((a, b) => (a.featured ?? 9999) - (b.featured ?? 9999) || ownLabel(a) - ownLabel(b) || a.category.localeCompare(b.category, 'vi') || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
   return lines;
 }
 
@@ -97,7 +106,8 @@ function quotedPrice(row, now) {
 export function formatCatalog(lines, now = new Date()) {
   if (!lines?.length) return '';
   return lines.map((row) => {
-    return [row.brand, row.name, row.weight, quotedPrice(row, now), row.url].filter(Boolean).join(' | ');
+    const flags = [row.limited ? 'phiên bản giới hạn' : '', row.oos ? 'hết hàng' : ''].filter(Boolean).join(', ');
+    return [row.brand, row.line, row.name, row.weight, quotedPrice(row, now), row.pitch, flags, row.url].filter(Boolean).join(' | ');
   }).join('\n');
 }
 
@@ -182,8 +192,40 @@ export function relatedItems(items, message, limit = 12) {
     if (matched === query.length) score += 20;
     scored.push({ item, score, matched });
   }
-  scored.sort((a, b) => b.matched - a.matched || b.score - a.score || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
-  return scored.map((row) => row.item).slice(0, limit);
+  scored.sort((a, b) => b.matched - a.matched || b.score - a.score || (a.item.featured ?? 9999) - (b.item.featured ?? 9999) || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
+  const ranked = scored.map((row) => row.item);
+  const combo = suggestCombo(items, ranked[0]);
+  if (combo && !ranked.some((item) => item.sku === combo.sku)) ranked.splice(1, 0, combo);
+  return ranked.slice(0, limit);
+}
+
+function isComboRow(item) {
+  return fold(item?.line) === 'combo' || /^combo\b/i.test(item?.name || '');
+}
+
+// Một combo cùng món, để câu trả lời gợi ý đúng một bước. Không thêm luật vào prompt.
+export function suggestCombo(items, focus) {
+  if (!focus || isComboRow(focus)) return null;
+  const words = new Set(tokensOf(focus.name).filter((word) => word.length >= 4));
+  let best = null;
+  let score = 0;
+  for (const item of items || []) {
+    if (!isComboRow(item) || item.oos) continue;
+    const hits = tokensOf(`${item.name} ${item.pitch || ''}`).filter((word) => words.has(word)).length;
+    const rank = hits * 10 - (item.featured ?? 40);
+    if (hits > 0 && rank > score) {
+      score = rank;
+      best = item;
+    }
+  }
+  return best;
+}
+
+function readShipping(value) {
+  const fee = Number(value?.shipFee);
+  const free = Number(value?.freeShip);
+  if (!Number.isInteger(fee) || !Number.isInteger(free) || fee < 0 || free < 0) return null;
+  return { shipFee: fee, freeShip: free };
 }
 
 function clean(value) {
@@ -206,7 +248,8 @@ function readBundle(origin) {
   try {
     const payload = JSON.parse(fs.readFileSync(BUNDLE_URL, 'utf8'));
     if (payload && Array.isArray(payload.products) && payload.products.length) {
-      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle' };
+      const shipping = readShipping(payload.shipping);
+      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle', ...(shipping ? { shipping } : {}) };
     }
   } catch {
     data = null;
@@ -238,7 +281,8 @@ export function createCatalogSource({
     if (!response.ok) throw httpError(response.status);
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.products)) throw new Error('catalog-shape');
-    return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) };
+    const shipping = readShipping(payload.shipping);
+    return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated), ...(shipping ? { shipping } : {}) };
   }
 
   async function pull() {

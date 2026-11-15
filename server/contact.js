@@ -1,11 +1,11 @@
-/** Thông tin liên hệ công khai của Mộc Quả. Giữ khớp với js/app.js và các trang tĩnh. */
+/** Thông tin liên hệ công khai của Mộc Quả. Chân trang, trang liên hệ và bot cùng đọc khối này. Hotline đặt hàng đứng trước. */
 export const shopContact = {
   phones: [
-    { tel: '0931330248', display: '0931 330 248' },
     { tel: '0919997283', display: '0919 997 283' },
+    { tel: '0931330248', display: '0931 330 248' },
   ],
   email: 'huydaigia1407@gmail.com',
-  address: '376/15 Nguyễn Đình Chiểu, Quận 3, TP. Hồ Chí Minh',
+  address: '376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM',
   maps: 'https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh',
   facebook: 'https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr',
   tiktok: 'https://www.tiktok.com/@mocqua79',

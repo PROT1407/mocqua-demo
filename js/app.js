@@ -4,11 +4,11 @@ const MQ=window.MQ;
 const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
 MQ.$=$; MQ.$$=$$;
 MQ.fmt=n=>Math.round(n).toLocaleString('vi-VN')+'đ';
-MQ.PHONES=[{tel:'0931330248',show:'0931 330 248'},{tel:'0919997283',show:'0919 997 283'}];
+MQ.PHONES=[{tel:'0919997283',show:'0919 997 283'},{tel:'0931330248',show:'0931 330 248'}];
 MQ.TEL=MQ.PHONES[0].tel; MQ.HOTLINE=MQ.PHONES[0].show;
 MQ.TEL2=MQ.PHONES[1].tel; MQ.HOTLINE2=MQ.PHONES[1].show;
 MQ.EMAIL='huydaigia1407@gmail.com';
-MQ.ADDRESS='376/15 Nguyễn Đình Chiểu, Quận 3, TP. Hồ Chí Minh';
+MQ.ADDRESS='376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM';
 MQ.MAPS='https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh';
 MQ.FACEBOOK='https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr';
 MQ.TIKTOK='https://www.tiktok.com/@mocqua79';
@@ -63,7 +63,7 @@ MQ.img=(f,sq)=>!f?'assets/img/hero.jpg':f.startsWith('products/')?('assets/'+f+(
 MQ.url=p=>'san-pham.html?id='+p.id;
 /* phân nhóm danh mục: cách sấy -> loại quả -> thương hiệu -> khối lượng */
 MQ.PROC=['deo','thanghoa','gion','kho'];
-MQ.BRAND_ORDER=['mq','fh','goodgood','cheers','yummy','kita','vizabox'];
+MQ.BRAND_ORDER=['fh','goodgood','cheers','yummy','kita','vizafood','vizabox','psdd','ycnuts','mq'];
 MQ.brandOf=p=>p.own?'mq':((p.lines||[])[0]||'zz');
 MQ.minG=p=>Math.min(...MQ.vars(p).map(v=>v.g||9999));
 MQ.procTag=p=>MQ.PROC.includes(p.cat)?`<span class="ptag ptag--${p.cat}">${MQ.CATS[p.cat].short}</span>`:'';
@@ -274,7 +274,7 @@ MQ.side=()=>{const cc=k=>cnt(p=>p.cat===k);const L=(h,t,n)=>`<li><a href="${h}">
   <li class="tree__g"><a href="cua-hang.html?cat=hat"><b>Hạt dinh dưỡng</b><em>${cc('hat')}</em></a></li>
   <li class="tree__g"><a href="cua-hang.html?cat=set"><b>Set quà &amp; hộp quà</b></a><ul>${L('cua-hang.html?cat=set','Set quà &amp; khay mứt',cc('set'))}${L('hop-qua.html#hop-san','Hộp quà Tết 2027')}${L('hop-qua.html#tu-thiet-ke','Tự thiết kế hộp quà')}</ul></li>
   <li class="tree__g"><span><b>Theo loại quả</b></span><ul class="tree__fr">${fr.filter(x=>x[1].top).map(([k,f,n])=>L('cua-hang.html?fruit='+k,f.name,n)).join('')}${L('cua-hang.html#loai-qua',`+ ${fr.filter(x=>!x[1].top).length} loại quả khác`)}</ul></li>
-  <li class="tree__g"><span><b>Thương hiệu</b></span><ul>${L('cua-hang.html?line=mq','<i class="mqseal">MQ</i>Mộc Quả',cnt(p=>p.own))}<li class="tree__sub">Viza Food</li>${Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>L('cua-hang.html?line='+k,l.name,cnt(p=>p.lines.includes(k)))).join('')}</ul></li>
+  <li class="tree__g"><span><b>Thương hiệu</b></span><ul><li class="tree__sub">Viza Food</li>${Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>L('cua-hang.html?line='+k,l.name,cnt(p=>p.lines.includes(k)))).join('')}${L('cua-hang.html?line=mq','<i class="mqseal">MQ</i>Mộc Quả',cnt(p=>p.own))}</ul></li>
   </ul></section>${MQ.sideHelp()}${MQ.sideGift()}${MQ.sideNews()}`};
 function footer(){
   return `

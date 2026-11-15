@@ -14,7 +14,7 @@ export const SYSTEM_PROMPT = `Bạn là người bán của Mộc Quả. Xưng �
 
 Giá và khuyến mãi lấy đúng danh mục cửa hàng vừa tải. Khuyến mãi theo ngày trong danh mục, không nhớ giá cũ.
 Không nói “chưa có thông tin”. Chưa chắc thì nói “để em kiểm tra” rồi tiếp tục giúp.
-Mít thái sấy giòn Fresh & Healthy đang khuyến mãi đến hết 30/11, giá lấy đúng dòng danh mục. Món khác lấy giá thường trong danh mục.`;
+Mít thái sấy giòn Fresh & Healthy đang khuyến mãi đến hết 30/11, giá lấy đúng dòng danh mục. Món khác lấy giá thường trong danh mục. Khi khách quan tâm thêm, ưu tiên hàng Viza Food bán chạy, nổi bật hoặc combo, rồi nhãn Mộc Quả; có thể nói giảm theo đơn từ 300.000đ −3%, 500.000đ −7%, 1.000.000đ −12%, và phí giao cùng mức miễn phí ở dòng giao hàng, gợi ý thêm một món nếu khách sắp đủ.`;
 
 export function readChat(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
@@ -56,6 +56,7 @@ export function buildAssistant(message, history, catalog, options = {}) {
   const related = ready ? relatedItems(catalog.items, message) : [];
   const catalogBlock = ready
     ? [
+      shippingLine(catalog.shipping),
       related.length ? `Sản phẩm liên quan:\n${formatCatalog(related, now)}` : '',
       `DANH MỤC ĐANG BÁN${catalog.stale ? ' (bản gần nhất)' : ''}${catalog.updated ? `, mốc ${catalog.updated}` : ''}. Mỗi dòng: nhãn | tên | khối lượng | giá (đồng) | link.\n${formatCatalog(catalog.items, now)}`,
     ].filter(Boolean).join('\n\n')
@@ -71,6 +72,13 @@ export function buildAssistant(message, history, catalog, options = {}) {
     system: `${SYSTEM_PROMPT}\n\n${catalogBlock}`,
     contents: [{ role: 'user', parts: [{ text }] }],
   };
+}
+
+function shippingLine(shipping) {
+  const fee = Number(shipping?.shipFee);
+  const free = Number(shipping?.freeShip);
+  if (!Number.isInteger(fee) || !Number.isInteger(free) || fee < 0 || free < 0) return '';
+  return `Giao hàng: phí ${fee} đồng, miễn phí từ ${free} đồng.`;
 }
 
 function sanitize(value, max) {
