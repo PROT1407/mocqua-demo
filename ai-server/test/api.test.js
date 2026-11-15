@@ -368,6 +368,9 @@ test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
   assert.match(SYSTEM_PROMPT, /Không nói “chưa có thông tin”/);
   assert.match(SYSTEM_PROMPT, /tối đa 3 dòng/);
   assert.doesNotMatch(SYSTEM_PROMPT, /An Nhiên|giảm 3%|múi nguyên|Nuts Talk/);
+  assert.doesNotMatch(SYSTEM_PROMPT, /30000|phí 30/);
+  const shipped = buildAssistant('ship bao nhiêu', [], { ok: true, stale: false, items, updated: '', shipping: { shipFee: 30000, freeShip: 300000 } }, { now: during });
+  assert.match(shipped.system, /Giao hàng: phí 30000 đồng, miễn phí từ 300000 đồng/);
 });
 
 test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', () => {

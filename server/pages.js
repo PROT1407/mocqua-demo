@@ -287,11 +287,6 @@ function homePicks(catalog) {
   return chosen;
 }
 
-function offerStrip(catalog) {
-  const settings = catalog.settings;
-  return `<p class="offerstrip">${esc(bannerText(settings))} · Giao ${esc(shortMoney(settings.shipFee))}, miễn phí từ ${esc(shortMoney(settings.freeShip))}</p>`;
-}
-
 function tierCopy(catalog) {
   const s = catalog.settings;
   return `${promoTiers(s).map((t) => `Từ ${vnd(t.min)} ${t.pct ? `giảm ${t.pct}%${t.ship ? ' và miễn phí giao' : ''}` : 'miễn phí giao'}`).join(', ')} — tự trừ trong giỏ. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.`;
@@ -336,7 +331,6 @@ export function homePage(catalog) {
       <h2>Nổi bật &amp; Khuyến mãi</h2>
       <a href="/cua-hang">Xem tất cả</a>
     </div>
-    ${offerStrip(catalog)}
     <div class="grid">${picks.map((p) => productCard(p, { showPitch: true })).join('')}</div>
   </section>
   <section class="wrap band" aria-label="Bốn cách sấy">

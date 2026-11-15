@@ -271,8 +271,12 @@ export function createApp() {
   // Danh mục tra cứu. Không gắn limiter của đơn hàng: ai-server gọi GET này.
   // Cache ngắn để Cloudflare trước onrender.com giữ bản vừa tải, đỡ trả 429 cho máy cùng cụm.
   app.get('/api/danh-muc', (req, res) => {
+    const settings = getSettings();
     res.set('Cache-Control', 'public, max-age=120');
-    res.json(withShopLinks(catalogWithPrices()));
+    res.json({
+      ...withShopLinks(catalogWithPrices()),
+      shipping: { shipFee: settings.shipFee, freeShip: settings.freeShip },
+    });
   });
   app.get('/api/admin/catalog-prices.json', requireAdmin, (req, res) => {
     const body = JSON.stringify({ kind: 'mocqua-catalog-prices', version: 1, exportedAt: new Date().toISOString(), rows: listCatalogPrices() }, null, 2);

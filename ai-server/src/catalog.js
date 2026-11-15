@@ -221,6 +221,13 @@ export function suggestCombo(items, focus) {
   return best;
 }
 
+function readShipping(value) {
+  const fee = Number(value?.shipFee);
+  const free = Number(value?.freeShip);
+  if (!Number.isInteger(fee) || !Number.isInteger(free) || fee < 0 || free < 0) return null;
+  return { shipFee: fee, freeShip: free };
+}
+
 function clean(value) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
 }
@@ -241,7 +248,8 @@ function readBundle(origin) {
   try {
     const payload = JSON.parse(fs.readFileSync(BUNDLE_URL, 'utf8'));
     if (payload && Array.isArray(payload.products) && payload.products.length) {
-      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle' };
+      const shipping = readShipping(payload.shipping);
+      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle', ...(shipping ? { shipping } : {}) };
     }
   } catch {
     data = null;
@@ -273,7 +281,8 @@ export function createCatalogSource({
     if (!response.ok) throw httpError(response.status);
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.products)) throw new Error('catalog-shape');
-    return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) };
+    const shipping = readShipping(payload.shipping);
+    return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated), ...(shipping ? { shipping } : {}) };
   }
 
   async function pull() {

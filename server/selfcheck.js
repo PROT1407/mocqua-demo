@@ -66,7 +66,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(home, /sấy thăng hoa, múi nguyên/);
     assert.match(home, /Khuyến mãi/);
     assert.match(home, /Phiên bản giới hạn/);
-    assert.match(home, /offerstrip/);
+    assert.doesNotMatch(home, /offerstrip/);
     assert.match(home, /P\. Bàn Cờ, TP\.HCM/);
     assert.doesNotMatch(home.split('Nổi bật')[1].split('Ưu đãi theo đơn')[0], /Ri6/);
     assert.match(home, /viza-ke-05/);
@@ -854,7 +854,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v46/);
+    assert.match(sw, /mocqua-shell-v47/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
@@ -1087,6 +1087,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(cb3.g, 305);
       assert.doesNotMatch(byId.get('vz-mix-cb3-thang-hoa').short + byId.get('xoai-say-thang-hoa').variants[0].w, /110g/);
       const liveDm = await (await fetch(base + '/api/danh-muc')).json();
+      assert.deepEqual(liveDm.shipping, { shipFee: 30000, freeShip: 300000 });
       const shopIds = new Set(shopAll.map((p) => p.id));
       const liveXth = liveDm.products.find((p) => p.id === 'vz-ch-xth');
       assert.equal(liveXth.shopId, 'xoai-say-thang-hoa');
