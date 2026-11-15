@@ -160,21 +160,6 @@ function tokenHit(hay, token) {
   return 0;
 }
 
-function asksDurian(message) {
-  const folded = fold(message);
-  return folded.includes('sau rieng') || folded.includes('saurieng') || folded.includes('durian');
-}
-
-// Túi Yummy sầu riêng sấy thăng hoa cỡ khoảng 105g (không phải Monthong, không phải combo).
-function isYummyDurian(item) {
-  const brand = fold(item?.brand);
-  const name = fold(item?.name);
-  const grams = Number(item?.grams);
-  if (!brand.includes('yummy') || !name.includes('sau rieng')) return false;
-  if (name.includes('combo') || name.includes('monthong')) return false;
-  return grams >= 100 && grams <= 110;
-}
-
 export function relatedItems(items, message, limit = 12) {
   const query = queryTokens(message);
   if (!query.length) return [];
@@ -198,12 +183,7 @@ export function relatedItems(items, message, limit = 12) {
     scored.push({ item, score, matched });
   }
   scored.sort((a, b) => b.matched - a.matched || b.score - a.score || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
-  let ranked = scored.map((row) => row.item);
-  if (asksDurian(message)) {
-    const yummy = (items || []).find(isYummyDurian);
-    if (yummy) ranked = [yummy, ...ranked.filter((item) => item.sku !== yummy.sku)];
-  }
-  return ranked.slice(0, limit);
+  return scored.map((row) => row.item).slice(0, limit);
 }
 
 function clean(value) {
