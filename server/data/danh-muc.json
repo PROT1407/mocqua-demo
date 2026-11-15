@@ -4432,10 +4432,11 @@
      "code": "VZ-PS-CB2-200",
      "weightG": 200,
      "weightLabel": "2 túi · 2 × 100g · 2 vị",
+     "bags": 2,
      "verify": false,
      "note": "Hai vị tùy chọn. Nhắn Mộc Quả tên hai vị muốn nhận.",
-     "price": 375000,
-     "priceSource": "Giá combo 2 vị Premium Shrinking giữ nguyên",
+     "price": 666000,
+     "priceSource": "2 × túi lẻ 333.000đ",
      "priceCheckedAt": "2026-11-15"
     }
    ]
