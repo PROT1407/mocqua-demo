@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
-import { compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
+import { addonPacks, compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
 import { CATALOG_WARM, CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SLOGAN, SYSTEM_PROMPT, buildAssistant, readChat, shapeReply } from '../src/prompt.js';
 import { shopAddressReply, shopInfo } from '../src/shop-info.js';
 import { generateReply, resolveModel } from '../src/gemini.js';
@@ -376,6 +376,30 @@ test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
   assert.doesNotMatch(SYSTEM_PROMPT, /30000|phí 30/);
   const shipped = buildAssistant('ship bao nhiêu', [], { ok: true, stale: false, items, updated: '', shipping: { shipFee: 30000, freeShip: 300000 } }, { now: during });
   assert.match(shipped.system, /Giao hàng: phí 30000 đồng, miễn phí từ 300000 đồng/);
+});
+
+test('bù mốc là túi trái cây sấy nhỏ, không có bột cari hay Ri6', () => {
+  const payload = JSON.parse(readFileSync(new URL('../../server/data/danh-muc.json', import.meta.url), 'utf8'));
+  const items = compactCatalog(payload);
+  const packs = addonPacks(items);
+  assert.ok(packs.length > 3);
+  assert.ok(packs.some((item) => /xoài sấy dẻo/i.test(item.name) && item.grams >= 80 && item.grams <= 100));
+  assert.ok(packs.some((item) => /mãng cầu sấy dẻo/i.test(item.name)));
+  assert.ok(packs.some((item) => /cóc sấy dẻo muối ớt/i.test(item.name)));
+  assert.equal(packs.some((item) => /bột|cari|ri6/i.test(item.name)), false);
+  const viza = packs.filter((item) => item.brand !== 'Mộc Quả');
+  assert.ok(viza.length > 0);
+  for (let i = 1; i < viza.length; i += 1) assert.ok(viza[i].price >= viza[i - 1].price);
+  assert.ok(packs.findIndex((item) => item.brand === 'Mộc Quả') > 0);
+  const built = buildAssistant('thiếu một chút là được miễn ship', [], { ok: true, stale: false, items, updated: '', shipping: { shipFee: 30000, freeShip: 300000 } });
+  const start = built.system.indexOf('Bù mốc —');
+  const block = built.system.slice(start, built.system.indexOf('DANH MỤC ĐANG BÁN'));
+  assert.match(block, /Cóc sấy dẻo muối ớt/);
+  assert.match(block, /Mãng cầu sấy dẻo/);
+  assert.doesNotMatch(block, /Bột cari|Ri6/);
+  assert.match(SYSTEM_PROMPT, /Bù mốc/);
+  assert.match(SYSTEM_PROMPT, /2–3/);
+  assert.match(SYSTEM_PROMPT, /không mở bằng xin lỗi/);
 });
 
 test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', () => {

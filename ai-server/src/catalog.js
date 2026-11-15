@@ -103,6 +103,25 @@ function quotedPrice(row, now) {
   return `${sale.price} (khuyến mãi ${sale.promo.price}, giá gốc ${sale.promo.originalPrice}, hết ${sale.promo.label})`;
 }
 
+function isDriedFruitPack(row) {
+  const category = fold(row?.category);
+  if (!category.includes('say')) return false;
+  const name = fold(row?.name);
+  if (/ri\s*6/.test(name) || name.startsWith('combo')) return false;
+  if (/(bot cari|bot |gia vi)/.test(name) || category.includes('gia vi') || category === 'hat') return false;
+  if (row?.bags > 1 || row?.oos) return false;
+  const grams = Number(row?.grams);
+  return grams >= 80 && grams <= 100 && Number.isInteger(row?.price) && row.price > 0;
+}
+
+// Túi trái cây sấy nhỏ để bù mốc miễn phí hoặc mức giảm. Viza Food trước, rồi giá tăng dần.
+export function addonPacks(items) {
+  const own = (row) => fold(row.brand) === 'moc qua' ? 1 : 0;
+  return (items || [])
+    .filter(isDriedFruitPack)
+    .sort((a, b) => own(a) - own(b) || a.price - b.price || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
+}
+
 export function formatCatalog(lines, now = new Date()) {
   if (!lines?.length) return '';
   return lines.map((row) => {
