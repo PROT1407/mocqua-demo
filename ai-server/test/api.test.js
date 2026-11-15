@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
-import { compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
+import { activePromoItems, compactCatalog, createCatalogSource, formatCatalog, relatedItems } from '../src/catalog.js';
 import { CATALOG_WARM, CONSECUTIVE_MESSAGE_LEAD, SINGLE_MESSAGE_LEAD, SLOGAN, SYSTEM_PROMPT, buildAssistant, readChat, shapeReply } from '../src/prompt.js';
 import { shopAddressReply, shopInfo } from '../src/shop-info.js';
 import { generateReply, resolveModel } from '../src/gemini.js';
@@ -360,7 +360,7 @@ test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
   assert.doesNotMatch(SYSTEM_PROMPT, /74000|139000|159000|99000|165000|33000|30\/11/);
   assert.match(SYSTEM_PROMPT, /Không có mã giảm giá/);
   assert.match(SYSTEM_PROMPT, /Không nhét khuyến mãi vào câu không liên quan/);
-  assert.match(SYSTEM_PROMPT, /Chỉ nói giá gốc hoặc giải thích thêm khi khách hỏi thêm/);
+  assert.match(SYSTEM_PROMPT, /giá gốc chỉ khi khách hỏi thêm/);
   assert.match(SYSTEM_PROMPT, /tối đa 3 dòng/);
 });
 
@@ -388,6 +388,43 @@ test('hỏi sầu riêng thì Yummy đứng đầu phần liên quan', () => {
   assert.doesNotMatch(SYSTEM_PROMPT, /199000|199\.000/);
   const mango = relatedItems(items, 'xoài sấy dẻo');
   assert.notEqual(mango[0]?.sku, 'VZ-YM-SRTH-100');
+});
+
+test('hỏi khuyến mãi thì nhắc mít đang giảm trước, sau 1/12 thì không', () => {
+  const during = new Date('2026-11-15T08:00:00+07:00');
+  const after = new Date('2026-12-01T00:00:00+07:00');
+  const payload = JSON.parse(readFileSync(new URL('../../server/data/danh-muc.json', import.meta.url), 'utf8'));
+  const items = compactCatalog(payload);
+  const promos = activePromoItems(items, during);
+  const sale = (sku) => promos.find((item) => item.sku === sku);
+  const mit300 = sale('VZ-FH-MIT-300');
+  const mit500 = sale('MQ-GMI-500-FH');
+  assert.ok(mit300?.schedule && mit500?.schedule);
+  assert.equal(promos[0].sku, 'VZ-FH-MIT-300');
+  assert.equal(promos[1].sku, 'MQ-GMI-500-FH');
+  assert.equal(activePromoItems(items, after).length, 0);
+  assert.doesNotMatch(SYSTEM_PROMPT, /74000|99000|139000|165000|30\/11/);
+  for (const query of ['có khuyến mãi không', 'có mã giảm giá không', 'đang giảm giá gì']) {
+    const built = buildAssistant(query, [], { ok: true, stale: false, items, updated: '' }, { now: during });
+    const head = built.system.split('DANH MỤC ĐANG BÁN')[0];
+    assert.match(head, /Khuyến mãi đang có/, query);
+    assert.match(head, /không có mã giảm giá/, query);
+    const line300 = head.split('\n').find((line) => line.includes('Mít thái sấy giòn') && line.includes('300g'));
+    const line500 = head.split('\n').find((line) => line.includes('Mít thái sấy giòn') && line.includes('500g'));
+    assert.ok(line300 && line500, query);
+    assert.ok(head.indexOf(line300) < head.indexOf(line500), query);
+    assert.match(line300, new RegExp(`\\| ${mit300.schedule.promo.price} \\(khuyến mãi ${mit300.schedule.promo.price}, giá gốc ${mit300.schedule.promo.originalPrice}`), query);
+    assert.match(line500, new RegExp(`\\| ${mit500.schedule.promo.price} \\(khuyến mãi ${mit500.schedule.promo.price}, giá gốc ${mit500.schedule.promo.originalPrice}`), query);
+    assert.match(line300, /hết KM đến 30\/11/, query);
+    const later = buildAssistant(query, [], { ok: true, stale: false, items, updated: '' }, { now: after });
+    assert.doesNotMatch(later.system, /Khuyến mãi đang có \(nhắc/, query);
+    const laterCatalog = later.system.split('DANH MỤC ĐANG BÁN')[1].split('\n').slice(1).join('\n');
+    assert.doesNotMatch(laterCatalog, /khuyến mãi|KM đến/, query);
+    assert.match(laterCatalog, /Mít thái sấy giòn \| 300g \| \d+$/m, query);
+    assert.match(laterCatalog, /Mít thái sấy giòn \| 500g \| \d+$/m, query);
+  }
+  const mango = buildAssistant('xoài sấy dẻo giá sao', [], { ok: true, stale: false, items, updated: '' }, { now: during });
+  assert.doesNotMatch(mango.system, /Khuyến mãi đang có \(nhắc/);
 });
 
 test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', () => {

@@ -206,6 +206,13 @@ export function relatedItems(items, message, limit = 12) {
   return ranked.slice(0, limit);
 }
 
+// Dòng đang trong hạn khuyến mãi theo lịch trong danh mục. Hết hạn thì không còn.
+export function activePromoItems(items, now = new Date()) {
+  return (items || [])
+    .filter((item) => item?.schedule && resolveSale(item.schedule, now).promo)
+    .sort((a, b) => (Number(a.grams) || 0) - (Number(b.grams) || 0) || String(a.sku).localeCompare(String(b.sku)));
+}
+
 function clean(value) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
 }
