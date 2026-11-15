@@ -65,7 +65,6 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(home, /Nổi bật &amp; Khuyến mãi/);
     assert.match(home, /sấy thăng hoa, múi nguyên/);
     assert.match(home, /Khuyến mãi/);
-    assert.match(home, /Phiên bản giới hạn/);
     assert.doesNotMatch(home, /offerstrip/);
     assert.match(home, /P\. Bàn Cờ, TP\.HCM/);
     assert.doesNotMatch(home.split('Nổi bật')[1].split('Ưu đãi theo đơn')[0], /Ri6/);
@@ -803,7 +802,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     }
     // Mã trùng mã cửa hàng, mã nối tay, combo 3 Cheers+, lựa chọn 2/3 vị Premium Shrinking.
     assert.equal(buy['VZ-PS-GD-100'].sku, 'VZ-PS-GD-100');
-    assert.deepEqual(buy['VZ-PS-GD-100'].options.map((o) => o.label), ['Lẻ', 'Combo 2 vị', 'Combo 3 vị']);
+    assert.deepEqual(buy['VZ-PS-GD-100'].options.map((o) => o.label), ['Lẻ', 'Combo 2 vị']);
     assert.equal(buy['VZ-CH-XDT-200'].sku, 'MQ-DXC-200-CHA');
     assert.ok(buy['VZ-CH-XDT-200'].options.some((o) => o.sku === 'VZ-CH-CB3X-600'));
     assert.equal(buy['VZ-VZ-HDI-100'].sku, 'MQ-HDR-100-VZ');
@@ -854,7 +853,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v47/);
+    assert.match(sw, /mocqua-shell-v48/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
@@ -1127,8 +1126,10 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"price":999000/);
     assert.match(cb3, /"bags":3/);
     assert.match(cb3, /"limited":true/);
-    assert.doesNotMatch(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"oos":true/);
+    assert.match(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"oos":true/);
     assert.match(cb3, /Phiên bản giới hạn/);
+    assert.match(cb3, /Hết hàng/);
+    assert.doesNotMatch(cb3, /oos:true|ô Ghi chú/);
     assert.match(cb3, /3 túi/);
     assert.doesNotMatch(cb3, /viza-ke-02|"shelf":\{/);
     assert.match(cb3, /vz-ps-cb2-2vi\.webp/);
@@ -1140,6 +1141,10 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(one, new RegExp('id="pdp-main" src="\\/assets\\/products\\/vz\\/' + id + '\\.webp"'));
       assert.doesNotMatch(one, /viza-ke-|"shelf":\{/);
       assert.match(one, /"photos":\[\{"src":"\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
+      if (id === 'vz-ps-gd') {
+        assert.match(one, /phiên bản giới hạn và đã hết/);
+        assert.doesNotMatch(one, /Combo 3 túi là phiên bản/);
+      }
     }
     // Ảnh kệ siêu thị: chỉ gắn khi túi của chính sản phẩm nhìn thấy trên ảnh (bảng soi tay, đối chiếu MQ.SHELF_FOR).
     {

@@ -72,14 +72,14 @@ export function catalogBuyMap(catalog) {
       const sku = bySku.has(cv.code) ? cv.code : (CATALOG_TO_SHOP[cv.code] || lookupSku(cv.code)?.sku);
       const hit = sku && bySku.get(sku);
       if (!hit) continue;
-      if (hit.p.oos) { out[cv.code] = { sku, price: hit.v.price, oos: true, options: [] }; continue; }
+      if (hit.p.oos || hit.v.oos) { out[cv.code] = { sku, price: hit.v.price, oos: true, options: [] }; continue; }
       const options = [{ sku, label: 'Lẻ', price: hit.v.price, title: `${hit.p.name} · ${hit.v.w}`, combo: isComboProduct(hit.p) }];
       if (!isComboProduct(hit.p)) {
         for (const cb of combos) {
           if (!cb.comboOf.includes(sku)) continue;
           for (const v of cb.variants) {
             const n = comboSize(cb, v);
-            if (!(v.price > 0) || n < 2 || n > 3) continue;
+            if (!(v.price > 0) || v.oos || n < 2 || n > 3) continue;
             const label = COMBO_LABEL[v.sku] || (/vị/.test(v.w) ? `Combo ${n} vị` : `Combo ${n}`);
             options.push({ sku: v.sku, label, price: v.price, title: `${cb.name} · ${v.w}`, combo: true });
           }

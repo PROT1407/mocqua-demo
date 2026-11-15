@@ -4296,7 +4296,7 @@
     }
    ],
    "verify": false,
-   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
+   "note": "Bộ 3 túi Golden, Royal và Yummy là phiên bản giới hạn và đã hết. Bộ 2 túi vẫn còn.",
    "variants": [
     {
      "code": "VZ-PS-GD-100",
@@ -4304,9 +4304,9 @@
      "weightLabel": "100g (in trên bao: NET WT 100g)",
      "verify": false,
      "note": "",
-     "price": 199000,
-     "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
-     "priceCheckedAt": "2026-10-31"
+     "price": 333000,
+     "priceSource": "Cùng đơn giá túi lẻ với bộ 3 túi 999.000đ (999.000 / 3)",
+     "priceCheckedAt": "2026-11-15"
     }
    ]
   },
@@ -4337,7 +4337,7 @@
     }
    ],
    "verify": false,
-   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
+   "note": "Bộ 3 túi Golden, Royal và Yummy là phiên bản giới hạn và đã hết. Bộ 2 túi vẫn còn.",
    "variants": [
     {
      "code": "VZ-PS-RY-100",
@@ -4345,9 +4345,9 @@
      "weightLabel": "100g (in trên bao: NET WT 100g)",
      "verify": false,
      "note": "",
-     "price": 199000,
-     "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
-     "priceCheckedAt": "2026-10-31"
+     "price": 333000,
+     "priceSource": "Cùng đơn giá túi lẻ với bộ 3 túi 999.000đ (999.000 / 3)",
+     "priceCheckedAt": "2026-11-15"
     }
    ]
   },
@@ -4378,7 +4378,7 @@
     }
    ],
    "verify": false,
-   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
+   "note": "Bộ 3 túi Golden, Royal và Yummy là phiên bản giới hạn và đã hết. Bộ 2 túi vẫn còn.",
    "variants": [
     {
      "code": "VZ-PS-YD-100",
@@ -4386,9 +4386,9 @@
      "weightLabel": "100g (in trên bao: NET WT 100g)",
      "verify": false,
      "note": "",
-     "price": 199000,
-     "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
-     "priceCheckedAt": "2026-10-31"
+     "price": 333000,
+     "priceSource": "Cùng đơn giá túi lẻ với bộ 3 túi 999.000đ (999.000 / 3)",
+     "priceCheckedAt": "2026-11-15"
     }
    ]
   },
@@ -4400,7 +4400,7 @@
    "cat": "thanghoa",
    "type": "sau-rieng-thang-hoa",
    "line": "Sấy thăng hoa",
-   "pitch": "3 túi ba vị, phiên bản giới hạn",
+   "pitch": "3 túi ba vị, phiên bản giới hạn, đã hết",
    "pack": "",
    "images": [
     {
@@ -4413,7 +4413,7 @@
     }
    ],
    "verify": false,
-   "note": "Giá bán lấy ở từng biến thể. oos:true trên biến thể 3 túi khi hết hàng.",
+   "note": "Bộ ba túi là phiên bản giới hạn và đã hết. Bộ hai túi vẫn còn.",
    "variants": [
     {
      "code": "VZ-PS-CB3-300",
@@ -4421,9 +4421,9 @@
      "weightLabel": "3 túi · 3 × 100g · 3 vị",
      "bags": 3,
      "limited": true,
-     "oos": false,
+     "oos": true,
      "verify": false,
-     "note": "Phiên bản giới hạn. Mỗi túi một vị.",
+     "note": "Phiên bản giới hạn, đã hết. Mỗi túi một vị.",
      "price": 999000,
      "priceSource": "Chủ shop chốt giá bộ 3 túi phiên bản giới hạn",
      "priceCheckedAt": "2026-11-15"
@@ -4432,10 +4432,11 @@
      "code": "VZ-PS-CB2-200",
      "weightG": 200,
      "weightLabel": "2 túi · 2 × 100g · 2 vị",
+     "bags": 2,
      "verify": false,
-     "note": "2 vị khác nhau, ghi vị ở ghi chú.",
-     "price": 375000,
-     "priceSource": "Giá combo 2 vị Premium Shrinking giữ nguyên",
+     "note": "Hai vị tùy chọn. Nhắn Mộc Quả tên hai vị muốn nhận.",
+     "price": 666000,
+     "priceSource": "2 × túi lẻ 333.000đ",
      "priceCheckedAt": "2026-11-15"
     }
    ]
