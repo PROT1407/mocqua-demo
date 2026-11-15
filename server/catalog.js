@@ -302,6 +302,68 @@ export function getShelf() {
   }));
 }
 
+const RI6 = /ri\s*6/i;
+
+function inStockVariant(variant) {
+  return Boolean(variant && variant.price > 0 && !variant.oos);
+}
+
+function safePitch(text) {
+  const value = String(text || '').trim();
+  if (!value || /đã hết|hết hàng/i.test(value)) return '';
+  return value;
+}
+
+function isRi6(product) {
+  return RI6.test(product?.id || '') || RI6.test(product?.name || '');
+}
+
+function isSetCombo(product) {
+  return Boolean(product?.mixed || product?.comboOf?.length || /^combo\b/i.test(product?.name || ''));
+}
+
+// Món còn hàng cùng loại, nổi bật trước. Không gồm Ri6. Biến thể khác của chính món hết hàng (ví dụ bộ 2 túi) được giữ lại.
+export function replacementsFor(sku, catalog = getShopCatalog()) {
+  let source = null;
+  for (const product of catalog.products) {
+    if (product.variants.some((variant) => variant.sku === sku)) {
+      source = product;
+      break;
+    }
+  }
+  if (!source) return [];
+  const pick = (product) => product.variants.find((variant) => variant.sku === product.defaultSku && inStockVariant(variant))
+    || product.variants.find(inStockVariant);
+  const singles = [];
+  const siblings = [];
+  for (const product of catalog.products) {
+    if (product.hidden || product.oos || isRi6(product)) continue;
+    if (source.fruit ? product.fruit !== source.fruit : product.cat !== source.cat) continue;
+    const variant = pick(product);
+    if (!variant || variant.sku === sku) continue;
+    const card = {
+      sku: variant.sku,
+      name: product.name,
+      w: variant.w || '',
+      price: variant.price,
+      img: variant.img || product.cardImg || '',
+      href: `/san-pham/${encodeURIComponent(product.id)}?sku=${encodeURIComponent(variant.sku)}`,
+      pitch: safePitch(product.pitch),
+    };
+    if (product.id === source.id) {
+      card.name = `${product.brandName} · ${variant.w}`;
+      if (!card.pitch && variant.bags > 1) card.pitch = `${variant.bags} túi, còn hàng.`;
+      siblings.push(card);
+    } else if (!isSetCombo(product)) {
+      singles.push({ card, product, featured: product.featured ?? 999, name: product.name });
+    }
+  }
+  const later = (product) => (/monthong/i.test(product.name) ? 2 : product.brandKey === 'goodgood' ? 0 : 1);
+  singles.sort((a, b) => a.featured - b.featured || later(a.product) - later(b.product) || a.name.localeCompare(b.name, 'vi'));
+  const room = siblings.length ? 3 : 4;
+  return [...singles.slice(0, room).map((row) => row.card), ...siblings].slice(0, 4);
+}
+
 export function getShopCatalog(now = new Date()) {
   const { mq } = loadBase();
   const settings = getSettings();

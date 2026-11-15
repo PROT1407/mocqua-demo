@@ -4,7 +4,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { ROOT } from './paths.js';
 import { problem } from './format.js';
-import { getShopCatalog, getProductPage, adminProducts, skuExists } from './catalog.js';
+import { getShopCatalog, getProductPage, adminProducts, skuExists, lookupSku, replacementsFor } from './catalog.js';
 import { priceItems } from './promo.js';
 import { dealBySku } from './deals.js';
 
@@ -125,8 +125,20 @@ export function createApp() {
   });
 
   app.post('/api/quote', wrap((req, res) => {
-    const priced = priceItems(req.body?.items, { allowEmpty: true, extras: true });
-    res.json(priced);
+    try {
+      const priced = priceItems(req.body?.items, { allowEmpty: true, extras: true });
+      res.json(priced);
+    } catch (err) {
+      if (err.expose && /hết hàng/.test(err.message)) {
+        const items = Array.isArray(req.body?.items) ? req.body.items : [];
+        const sku = items.map((item) => item?.sku).find((code) => {
+          const hit = lookupSku(code);
+          return hit && (hit.product.oos || hit.variant?.oos);
+        });
+        err.alts = replacementsFor(sku);
+      }
+      throw err;
+    }
   }));
 
   app.post('/api/orders', limiter(30, 60 * 60 * 1000), wrap((req, res) => {
@@ -465,7 +477,7 @@ export function createApp() {
     if (status === 413) message = 'Dữ liệu gửi lên quá lớn.';
     if (err.type === 'entity.parse.failed') message = 'Không đọc được JSON. Dùng file Xuất tất cả (JSON) để nhập lại.';
     if (req.path.startsWith('/api/') || req.headers.accept?.includes('application/json')) {
-      res.status(status).json({ error: message });
+      res.status(status).json({ error: message, ...(Array.isArray(err.alts) ? { alts: err.alts } : {}) });
       return;
     }
     html(res, status, errorPage(message, status));

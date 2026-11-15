@@ -79,10 +79,22 @@ async function draw() {
   }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    root.innerHTML = `<div class="empty"><h2>Giỏ chưa tính được.</h2><p>${data.error || 'Bạn thử lại giúp.'}</p><button class="btn" type="button" id="cart-clear">Xoá giỏ và chọn lại</button></div>`;
+    const alts = Array.isArray(data.alts) ? data.alts : [];
+    root.innerHTML = `<div class="empty"><h2>Giỏ chưa tính được.</h2><p>${esc(data.error || 'Bạn thử lại giúp.')}</p><button class="btn" type="button" id="cart-clear">Xoá giỏ và chọn lại</button>${alts.length ? `<div class="alts"><h2>Gợi ý thay thế</h2><div class="alts__row">${alts.map((item) => `<article class="alt">
+      <a href="${esc(item.href)}"><img src="${esc(item.img)}" alt="" width="64" height="80" loading="lazy"></a>
+      <div><a href="${esc(item.href)}">${esc(item.name)}</a>${item.pitch ? `<small>${esc(item.pitch)}</small>` : ''}<b>${money(item.price)}</b></div>
+      <button type="button" class="btn btn--small" data-alt-add="${esc(item.sku)}">Đặt ngay</button>
+    </article>`).join('')}</div></div>` : ''}</div>`;
     document.querySelector('#cart-clear')?.addEventListener('click', () => {
       clearCart();
       draw();
+    });
+    root.querySelectorAll('[data-alt-add]').forEach((button) => {
+      button.addEventListener('click', () => {
+        add(button.dataset.altAdd, 1);
+        toast('Đã cho vào giỏ.', { href: '/gio-hang', label: 'Xem giỏ' });
+        draw();
+      });
     });
     return;
   }

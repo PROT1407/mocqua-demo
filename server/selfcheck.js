@@ -853,7 +853,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v48/);
+    assert.match(sw, /mocqua-shell-v49/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
@@ -1129,6 +1129,17 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"oos":true/);
     assert.match(cb3, /Phiên bản giới hạn/);
     assert.match(cb3, /Hết hàng/);
+    assert.match(cb3, /Gợi ý thay thế/);
+    const swaps = cb3.split('"swaps":')[1].split(',"variants"')[0];
+    assert.match(swaps, /MQ-THSR-105-YM/);
+    assert.match(swaps, /MQ-THSR-110-CH/);
+    assert.match(swaps, /MQ-GSR-100-GG/);
+    assert.match(swaps, /VZ-PS-CB2-200/);
+    assert.doesNotMatch(swaps, /[Rr]i6|mqz-sau-rieng-ri6/);
+    const sold = await (await fetch(base + '/api/quote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: [{ sku: 'VZ-PS-CB3-300', qty: 1 }] }) })).json();
+    assert.match(sold.error, /hết hàng/);
+    assert.ok(sold.alts.some((item) => item.sku === 'MQ-THSR-105-YM' && item.price > 0 && item.href && item.img));
+    assert.deepEqual(sold.alts.map((item) => item.sku), ['MQ-THSR-105-YM', 'MQ-THSR-110-CH', 'MQ-GSR-100-GG', 'VZ-PS-CB2-200']);
     assert.doesNotMatch(cb3, /oos:true|ô Ghi chú/);
     assert.match(cb3, /3 túi/);
     assert.doesNotMatch(cb3, /viza-ke-02|"shelf":\{/);

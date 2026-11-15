@@ -1,5 +1,5 @@
 import { esc, vnd } from './format.js';
-import { brandOrder } from './catalog.js';
+import { brandOrder, replacementsFor } from './catalog.js';
 import { STATUSES, getSettings } from './db.js';
 import { bannerText, isComboProduct, ORDER_TIERS, promoTiers, tierTitle, shortMoney } from './promo.js';
 import { chooserOptions, giftBox, listGiftBoxes, swapPool } from './giftbox.js';
@@ -255,6 +255,15 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
       ${giftTune ? `<a class="textlink" href="/hop-qua/${encodeURIComponent(product.id)}">Đổi vị</a>` : ''}
     </div>
   </article>`;
+}
+
+function altCards(items) {
+  if (!items?.length) return '';
+  return `<h2>Gợi ý thay thế</h2><div class="alts__row">${items.map((item) => `<article class="alt">
+      <a href="${esc(item.href)}"><img src="${esc(item.img)}" alt="" width="64" height="80" loading="lazy"></a>
+      <div><a href="${esc(item.href)}">${esc(item.name)}</a>${item.pitch ? `<small>${esc(item.pitch)}</small>` : ''}<b>${esc(vnd(item.price))}</b></div>
+      <button type="button" class="btn btn--small" data-alt-add="${esc(item.sku)}">Đặt ngay</button>
+    </article>`).join('')}</div>`;
 }
 
 function statusBadge(product, lead, soldOut) {
@@ -603,6 +612,7 @@ export function productPage(product, catalog) {
     shelves: product.shelves || [],
     photos: product.photos || [],
     fit45: product.fit45 || [],
+    swaps: Object.fromEntries(product.variants.filter((v) => v.oos || product.oos).map((v) => [v.sku, replacementsFor(v.sku, catalog)])),
     variants: product.variants.map((v) => ({
       sku: v.sku, w: v.w, g: v.g, price: v.price,
       ...(v.bags ? { bags: v.bags } : {}),
@@ -647,6 +657,8 @@ export function productPage(product, catalog) {
           <label class="qty"><span class="sr">Số lượng</span><input id="pdp-qty" type="number" min="1" max="99" value="1" inputmode="numeric"></label>
           <button class="btn" type="button" id="pdp-add" data-add>${product.oos ? 'Hết hàng đợt này' : (product.variants.find((v) => v.sku === product.defaultSku)?.oos ? 'Hết hàng' : 'Cho vào giỏ')}</button>
         </div>
+        <p class="oosnote" id="pdp-oos"${product.oos || product.variants.find((v) => v.sku === product.defaultSku)?.oos ? '' : ' hidden'}>Hết hàng. Xóa bỏ lựa chọn này và chọn lại.</p>
+        <div class="alts" id="pdp-alts"${client.swaps[product.defaultSku]?.length ? '' : ' hidden'}>${altCards(client.swaps[product.defaultSku])}</div>
         ${inComboCards(product, catalog)}
         <ul class="trust">${trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       </div>
