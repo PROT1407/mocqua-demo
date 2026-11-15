@@ -258,6 +258,7 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
 }
 
 function statusBadge(product, lead, soldOut) {
+  if (soldOut && lead?.limited) return '<span class="badge badge--tag">Phiên bản giới hạn</span><span class="badge badge--oos">Hết hàng</span>';
   if (soldOut) return '<span class="badge badge--oos">Hết hàng</span>';
   const onSale = lead?.promo || product.variants.some((v) => v.promo && v.compareAt > v.price);
   if (onSale) return '<span class="badge badge--tag">Khuyến mãi</span>';
@@ -644,7 +645,7 @@ export function productPage(product, catalog) {
         </fieldset>
         <div class="buyrow">
           <label class="qty"><span class="sr">Số lượng</span><input id="pdp-qty" type="number" min="1" max="99" value="1" inputmode="numeric"></label>
-          <button class="btn" type="button" id="pdp-add" data-add>${product.oos ? 'Hết hàng đợt này' : 'Cho vào giỏ'}</button>
+          <button class="btn" type="button" id="pdp-add" data-add>${product.oos ? 'Hết hàng đợt này' : (product.variants.find((v) => v.sku === product.defaultSku)?.oos ? 'Hết hàng' : 'Cho vào giỏ')}</button>
         </div>
         ${inComboCards(product, catalog)}
         <ul class="trust">${trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
@@ -654,7 +655,7 @@ export function productPage(product, catalog) {
     ${kemBlock(product, kem)}
     <div class="buysticky">
       <div><b id="pdp-sticky-price"></b><span id="pdp-sticky-label"></span></div>
-      <button class="btn" type="button" id="pdp-add-2" data-add>${product.oos ? 'Hết hàng' : 'Cho vào giỏ'}</button>
+      <button class="btn" type="button" id="pdp-add-2" data-add>${product.oos || product.variants.find((v) => v.sku === product.defaultSku)?.oos ? 'Hết hàng' : 'Cho vào giỏ'}</button>
     </div>
     ${jsonScript('product-data', client)}
   </main>`;

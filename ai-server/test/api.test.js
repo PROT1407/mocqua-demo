@@ -359,6 +359,11 @@ test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
   assert.match(built.system, /Mít sấy giòn/);
   assert.match(built.system, /Sấy giòn \| Mít thái sấy giòn/);
   assert.match(built.system, /hương vị đặc biệt, ngọt thanh, không gắt/);
+  const premium = items.find((item) => item.sku === 'VZ-PS-CB3-300');
+  assert.equal(premium.limited, true);
+  assert.equal(premium.oos, true);
+  assert.match(formatCatalog([premium], during), /phiên bản giới hạn, hết hàng/);
+  assert.doesNotMatch(formatCatalog([premium], during), /oos:true|ô Ghi chú/);
   const catalogHead = built.system.split('DANH MỤC ĐANG BÁN')[1];
   assert.match(catalogHead, /Sấy thăng hoa \| Sầu riêng sấy thăng hoa \| 105g/);
   assert.doesNotMatch(SYSTEM_PROMPT, /múi nguyên vị|Nổi bật/);
