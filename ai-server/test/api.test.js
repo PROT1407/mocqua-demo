@@ -357,6 +357,11 @@ test('mít thái khớp theo từ khóa, giá lấy từ danh mục', () => {
   assert.match(built.system, /159000/);
   assert.match(built.system, /Mít thái sấy giòn/);
   assert.match(built.system, /Mít sấy giòn/);
+  assert.match(built.system, /Sấy giòn \| Mít thái sấy giòn/);
+  assert.match(built.system, /hương vị đặc biệt, ngọt thanh, không gắt/);
+  const catalogHead = built.system.split('DANH MỤC ĐANG BÁN')[1];
+  assert.match(catalogHead, /Sấy thăng hoa \| Sầu riêng sấy thăng hoa \| 105g/);
+  assert.doesNotMatch(SYSTEM_PROMPT, /múi nguyên vị|Nổi bật/);
   assert.doesNotMatch(SYSTEM_PROMPT, /74000|139000|159000|99000|165000|33000/);
   assert.match(SYSTEM_PROMPT, /đến hết 30\/11/);
   assert.match(SYSTEM_PROMPT, /để em kiểm tra/);
@@ -391,8 +396,8 @@ test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', ()
   assert.match(beforeText, /74000 \(khuyến mãi 74000, giá gốc 99000, hết KM đến 30\/11\)/);
   assert.match(beforeText, /139000 \(khuyến mãi 139000, giá gốc 165000, hết KM đến 30\/11\)/);
   assert.doesNotMatch(afterFresh, /khuyến mãi|KM đến 30\/11/);
-  assert.match(afterFresh, /Mít thái sấy giòn \| 300g \| 99000$/m);
-  assert.match(afterFresh, /Mít thái sấy giòn \| 500g \| 165000$/m);
+  assert.match(afterFresh, /Mít thái sấy giòn \| 300g \| 99000( \| |$)/m);
+  assert.match(afterFresh, /Mít thái sấy giòn \| 500g \| 165000( \| |$)/m);
   assert.doesNotMatch(afterFresh, /Mít thái sấy giòn \| 300g \| 74000|Mít thái sấy giòn \| 500g \| 139000/);
   const xoai = afterLines.filter((line) => line.includes('Xoài'));
   assert.ok(xoai.length > 0);
@@ -404,8 +409,8 @@ test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', ()
   assert.match(ask.system, /khuyến mãi 74000, giá gốc 99000/);
   const later = buildAssistant('mít thái giá sao', [], { ok: true, stale: false, items: cached, updated: '' }, { now: after });
   const laterCatalog = later.system.split('DANH MỤC ĐANG BÁN')[1].split('\n').slice(1).join('\n');
-  assert.match(laterCatalog, /Mít thái sấy giòn \| 300g \| 99000$/m);
-  assert.match(laterCatalog, /Mít thái sấy giòn \| 500g \| 165000$/m);
+  assert.match(laterCatalog, /Mít thái sấy giòn \| 300g \| 99000( \| |$)/m);
+  assert.match(laterCatalog, /Mít thái sấy giòn \| 500g \| 165000( \| |$)/m);
   assert.doesNotMatch(laterCatalog, /khuyến mãi|KM đến 30\/11/);
   assert.doesNotMatch(laterCatalog, /Mít thái sấy giòn \| 300g \| 74000|Mít thái sấy giòn \| 500g \| 139000/);
 });
@@ -455,7 +460,7 @@ test('prompt không nhét giá sản phẩm có sẵn, và từ chối câu quá
 });
 
 test('hỏi địa chỉ shop thì trả đúng câu từ cấu hình', () => {
-  const expected = 'Địa chỉ: 376/15, phường Bàn Cờ, Quận 3, TP.HCM. Hotline đặt hàng: 0919 997 283.';
+  const expected = 'Địa chỉ: 376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM. Hotline đặt hàng: 0919 997 283, 0931 330 248.';
   assert.equal(shopAddressReply(), expected);
   assert.equal(shopInfo.hotlineTel, '0919997283');
   assert.doesNotMatch(SYSTEM_PROMPT, /376\/15|0919 997 283/);

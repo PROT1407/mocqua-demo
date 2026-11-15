@@ -67,12 +67,16 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
           if (text) aliases.push(text);
         }
       }
+      const featured = Number.isInteger(product?.featured) ? product.featured : null;
       lines.push({
         id,
         shopId,
         name,
         brand,
         category,
+        line: clean(product?.line),
+        pitch: clean(product?.pitch),
+        ...(featured != null ? { featured } : {}),
         sku,
         weight,
         grams: Number.isFinite(grams) ? grams : null,
@@ -83,7 +87,7 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
       });
     }
   }
-  lines.sort((a, b) => a.category.localeCompare(b.category, 'vi') || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
+  lines.sort((a, b) => (a.featured ?? 9999) - (b.featured ?? 9999) || a.category.localeCompare(b.category, 'vi') || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
   return lines;
 }
 
@@ -97,7 +101,7 @@ function quotedPrice(row, now) {
 export function formatCatalog(lines, now = new Date()) {
   if (!lines?.length) return '';
   return lines.map((row) => {
-    return [row.brand, row.name, row.weight, quotedPrice(row, now), row.url].filter(Boolean).join(' | ');
+    return [row.brand, row.line, row.name, row.weight, quotedPrice(row, now), row.pitch, row.url].filter(Boolean).join(' | ');
   }).join('\n');
 }
 
@@ -182,7 +186,7 @@ export function relatedItems(items, message, limit = 12) {
     if (matched === query.length) score += 20;
     scored.push({ item, score, matched });
   }
-  scored.sort((a, b) => b.matched - a.matched || b.score - a.score || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
+  scored.sort((a, b) => b.matched - a.matched || b.score - a.score || (a.item.featured ?? 9999) - (b.item.featured ?? 9999) || a.item.name.localeCompare(b.item.name, 'vi') || String(a.item.sku).localeCompare(String(b.item.sku)));
   return scored.map((row) => row.item).slice(0, limit);
 }
 

@@ -23,18 +23,7 @@ const CAT_INTRO = {
 };
 const BAND_MIN = 4;
 const EXTRA = ['omai', 'set', 'hat'];
-// Khối "Nổi bật" đầu /cua-hang (chỉ khi chưa lọc) và món đứng đầu mỗi cách sấy. Theo thứ tự này; id ẩn/không có thì bỏ qua.
-// Chỉ đổi thứ tự hiển thị — không đụng mã, giá hay nút mua ở /danh-muc.
-const FEATURED = [
-  'mqz-sau-rieng-ri6-thang-hoa',
-  'sau-rieng-say-thang-hoa-cheers',
-  'vz-ps-cb3',
-  'xoai-say-deo',
-  'mqz-mit-say-gion',
-  'xoai-chin-cay',
-  'combo-xoai-say-deo-100g',
-  'mit-say-gion',
-];
+// Nổi bật lấy từ danh mục (featured = thứ tự). Món đang khuyến mãi mà chưa có số thì xếp sau.
 
 function layout({ title, description, page, body, scripts = [], styles = [] }) {
   const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
@@ -220,7 +209,24 @@ function cardImage(product) {
   return { hero, img, src: hero?.thumb || img, native45: /-45\.jpg$/.test(img) };
 }
 
-export function productCard(product, { eager = false, cls = '', giftTune = false } = {}) {
+function onPromo(product) {
+  return (product.variants || []).some((variant) => variant.promo && variant.compareAt > variant.price);
+}
+
+export function spotlight(catalog) {
+  const sorted = catalog.products
+    .filter((product) => Number.isInteger(product.featured) || onPromo(product))
+    .sort((a, b) => (a.featured ?? 500) - (b.featured ?? 500) || a.name.localeCompare(b.name, 'vi'));
+  const seen = new Set();
+  return sorted.filter((product) => {
+    const key = Number.isInteger(product.featured) ? product.featured : product.id;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+export function productCard(product, { eager = false, cls = '', giftTune = false, showPitch = false } = {}) {
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
   const { hero, img } = cardImage(product);
   const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
@@ -236,6 +242,7 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
     <div class="card__body">
       <p class="card__brand">${esc(product.brandName)}</p>
       <h3><a href="${href}">${esc(product.name)}</a></h3>
+      ${showPitch && product.pitch ? `<p class="card__meta">${esc(product.pitch)}</p>` : ''}
       <p class="card__meta">${esc(product.weightLabel)}</p>
       <p class="card__price">${priceHtml(product)}${product.deal ? ` ${wasPrice(product.deal.sum)}` : ''}</p>
       ${canBuy
@@ -255,7 +262,7 @@ export function homePage(catalog) {
   attachDeals(catalog);
   const byCat = Object.fromEntries(catalog.cats.map((c) => [c.id, { ...c, count: catalog.products.filter((p) => p.cat === c.id).length }]));
   const tiles = PROC.map((id) => byCat[id]).filter(Boolean);
-  const picks = [...catalog.products].filter((p) => p.priceFrom > 0 && !p.oos).sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name, 'vi')).slice(0, 8);
+  const picks = spotlight(catalog).filter((p) => p.priceFrom > 0 && !p.oos);
   const shots = catalog.shelf.map((s, i) => `<button type="button" class="shot" data-shot="${esc(s.src)}" data-cap="${esc(s.cap)}">
       <img src="${esc(s.thumb)}" alt="${esc(s.cap)}" loading="lazy" width="640" height="480">
       <span>${esc(s.cap)}</span>
@@ -300,12 +307,12 @@ export function homePage(catalog) {
       </a>`).join('')}
     </div>
   </section>
-  <section class="wrap">
+  <section class="wrap" id="noi-bat">
     <div class="band__h">
-      <h2>Hay được hỏi</h2>
+      <h2>Nổi bật &amp; Khuyến mãi</h2>
       <a href="/cua-hang">Xem tất cả</a>
     </div>
-    <div class="grid">${picks.map(productCard).join('')}</div>
+    <div class="grid">${picks.map((p) => productCard(p, { showPitch: true })).join('')}</div>
   </section>
   <section class="wrap giftband">
     <div>
@@ -395,7 +402,7 @@ export function shopPage(catalog, query) {
   const catOrder = [...PROC, ...EXTRA];
   // Mỗi cách sấy là MỘT lưới liền. Trước đây mỗi loại quả là một lưới riêng nên quả chỉ có 1–2 món để lại nửa hàng trống.
   // Trong một cách sấy: món Nổi bật trước, rồi theo quả (quả có món rank tốt nhất lên trước), hãng, rank; combo xếp cuối.
-  const featIdx = (p) => { const i = FEATURED.indexOf(p.id); return i < 0 ? 99 : i; };
+  const featIdx = (p) => (Number.isInteger(p.featured) ? p.featured : 99);
   const fruitRank = new Map();
   for (const p of final) {
     if (isComboProduct(p)) continue;
@@ -452,11 +459,11 @@ export function shopPage(catalog, query) {
     if (cat === 'set') html += `<p class="setlink"><a href="/hop-qua">Đổi vị trong hộp</a> — chạm từng ngăn, giá cập nhật ngay. Từ 20 hộp tính giá sỉ.</p>`;
     html += `<div class="grid${editorial ? ' grid--row' : ''}">${items.map((p) => card(p)).join('')}</div>`;
   }
-  const featured = filtered ? [] : FEATURED.map((id) => final.find((p) => p.id === id)).filter(Boolean);
+  const featured = filtered ? [] : spotlight(catalog);
   const featHtml = featured.length
     ? `<section class="feat" aria-labelledby="feat-h">
-      <div class="feat__h"><h2 id="feat-h">Nổi bật</h2><p>Món tiêu biểu của Mộc Quả và hàng hãng bán chạy.</p></div>
-      <div class="grid grid--feat${kieu === '2' ? ' bento' : ''}">${featured.map((p, i) => productCard(p, { eager: i < 4, cls: kieu !== '2' ? '' : i === 0 ? 'card--hero' : (i === featured.length - 1 && featured.length === 8 ? 'card--wide' : '') })).join('')}</div>
+      <div class="feat__h"><h2 id="feat-h">Nổi bật &amp; Khuyến mãi</h2><p>Món bán chạy và món đang giảm, giá lấy từ danh mục.</p></div>
+      <div class="grid grid--feat${kieu === '2' ? ' bento' : ''}">${featured.map((p, i) => productCard(p, { eager: i < 4, showPitch: true, cls: kieu !== '2' ? '' : i === 0 ? 'card--hero' : '' })).join('')}</div>
     </section>`
     : '';
   const tierBox = `<ul class="tiers" aria-label="Ưu đãi theo đơn">

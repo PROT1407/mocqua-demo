@@ -62,6 +62,10 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(home, /huydaigia1407@gmail.com/);
     assert.match(home, /Nguyễn Đình Chiểu/);
     assert.match(home, /Bốn cách sấy/);
+    assert.match(home, /Nổi bật &amp; Khuyến mãi/);
+    assert.match(home, /sầu riêng sấy thăng hoa, múi nguyên vị/);
+    assert.match(home, /P\. Bàn Cờ, TP\.HCM/);
+    assert.doesNotMatch(home.split('Nổi bật')[1].split('Ưu đãi theo đơn')[0], /Ri6/);
     assert.match(home, /viza-ke-05/);
     assert.match(home, /xoai-deo-muoi-ot/);
 
@@ -814,6 +818,11 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(shop, /sau-rieng-say-viza-food/);
     // Bố cục cân đối: mỗi cách sấy một lưới liền, có khối Nổi bật và 3 mức ưu đãi; món ẩn bằng cờ hide trong data.js không hiện.
     assert.match(shop, /class="feat"/);
+    assert.match(shop, /Nổi bật &amp; Khuyến mãi/);
+    const feat = shop.split('id="feat-h"')[1].split('</section>')[0];
+    assert.match(feat, /sầu riêng sấy thăng hoa, múi nguyên vị/);
+    assert.match(feat, /hương vị đặc biệt, ngọt thanh, không gắt/);
+    assert.doesNotMatch(feat, /Ri6/);
     assert.match(shop, /class="tiers"/);
     assert.doesNotMatch(shop, /class="fhead"/);
     assert.doesNotMatch(shop, /mqz-xxx/);
