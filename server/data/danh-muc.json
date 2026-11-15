@@ -4296,7 +4296,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
+   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
    "variants": [
     {
      "code": "VZ-PS-GD-100",
@@ -4337,7 +4337,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
+   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
    "variants": [
     {
      "code": "VZ-PS-RY-100",
@@ -4378,7 +4378,7 @@
     }
    ],
    "verify": false,
-   "note": "Combo 2 vị khác nhau (2 × 100g): 375.000đ · Combo 3 vị Golden + Royal + Yummy (3 × 100g): 529.000đ, tiết kiệm 68.000đ.",
+   "note": "Bộ 3 túi Golden + Royal + Yummy là phiên bản giới hạn (VZ-PS-CB3-300). Bản 2 túi khác nhau vẫn có (VZ-PS-CB2-200).",
    "variants": [
     {
      "code": "VZ-PS-YD-100",
@@ -4389,6 +4389,54 @@
      "price": 199000,
      "priceSource": "Giá thị trường VN (trung vị) – sầu riêng sấy thăng hoa 100g ~193k",
      "priceCheckedAt": "2026-10-31"
+    }
+   ]
+  },
+  {
+   "id": "vz-ps-cb3",
+   "brand": "viza-food",
+   "label": "Premium Shrinking Dried Durian",
+   "name": "Combo 3 túi sầu riêng sấy thăng hoa Premium Shrinking (Golden + Royal + Yummy)",
+   "cat": "thanghoa",
+   "type": "sau-rieng-thang-hoa",
+   "line": "Sấy thăng hoa",
+   "pitch": "bộ 3 túi Golden, Royal và Yummy, phiên bản giới hạn",
+   "pack": "",
+   "images": [
+    {
+     "src": "/assets/catalog/vz-ps-cb3-3tui.webp",
+     "thumb": "/assets/catalog/vz-ps-cb3-3tui-sm.webp",
+     "w": 1200,
+     "h": 1500,
+     "alt": "3 túi Golden, Royal và Yummy Durian",
+     "kind": "hero"
+    }
+   ],
+   "verify": false,
+   "note": "Giá bán lấy ở từng biến thể. oos:true trên biến thể 3 túi khi hết hàng.",
+   "variants": [
+    {
+     "code": "VZ-PS-CB3-300",
+     "weightG": 300,
+     "weightLabel": "3 túi · 3 × 100g · 3 vị",
+     "bags": 3,
+     "limited": true,
+     "oos": false,
+     "verify": false,
+     "note": "Phiên bản giới hạn. Mỗi túi một vị.",
+     "price": 999000,
+     "priceSource": "Chủ shop chốt giá bộ 3 túi phiên bản giới hạn",
+     "priceCheckedAt": "2026-11-15"
+    },
+    {
+     "code": "VZ-PS-CB2-200",
+     "weightG": 200,
+     "weightLabel": "2 túi · 2 × 100g · 2 vị",
+     "verify": false,
+     "note": "2 vị khác nhau, ghi vị ở ghi chú.",
+     "price": 375000,
+     "priceSource": "Giá combo 2 vị Premium Shrinking giữ nguyên",
+     "priceCheckedAt": "2026-11-15"
     }
    ]
   },

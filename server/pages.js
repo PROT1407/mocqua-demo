@@ -131,6 +131,8 @@ function priceLabel(product) {
 }
 
 function priceHtml(product) {
+  const lead = product.variants.find((v) => v.sku === product.defaultSku);
+  if (lead?.limited && lead.price) return esc(vnd(lead.price));
   const text = esc(priceLabel(product));
   const from = product.variants.find((v) => v.price === product.priceFrom);
   if (!(from?.compareAt > from?.price)) return text;
@@ -230,24 +232,26 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
   const href = `/san-pham/${encodeURIComponent(product.id)}`;
   const { hero, img } = cardImage(product);
   const srcset = hero?.thumb ? ` srcset="${esc(hero.thumb)} 480w, ${esc(hero.src)} 1000w" sizes="(max-width: 719px) 50vw, (max-width: 979px) 33vw, 300px"` : '';
-  const canBuy = product.defaultSku && product.priceFrom > 0 && !product.oos;
+  const lead = product.variants.find((v) => v.sku === product.defaultSku) || product.variants[0];
+  const soldOut = product.oos || lead?.oos;
+  const canBuy = product.defaultSku && product.priceFrom > 0 && !soldOut;
   // Ảnh không phải 4:5 dựng sẵn (ảnh vuông/ngang/dọc mượn từ /danh-muc): hiện trọn ảnh, căn giữa trong khung 4:5, không cắt.
   const fit = /-45\.jpg$/.test(img) ? '' : ' card__img--fit';
   return `<article class="card${cls ? ` ${cls}` : ''}">
     <a class="card__img${fit}" href="${href}">
       <img src="${esc(hero?.thumb || img)}"${srcset} alt="${esc(product.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="480" height="600">
       <span class="badge badge--${esc(product.cat)}">${esc(product.catShort)}</span>
-      ${product.oos ? '<span class="badge badge--oos">Hết hàng</span>' : product.deal ? saveBadge(product.deal.save) : ''}
+      ${soldOut ? '<span class="badge badge--oos">Hết hàng</span>' : lead?.limited ? '<span class="badge badge--oos">Phiên bản giới hạn</span>' : product.deal ? saveBadge(product.deal.save) : ''}
     </a>
     <div class="card__body">
       <p class="card__brand">${esc(product.brandName)}</p>
       <h3><a href="${href}">${esc(product.name)}</a></h3>
       ${showPitch && product.pitch ? `<p class="card__meta">${esc(product.pitch)}</p>` : ''}
-      <p class="card__meta">${esc(product.weightLabel)}</p>
+      <p class="card__meta">${esc(lead?.w || product.weightLabel)}${lead?.bags > 1 && lead.price ? ` · ${esc(vnd(Math.round(lead.price / lead.bags)))}/túi` : ''}</p>
       <p class="card__price">${priceHtml(product)}${product.deal ? ` ${wasPrice(product.deal.sum)}` : ''}</p>
       ${canBuy
         ? `<button type="button" class="btn btn--small" data-add-sku="${esc(product.defaultSku)}">Cho vào giỏ</button>`
-        : `<a class="btn btn--small btn--ghost" href="${href}">${product.oos ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
+        : `<a class="btn btn--small btn--ghost" href="${href}">${soldOut ? 'Hết hàng · Xem' : 'Xem chi tiết'}</a>`}
       ${giftTune ? `<a class="textlink" href="/hop-qua/${encodeURIComponent(product.id)}">Đổi vị</a>` : ''}
     </div>
   </article>`;
@@ -570,6 +574,9 @@ export function productPage(product, catalog) {
     fit45: product.fit45 || [],
     variants: product.variants.map((v) => ({
       sku: v.sku, w: v.w, g: v.g, price: v.price,
+      ...(v.bags ? { bags: v.bags } : {}),
+      ...(v.limited ? { limited: true } : {}),
+      ...(v.oos ? { oos: true } : {}),
       ...(v.compareAt != null ? { compareAt: v.compareAt } : {}),
       ...(v.promo ? { promo: { label: v.promo.label, endsAt: v.promo.endsAt, price: v.promo.price, originalPrice: v.promo.originalPrice } } : {}),
       pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),

@@ -162,7 +162,7 @@ export function priceItems(rawItems, { allowEmpty = false, extras = false, now =
     }
     const hit = lookupSku(line.sku, { now });
     if (!hit) throw problem(400, 'Một món trong giỏ không còn bán. Bạn mở giỏ và bỏ món đó giúp.');
-    if (hit.product.oos) throw problem(400, `${hit.name} đang hết hàng đợt này.`);
+    if (hit.product.oos || hit.variant?.oos) throw problem(400, `${hit.name} đang hết hàng đợt này.`);
     if (!(hit.price > 0)) throw problem(400, `${hit.name} chưa có giá bán.`);
     items.push({
       sku: hit.sku,

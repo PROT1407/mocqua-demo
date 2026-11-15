@@ -1110,7 +1110,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.equal(dmv.get('MQZ-DTL-500-HV'), 205000);
       // Rà soát giá 03/11/2026 (mục 1–6).
       assert.equal(priceOf.get('MQZ-THSR-200'), 429000);
-      assert.equal(priceOf.get('VZ-PS-CB3-300'), 529000);
+      assert.equal(priceOf.get('VZ-PS-CB3-300'), 999000);
       assert.equal(dmp.get('vz-gg-me').variants[0].code, 'VZ-GG-ME-80');
       assert.equal(dmp.get('vz-gg-me').variants[0].weightLabel, '80g');
       assert.equal(dmp.get('vz-ym-srth').variants[0].weightLabel, '105g');
@@ -1120,6 +1120,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Combo Premium 3 vị: ảnh đầu là 3 túi đứng cạnh nhau, rồi từng túi; không còn ảnh kệ Cheers+ (viza-ke-02).
     const cb3 = await (await fetch(base + '/san-pham/vz-ps-cb3')).text();
     assert.match(cb3, /id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ps-cb3-3tui\.webp"/);
+    assert.match(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"price":999000/);
+    assert.match(cb3, /"bags":3/);
+    assert.match(cb3, /"limited":true/);
+    assert.doesNotMatch(cb3, /"sku":"VZ-PS-CB3-300"[^}]*"oos":true/);
+    assert.match(cb3, /Phiên bản giới hạn/);
+    assert.match(cb3, /3 túi/);
     assert.doesNotMatch(cb3, /viza-ke-02|"shelf":\{/);
     assert.match(cb3, /vz-ps-cb2-2vi\.webp/);
     assert.match(cb3, /<img id="pdp-main" class="is-45"/);

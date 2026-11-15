@@ -7,7 +7,7 @@ import { resolveSale } from '../ai-server/src/sale.js';
 import { catalogData } from './danhmuc.js';
 import { CATALOG_TO_SHOP } from './dm-buy.js';
 
-const BRAND_ORDER = ['mq', 'fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'other'];
+const BRAND_ORDER = ['fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'psdd', 'ycnuts', 'mq', 'other'];
 
 const SHELF_CAPS = [
   ['viza-ke-01', 'Kệ trái cây sấy Viza Food: xoài, mít, sầu riêng'],
@@ -167,6 +167,9 @@ function presentVariant(mq, product, variant, sale) {
     ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
     ...(sale.promo ? { promo: sale.promo } : {}),
     pack: variant.pk || '',
+    bags: Number.isInteger(variant.bags) && variant.bags > 1 ? variant.bags : null,
+    limited: variant.limited === true,
+    oos: variant.oos === true,
     note: variant.note || '',
     img: resolveImg(variant.img, true),
     back: resolveImg(variant.back, true),

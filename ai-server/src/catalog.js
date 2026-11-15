@@ -68,6 +68,7 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
         }
       }
       const featured = Number.isInteger(product?.featured) ? product.featured : null;
+      const bags = Number.isInteger(variant?.bags) && variant.bags > 1 ? variant.bags : null;
       lines.push({
         id,
         shopId,
@@ -81,13 +82,17 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
         weight,
         grams: Number.isFinite(grams) ? grams : null,
         price: sale.price,
+        ...(bags ? { bags } : {}),
+        ...(variant?.limited === true || product?.limited === true ? { limited: true } : {}),
+        ...(variant?.oos === true || product?.oos === true ? { oos: true } : {}),
         ...(schedule ? { schedule } : {}),
         url,
         aliases,
       });
     }
   }
-  lines.sort((a, b) => (a.featured ?? 9999) - (b.featured ?? 9999) || a.category.localeCompare(b.category, 'vi') || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
+  const ownLabel = (row) => fold(row.brand) === 'moc qua' ? 1 : 0;
+  lines.sort((a, b) => (a.featured ?? 9999) - (b.featured ?? 9999) || ownLabel(a) - ownLabel(b) || a.category.localeCompare(b.category, 'vi') || a.name.localeCompare(b.name, 'vi') || a.sku.localeCompare(b.sku));
   return lines;
 }
 
@@ -101,7 +106,8 @@ function quotedPrice(row, now) {
 export function formatCatalog(lines, now = new Date()) {
   if (!lines?.length) return '';
   return lines.map((row) => {
-    return [row.brand, row.line, row.name, row.weight, quotedPrice(row, now), row.pitch, row.url].filter(Boolean).join(' | ');
+    const flags = [row.limited ? 'phiên bản giới hạn' : '', row.oos ? 'hết hàng' : ''].filter(Boolean).join(', ');
+    return [row.brand, row.line, row.name, row.weight, quotedPrice(row, now), row.pitch, flags, row.url].filter(Boolean).join(' | ');
   }).join('\n');
 }
 

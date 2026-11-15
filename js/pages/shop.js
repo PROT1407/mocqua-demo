@@ -14,7 +14,7 @@ $('[data-f-cat]').innerHTML=Object.entries(MQ.CATS).filter(([k,c])=>!c.soon).map
 const FR=Object.entries(MQ.FRUITS).map(([k,f])=>[k,f,live.filter(p=>p.fruit===k).length]).filter(x=>x[2]);
 $('[data-f-fruit]').innerHTML=FR.filter(x=>x[1].top||st.fruit.has(x[0])).map(([k,f,n])=>opt('fruit',k,f.name,n)).join('')+`<div class="fmore" hidden data-fmore>${FR.filter(x=>!x[1].top&&!st.fruit.has(x[0])).map(([k,f,n])=>opt('fruit',k,f.name,n)).join('')}</div><button type="button" class="fmore__btn" data-fmore-btn>+ Xem thêm ${FR.filter(x=>!x[1].top&&!st.fruit.has(x[0])).length} loại quả</button>`;
 $('[data-f-flavour]').innerHTML=Object.entries(MQ.FLAVOURS).map(([k,f])=>[k,f,live.filter(p=>p.flavour===k).length]).filter(x=>x[2]).map(([k,f,n])=>opt('flavour',k,f.name,n)).join('');
-$('[data-f-line]').innerHTML=opt('line','mq','<b class="fown">Mộc Quả</b> <small class="muted">mocqua.com</small>',live.filter(p=>p.lines.includes('mq')).length)+`<span class="fsub">Viza Food</span>`+Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>opt('line',k,l.name,live.filter(p=>p.lines.includes(k)).length)).join('');
+$('[data-f-line]').innerHTML=`<span class="fsub">Viza Food</span>`+Object.entries(MQ.LINES).filter(([k,l])=>l.maker==='viza').map(([k,l])=>opt('line',k,l.name,live.filter(p=>p.lines.includes(k)).length)).join('')+opt('line','mq','<b class="fown">Mộc Quả</b> <small class="muted">mocqua.com</small>',live.filter(p=>p.lines.includes('mq')).length);
 $('[data-f-tag]').innerHTML=Object.entries(TAGS).map(([k,l])=>opt('tag',k,l,live.filter(p=>hasTag(p,k)).length)).join('');
 /* ô danh mục có ảnh (kiểu "tile" dễ bấm) */
 const TILES=[
