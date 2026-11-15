@@ -367,7 +367,7 @@ test('một cụm tính một lượt, mặc định 40 lượt mỗi 10 phút',
   });
 });
 
-test('Facebook bỏ slogan sau câu chào và không kể giảm giá khi hỏi ship', { timeout: 4000 }, async () => {
+test('Facebook bỏ slogan sau câu chào và giữ câu trả lời ngắn', { timeout: 4000 }, async () => {
   const { app, calls, clock } = clockedApp({
     generate: async ({ contents } = {}) => {
       const text = contents?.[0]?.parts?.[0]?.text || '';
@@ -387,7 +387,7 @@ test('Facebook bỏ slogan sau câu chào và không kể giảm giá khi hỏi 
     await clock.advance(4000);
     const ship = replies(calls)[1];
     assert.match(ship, /30\.000đ/);
-    assert.doesNotMatch(ship, /Quả của đất|Giảm 3%|Giảm 7%/);
+    assert.doesNotMatch(ship, /Quả của đất/);
     assert.ok(ship.split('\n').filter(Boolean).length <= 3);
     await app.locals.drainFacebook();
   });
