@@ -1,2 +1,7 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin
+Disallow: /gio-hang
+Disallow: /api/
+
+Sitemap: https://mocqua.onrender.com/sitemap.xml

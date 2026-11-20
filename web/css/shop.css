@@ -309,6 +309,11 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .trust li { padding-left: 18px; position: relative; }
 .trust li::before { content: ""; position: absolute; left: 0; top: .55em; width: 8px; height: 8px; border-radius: 50%; background: var(--olive); }
 .prose { display: grid; gap: 22px; max-width: 46rem; }
+.faq { display: grid; gap: 8px; max-width: 46rem; margin: 8px 0 28px; }
+.faq h2 { font-size: 1.15rem; margin: 0; }
+.faq details { background: var(--paper); border-radius: 14px; padding: 0 14px; }
+.faq summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
+.faq details p { margin: 0 0 12px; color: var(--ink); }
 .prose section { display: grid; gap: 8px; }
 .prose ul { margin: 0; padding-left: 18px; }
 .spec { width: 100%; border-collapse: collapse; }
