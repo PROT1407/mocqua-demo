@@ -17,6 +17,8 @@ const packWrap = document.querySelector('#pdp-pack-wrap');
 const qty = document.querySelector('#pdp-qty');
 const stickyPrice = document.querySelector('#pdp-sticky-price');
 const stickyLabel = document.querySelector('#pdp-sticky-label');
+const oosNote = document.querySelector('#pdp-oos');
+const alts = document.querySelector('#pdp-alts');
 
 function text(value) {
   return String(value ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -118,6 +120,16 @@ function render() {
     button.disabled = gone;
     button.textContent = data.oos || current.oos ? 'Hết hàng' : 'Cho vào giỏ';
   });
+  const swaps = (data.oos || current.oos) ? (data.swaps?.[current.sku] || []) : [];
+  if (oosNote) oosNote.hidden = !(data.oos || current.oos);
+  if (alts) {
+    alts.hidden = !swaps.length;
+    alts.innerHTML = swaps.length ? `<h2>Gợi ý thay thế</h2><div class="alts__row">${swaps.map((item) => `<article class="alt">
+      <a href="${text(item.href)}"><img src="${text(item.img)}" alt="" width="64" height="80" loading="lazy"></a>
+      <div><a href="${text(item.href)}">${text(item.name)}</a>${item.pitch ? `<small>${text(item.pitch)}</small>` : ''}<b>${money(item.price)}</b></div>
+      <button type="button" class="btn btn--small" data-alt-add="${text(item.sku)}">Đặt ngay</button>
+    </article>`).join('')}</div>` : '';
+  }
   const url = new URL(location.href);
   url.searchParams.set('sku', current.sku);
   history.replaceState(null, '', url);
@@ -152,4 +164,10 @@ function buy() {
 
 document.querySelector('#pdp-add').addEventListener('click', buy);
 document.querySelector('#pdp-add-2').addEventListener('click', buy);
+alts?.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-alt-add]');
+  if (!button) return;
+  add(button.dataset.altAdd, 1);
+  toast('Đã cho vào giỏ.', { href: '/gio-hang', label: 'Xem giỏ' });
+});
 render();
