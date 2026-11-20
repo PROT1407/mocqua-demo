@@ -402,6 +402,28 @@ test('bù mốc là túi trái cây sấy nhỏ, không có bột cari hay Ri6',
   assert.match(SYSTEM_PROMPT, /không mở bằng xin lỗi/);
 });
 
+test('giá admin khoá dòng danh mục và hết hàng không lấy lại giá lịch', () => {
+  const now = new Date('2026-11-15T03:00:00.000Z');
+  const items = compactCatalog({
+    categories: [{ id: 'deo', name: 'Trái cây sấy dẻo' }],
+    products: [{
+      id: 'xoai-test',
+      name: 'Xoài sấy dẻo',
+      label: 'Good Good',
+      cat: 'deo',
+      promoEndsAt: '2026-12-01T00:00:00+07:00',
+      listPer100g: 33000,
+      variants: [{ code: 'X1', weightG: 100, weightLabel: '100g', price: 45000, priceLocked: true, compareAt: 69000, oos: true }],
+    }],
+  }, { now });
+  assert.equal(items[0].price, 45000);
+  assert.equal(items[0].oos, true);
+  const line = formatCatalog(items, now);
+  assert.match(line, /45000 \(khuyến mãi 45000, giá gốc 69000\)/);
+  assert.match(line, /hết hàng/);
+  assert.doesNotMatch(line, /33000/);
+});
+
 test('sau 1/12 ICT bot báo giá gốc mít và không nhắc khuyến mãi', () => {
   const during = new Date('2026-11-15T03:00:00.000Z');
   const after = new Date('2026-11-30T17:00:00.000Z');

@@ -191,6 +191,47 @@ function readProductOverrides(input) {
   });
 }
 
+function readVariantFlags(input) {
+  if (!Array.isArray(input) || input.length > 5000) fail('Mục hết hàng trong file sao lưu chưa đúng.');
+  const seen = new Set();
+  return input.map((row) => {
+    if (!plain(row)) fail('Một dòng hết hàng trong file sao lưu không đúng dạng.');
+    const sku = text(row.sku, 80, { required: true });
+    if (!SKU_RE.test(sku)) fail(`Mã ${sku} chưa đúng.`);
+    if (seen.has(sku)) fail(`File có mã trùng ${sku}.`);
+    seen.add(sku);
+    const oos = row.oos == null ? null : row.oos === true || row.oos === 1 ? true : row.oos === false || row.oos === 0 ? false : fail(`Hết hàng của ${sku} chưa đúng.`);
+    const compareAt = row.compareAt == null || row.compareAt === '' ? null : intField(row.compareAt, 1000, 100000000, `Giá gốc ${sku}`);
+    return { sku, oos, compareAt, updatedAt: iso(row.updatedAt, `Ngày sửa ${sku}`) };
+  });
+}
+
+function readGalleries(input) {
+  if (!Array.isArray(input) || input.length > 500) fail('Mục ảnh trong file sao lưu chưa đúng.');
+  const seen = new Set();
+  return input.map((row) => {
+    if (!plain(row)) fail('Một bộ ảnh trong file sao lưu không đúng dạng.');
+    const id = text(row.id, 120, { required: true });
+    if (!PRODUCT_RE.test(id)) fail(`Mã sản phẩm ${id} trong file chưa đúng.`);
+    if (seen.has(id)) fail(`File có bộ ảnh trùng ${id}.`);
+    seen.add(id);
+    if (!Array.isArray(row.items) || row.items.length > 24) fail(`Ảnh của ${id} chưa đúng.`);
+    const items = row.items.map((item) => {
+      if (!plain(item)) fail(`Ảnh của ${id} chưa đúng.`);
+      const file = text(item.file, 200, { required: true });
+      if (!/^(asset:[\w./-]{1,180}|upload:[a-z0-9-]{1,60}\.(jpg|png|webp))$/.test(file)) fail(`Ảnh của ${id} chưa đúng.`);
+      return {
+        file,
+        label: text(item.label, 80),
+        alt: text(item.alt, 180),
+        hero: item.hero === true,
+      };
+    });
+    if (items.length && !items.some((item) => item.hero)) items[0].hero = true;
+    return { id, items };
+  });
+}
+
 export function parseBackup(body, { restoreShop = false } = {}) {
   if (!plain(body)) fail('File không phải bản sao JSON của Mộc Quả.');
   if (body.version !== BACKUP_VERSION) fail('File không phải bản sao Mộc Quả (sai phiên bản). Dùng file Xuất tất cả (JSON).');
@@ -203,6 +244,8 @@ export function parseBackup(body, { restoreShop = false } = {}) {
     if (body.settings != null) parsed.settings = readSettings(body.settings);
     if (body.variantPrices != null) parsed.variantPrices = readVariantPrices(body.variantPrices);
     if (body.productOverrides != null) parsed.productOverrides = readProductOverrides(body.productOverrides);
+    if (body.variantFlags != null) parsed.variantFlags = readVariantFlags(body.variantFlags);
+    if (body.galleries != null) parsed.galleries = readGalleries(body.galleries);
   }
   return parsed;
 }

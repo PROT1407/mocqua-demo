@@ -57,7 +57,8 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
       const grams = Number(variant?.weightG);
       const weight = clean(variant?.weightLabel) || (Number.isFinite(grams) && grams > 0 ? `${grams}g` : '');
       const price = Number.isInteger(variant?.price) && variant.price >= 0 ? variant.price : null;
-      const schedule = saleSchedule(product, variant);
+      const priceLocked = variant?.priceLocked === true;
+      const schedule = priceLocked ? null : saleSchedule(product, variant);
       const sale = schedule ? resolveSale(schedule, now) : { price, compareAt: null, promo: null };
       const aliases = [];
       if (product?.type) aliases.push(clean(String(product.type).replace(/[-_]/g, ' ')));
@@ -81,7 +82,8 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
         sku,
         weight,
         grams: Number.isFinite(grams) ? grams : null,
-        price: sale.price,
+        price: priceLocked ? price : sale.price,
+        ...(priceLocked && Number.isInteger(variant?.compareAt) ? { compareAt: variant.compareAt, priceLocked: true } : {}),
         ...(bags ? { bags } : {}),
         ...(variant?.limited === true || product?.limited === true ? { limited: true } : {}),
         ...(variant?.oos === true || product?.oos === true ? { oos: true } : {}),
@@ -97,6 +99,13 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
 }
 
 function quotedPrice(row, now) {
+  if (row?.priceLocked) {
+    if (!(row.price > 0)) return row.price == null ? 'chưa có giá' : String(row.price);
+    if (Number.isInteger(row.compareAt) && row.compareAt > row.price) {
+      return `${row.price} (khuyến mãi ${row.price}, giá gốc ${row.compareAt})`;
+    }
+    return String(row.price);
+  }
   const sale = row?.schedule ? resolveSale(row.schedule, now) : { price: row?.price ?? null, promo: null };
   if (sale.price == null) return 'chưa có giá';
   if (!sale.promo) return String(sale.price);
@@ -281,7 +290,7 @@ export function createCatalogSource({
   fetchImpl = globalThis.fetch,
   url = process.env.MOCQUA_CATALOG_URL || DEFAULT_URL,
   origin = shopOrigin(),
-  ttlMs = Number(process.env.CATALOG_TTL_MS) || 10 * 60 * 1000,
+  ttlMs = Number(process.env.CATALOG_TTL_MS) || 2 * 60 * 1000,
   timeoutMs = Number(process.env.CATALOG_TIMEOUT_MS) || 25_000,
   failCooldownMs = Number(process.env.CATALOG_FAIL_COOLDOWN_MS) || 60_000,
   bundle = true,

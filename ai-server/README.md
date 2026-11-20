@@ -19,7 +19,7 @@ Biến tùy chọn:
 - `GEMINI_MODEL` — mặc định `gemini-3.5-flash-lite`. Đổi được khi Google ra model Flash khác.
 - `MOCQUA_CATALOG_URL` — mặc định `https://mocqua.onrender.com/api/danh-muc`. Server chỉ giữ tên, nhãn, khối lượng, giá và link `/san-pham/<shopId>` khi danh mục có slug trang cửa hàng. Không đoán link từ id danh mục.
 - `SHOP_PUBLIC_URL` — gốc link sản phẩm, mặc định `https://mocqua.onrender.com`.
-- `CATALOG_TTL_MS` — cache danh mục trong bộ nhớ, mặc định 10 phút. Lỗi tải thì dùng bản gần nhất. Lần tải đầu chờ khoảng 25 giây và thử lại một lần, vì shop miễn phí khởi động chậm. Máy chủ làm nóng danh mục ngay khi bật, không chặn cổng lắng nghe.
+- `CATALOG_TTL_MS` — cache danh mục trong bộ nhớ, mặc định 2 phút để giá và hết hàng sửa ở /admin kịp lên bot. Lỗi tải thì dùng bản gần nhất. Lần tải đầu chờ khoảng 25 giây và thử lại một lần, vì shop miễn phí khởi động chậm. Máy chủ làm nóng danh mục ngay khi bật, không chặn cổng lắng nghe.
 
 Máy chủ lắng nghe `0.0.0.0` và `PORT` (Render thường là 10000).
 

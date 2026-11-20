@@ -342,6 +342,71 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     const restored = await quote([{ sku: bag.sku, qty: 1 }]);
     assert.equal(restored.items[0].price, bag.price);
 
+    const was = small.price + 20000;
+    const flagged = await fetch(base + '/api/admin/variants/' + encodeURIComponent(small.sku), {
+      method: 'PATCH',
+      headers: auth,
+      body: JSON.stringify({ oos: true, compareAt: was }),
+    });
+    assert.equal(flagged.status, 200);
+    const sold = await fetch(base + '/api/quote', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items: [{ sku: small.sku, qty: 1 }] }),
+    });
+    assert.equal(sold.status, 400);
+    const flaggedPage = await (await fetch(base + '/san-pham/' + side.id)).text();
+    const flaggedData = JSON.parse(flaggedPage.split('id="product-data">')[1].split('</script>')[0]);
+    const flaggedVariant = flaggedData.variants.find((variant) => variant.sku === small.sku);
+    assert.equal(flaggedVariant.oos, true);
+    assert.equal(flaggedVariant.compareAt, was);
+    const { catalogCodeForShopSku } = await import('./dm-buy.js');
+    const code = catalogCodeForShopSku(small.sku);
+    if (code) {
+      const dm = await (await fetch(base + '/api/danh-muc')).json();
+      const linked = dm.products.flatMap((product) => product.variants).find((variant) => variant.code === code);
+      assert.ok(linked, code);
+      assert.equal(linked.oos, true);
+      assert.equal(linked.priceLocked, true);
+      assert.equal(linked.compareAt, was);
+    }
+    const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const uploaded = await fetch(base + '/api/admin/products/' + side.id + '/photos', {
+      method: 'POST',
+      headers: auth,
+      body: JSON.stringify({ data: png }),
+    });
+    const uploadedBody = await uploaded.json();
+    assert.equal(uploaded.status, 200, JSON.stringify(uploadedBody));
+    assert.match(uploadedBody.file, /^upload:/);
+    const photoName = uploadedBody.file.slice('upload:'.length);
+    const media = await fetch(base + '/media/' + photoName);
+    assert.equal(media.status, 200);
+    assert.match(media.headers.get('content-type') || '', /png/);
+    const galleryRes = await fetch(base + '/api/admin/products/' + side.id + '/gallery', {
+      method: 'PUT',
+      headers: auth,
+      body: JSON.stringify({ items: [{ file: uploadedBody.file, hero: true, label: 'Ảnh mới', alt: side.name }] }),
+    });
+    assert.equal(galleryRes.status, 200);
+    const heroPage = await (await fetch(base + '/san-pham/' + side.id)).text();
+    assert.match(heroPage, new RegExp('/media/' + photoName));
+    const cleared = await fetch(base + '/api/admin/variants/' + encodeURIComponent(small.sku), {
+      method: 'PATCH',
+      headers: auth,
+      body: JSON.stringify({ oos: null, compareAt: null }),
+    });
+    assert.equal(cleared.status, 200);
+    const back = await quote([{ sku: small.sku, qty: 1 }]);
+    assert.equal(back.items[0].price, small.price);
+    const clearedGallery = await fetch(base + '/api/admin/products/' + side.id + '/gallery', {
+      method: 'PUT',
+      headers: auth,
+      body: JSON.stringify({ items: [] }),
+    });
+    assert.equal(clearedGallery.status, 200);
+    assert.equal((await fetch(base + '/media/' + photoName)).status, 404);
+
     const hidden = await fetch(base + '/api/admin/products/' + side.id, {
       method: 'PATCH',
       headers: auth,
@@ -853,7 +918,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v49/);
+    assert.match(sw, /mocqua-shell-v50/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);
