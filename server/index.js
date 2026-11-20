@@ -4,22 +4,24 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { ROOT } from './paths.js';
 import { problem } from './format.js';
-import { getShopCatalog, getProductPage, adminProducts, skuExists, lookupSku, replacementsFor } from './catalog.js';
+import { getShopCatalog, getProductPage, getRawProduct, adminProducts, defaultGallery, normalizeGallery, skuExists, lookupSku, replacementsFor } from './catalog.js';
 import { priceItems } from './promo.js';
 import { dealBySku } from './deals.js';
 
 // { mã combo: { sum, save } } cho thẻ combo ở /danh-muc (tiết kiệm = tổng giá lẻ thật − giá combo).
 const dealsForClient = (catalog) => Object.fromEntries([...dealBySku(catalog)].map(([sku, d]) => [sku, { sum: d.sum, save: d.save }]));
 import { placeOrder, readCustomer } from './orders.js';
-import { applyBackup, getOrder, getSettings, isStatus, listAllOrders, listOrders, listProductOverrideRows, listVariantPriceRows, saveSettings, setProductOverride, setVariantPrice, STATUSES, updateOrderStatus } from './db.js';
+import { applyBackup, getOrder, getOverrides, getSettings, isStatus, listAllOrders, listGalleryGroups, listOrders, listProductOverrideRows, listVariantFlagRows, listVariantPriceRows, saveSettings, setGallery, setProductOverride, setVariantFlag, setVariantPrice, STATUSES, updateOrderStatus } from './db.js';
 import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.js';
 import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
 import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
-import { catalogBuyMap, withShopLinks } from './dm-buy.js';
+import { catalogBuyMap, catalogCodeForShopSku, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage, giftIndexPage, giftBuilderPage } from './pages.js';
+import { durableConfig, hydrateEdits, persistEdits } from './durable.js';
+import { decodeImage, readMedia, removeMedia, saveUpload } from './media.js';
 import { notifyNewOrder } from './telegram.js';
 import { notifySheets, sendTestNotifications } from './sheets.js';
 
@@ -80,7 +82,22 @@ function buildBackup() {
     settings: getSettings(),
     variantPrices: listVariantPriceRows(),
     productOverrides: listProductOverrideRows(),
+    variantFlags: listVariantFlagRows(),
+    galleries: listGalleryGroups(),
   };
+}
+
+function todayICT() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date());
+}
+
+function mirrorSku(sku, { price = null, clearPrice = false, flag = null } = {}) {
+  const code = catalogCodeForShopSku(sku);
+  if (code) {
+    if (clearPrice) setCatalogPrice(code, { price: null, source: '', checkedAt: '' });
+    else if (price != null) setCatalogPrice(code, { price, source: 'admin', checkedAt: todayICT() });
+  }
+  if (flag && code && code !== sku) setVariantFlag(code, flag);
 }
 
 function sendBackup(res, body, filename, type) {
@@ -96,8 +113,14 @@ export function createApp() {
   app.set('trust proxy', 1);
   const parseJson = express.json({ limit: '200kb' });
   const parseBackupBody = express.json({ limit: '8mb' });
+  const parsePhoto = express.json({ limit: '6mb' });
+  const catalogReady = hydrateEdits();
   app.use((req, res, next) => {
-    if (req.method === 'POST' && (req.path === '/api/admin/backup' || req.path === '/api/admin/price-refs/import' || req.path === '/api/admin/catalog-prices/import')) return next();
+    if (req.path === '/healthz' || req.path === '/api/health') return next();
+    catalogReady.then(() => next(), () => next());
+  });
+  app.use((req, res, next) => {
+    if (req.method === 'POST' && (req.path === '/api/admin/backup' || req.path === '/api/admin/price-refs/import' || req.path === '/api/admin/catalog-prices/import' || /^\/api\/admin\/products\/[^/]+\/photos$/.test(req.path))) return next();
     return parseJson(req, res, next);
   });
   app.use(securityHeaders);
@@ -202,7 +225,7 @@ export function createApp() {
       return;
     }
     const bank = bankConfig();
-    res.json({ ok: true, bankReady: bank.ready, bankName: bank.bankName || '' });
+    res.json({ ok: true, bankReady: bank.ready, bankName: bank.bankName || '', durable: durableConfig().enabled });
   });
 
   app.post('/api/admin/telegram-test', requireAdmin, wrap(async (_req, res) => {
@@ -319,19 +342,37 @@ export function createApp() {
     res.json({ products: adminProducts() });
   });
 
-  app.patch('/api/admin/variants/:sku', requireAdmin, wrap((req, res) => {
+  app.patch('/api/admin/variants/:sku', requireAdmin, wrap(async (req, res) => {
     const sku = String(req.params.sku || '');
     if (!skuExists(sku)) throw problem(404, 'Không thấy mã này trong danh mục.');
-    if (req.body?.price == null) {
-      setVariantPrice(sku, null);
-    } else {
-      const price = intField(req.body.price, { min: 1000, max: 100000000, label: 'Giá' });
-      setVariantPrice(sku, price);
+    const body = req.body || {};
+    let price = null;
+    let clearPrice = false;
+    if (Object.prototype.hasOwnProperty.call(body, 'price')) {
+      if (body.price == null || body.price === '') {
+        setVariantPrice(sku, null);
+        clearPrice = true;
+      } else {
+        price = intField(body.price, { min: 1000, max: 100000000, label: 'Giá' });
+        setVariantPrice(sku, price);
+      }
     }
-    res.json({ ok: true });
+    let flag = null;
+    if (Object.prototype.hasOwnProperty.call(body, 'oos') || Object.prototype.hasOwnProperty.call(body, 'compareAt')) {
+      flag = {};
+      if (Object.prototype.hasOwnProperty.call(body, 'oos')) flag.oos = body.oos == null ? null : !!body.oos;
+      if (Object.prototype.hasOwnProperty.call(body, 'compareAt')) {
+        flag.compareAt = body.compareAt == null || body.compareAt === ''
+          ? null
+          : intField(body.compareAt, { min: 1000, max: 100000000, label: 'Giá gốc' });
+      }
+      setVariantFlag(sku, flag);
+    }
+    mirrorSku(sku, { price, clearPrice, flag });
+    res.json({ ok: true, ...(await persistEdits()) });
   }));
 
-  app.patch('/api/admin/products/:id', requireAdmin, wrap((req, res) => {
+  app.patch('/api/admin/products/:id', requireAdmin, wrap(async (req, res) => {
     const id = String(req.params.id || '');
     const known = adminProducts().some((p) => p.id === id);
     if (!known) throw problem(404, 'Không thấy sản phẩm.');
@@ -342,7 +383,34 @@ export function createApp() {
       patch.short = short || null;
     }
     setProductOverride(id, patch);
-    res.json({ ok: true });
+    res.json({ ok: true, ...(await persistEdits()) });
+  }));
+
+  app.post('/api/admin/products/:id/photos', requireAdmin, parsePhoto, wrap(async (req, res) => {
+    const id = String(req.params.id || '');
+    const product = getRawProduct(id);
+    if (!product || product.soon) throw problem(404, 'Không thấy sản phẩm.');
+    const decoded = decodeImage(req.body?.data);
+    const saved = saveUpload(id, decoded);
+    const current = getOverrides().galleries.get(id);
+    const base = current?.length ? current : defaultGallery(product);
+    const items = [
+      ...base.map((item) => ({ ...item })),
+      { file: `upload:${saved.name}`, label: 'Ảnh mới', alt: product.name, hero: false },
+    ];
+    if (!items.some((item) => item.hero)) items[0].hero = true;
+    setGallery(id, items);
+    res.json({ ok: true, file: `upload:${saved.name}`, ...(await persistEdits({ uploads: [saved] })) });
+  }));
+
+  app.put('/api/admin/products/:id/gallery', requireAdmin, wrap(async (req, res) => {
+    const id = String(req.params.id || '');
+    const product = getRawProduct(id);
+    if (!product || product.soon) throw problem(404, 'Không thấy sản phẩm.');
+    const items = normalizeGallery(product, req.body?.items);
+    const removed = setGallery(id, items);
+    for (const name of removed) removeMedia(name);
+    res.json({ ok: true, ...(await persistEdits({ removals: removed })) });
   }));
 
   app.get('/api/admin/settings', requireAdmin, (req, res) => {
@@ -443,6 +511,16 @@ export function createApp() {
     }
     res.redirect(302, '/don/' + code);
   });
+  app.get('/media/:name', (req, res) => {
+    const file = readMedia(String(req.params.name || ''));
+    if (!file) {
+      res.status(404).end();
+      return;
+    }
+    res.set('Cache-Control', 'public, max-age=86400');
+    res.type(file.mime).send(file.bytes);
+  });
+
   app.get('/admin', (req, res) => {
     html(res, 200, adminPage());
   });

@@ -42,6 +42,13 @@ function pick(group, pack) {
 }
 
 function gallery(variant) {
+  if (Array.isArray(data.gallery) && data.gallery.length) {
+    const shots = data.gallery.filter((photo) => photo && photo.src);
+    if (shots.length) {
+      const hero = shots.find((photo) => photo.hero) || shots[0];
+      return [hero, ...shots.filter((photo) => photo !== hero)];
+    }
+  }
   const list = [];
   if (variant.img) list.push({ src: variant.img, alt: `${data.name}, bao bì ${variant.label}`, kind: 'Bao bì' });
   if (variant.back && variant.back !== variant.img) list.push({ src: variant.back, alt: `${data.name}, ${variant.backKind || 'mặt sau'}`, kind: variant.backKind || 'Mặt sau' });

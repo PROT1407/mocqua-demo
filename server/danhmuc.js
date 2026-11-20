@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './paths.js';
-import { getDb, withTransaction } from './db.js';
+import { getDb, listVariantFlagRows, withTransaction } from './db.js';
 import { problem } from './format.js';
 import { resolveSale } from '../ai-server/src/sale.js';
 
@@ -34,13 +34,15 @@ export function listCatalogPrices() {
 export function catalogWithPrices(now = new Date()) {
   const data = catalogData();
   const prices = new Map(priceRows().map((r) => [r.code, r]));
+  const flags = new Map(listVariantFlagRows().map((row) => [row.sku, row]));
   const products = data.products.map((p) => ({
     ...p,
     variants: p.variants.map((v) => {
       const pr = prices.get(v.code);
+      const flag = flags.get(v.code) || null;
       const overridden = Boolean(pr);
       const stored = overridden ? pr.price ?? null : v.price ?? null;
-      const sale = overridden || !(stored > 0)
+      let sale = overridden || !(stored > 0)
         ? { price: stored, compareAt: null, promo: null }
         : resolveSale({
           price: stored,
@@ -49,12 +51,22 @@ export function catalogWithPrices(now = new Date()) {
           promoEndsAt: p.promoEndsAt,
           promo: v.promo,
         }, now);
+      if (Number.isInteger(flag?.compareAt) && flag.compareAt > sale.price) {
+        sale = {
+          price: sale.price,
+          compareAt: flag.compareAt,
+          promo: { price: sale.price, originalPrice: flag.compareAt, endsAt: '', label: 'Khuyến mãi' },
+        };
+      }
       const { promo: _storedPromo, ...rest } = v;
+      const priceLocked = overridden || Number.isInteger(flag?.compareAt);
       return {
         ...rest,
         price: sale.price,
         ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
         ...(sale.promo ? { promo: sale.promo } : {}),
+        ...(flag && flag.oos != null ? { oos: flag.oos } : {}),
+        ...(priceLocked ? { priceLocked: true } : {}),
         per100g: sale.price != null && v.weightG ? Math.round((sale.price * 100) / v.weightG) : null,
         priceSource: pr ? pr.source || '' : v.priceSource || '',
         priceCheckedAt: pr ? pr.checkedAt || '' : v.priceCheckedAt || '',

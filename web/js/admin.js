@@ -2,6 +2,7 @@ const loginPanel = document.querySelector('#login-panel');
 const dash = document.querySelector('#dash');
 const loginErr = document.querySelector('#login-err');
 const bankWarn = document.querySelector('#bank-warn');
+let durableOn = false;
 const panels = {
   orders: document.querySelector('#panel-orders'),
   prices: document.querySelector('#panel-prices'),
@@ -70,9 +71,19 @@ async function loadOrders() {
   }).join('');
 }
 
+function durableLine(result) {
+  if (result?.durable) return 'Đã lưu';
+  if (result?.reason === 'github') return 'Đã lưu trên máy, chưa ghi được lên GitHub';
+  return 'Đã lưu';
+}
+
 async function loadPrices() {
   const data = await api('/api/admin/products');
-  panels.prices.innerHTML = `<label class="field">Tìm <input id="price-q" placeholder="Tên hoặc mã"></label><div id="price-list"></div>`;
+  const keep = document.querySelector('#price-q')?.value || '';
+  const storeNote = durableOn
+    ? 'Giá, hết hàng và ảnh được ghi lên GitHub, còn sau khi máy chủ khởi động lại.'
+    : 'Chưa có CATALOG_GITHUB_TOKEN trên Render. Sửa có hiệu lực ngay, nhưng mất khi máy chủ khởi động lại.';
+  panels.prices.innerHTML = `<p class="fine">${storeNote}</p><label class="field">Tìm <input id="price-q" placeholder="Tên hoặc mã" value="${esc(keep)}"></label><div id="price-list"></div>`;
   const list = document.querySelector('#price-list');
   const input = document.querySelector('#price-q');
   const draw = () => {
@@ -95,11 +106,31 @@ async function loadPrices() {
       </label>
       <button class="btn btn--small" type="button" data-save-copy="${esc(product.id)}">Lưu câu và trạng thái ẩn</button>
       <div class="vars">${product.variants.map((variant) => `<div class="varrow">
-        <div><b>${esc(variant.label)}</b><small>${esc(variant.sku)}<br>Giá gốc ${money(variant.catalogPrice)}${variant.overridden ? ' · đang ghi đè' : ''}</small></div>
-        <input data-price="${esc(variant.sku)}" inputmode="numeric" value="${variant.price ?? ''}" aria-label="Giá ${esc(variant.sku)}">
-        <button class="btn btn--small" type="button" data-save-price="${esc(variant.sku)}">Lưu giá</button>
-        <button class="textbtn" type="button" data-reset-price="${esc(variant.sku)}">Về giá gốc</button>
+        <div><b>${esc(variant.label)}</b><small>${esc(variant.sku)}<br>Giá niêm yết ${money(variant.catalogPrice)}${variant.overridden ? ' · đang ghi đè' : ''}</small></div>
+        <label class="field">Giá bán <input data-price="${esc(variant.sku)}" inputmode="numeric" value="${variant.price ?? ''}" aria-label="Giá ${esc(variant.sku)}"></label>
+        <label class="field">Giá gốc gạch ngang <input data-was="${esc(variant.sku)}" inputmode="numeric" value="${variant.compareAt ?? ''}" placeholder="Để trống nếu không gạch" aria-label="Giá gốc ${esc(variant.sku)}"></label>
+        <label class="check"><input type="checkbox" data-oos="${esc(variant.sku)}" data-catalog-oos="${variant.catalogOos ? '1' : '0'}"${variant.oos ? ' checked' : ''}> Hết hàng</label>
+        <button class="btn btn--small" type="button" data-save-price="${esc(variant.sku)}">Lưu</button>
+        <button class="textbtn" type="button" data-reset-price="${esc(variant.sku)}">Về giá niêm yết</button>
       </div>`).join('')}</div>
+      <div class="gallery-edit" data-gallery="${esc(product.id)}">
+        <b>Ảnh</b>
+        <div class="shots-edit">${(product.gallery || []).map((shot, index) => `<div class="shot${shot.hero ? ' is-hero' : ''}" data-shot="${esc(shot.file)}" data-label="${esc(shot.label)}" data-alt="${esc(shot.alt)}">
+          <img src="${esc(shot.src)}" alt="">
+          <div>
+            <label class="check"><input type="radio" name="hero-${esc(product.id)}" data-hero${shot.hero ? ' checked' : ''}> Ảnh chính</label>
+            <div class="shot__actions">
+              <button class="btn btn--small btn--ghost" type="button" data-photo-up="${index}">Lên</button>
+              <button class="btn btn--small btn--ghost" type="button" data-photo-down="${index}">Xuống</button>
+              <button class="btn btn--small btn--ghost" type="button" data-photo-del>Xoá</button>
+            </div>
+          </div>
+        </div>`).join('')}</div>
+        <div class="shot__actions">
+          <label class="btn btn--small btn--ghost">Thêm ảnh<input data-photo-file="${esc(product.id)}" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
+          <button class="btn btn--small" type="button" data-save-gallery="${esc(product.id)}">Lưu thứ tự ảnh</button>
+        </div>
+      </div>
     </article>`).join('') || '<p>Không thấy món nào.</p>';
   };
   input.oninput = draw;
@@ -149,6 +180,7 @@ async function loadPromo() {
 
 async function enter() {
   const me = await api('/api/admin/me');
+  durableOn = !!me.durable;
   loginPanel.hidden = true;
   dash.hidden = false;
   bankWarn.hidden = me.bankReady;
@@ -245,6 +277,30 @@ panels.orders.addEventListener('change', async (event) => {
   }
 });
 
+panels.prices.addEventListener('change', async (event) => {
+  const input = event.target.closest('[data-photo-file]');
+  if (!input?.files?.[0]) return;
+  const id = input.dataset.photoFile;
+  const file = input.files[0];
+  input.value = '';
+  try {
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('Không đọc được ảnh.'));
+      reader.readAsDataURL(file);
+    });
+    const result = await api('/api/admin/products/' + encodeURIComponent(id) + '/photos', {
+      method: 'POST',
+      body: JSON.stringify({ data: dataUrl }),
+    });
+    if (result.reason === 'github') alert('Ảnh đã lưu trên máy, chưa ghi được lên GitHub.');
+    await loadPrices();
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
 panels.prices.addEventListener('click', async (event) => {
   const savePrice = event.target.closest('[data-save-price]');
   const resetPrice = event.target.closest('[data-reset-price]');
@@ -253,11 +309,52 @@ panels.prices.addEventListener('click', async (event) => {
     if (savePrice) {
       const sku = savePrice.dataset.savePrice;
       const input = panels.prices.querySelector(`[data-price="${CSS.escape(sku)}"]`);
-      await api('/api/admin/variants/' + encodeURIComponent(sku), {
+      const was = panels.prices.querySelector(`[data-was="${CSS.escape(sku)}"]`);
+      const oosBox = panels.prices.querySelector(`[data-oos="${CSS.escape(sku)}"]`);
+      const catalogOos = oosBox?.dataset.catalogOos === '1';
+      const checked = !!oosBox?.checked;
+      const result = await api('/api/admin/variants/' + encodeURIComponent(sku), {
         method: 'PATCH',
-        body: JSON.stringify({ price: Number(input.value) }),
+        body: JSON.stringify({
+          price: input.value.trim() === '' ? null : Number(input.value),
+          compareAt: was.value.trim() === '' ? null : Number(was.value),
+          oos: checked === catalogOos ? null : checked,
+        }),
       });
-      savePrice.textContent = 'Đã lưu';
+      savePrice.textContent = durableLine(result);
+    }
+    const up = event.target.closest('[data-photo-up]');
+    const down = event.target.closest('[data-photo-down]');
+    const del = event.target.closest('[data-photo-del]');
+    if (up || down || del) {
+      const shot = event.target.closest('[data-shot]');
+      const list = shot?.parentElement;
+      if (up && shot.previousElementSibling) list.insertBefore(shot, shot.previousElementSibling);
+      if (down && shot.nextElementSibling) list.insertBefore(shot.nextElementSibling, shot);
+      if (del) {
+        const wasHero = shot.querySelector('[data-hero]')?.checked;
+        shot.remove();
+        if (wasHero) {
+          const first = list.querySelector('[data-hero]');
+          if (first) first.checked = true;
+        }
+      }
+    }
+    const saveGallery = event.target.closest('[data-save-gallery]');
+    if (saveGallery) {
+      const id = saveGallery.dataset.saveGallery;
+      const box = saveGallery.closest('[data-gallery]');
+      const items = [...box.querySelectorAll('[data-shot]')].map((shot) => ({
+        file: shot.dataset.shot,
+        label: shot.dataset.label || '',
+        alt: shot.dataset.alt || '',
+        hero: !!shot.querySelector('[data-hero]')?.checked,
+      }));
+      const result = await api('/api/admin/products/' + encodeURIComponent(id) + '/gallery', {
+        method: 'PUT',
+        body: JSON.stringify({ items }),
+      });
+      saveGallery.textContent = durableLine(result);
     }
     if (resetPrice) {
       const sku = resetPrice.dataset.resetPrice;

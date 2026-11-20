@@ -611,6 +611,7 @@ export function productPage(product, catalog) {
     open: product.open,
     shelves: product.shelves || [],
     photos: product.photos || [],
+    ...(product.gallery?.length ? { gallery: product.gallery } : {}),
     fit45: product.fit45 || [],
     swaps: Object.fromEntries(product.variants.filter((v) => v.oos || product.oos).map((v) => [v.sku, replacementsFor(v.sku, catalog)])),
     variants: product.variants.map((v) => ({
@@ -1095,7 +1096,7 @@ export function adminPage() {
       </section>
       <div class="tabs" role="tablist">
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
-        <button type="button" data-tab="prices">Giá bán</button>
+        <button type="button" data-tab="prices">Giá và ảnh</button>
         <button type="button" data-tab="promo">Giao hàng &amp; ưu đãi</button>
         <button type="button" data-tab="refs">So sánh giá</button>
         <button type="button" data-tab="catalog">Danh mục</button>

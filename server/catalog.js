@@ -3,6 +3,8 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { ROOT } from './paths.js';
 import { getOverrides, getSettings } from './db.js';
+import { mediaExists } from './media.js';
+import { problem } from './format.js';
 import { resolveSale } from '../ai-server/src/sale.js';
 import { catalogData } from './danhmuc.js';
 import { CATALOG_TO_SHOP } from './dm-buy.js';
@@ -41,6 +43,63 @@ function fileExists(abs) {
   const ok = fs.existsSync(abs);
   existsCache.set(abs, ok);
   return ok;
+}
+
+const GALLERY_FILE = /^(asset:[\w./-]{1,180}|upload:[a-z0-9-]{1,60}\.(?:jpg|png|webp))$/;
+
+export function gallerySrc(file) {
+  const key = String(file || '');
+  if (key.startsWith('upload:')) {
+    const name = key.slice('upload:'.length);
+    return mediaExists(name) ? `/media/${name}` : null;
+  }
+  if (key.startsWith('asset:')) return resolveImg(key.slice('asset:'.length), true);
+  return null;
+}
+
+export function defaultGallery(product) {
+  const items = [];
+  const push = (img, label) => {
+    if (!img) return;
+    const src = resolveImg(img, true);
+    if (!src?.startsWith('/assets/')) return;
+    const file = `asset:${src.slice('/assets/'.length)}`;
+    if (items.some((item) => item.file === file)) return;
+    items.push({ file, label: label || 'Ảnh', alt: product.name || '', hero: items.length === 0 });
+  };
+  const variants = product?.variants || [];
+  const lead = variants.find((variant) => variant.sku === product?.def) || variants[0];
+  if (lead?.img) push(lead.img, 'Bao bì');
+  for (const variant of variants) {
+    push(variant.img, 'Bao bì');
+    push(variant.back, variant.backKind || 'Mặt sau');
+  }
+  for (const photo of product?.photos || []) push(photo[0], photo[1] || 'Ảnh');
+  if (!items.length) push(product?.img, 'Ảnh');
+  return items;
+}
+
+export function normalizeGallery(product, input) {
+  if (!Array.isArray(input) || input.length > 24) throw problem(400, 'Danh sách ảnh chưa đúng.');
+  const items = [];
+  const seen = new Set();
+  for (const row of input) {
+    const file = String(row?.file || '');
+    if (!GALLERY_FILE.test(file) || seen.has(file) || !gallerySrc(file)) throw problem(400, 'Một ảnh không dùng được.');
+    seen.add(file);
+    items.push({
+      file,
+      label: String(row?.label || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+      alt: String(row?.alt || product?.name || '').replace(/\s+/g, ' ').trim().slice(0, 180),
+      hero: row?.hero === true,
+    });
+  }
+  const heroes = items.filter((item) => item.hero);
+  if (items.length && heroes.length !== 1) {
+    for (const item of items) item.hero = false;
+    items[0].hero = true;
+  }
+  return items;
 }
 
 export function resolveImg(f, portrait = false) {
@@ -120,6 +179,20 @@ function saleFor(product, variant, price, overridden, now) {
   }, now);
 }
 
+function applyCompare(sale, flag) {
+  if (!flag || !Number.isInteger(flag.compareAt) || !(sale.price > 0) || flag.compareAt <= sale.price) return sale;
+  return {
+    price: sale.price,
+    compareAt: flag.compareAt,
+    promo: { price: sale.price, originalPrice: flag.compareAt, endsAt: '', label: 'Khuyến mãi' },
+  };
+}
+
+function flagOos(variant, flag) {
+  if (flag && flag.oos != null) return flag.oos;
+  return variant.oos === true;
+}
+
 function catalogStoryBySku() {
   const { mq, bySku } = loadBase();
   const map = new Map();
@@ -155,7 +228,7 @@ function storyOf(product, stories) {
   return best;
 }
 
-function presentVariant(mq, product, variant, sale) {
+function presentVariant(mq, product, variant, sale, oos) {
   const packs = product.packs || null;
   return {
     sku: variant.sku,
@@ -169,7 +242,7 @@ function presentVariant(mq, product, variant, sale) {
     pack: variant.pk || '',
     bags: Number.isInteger(variant.bags) && variant.bags > 1 ? variant.bags : null,
     limited: variant.limited === true,
-    oos: variant.oos === true,
+    oos: oos === true,
     note: variant.note || '',
     img: resolveImg(variant.img, true),
     back: resolveImg(variant.back, true),
@@ -188,9 +261,11 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
   const overrides = getOverrides();
   const over = overrides.products.get(product.id);
   const variants = (product.variants || []).filter((v) => v.sku).map((variant) => {
+    const flag = overrides.flags.get(variant.sku);
     const overridden = overrides.prices.has(variant.sku);
     const price = overridden ? overrides.prices.get(variant.sku) : (variant.p ?? null);
-    return presentVariant(mq, product, variant, saleFor(product, variant, price, overridden, now));
+    const sale = applyCompare(saleFor(product, variant, price, overridden, now), flag);
+    return presentVariant(mq, product, variant, sale, flagOos(variant, flag));
   });
   const multiLine = new Set(variants.map((v) => v.line).filter(Boolean)).size > 1;
   for (const variant of variants) {
@@ -278,6 +353,20 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
       .map(([img, kind, alt]) => ({ src: resolveImg(img, true), kind: kind || 'Ảnh', alt: alt || product.name }))
       .filter((x) => x.src),
   };
+  const saved = overrides.galleries.get(product.id);
+  if (saved?.length) {
+    const shots = saved.map((item) => ({
+      src: gallerySrc(item.file),
+      kind: item.label || (item.hero ? 'Ảnh chính' : 'Ảnh'),
+      alt: item.alt || product.name,
+      hero: !!item.hero,
+    })).filter((item) => item.src);
+    if (shots.length) {
+      const hero = shots.find((item) => item.hero) || shots[0];
+      out.cardImg = hero.src;
+      out.gallery = shots;
+    }
+  }
   if (detail) {
     out.long = product.long || '';
     const desc = product.desc;
@@ -413,8 +502,16 @@ export function adminProducts() {
     const view = presentProduct(mq, product);
     return {
       ...view,
+      gallery: (overrides.galleries.get(product.id) || defaultGallery(product)).map((item) => ({
+        file: item.file,
+        label: item.label || '',
+        alt: item.alt || '',
+        hero: !!item.hero,
+        src: gallerySrc(item.file) || '',
+      })).filter((item) => item.src),
       variants: (product.variants || []).filter((v) => v.sku).map((variant) => {
         const current = view.variants.find((v) => v.sku === variant.sku);
+        const flag = overrides.flags.get(variant.sku);
         return {
           sku: variant.sku,
           w: variant.w,
@@ -422,6 +519,9 @@ export function adminProducts() {
           catalogPrice: variant.p ?? null,
           price: current?.price ?? null,
           overridden: overrides.prices.has(variant.sku),
+          oos: current?.oos === true,
+          catalogOos: variant.oos === true,
+          compareAt: flag?.compareAt ?? null,
         };
       }),
     };
@@ -436,16 +536,18 @@ export function lookupSku(sku, { allowHidden = false, now = new Date() } = {}) {
   const overrides = getOverrides();
   const hidden = !!overrides.products.get(hit.product.id)?.hidden || !!hit.product.hide;
   if (hidden && !allowHidden) return null;
+  const flag = overrides.flags.get(key);
   const overridden = overrides.prices.has(key);
   const stored = overridden ? overrides.prices.get(key) : (hit.variant.p ?? null);
-  const sale = saleFor(hit.product, hit.variant, stored, overridden, now);
+  const sale = applyCompare(saleFor(hit.product, hit.variant, stored, overridden, now), flag);
+  const oos = flagOos(hit.variant, flag);
   return {
     sku: key,
     price: sale.price,
     ...(sale.compareAt != null ? { compareAt: sale.compareAt } : {}),
     ...(sale.promo ? { promo: sale.promo } : {}),
     product: hit.product,
-    variant: hit.variant,
+    variant: oos === (hit.variant.oos === true) ? hit.variant : { ...hit.variant, oos },
     name: hit.product.name,
     w: hit.variant.w,
     g: hit.variant.g || 0,

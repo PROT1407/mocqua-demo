@@ -2,8 +2,20 @@
 // Mã danh mục trùng mã cửa hàng (hoặc có trong MQ.SKU_ALIAS) thì dùng luôn; còn lại tra bảng CATALOG_TO_SHOP bên dưới.
 // Chỉ nối khi cùng hãng, cùng sản phẩm, cùng khối lượng và cùng giá. Không chắc thì để "Liên hệ".
 import { getShopCatalog, lookupSku, getProductPage } from './catalog.js';
-import { catalogData } from './danhmuc.js';
+import { catalogCodes, catalogData } from './danhmuc.js';
 import { isComboProduct } from './promo.js';
+
+export function catalogCodeForShopSku(sku) {
+  const key = String(sku || '');
+  const codes = catalogCodes();
+  if (codes.has(key)) return key;
+  const upper = key.toUpperCase();
+  if (codes.has(upper)) return upper;
+  for (const [code, shop] of Object.entries(CATALOG_TO_SHOP)) {
+    if (shop === key && codes.has(code)) return code;
+  }
+  return '';
+}
 
 export const CATALOG_TO_SHOP = {
   'VZ-GG-XDMO-200': 'MQ-DXM-200-GG',
