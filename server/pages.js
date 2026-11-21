@@ -9,7 +9,8 @@ import { catalogHeroBySku } from './dm-buy.js';
 import { dealBySku } from './deals.js';
 import { bankConfig } from './vietqr.js';
 import { aiHealthUrl } from './warmup.js';
-import { PAGE_SEO, faqBlock, headTags, homeJsonLd, homeSeo, jsonLdTag, productDescription, productFaqs, productJsonLd, productTitle, shopSeo } from './seo.js';
+import { PAGE_SEO, faqBlock, headTags, homeJsonLd, homeSeo, jsonLdTag, pageCopy, productDescription, productFaqs, productJsonLd, productTitle, shopSeo } from './seo.js';
+import { getSiteCopy } from './content.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 // Câu mở đầu cho băng tiêu đề từng nhóm ở /cua-hang (chỉ trang Cửa hàng dùng).
@@ -92,7 +93,7 @@ function promoBar(page) {
   if (page === 'admin') return '';
   let text;
   try {
-    text = bannerText(getSettings());
+    text = getSiteCopy().banner || bannerText(getSettings());
   } catch {
     text = 'Giảm 3% + miễn ship đơn từ 300k · Giảm 7% đơn từ 500k · Giảm 12% đơn từ 1 triệu';
   }
@@ -130,6 +131,7 @@ function footer() {
   <div class="wrap foot__in">
     <div>
       <b>Mộc Quả</b>
+      <p>${esc(getSiteCopy().footerTagline || 'Trái cây sấy.')}</p>
       <p>${esc(shopContact.address)}</p>
       <p>${phones}<br><a href="mailto:${esc(shopContact.email)}">${esc(shopContact.email)}</a><br>${esc(shopContact.hours)}</p>
       ${bankLine}
@@ -296,6 +298,7 @@ function altCards(items) {
 function statusBadge(product, lead, soldOut) {
   if (soldOut && lead?.limited) return '<span class="badge badge--tag">Phiên bản giới hạn</span><span class="badge badge--oos">Hết hàng</span>';
   if (soldOut) return '<span class="badge badge--oos">Hết hàng</span>';
+  if (product.badgeOverride) return product.badge ? `<span class="badge badge--tag">${esc(product.badge)}</span>` : '';
   const onSale = lead?.promo || product.variants.some((v) => v.promo && v.compareAt > v.price);
   if (onSale) return '<span class="badge badge--tag">Khuyến mãi</span>';
   if (lead?.limited) return '<span class="badge badge--tag">Phiên bản giới hạn</span>';
@@ -338,15 +341,16 @@ export function homePage(catalog) {
       <img src="${esc(s.thumb)}" alt="${esc(s.cap)}" loading="lazy" width="640" height="480">
       <span>${esc(s.cap)}</span>
     </button>`).join('');
-  const body = `<main id="main">
-  <section class="wrap hero">
+  const copy = getSiteCopy();
+  const blocks = {
+    hero: `<section class="wrap hero">
     <div class="hero__copy">
-      <p class="kicker">Trái cây sấy</p>
-      <h1>Chọn theo cách sấy, rồi mới chọn quả.</h1>
-      <p class="lead">Cùng một loại quả, túi dẻo với túi thăng hoa ăn khác nhau hẳn. Chúng tôi xếp cửa hàng theo cách làm — dẻo, thăng hoa, giòn, khô — để bạn khỏi lạc giữa hàng chục túi.</p>
+      <p class="kicker">${esc(copy.heroKicker)}</p>
+      <h1>${esc(copy.heroTitle)}</h1>
+      <p class="lead">${esc(copy.heroLead)}</p>
       <div class="hero__actions">
-        <a class="btn" href="/cua-hang">Vào cửa hàng</a>
-        <a class="btn btn--ghost" href="#tren-ke">Xem hàng trên kệ</a>
+        <a class="btn" href="/cua-hang">${esc(copy.heroCta)}</a>
+        <a class="btn btn--ghost" href="#tren-ke">${esc(copy.heroSecondary)}</a>
       </div>
       <form class="find" action="/cua-hang" method="get">
         <label class="sr" for="q">Tìm sản phẩm</label>
@@ -362,18 +366,18 @@ export function homePage(catalog) {
         <span>Trên kệ siêu thị</span>
       </a>
     </div>
-  </section>
-  <section class="wrap" id="noi-bat">
+  </section>`,
+    featured: `<section class="wrap" id="noi-bat">
     <div class="band__h">
-      <h2>Nổi bật &amp; Khuyến mãi</h2>
+      <h2>${esc(copy.featuredTitle)}</h2>
       <a href="/cua-hang">Xem tất cả</a>
     </div>
     <div class="grid">${picks.map((p) => productCard(p, { showPitch: true })).join('')}</div>
-  </section>
-  <section class="wrap band" aria-label="Bốn cách sấy">
+  </section>`,
+    ways: `<section class="wrap band" aria-label="${esc(copy.waysTitle)}">
     <div class="band__h">
-      <h2>Bốn cách sấy</h2>
-      <p>Bấm vào cách bạn muốn ăn. Trong mỗi cách có từng loại quả, rồi tới hãng và khối lượng.</p>
+      <h2>${esc(copy.waysTitle)}</h2>
+      <p>${esc(copy.waysLead)}</p>
     </div>
     <div class="tiles">
       ${tiles.map((t) => `<a class="tile" href="/cua-hang?cat=${esc(t.id)}">
@@ -384,21 +388,25 @@ export function homePage(catalog) {
         <em>${t.count} món</em>
       </a>`).join('')}
     </div>
-  </section>
-  <section class="wrap giftband">
+  </section>`,
+    offer: `<section class="wrap giftband">
     <div>
-      <p class="kicker">Ưu đãi theo đơn</p>
-      <h2>Đơn càng lớn, giá càng mềm</h2>
-      <p>${esc(tierCopy(catalog))}</p>
+      <p class="kicker">${esc(copy.offerKicker)}</p>
+      <h2>${esc(copy.offerTitle)}</h2>
+      <p>${esc(copy.offerLead || tierCopy(catalog))}</p>
     </div>
-  </section>
-  <section class="wrap shelfsec" id="tren-ke">
+  </section>`,
+    shelf: `<section class="wrap shelfsec" id="tren-ke">
     <div class="band__h">
-      <h2>Hàng trên kệ siêu thị và sân bay</h2>
+      <h2>${esc(copy.shelfTitle)}</h2>
     </div>
-    <p class="lead lead--left">Các dòng trái cây sấy Viza Food được bày tại siêu thị và cửa hàng ở sân bay. Dưới đây là ảnh kệ chúng tôi chụp. Túi gửi tới bạn là đúng loại hàng đó: chính hãng, nguyên bao bì, không san chiết.</p>
+    <p class="lead lead--left">${esc(copy.shelfLead)}</p>
     <div class="shots">${shots}</div>
-  </section>
+  </section>`,
+  };
+  const ordered = (copy.sections || []).filter((section) => !section.hidden && blocks[section.id]).map((section) => blocks[section.id]);
+  const body = `<main id="main">
+  ${ordered.join('\n')}
   <dialog class="shotbox" id="shotbox">
     <form method="dialog"><button class="shotbox__x" aria-label="Đóng">Đóng</button></form>
     <img alt="" aria-hidden="true" id="shotbox-img">
@@ -673,6 +681,7 @@ export function productPage(product, catalog) {
       <div class="pdp__info">
         <p class="kicker">${esc(product.catName)}${product.flavourName ? ' · ' + esc(product.flavourName) : ''}</p>
         <h1>${esc(product.name)}</h1>
+        ${product.badgeOverride && product.badge ? `<p><span class="badge badge--tag">${esc(product.badge)}</span></p>` : ''}
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
         <p class="lead lead--left">${esc(product.short)}</p>
         ${product.cat === 'set' && giftBox(product.id) ? `<p class="setlink"><a href="/hop-qua/${esc(product.id)}">Đổi vị trong hộp</a> — chọn từng ngăn, giá cập nhật ngay.</p>` : ''}
@@ -699,7 +708,7 @@ export function productPage(product, catalog) {
         <ul class="trust">${trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       </div>
     </article>
-    <div class="prose">${sections}</div>
+    <div class="prose">${product.descriptionOverride ? `<section><h2>Mô tả</h2><p>${esc(product.descriptionOverride)}</p></section>` : ''}${sections}</div>
     ${faqBlock(productFaqs(product, catalog.settings))}
     ${kemBlock(product, kem)}
     <div class="buysticky">
@@ -888,8 +897,8 @@ export function comboPage(catalog) {
     <p class="cbnote">${esc(bannerText(s))}. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.</p>
   </main>`;
   return layout({
-    title: PAGE_SEO.combo.title,
-    description: PAGE_SEO.combo.description,
+    title: pageCopy('combo', PAGE_SEO.combo).title,
+    description: pageCopy('combo', PAGE_SEO.combo).description,
     page: 'combo',
     body,
   });
@@ -1141,12 +1150,14 @@ export function adminPage() {
       <div class="tabs" role="tablist">
         <button type="button" data-tab="orders" class="is-on">Đơn hàng</button>
         <button type="button" data-tab="prices">Giá và ảnh</button>
+        <button type="button" data-tab="content">Nội dung</button>
         <button type="button" data-tab="promo">Giao hàng &amp; ưu đãi</button>
         <button type="button" data-tab="refs">So sánh giá</button>
         <button type="button" data-tab="catalog">Danh mục</button>
       </div>
       <div id="panel-orders"></div>
       <div id="panel-prices" hidden></div>
+      <div id="panel-content" hidden></div>
       <div id="panel-promo" hidden></div>
       <div id="panel-refs" hidden></div>
       <div id="panel-catalog" hidden></div>
@@ -1197,8 +1208,8 @@ export function comparePage(rows) {
     ${jsonScript('price-refs-data', rows)}
   </main>`;
   return layout({
-    title: PAGE_SEO.compare.title,
-    description: PAGE_SEO.compare.description,
+    title: pageCopy('compare', PAGE_SEO.compare).title,
+    description: pageCopy('compare', PAGE_SEO.compare).description,
     page: 'compare',
     body,
     scripts: ['/static/js/compare.js'],
@@ -1263,8 +1274,8 @@ export function catalogPage(data) {
     ${jsonScript('dm-data', { ...data, contact: `https://zalo.me/${shopContact.phones[0]?.tel || ''}` })}
   </main>`;
   return layout({
-    title: PAGE_SEO.catalog.title,
-    description: PAGE_SEO.catalog.description,
+    title: pageCopy('catalog', PAGE_SEO.catalog).title,
+    description: pageCopy('catalog', PAGE_SEO.catalog).description,
     page: 'catalog',
     body,
     scripts: ['/static/js/danh-muc.js'],
@@ -1334,8 +1345,8 @@ export function giftIndexPage() {
     <p class="fine">Đơn công ty, in logo hoặc xuất VAT: xem <a href="/chinh-sach.html#khuyen-mai">giá sỉ trong chính sách</a>.</p>
   </main>`;
   return layout({
-    title: PAGE_SEO.gift.title,
-    description: PAGE_SEO.gift.description,
+    title: pageCopy('gift', PAGE_SEO.gift).title,
+    description: pageCopy('gift', PAGE_SEO.gift).description,
     page: 'gift',
     body,
   });

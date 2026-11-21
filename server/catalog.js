@@ -4,6 +4,7 @@ import vm from 'node:vm';
 import { ROOT } from './paths.js';
 import { getOverrides, getSettings } from './db.js';
 import { mediaExists } from './media.js';
+import { applyCopy } from './content.js';
 import { problem } from './format.js';
 import { resolveSale } from '../ai-server/src/sale.js';
 import { catalogData } from './danhmuc.js';
@@ -380,6 +381,7 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
         spec: s.spec || null,
       }));
   }
+  applyCopy(out, product.name, product.badge || '', story.featured ?? null, story.pitch || '');
   return out;
 }
 
