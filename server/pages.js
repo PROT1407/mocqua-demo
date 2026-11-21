@@ -672,6 +672,7 @@ export function productPage(product, catalog) {
     shelves: product.shelves || [],
     photos: product.photos || [],
     ...(product.gallery?.length ? { gallery: product.gallery } : {}),
+    ...(product.variantGalleries && Object.keys(product.variantGalleries).length ? { variantGalleries: product.variantGalleries } : {}),
     fit45: product.fit45 || [],
     swaps: Object.fromEntries(product.variants.filter((v) => v.oos || product.oos).map((v) => [v.sku, replacementsFor(v.sku, catalog)])),
     variants: product.variants.map((v) => ({

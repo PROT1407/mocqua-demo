@@ -98,14 +98,34 @@ export function getDb() {
     );
     CREATE TABLE IF NOT EXISTS product_gallery (
       product_id TEXT NOT NULL,
+      sku TEXT NOT NULL DEFAULT '',
       file TEXT NOT NULL,
       label TEXT NOT NULL DEFAULT '',
       alt TEXT NOT NULL DEFAULT '',
       sort INTEGER NOT NULL,
       hero INTEGER NOT NULL DEFAULT 0,
-      PRIMARY KEY (product_id, file)
+      PRIMARY KEY (product_id, sku, file)
     );
   `);
+  const galleryCols = db.prepare(`PRAGMA table_info(product_gallery)`).all();
+  if (galleryCols.length && !galleryCols.some((col) => col.name === 'sku')) {
+    db.exec(`
+      ALTER TABLE product_gallery RENAME TO product_gallery_old;
+      CREATE TABLE product_gallery (
+        product_id TEXT NOT NULL,
+        sku TEXT NOT NULL DEFAULT '',
+        file TEXT NOT NULL,
+        label TEXT NOT NULL DEFAULT '',
+        alt TEXT NOT NULL DEFAULT '',
+        sort INTEGER NOT NULL,
+        hero INTEGER NOT NULL DEFAULT 0,
+        PRIMARY KEY (product_id, sku, file)
+      );
+      INSERT INTO product_gallery (product_id, sku, file, label, alt, sort, hero)
+        SELECT product_id, '', file, label, alt, sort, hero FROM product_gallery_old;
+      DROP TABLE product_gallery_old;
+    `);
+  }
   const existing = db.prepare(`SELECT value FROM settings WHERE key = 'shop'`).get();
   if (!existing) {
     db.prepare(`INSERT INTO settings (key, value) VALUES ('shop', ?)`).run(JSON.stringify(DEFAULT_SETTINGS));
@@ -142,12 +162,23 @@ export function getOverrides() {
     });
   }
   const galleries = new Map();
-  for (const row of getDb().prepare(`SELECT product_id, file, label, alt, sort, hero FROM product_gallery ORDER BY product_id, sort, file`).all()) {
-    const list = galleries.get(row.product_id) || [];
-    list.push({ file: row.file, label: row.label || '', alt: row.alt || '', sort: row.sort, hero: !!row.hero });
-    galleries.set(row.product_id, list);
+  const variantGalleries = new Map();
+  for (const row of getDb().prepare(`SELECT product_id, sku, file, label, alt, sort, hero FROM product_gallery ORDER BY product_id, sku, sort, file`).all()) {
+    const item = { file: row.file, label: row.label || '', alt: row.alt || '', sort: row.sort, hero: !!row.hero };
+    const sku = row.sku || '';
+    if (!sku) {
+      const list = galleries.get(row.product_id) || [];
+      list.push(item);
+      galleries.set(row.product_id, list);
+    } else {
+      const bySku = variantGalleries.get(row.product_id) || new Map();
+      const list = bySku.get(sku) || [];
+      list.push(item);
+      bySku.set(sku, list);
+      variantGalleries.set(row.product_id, bySku);
+    }
   }
-  return { prices, products, flags, galleries };
+  return { prices, products, flags, galleries, variantGalleries };
 }
 
 export function setVariantPrice(sku, price) {
@@ -188,18 +219,25 @@ export function setVariantFlag(sku, patch) {
 }
 
 export function listGalleryGroups() {
-  return [...getOverrides().galleries.entries()]
-    .map(([id, items]) => ({ id, items }))
-    .sort((a, b) => a.id.localeCompare(b.id));
+  const overrides = getOverrides();
+  const groups = [...overrides.galleries.entries()].map(([id, items]) => ({ id, sku: '', items }));
+  for (const [id, bySku] of overrides.variantGalleries || []) {
+    for (const [sku, items] of bySku) groups.push({ id, sku, items });
+  }
+  return groups.sort((a, b) => a.id.localeCompare(b.id) || a.sku.localeCompare(b.sku));
 }
 
-export function setGallery(productId, items) {
-  const previous = getOverrides().galleries.get(productId) || [];
+export function setGallery(productId, items, sku = '') {
+  const skuKey = String(sku || '');
+  const overrides = getOverrides();
+  const previous = skuKey
+    ? (overrides.variantGalleries.get(productId)?.get(skuKey) || [])
+    : (overrides.galleries.get(productId) || []);
   withTransaction((database) => {
-    database.prepare(`DELETE FROM product_gallery WHERE product_id = ?`).run(productId);
-    const insert = database.prepare(`INSERT INTO product_gallery (product_id, file, label, alt, sort, hero) VALUES (?, ?, ?, ?, ?, ?)`);
+    database.prepare(`DELETE FROM product_gallery WHERE product_id = ? AND sku = ?`).run(productId, skuKey);
+    const insert = database.prepare(`INSERT INTO product_gallery (product_id, sku, file, label, alt, sort, hero) VALUES (?, ?, ?, ?, ?, ?, ?)`);
     items.forEach((item, index) => {
-      insert.run(productId, item.file, item.label || '', item.alt || '', index, item.hero ? 1 : 0);
+      insert.run(productId, skuKey, item.file, item.label || '', item.alt || '', index, item.hero ? 1 : 0);
     });
   });
   const kept = new Set(items.map((item) => item.file));
@@ -373,12 +411,13 @@ export function applyBackup(payload, { mode, restoreShop }) {
     }
     if (restoreShop && payload.galleries) {
       if (mode === 'replace') database.prepare(`DELETE FROM product_gallery`).run();
-      const clear = database.prepare(`DELETE FROM product_gallery WHERE product_id = ?`);
-      const insert = database.prepare(`INSERT INTO product_gallery (product_id, file, label, alt, sort, hero) VALUES (?, ?, ?, ?, ?, ?)`);
+      const clear = database.prepare(`DELETE FROM product_gallery WHERE product_id = ? AND sku = ?`);
+      const insert = database.prepare(`INSERT INTO product_gallery (product_id, sku, file, label, alt, sort, hero) VALUES (?, ?, ?, ?, ?, ?, ?)`);
       for (const group of payload.galleries) {
-        clear.run(group.id);
+        const sku = group.sku || '';
+        clear.run(group.id, sku);
         group.items.forEach((item, index) => {
-          insert.run(group.id, item.file, item.label || '', item.alt || '', index, item.hero ? 1 : 0);
+          insert.run(group.id, sku, item.file, item.label || '', item.alt || '', index, item.hero ? 1 : 0);
         });
       }
       restoredShop = true;
@@ -438,14 +477,15 @@ export function replaceDurableRows(snapshot) {
       if (!sku || (row.oos == null && row.compareAt == null)) continue;
       flag.run(sku, row.oos == null ? null : (row.oos ? 1 : 0), Number.isInteger(row.compareAt) ? row.compareAt : null, typeof row.updatedAt === 'string' ? row.updatedAt : now);
     }
-    const shot = database.prepare(`INSERT INTO product_gallery (product_id, file, label, alt, sort, hero) VALUES (?, ?, ?, ?, ?, ?)`);
+    const shot = database.prepare(`INSERT INTO product_gallery (product_id, sku, file, label, alt, sort, hero) VALUES (?, ?, ?, ?, ?, ?, ?)`);
     for (const group of snapshot.galleries || []) {
       const id = cleanProductId(group?.id);
-      if (!id || !Array.isArray(group.items)) continue;
+      const sku = group?.sku ? cleanSku(group.sku) : '';
+      if (!id || !Array.isArray(group.items) || (group?.sku && !sku)) continue;
       group.items.forEach((item, index) => {
         const file = String(item?.file || '');
         if (!/^(asset:[\w./-]{1,180}|upload:[a-z0-9-]{1,60}\.(jpg|png|webp))$/.test(file)) return;
-        shot.run(id, file, String(item.label || '').slice(0, 80), String(item.alt || '').slice(0, 180), index, item.hero ? 1 : 0);
+        shot.run(id, sku, file, String(item.label || '').slice(0, 80), String(item.alt || '').slice(0, 180), index, item.hero ? 1 : 0);
       });
     }
     const catalog = database.prepare(`INSERT INTO catalog_prices (code, price, source, checked_at, updated_at) VALUES (?, ?, ?, ?, ?)`);

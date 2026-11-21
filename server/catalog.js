@@ -9,6 +9,7 @@ import { problem } from './format.js';
 import { resolveSale } from '../ai-server/src/sale.js';
 import { catalogData } from './danhmuc.js';
 import { CATALOG_TO_SHOP } from './dm-buy.js';
+import { productGallery } from '../web/js/gallery-list.js';
 
 const BRAND_ORDER = ['fh', 'goodgood', 'cheers', 'yummy', 'kita', 'vizafood', 'vizabox', 'psdd', 'ycnuts', 'mq', 'other'];
 
@@ -58,30 +59,75 @@ export function gallerySrc(file) {
   return null;
 }
 
-export function defaultGallery(product) {
-  const items = [];
-  const push = (img, label) => {
-    if (!img) return;
-    const src = resolveImg(img, true);
-    if (!src?.startsWith('/assets/')) return;
-    const file = `asset:${src.slice('/assets/'.length)}`;
-    if (items.some((item) => item.file === file)) return;
-    items.push({ file, label: label || 'Ảnh', alt: product.name || '', hero: items.length === 0 });
-  };
-  const variants = product?.variants || [];
-  const lead = variants.find((variant) => variant.sku === product?.def) || variants[0];
-  if (lead?.img) push(lead.img, 'Bao bì');
-  for (const variant of variants) {
-    push(variant.img, 'Bao bì');
-    push(variant.back, variant.backKind || 'Mặt sau');
+function srcToFile(src) {
+  const value = String(src || '');
+  if (value.startsWith('/assets/')) return `asset:${value.slice('/assets/'.length)}`;
+  if (value.startsWith('/media/')) return `upload:${value.slice('/media/'.length)}`;
+  return '';
+}
+
+function leadVariant(view) {
+  const variants = view?.variants || [];
+  return variants.find((variant) => variant.sku === view.defaultSku) || variants[0] || null;
+}
+
+function pageSource(view, variant) {
+  const custom = view?.variantGalleries?.[variant?.sku];
+  if (Array.isArray(custom) && custom.length) return { ...view, gallery: custom };
+  return view;
+}
+
+function catalogKindMap(view) {
+  const bare = { ...view, gallery: undefined, variantGalleries: undefined };
+  const map = new Map();
+  for (const variant of bare.variants || []) {
+    for (const shot of productGallery(bare, variant)) {
+      if (shot?.src && !map.has(shot.src)) map.set(shot.src, shot.kind || 'Ảnh');
+    }
   }
-  for (const photo of product?.photos || []) push(photo[0], photo[1] || 'Ảnh');
-  if (!items.length) push(product?.img, 'Ảnh');
-  return items;
+  return map;
+}
+
+function withCaption(item, defaults, name) {
+  const src = gallerySrc(item.file);
+  if (!src) return null;
+  const custom = String(item.label || '').replace(/\s+/g, ' ').trim();
+  return {
+    src,
+    kind: custom || defaults.get(src) || 'Ảnh',
+    alt: item.alt || name,
+    hero: !!item.hero,
+  };
+}
+
+// Đúng danh sách ảnh trang sản phẩm đang vẽ cho một mẫu: cùng thứ tự, cùng chú thích.
+export function variantGallery(view, variant) {
+  if (!variant) return [];
+  const defaults = catalogKindMap(view);
+  return productGallery(pageSource(view, variant), variant).map((shot, index) => {
+    const file = srcToFile(shot.src);
+    if (!file || !gallerySrc(file)) return null;
+    return {
+      file,
+      label: shot.kind || 'Ảnh',
+      defaultLabel: defaults.get(shot.src) || shot.kind || 'Ảnh',
+      alt: shot.alt || view?.name || '',
+      hero: index === 0,
+      src: shot.src,
+    };
+  }).filter(Boolean);
+}
+
+export function defaultGallery(product, sku = '') {
+  const { mq } = loadBase();
+  const view = presentProduct(mq, product);
+  const bare = { ...view, gallery: undefined, variantGalleries: undefined };
+  const variant = (sku && bare.variants.find((item) => item.sku === sku)) || leadVariant(bare);
+  return variantGallery(bare, variant).map(({ src, ...item }) => item);
 }
 
 export function normalizeGallery(product, input) {
-  if (!Array.isArray(input) || input.length > 24) throw problem(400, 'Danh sách ảnh chưa đúng.');
+  if (!Array.isArray(input) || input.length > 48) throw problem(400, 'Danh sách ảnh chưa đúng.');
   const items = [];
   const seen = new Set();
   for (const row of input) {
@@ -354,18 +400,22 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
       .map(([img, kind, alt]) => ({ src: resolveImg(img, true), kind: kind || 'Ảnh', alt: alt || product.name }))
       .filter((x) => x.src),
   };
+  const kinds = catalogKindMap(out);
   const saved = overrides.galleries.get(product.id);
   if (saved?.length) {
-    const shots = saved.map((item) => ({
-      src: gallerySrc(item.file),
-      kind: item.label || (item.hero ? 'Ảnh chính' : 'Ảnh'),
-      alt: item.alt || product.name,
-      hero: !!item.hero,
-    })).filter((item) => item.src);
+    const shots = saved.map((item) => withCaption(item, kinds, product.name)).filter(Boolean);
     if (shots.length) {
       const hero = shots.find((item) => item.hero) || shots[0];
       out.cardImg = hero.src;
       out.gallery = shots;
+    }
+  }
+  const bySku = overrides.variantGalleries?.get(product.id);
+  if (bySku?.size) {
+    out.variantGalleries = {};
+    for (const [sku, items] of bySku) {
+      const shots = items.map((item) => withCaption(item, kinds, product.name)).filter(Boolean);
+      if (shots.length) out.variantGalleries[sku] = shots;
     }
   }
   if (detail) {
@@ -497,20 +547,30 @@ export function getProductPage(id, now = new Date()) {
   return { redirect: null, product: view };
 }
 
+export function catalogView(id) {
+  const { mq, byId } = loadBase();
+  const product = byId.get(id);
+  if (!product || product.soon) return null;
+  return presentProduct(mq, product);
+}
+
 export function adminProducts() {
   const { mq } = loadBase();
   const overrides = getOverrides();
   return mq.PRODUCTS.filter((p) => !p.soon).map((product) => {
     const view = presentProduct(mq, product);
+    const variantGalleries = (view.variants || []).map((variant) => ({
+      sku: variant.sku,
+      label: variant.label || variant.w || variant.sku,
+      items: variantGallery(view, variant),
+    }));
+    const lead = variantGalleries.find((row) => row.sku === view.defaultSku) || variantGalleries[0];
+    const custom = !!(overrides.galleries.get(product.id)?.length) || !!(overrides.variantGalleries?.get(product.id)?.size);
     return {
       ...view,
-      gallery: (overrides.galleries.get(product.id) || defaultGallery(product)).map((item) => ({
-        file: item.file,
-        label: item.label || '',
-        alt: item.alt || '',
-        hero: !!item.hero,
-        src: gallerySrc(item.file) || '',
-      })).filter((item) => item.src),
+      galleryCustom: custom,
+      gallery: lead?.items || [],
+      variantGalleries,
       variants: (product.variants || []).filter((v) => v.sku).map((variant) => {
         const current = view.variants.find((v) => v.sku === variant.sku);
         const flag = overrides.flags.get(variant.sku);

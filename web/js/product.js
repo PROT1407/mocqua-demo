@@ -1,3 +1,4 @@
+import { productGallery } from './gallery-list.js';
 import { add, money, toast } from './store.js';
 
 const data = JSON.parse(document.querySelector('#product-data').textContent);
@@ -42,28 +43,9 @@ function pick(group, pack) {
 }
 
 function gallery(variant) {
-  if (Array.isArray(data.gallery) && data.gallery.length) {
-    const shots = data.gallery.filter((photo) => photo && photo.src);
-    if (shots.length) {
-      const hero = shots.find((photo) => photo.hero) || shots[0];
-      return [hero, ...shots.filter((photo) => photo !== hero)];
-    }
-  }
-  const list = [];
-  if (variant.img) list.push({ src: variant.img, alt: `${data.name}, bao bì ${variant.label}`, kind: 'Bao bì' });
-  if (variant.back && variant.back !== variant.img) list.push({ src: variant.back, alt: `${data.name}, ${variant.backKind || 'mặt sau'}`, kind: variant.backKind || 'Mặt sau' });
-  for (const photo of data.photos || []) {
-    if (photo.src && !list.some((x) => x.src === photo.src)) list.push({ src: photo.src, alt: photo.alt || data.name, kind: photo.kind || 'Ảnh' });
-  }
-  if (data.open?.src) list.push({ src: data.open.src, alt: data.open.cap || 'Mở túi', kind: 'Mở túi' });
-  // Ảnh kệ siêu thị có túi của chính sản phẩm (có thể nhiều ảnh).
-  // Sản phẩm nhiều mẫu túi: ảnh kệ chỉ hiện ở mẫu có túi đó trên ảnh (shelf.bags = tên ảnh bao bì).
-  const bagOn = (shelf) => !shelf.bags || shelf.bags.some((k) => [variant.img, variant.back].some((p) => p && new RegExp('/' + k + '[-.]').test(p)));
-  for (const shelf of data.shelves || (data.shelf ? [data.shelf] : [])) {
-    if (shelf?.src && bagOn(shelf) && !list.some((x) => x.src === shelf.src)) list.push({ src: shelf.src, alt: shelf.cap || 'Trên kệ', kind: 'Trên kệ' });
-  }
-  if (!list.length && data.open?.src) list.push({ src: data.open.src, alt: data.name, kind: 'Ảnh' });
-  return list;
+  const custom = data.variantGalleries?.[variant?.sku];
+  if (Array.isArray(custom) && custom.length) return productGallery({ ...data, gallery: custom }, variant);
+  return productGallery(data, variant);
 }
 
 // Ảnh 4:5 nhiều túi đứng cạnh nhau (data.fit45) hiện trọn khung 4:5, không cắt mất túi hai bên; ảnh khác giữ khung cũ.
