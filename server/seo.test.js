@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import test from 'node:test';
+import { describe, test } from 'node:test';
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'mocqua-seo-'));
 process.env.DB_PATH = path.join(dir, 'shop.sqlite');
@@ -21,7 +21,9 @@ function typesOf(node) {
   return Array.isArray(value) ? value : [value];
 }
 
+describe('seo', { concurrency: 1 }, () => {
 test('robots mở trang bán, sitemap và JSON-LD đúng giá danh mục', async () => {
+  process.env.SEO_INDEXING = 'on';
   const { createApp } = await import('./index.js');
   const { getShopCatalog } = await import('./catalog.js');
   const { homeSeo, PAGE_SEO, shopSeo } = await import('./seo.js');
@@ -56,6 +58,7 @@ test('robots mở trang bán, sitemap và JSON-LD đúng giá danh mục', async
     assert.match(home, /property="og:image" content="https:\/\/mocqua\.onrender\.com\/assets\/products\/real\/xoai-deo-muoi-ot\.webp"/);
     assert.match(home, /name="twitter:card" content="summary_large_image"/);
     assert.match(home, /name="robots" content="index, follow"/);
+    assert.equal(homeResHeaders(await fetch(base + '/')).get('x-robots-tag'), null);
     const homeLd = graphs(home);
     assert.ok(homeLd.some((node) => typesOf(node).includes('Organization')));
     assert.ok(homeLd.some((node) => typesOf(node).includes('Store')));
@@ -102,10 +105,61 @@ test('robots mở trang bán, sitemap và JSON-LD đúng giá danh mục', async
   }
 });
 
+function homeResHeaders(res) {
+  return res.headers;
+}
+
 test('SITE_URL đổi địa chỉ trong sitemap', async () => {
+  process.env.SEO_INDEXING = 'on';
   process.env.SITE_URL = 'https://mocqua.com/';
   const { robotsTxt, siteUrl } = await import('./seo.js');
   assert.equal(siteUrl(), 'https://mocqua.com');
   assert.match(robotsTxt(), /Sitemap: https:\/\/mocqua\.com\/sitemap\.xml/);
   delete process.env.SITE_URL;
+});
+
+test('SEO_INDEXING tắt thì chặn Google, thẻ chia sẻ vẫn còn', async () => {
+  for (const value of [undefined, '', 'off', 'yes', '0']) {
+    if (value === undefined) delete process.env.SEO_INDEXING;
+    else process.env.SEO_INDEXING = value;
+    const { indexingEnabled, robotsTxt, headTags } = await import('./seo.js');
+    assert.equal(indexingEnabled(), false, String(value));
+    assert.equal(robotsTxt(), 'User-agent: *\nDisallow: /\n');
+    assert.doesNotMatch(robotsTxt(), /Sitemap|Allow:/);
+    const tags = headTags({ title: 'Mộc Quả', description: 'Trái cây sấy', path: '/', type: 'product', price: 199000 });
+    assert.match(tags, /name="robots" content="noindex, nofollow"/);
+    assert.match(tags, /rel="canonical"/);
+    assert.match(tags, /property="og:title"/);
+    assert.match(tags, /property="og:type" content="product"/);
+    assert.match(tags, /product:price:amount" content="199000"/);
+  }
+  for (const value of ['on', 'true', '1', 'ON', 'True']) {
+    process.env.SEO_INDEXING = value;
+    const { indexingEnabled } = await import('./seo.js');
+    assert.equal(indexingEnabled(), true, value);
+  }
+  delete process.env.SEO_INDEXING;
+  const { createApp } = await import('./index.js');
+  const app = createApp();
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    const robots = await fetch(base + '/robots.txt');
+    assert.equal(await robots.text(), 'User-agent: *\nDisallow: /\n');
+    assert.equal(robots.headers.get('x-robots-tag'), 'noindex, nofollow');
+    const home = await fetch(base + '/');
+    const html = await home.text();
+    assert.equal(home.headers.get('x-robots-tag'), 'noindex, nofollow');
+    assert.match(html, /name="robots" content="noindex, nofollow"/);
+    assert.match(html, /rel="canonical" href="https:\/\/mocqua\.onrender\.com\/"/);
+    assert.match(html, /property="og:title"/);
+    assert.match(html, /application\/ld\+json/);
+    const health = await fetch(base + '/healthz');
+    assert.equal(health.headers.get('x-robots-tag'), 'noindex, nofollow');
+    assert.equal((await fetch(base + '/sitemap.xml')).status, 200);
+  } finally {
+    server.close();
+    process.env.SEO_INDEXING = 'on';
+  }
+});
 });
