@@ -320,6 +320,14 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .spec { width: 100%; border-collapse: collapse; }
 .spec th, .spec td { text-align: left; vertical-align: top; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--line); }
 .spec th { width: 40%; color: var(--muted); font-weight: 500; }
+.edit-shortcut {
+  position: fixed; left: 12px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60;
+  background: var(--brown); color: var(--cream); text-decoration: none;
+  border-radius: 999px; padding: 10px 14px; font-weight: 600; min-height: 44px;
+  display: inline-flex; align-items: center;
+}
+.page-product .edit-shortcut { bottom: calc(84px + env(safe-area-inset-bottom)); }
+.is-edit-target { outline: 2px solid var(--olive); outline-offset: 4px; }
 .buysticky {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 35;
   display: flex; justify-content: space-between; align-items: center; gap: 12px;

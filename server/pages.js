@@ -42,8 +42,10 @@ const PAGE_PATH = {
   gift: '/hop-qua',
 };
 
+const EDIT_PAGES = new Set(['home', 'shop', 'catalog', 'combo', 'gift', 'product']);
+
 function layout({ title, description, page, body, scripts = [], styles = [], seo = {} }) {
-  const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
+  const tags = ['/static/js/store.js', '/static/js/pwa.js', ...(EDIT_PAGES.has(page) ? ['/static/js/edit-shortcut.js'] : []), ...scripts]
     .map((src) => `<script type="module" src="${src}"></script>`)
     .join('');
   const noindex = seo.noindex ?? NOINDEX_PAGES.has(page);
