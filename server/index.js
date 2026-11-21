@@ -16,12 +16,13 @@ import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.
 import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
-import { catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
+import { catalogData, catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
 import { catalogBuyMap, catalogCodeForShopSku, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage, giftIndexPage, giftBuilderPage } from './pages.js';
 import { durableConfig, hydrateEdits, persistEdits } from './durable.js';
 import { decodeImage, readMedia, removeMedia, saveUpload } from './media.js';
+import { robotsTxt, shopSitemap } from './seo.js';
 import { notifyNewOrder } from './telegram.js';
 import { notifySheets, sendTestNotifications } from './sheets.js';
 
@@ -38,7 +39,6 @@ const LEGACY = [
   'yeu-thich.html',
   'tai-khoan.html',
   'favicon.svg',
-  'robots.txt',
   'CREDITS.md',
 ];
 
@@ -137,6 +137,16 @@ export function createApp() {
     res.sendFile(path.join(ROOT, 'web', 'sw.js'));
   });
   app.use('/icons', express.static(path.join(ROOT, 'web', 'icons'), { index: false, maxAge: '7d' }));
+
+  app.get('/robots.txt', (req, res) => {
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.type('text/plain').send(robotsTxt());
+  });
+  app.get('/sitemap.xml', (req, res) => {
+    const updated = catalogData()?.updated;
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.type('application/xml').send(shopSitemap(getShopCatalog(), updated));
+  });
 
   app.get('/healthz', (req, res) => {
     res.set('Cache-Control', 'no-store');

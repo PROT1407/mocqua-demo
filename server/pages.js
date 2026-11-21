@@ -9,6 +9,7 @@ import { catalogHeroBySku } from './dm-buy.js';
 import { dealBySku } from './deals.js';
 import { bankConfig } from './vietqr.js';
 import { aiHealthUrl } from './warmup.js';
+import { PAGE_SEO, faqBlock, headTags, homeJsonLd, homeSeo, jsonLdTag, productDescription, productFaqs, productJsonLd, productTitle, shopSeo } from './seo.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 // Câu mở đầu cho băng tiêu đề từng nhóm ở /cua-hang (chỉ trang Cửa hàng dùng).
@@ -25,16 +26,41 @@ const BAND_MIN = 4;
 const EXTRA = ['omai', 'set', 'hat'];
 // Nổi bật lấy từ danh mục (featured = thứ tự). Món đang khuyến mãi mà chưa có số thì xếp sau.
 
-function layout({ title, description, page, body, scripts = [], styles = [] }) {
+const NOINDEX_PAGES = new Set(['admin', 'cart', 'checkout', 'order', 'track', 'offline', 'error']);
+const PAGE_PATH = {
+  home: '/',
+  shop: '/cua-hang',
+  combo: '/combo',
+  cart: '/gio-hang',
+  checkout: '/thanh-toan',
+  track: '/tra-cuu',
+  admin: '/admin',
+  compare: '/so-sanh',
+  catalog: '/danh-muc',
+  offline: '/offline',
+  gift: '/hop-qua',
+};
+
+function layout({ title, description, page, body, scripts = [], styles = [], seo = {} }) {
   const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
     .map((src) => `<script type="module" src="${src}"></script>`)
     .join('');
+  const noindex = seo.noindex ?? NOINDEX_PAGES.has(page);
+  const meta = headTags({
+    title,
+    description,
+    path: seo.path || PAGE_PATH[page] || '/',
+    image: seo.image,
+    type: seo.type || 'website',
+    price: seo.price,
+    noindex,
+  });
   return `<!doctype html>
 <html lang="vi">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
+${meta}
 <meta name="theme-color" content="#F7F1E8">
 <meta name="mq-ai-health" content="${esc(aiHealthUrl())}">
 <meta name="mobile-web-app-capable" content="yes">
@@ -50,6 +76,7 @@ function layout({ title, description, page, body, scripts = [], styles = [] }) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/shop.css">${styles.map((href) => `<link rel="stylesheet" href="${esc(href)}">`).join('')}
+${jsonLdTag(seo.jsonld)}
 </head>
 <body class="page-${esc(page)}">
 <a class="skip" href="#main">Tới nội dung</a>
@@ -191,7 +218,7 @@ function kemBlock(product, kem) {
     const def = p.variants.find((v) => v.sku === p.defaultSku);
     const price = def?.price || p.priceFrom;
     return `<li class="kem__it${combo ? ' kem__it--combo' : ''}">
-      <a class="kem__img" href="${href}"><img src="${esc(p.cardImg || '/assets/img/xoai.jpg')}" alt="" loading="lazy" width="160" height="160"></a>
+      <a class="kem__img" href="${href}"><img src="${esc(p.cardImg || '/assets/img/xoai.jpg')}" alt="${esc(p.name)}" loading="lazy" width="160" height="160"></a>
       <div class="kem__body">
         ${combo ? `<p class="kem__tag">Combo${combo.save ? ` · Tiết kiệm ${k(combo.save)}` : ''}</p>` : ''}
         <a class="kem__name" href="${href}">${esc(p.name)}</a>
@@ -260,7 +287,7 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
 function altCards(items) {
   if (!items?.length) return '';
   return `<h2>Gợi ý thay thế</h2><div class="alts__row">${items.map((item) => `<article class="alt">
-      <a href="${esc(item.href)}"><img src="${esc(item.img)}" alt="" width="64" height="80" loading="lazy"></a>
+      <a href="${esc(item.href)}"><img src="${esc(item.img)}" alt="${esc(item.name)}" width="64" height="80" loading="lazy"></a>
       <div><a href="${esc(item.href)}">${esc(item.name)}</a>${item.pitch ? `<small>${esc(item.pitch)}</small>` : ''}<b>${esc(vnd(item.price))}</b></div>
       <button type="button" class="btn btn--small" data-alt-add="${esc(item.sku)}">Đặt ngay</button>
     </article>`).join('')}</div>`;
@@ -350,7 +377,7 @@ export function homePage(catalog) {
     </div>
     <div class="tiles">
       ${tiles.map((t) => `<a class="tile" href="/cua-hang?cat=${esc(t.id)}">
-        <img src="${esc(t.img || '/assets/img/xoai.jpg')}" alt="" width="800" height="800">
+        <img src="${esc(t.img || '/assets/img/xoai.jpg')}" alt="${esc(t.name)}" width="800" height="800">
         <span class="badge badge--${esc(t.id)}">${esc(t.short)}</span>
         <b>${esc(t.name)}</b>
         <small>${esc(t.desc)}</small>
@@ -374,16 +401,18 @@ export function homePage(catalog) {
   </section>
   <dialog class="shotbox" id="shotbox">
     <form method="dialog"><button class="shotbox__x" aria-label="Đóng">Đóng</button></form>
-    <img alt="" id="shotbox-img">
+    <img alt="" aria-hidden="true" id="shotbox-img">
     <p id="shotbox-cap"></p>
   </dialog>
 </main>`;
+  const seoCopy = homeSeo();
   return layout({
-    title: 'Mộc Quả — trái cây sấy',
-    description: 'Cửa hàng trái cây sấy Mộc Quả. Chọn theo cách sấy: dẻo, thăng hoa, giòn, khô.',
+    title: seoCopy.title,
+    description: seoCopy.description,
     page: 'home',
     body,
     scripts: ['/static/js/home.js'],
+    seo: { path: '/', image: '/assets/products/real/xoai-deo-muoi-ot.webp', jsonld: homeJsonLd() },
   });
 }
 
@@ -543,6 +572,7 @@ export function shopPage(catalog, query) {
   const sub = wantedCat
     ? (catMeta[wantedCat]?.desc || '')
     : 'Chọn cách sấy, rồi đến quả, rồi đến hãng. Một hãng nhiều khối lượng nằm chung một trang.';
+  const seoCopy = shopSeo(q ? '' : (wantedCat || ''));
 
   const body = `<main id="main" class="wrap shop">
     <header class="pagehead">
@@ -570,10 +600,14 @@ export function shopPage(catalog, query) {
     ${html}
   </main>`;
   return layout({
-    title: `${title} | Mộc Quả`,
-    description: sub,
+    title: q ? `${title} | Mộc Quả` : seoCopy.title,
+    description: q ? sub : seoCopy.description,
     page: 'shop',
     body,
+    seo: {
+      path: q ? '/cua-hang' : (wantedCat ? `/cua-hang?cat=${encodeURIComponent(wantedCat)}` : '/cua-hang'),
+      noindex: !!q,
+    },
   });
 }
 
@@ -583,6 +617,7 @@ function specTable(rows) {
 }
 
 export function productPage(product, catalog) {
+  const imageAlt = `${productTitle(product).replace(/ \| Mộc Quả$/, '')} – bao bì`;
   const crumbs = `<nav class="crumbs" aria-label="Đường dẫn"><a href="/cua-hang">Cửa hàng</a> <a href="/cua-hang?cat=${esc(product.cat)}">${esc(product.catShort)}</a>${product.fruit ? ` <a href="/cua-hang?cat=${esc(product.cat)}&fruit=${esc(product.fruit)}">${esc(product.fruitName)}</a>` : ''}</nav>`;
   const trust = [
     product.own ? 'Đóng túi Mộc Quả, nhìn rõ quả qua cửa sổ' : 'Nguyên bao bì nhà sản xuất, không san chiết',
@@ -629,7 +664,7 @@ export function productPage(product, catalog) {
     <article class="pdp">
       <div class="pdp__gallery">
         <div class="pdp__stage">
-          <img id="pdp-main"${(product.fit45 || []).includes(product.cardImg) ? ' class="is-45"' : ''} src="${esc(product.cardImg || '')}" alt="${esc(product.name)}" width="900" height="1125">
+          <img id="pdp-main"${(product.fit45 || []).includes(product.cardImg) ? ' class="is-45"' : ''} src="${esc(product.cardImg || '')}" alt="${esc(imageAlt)}" width="900" height="1125">
           <span class="pdp__kind" id="pdp-kind">Bao bì</span>
           <span class="savebadge savebadge--lg" id="pdp-save" hidden></span>
         </div>
@@ -665,6 +700,7 @@ export function productPage(product, catalog) {
       </div>
     </article>
     <div class="prose">${sections}</div>
+    ${faqBlock(productFaqs(product, catalog.settings))}
     ${kemBlock(product, kem)}
     <div class="buysticky">
       <div><b id="pdp-sticky-price"></b><span id="pdp-sticky-label"></span></div>
@@ -672,12 +708,20 @@ export function productPage(product, catalog) {
     </div>
     ${jsonScript('product-data', client)}
   </main>`;
+  const lead = product.variants.find((variant) => variant.sku === product.defaultSku) || product.variants[0];
   return layout({
-    title: `${product.name} | Mộc Quả`,
-    description: product.short || product.name,
+    title: productTitle(product),
+    description: productDescription(product),
     page: 'product',
     body,
     scripts: ['/static/js/product.js'],
+    seo: {
+      path: `/san-pham/${encodeURIComponent(product.id)}`,
+      image: product.cardImg,
+      type: 'product',
+      price: lead?.price,
+      jsonld: productJsonLd(product, catalog.settings),
+    },
   });
 }
 
@@ -788,7 +832,7 @@ function inComboCards(product, catalog) {
         const href = `/san-pham/${encodeURIComponent(p.id)}`;
         const { src } = comboImg(p);
         return `<article class="cbmini">
-        <a class="cbmini__img" href="${href}"><img src="${esc(src)}" alt="" width="72" height="90" loading="lazy" decoding="async"></a>
+        <a class="cbmini__img" href="${href}"><img src="${esc(src)}" alt="${esc(p.name)}" width="72" height="90" loading="lazy" decoding="async"></a>
         <div class="cbmini__body">
           <a class="cbmini__name" href="${href}">${esc(p.name)}</a>
           ${info.save ? `<span class="cbmini__save">Tiết kiệm ${esc(kShort(info.save))}</span>` : ''}
@@ -844,8 +888,8 @@ export function comboPage(catalog) {
     <p class="cbnote">${esc(bannerText(s))}. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.</p>
   </main>`;
   return layout({
-    title: 'Combo trái cây sấy | Mộc Quả',
-    description: 'Combo trộn vị Mộc Quả: ăn vặt mỗi ngày, cặp đôi cùng vị, quà biếu. Giá combo tính từ giá lẻ thật.',
+    title: PAGE_SEO.combo.title,
+    description: PAGE_SEO.combo.description,
     page: 'combo',
     body,
   });
@@ -1153,8 +1197,8 @@ export function comparePage(rows) {
     ${jsonScript('price-refs-data', rows)}
   </main>`;
   return layout({
-    title: 'So sánh giá theo thương hiệu | Mộc Quả',
-    description: 'Bảng so sánh giá trái cây sấy, hạt theo thương hiệu, nhãn và khối lượng.',
+    title: PAGE_SEO.compare.title,
+    description: PAGE_SEO.compare.description,
     page: 'compare',
     body,
     scripts: ['/static/js/compare.js'],
@@ -1219,8 +1263,8 @@ export function catalogPage(data) {
     ${jsonScript('dm-data', { ...data, contact: `https://zalo.me/${shopContact.phones[0]?.tel || ''}` })}
   </main>`;
   return layout({
-    title: 'Danh mục tra cứu | Mộc Quả',
-    description: 'Tra cứu sản phẩm Mộc Quả và Viza Food (Mộc Quả là đối tác phân phối độc quyền) theo thương hiệu, nhãn, sản phẩm, khối lượng.',
+    title: PAGE_SEO.catalog.title,
+    description: PAGE_SEO.catalog.description,
     page: 'catalog',
     body,
     scripts: ['/static/js/danh-muc.js'],
@@ -1290,8 +1334,8 @@ export function giftIndexPage() {
     <p class="fine">Đơn công ty, in logo hoặc xuất VAT: xem <a href="/chinh-sach.html#khuyen-mai">giá sỉ trong chính sách</a>.</p>
   </main>`;
   return layout({
-    title: 'Đổi vị hộp quà | Mộc Quả',
-    description: 'Tự chọn vị trong hộp quà Mộc Quả. Giá cập nhật theo danh mục. Từ 20 hộp tính giá sỉ.',
+    title: PAGE_SEO.gift.title,
+    description: PAGE_SEO.gift.description,
     page: 'gift',
     body,
   });
@@ -1304,7 +1348,7 @@ export function giftBuilderPage(id) {
   const options = chooserOptions(pool, [box]);
   const view = quoteBox({ unit: box.listed, qty: 1, tiers: ORDER_TIERS });
   const slots = box.slots.map((slot) => `<li class="gslot" data-slot="${slot.i}">
-    <span class="gslot__img">${slot.img ? `<img src="${esc(slot.img)}" alt="" width="64" height="64">` : ''}</span>
+    <span class="gslot__img">${slot.img ? `<img src="${esc(slot.img)}" alt="${esc(slot.name)}" width="64" height="64">` : ''}</span>
     <span>
       <b>${esc(slot.name)}</b>
       <small>${esc(slot.locked ? `${slot.label} · ${slot.grams}g` : `${slot.w} · ngăn ${slot.grams}g`)}</small>

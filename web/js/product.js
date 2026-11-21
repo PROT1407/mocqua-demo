@@ -86,7 +86,7 @@ function showImage(list, index) {
 
 function render() {
   const images = gallery(current);
-  thumbs.innerHTML = images.map((image, index) => `<button type="button" data-i="${index}"><img src="${text(image.src)}" alt=""><span>${text(image.kind)}</span></button>`).join('');
+  thumbs.innerHTML = images.map((image, index) => `<button type="button" data-i="${index}"><img src="${text(image.src)}" alt="${text(image.alt || data.name)}"><span>${text(image.kind)}</span></button>`).join('');
   showImage(images, 0);
   weights.innerHTML = groups().map((variant) => {
     const sample = pick(variant.group, current.pack);
@@ -132,7 +132,7 @@ function render() {
   if (alts) {
     alts.hidden = !swaps.length;
     alts.innerHTML = swaps.length ? `<h2>Gợi ý thay thế</h2><div class="alts__row">${swaps.map((item) => `<article class="alt">
-      <a href="${text(item.href)}"><img src="${text(item.img)}" alt="" width="64" height="80" loading="lazy"></a>
+          <a href="${text(item.href)}"><img src="${text(item.img)}" alt="${text(item.name)}" width="64" height="80" loading="lazy"></a>
       <div><a href="${text(item.href)}">${text(item.name)}</a>${item.pitch ? `<small>${text(item.pitch)}</small>` : ''}<b>${money(item.price)}</b></div>
       <button type="button" class="btn btn--small" data-alt-add="${text(item.sku)}">Đặt ngay</button>
     </article>`).join('')}</div>` : '';
