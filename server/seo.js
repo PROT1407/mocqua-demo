@@ -118,7 +118,13 @@ export function productDescription(product) {
   return clip(product?.short || product?.name || 'Trái cây sấy tại Mộc Quả', 155);
 }
 
+export function indexingEnabled(env = process.env) {
+  const value = String(env.SEO_INDEXING ?? '').trim().toLowerCase();
+  return value === 'on' || value === 'true' || value === '1';
+}
+
 export function robotsTxt() {
+  if (!indexingEnabled()) return 'User-agent: *\nDisallow: /\n';
   return [
     'User-agent: *',
     'Allow: /',
@@ -155,8 +161,9 @@ export function shopSitemap(catalog, updated) {
 export function headTags({ title, description, path = '/', image, type = 'website', price, noindex = false }) {
   const url = absoluteUrl(path);
   const img = absoluteUrl(image || DEFAULT_IMAGE);
+  const block = !indexingEnabled() || noindex;
   const lines = [
-    `<meta name="robots" content="${noindex ? 'noindex, nofollow' : 'index, follow'}">`,
+    `<meta name="robots" content="${block ? 'noindex, nofollow' : 'index, follow'}">`,
     `<link rel="canonical" href="${esc(url)}">`,
     `<meta property="og:title" content="${esc(title)}">`,
     `<meta property="og:description" content="${esc(description)}">`,

@@ -22,7 +22,7 @@ import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage, giftIndexPage, giftBuilderPage } from './pages.js';
 import { durableConfig, hydrateEdits, persistEdits } from './durable.js';
 import { decodeImage, readMedia, removeMedia, saveUpload } from './media.js';
-import { robotsTxt, shopSitemap } from './seo.js';
+import { indexingEnabled, robotsTxt, shopSitemap } from './seo.js';
 import { notifyNewOrder } from './telegram.js';
 import { notifySheets, sendTestNotifications } from './sheets.js';
 
@@ -125,6 +125,10 @@ export function createApp() {
   });
   app.use(securityHeaders);
   app.use(adminSameOrigin);
+  app.use((req, res, next) => {
+    if (!indexingEnabled()) res.set('X-Robots-Tag', 'noindex, nofollow');
+    next();
+  });
 
   app.get('/manifest.webmanifest', (req, res) => {
     res.set('Cache-Control', 'no-cache');
