@@ -48,6 +48,8 @@ export function createApp({
     maxWaitMs: facebook.maxWaitMs,
     schedule: facebook.schedule,
     clearSchedule: facebook.clearSchedule,
+    pace: facebook.pace != null ? facebook.pace : !facebook.schedule,
+    typePaceMs: facebook.typePaceMs,
   });
   let facebookTail = Promise.resolve();
   app.locals.drainFacebook = () => facebookTail;

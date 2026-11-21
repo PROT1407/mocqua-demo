@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
+import { confirmedOrderFromThread, extractConfirmedOrder, typingDelayMs } from '../src/facebook.js';
 import { CATALOG_WARM } from '../src/prompt.js';
 
 const SECRET = 'test-app-secret';
@@ -139,6 +140,34 @@ async function post(base, app, payload) {
   await app.locals.drainFacebook();
   return res;
 }
+
+test('đơn đủ tên, điện thoại, địa chỉ và món mới được ghi nhận', () => {
+  const catalog = [{ name: 'Xoài sấy dẻo', url: 'https://mocqua.com/san-pham/xoai-say-deo' }];
+  assert.equal(extractConfirmedOrder('0919997283', catalog), null);
+  assert.equal(extractConfirmedOrder('Tên: Lan\n0919997283', catalog), null);
+  const one = extractConfirmedOrder('Tên: Lan\nĐiện thoại: 0919997283\nĐịa chỉ: 12 Lê Lợi, quận 1\n1 túi xoài sấy dẻo', catalog);
+  assert.equal(one.name, 'Lan');
+  assert.equal(one.phone, '0919997283');
+  assert.match(one.address, /Lê Lợi/);
+  assert.deepEqual(one.items, ['Xoài sấy dẻo']);
+  const thread = confirmedOrderFromThread({
+    turns: [
+      { role: 'user', text: 'Tên: Lan\nĐiện thoại: 0919997283\nĐịa chỉ: 12 Lê Lợi, quận 1\n1 túi xoài sấy dẻo' },
+      { role: 'model', text: 'Em đọc lại đơn.' },
+      { role: 'user', text: 'ok chốt' },
+    ],
+    latest: 'ok chốt',
+    catalogItems: catalog,
+  });
+  assert.equal(thread.name, 'Lan');
+  assert.equal(confirmedOrderFromThread({
+    turns: [{ role: 'user', text: 'Tên: Lan\nĐiện thoại: 0919997283\nĐịa chỉ: 12 Lê Lợi\n1 túi xoài sấy dẻo' }, { role: 'user', text: 'còn mít không' }],
+    latest: 'còn mít không',
+    catalogItems: catalog,
+  }), null);
+  assert.equal(typingDelayMs(''), 2000);
+  assert.equal(typingDelayMs('x'.repeat(300)), 5000);
+});
 
 test('Facebook xác thực webhook và từ chối chữ ký sai', async () => {
   const { app } = appFor();
@@ -650,4 +679,77 @@ test('thiếu khóa hoặc danh mục lỗi cũng báo chủ, Gemini ổn thì k
     assert.deepEqual(ok.calls.owner, []);
     await ok.app.locals.drainFacebook();
   });
+});
+
+test('đơn đã đủ thì báo Telegram ngay, không chờ 4 giây', async () => {
+  const { app, calls, clock } = clockedApp({
+    loadCatalog: async () => ({
+      ok: true,
+      items: [{ name: 'Xoài sấy dẻo', price: 49000, url: 'https://mocqua.com/san-pham/xoai-say-deo' }],
+      updated: '',
+    }),
+  });
+  await withServer(app, async (base) => {
+    await send(base, textEvent('U40', 'Tên: Lan\nĐiện thoại: 0919997283\nĐịa chỉ: 12 Lê Lợi, quận 1\n1 túi xoài sấy dẻo'));
+    await app.locals.drainFacebook();
+    assert.equal(clock.pending(), 0);
+    assert.equal(calls.generate, 0);
+    assert.match(replies(calls).at(-1), /đã ghi nhận thông tin/);
+    assert.match(calls.owner.at(-1), /ĐƠN FACEBOOK/);
+    assert.match(calls.owner.at(-1), /Lan/);
+    assert.match(calls.owner.at(-1), /0919997283/);
+    assert.match(calls.owner.at(-1), /Lê Lợi/);
+    assert.match(calls.owner.at(-1), /Xoài sấy dẻo/);
+  });
+});
+
+test('gõ máy rồi chờ theo độ dài câu rồi mới gửi', async () => {
+  const stamps = [];
+  const { app, calls } = appFor({
+    pace: true,
+    typePaceMs: () => 40,
+    quietMs: 5,
+    maxWaitMs: 5,
+    fetchImpl: async (_url, init) => {
+      stamps.push(Date.now());
+      calls.graph.push(JSON.parse(init.body));
+      return new Response('{}', { status: 200 });
+    },
+  });
+  await withServer(app, async (base) => {
+    await send(base, textEvent('U41', 'có xoài không'));
+    await app.locals.drainFacebook();
+    const messageAt = calls.graph.findIndex((body) => body.message?.text);
+    const typingAt = calls.graph.findLastIndex((body, index) => body.sender_action === 'typing_on' && index < messageAt);
+    assert.ok(typingAt >= 0);
+    assert.ok(messageAt > typingAt);
+    assert.ok(stamps[messageAt] - stamps[typingAt] >= 30);
+    await app.locals.drainFacebook();
+  });
+});
+
+test('facebook send failed ghi thân lỗi, không ghi token', async () => {
+  const errors = [];
+  const original = console.error;
+  console.error = (...args) => { errors.push(args.map(String).join(' ')); };
+  try {
+    const { app, clock } = clockedApp({
+      fetchImpl: async (url) => {
+        assert.doesNotMatch(String(url), /console/);
+        return new Response(JSON.stringify({ error: { message: 'Error validating access token', code: 190 } }), { status: 401 });
+      },
+    });
+    await withServer(app, async (base) => {
+      await send(base, textEvent('U42', 'có xoài không'));
+      await clock.advance(4000);
+      await app.locals.drainFacebook();
+    });
+  } finally {
+    console.error = original;
+  }
+  const line = errors.find((row) => row.includes('facebook send failed'));
+  assert.ok(line);
+  assert.match(line, /401/);
+  assert.match(line, /Error validating access token/);
+  assert.doesNotMatch(line, /page-token|access_token=/);
 });

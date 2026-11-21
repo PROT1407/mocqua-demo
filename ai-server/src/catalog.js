@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { listPriceForGrams, resolveSale } from './sale.js';
+import { listPriceForGrams, promoLabel, resolveSale } from './sale.js';
 
 const DEFAULT_URL = 'https://mocqua.onrender.com/api/danh-muc';
 const DEFAULT_ORIGIN = 'https://mocqua.onrender.com';
@@ -52,7 +52,7 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
     for (const variant of product?.variants || []) {
       const sku = clean(variant?.code);
       if (!sku) continue;
-      const shopId = clean(variant?.shopId);
+      const shopId = clean(variant?.shopId) || clean(product?.shopId);
       const url = shopId ? `${origin}/san-pham/${encodeURIComponent(shopId)}` : '';
       const grams = Number(variant?.weightG);
       const weight = clean(variant?.weightLabel) || (Number.isFinite(grams) && grams > 0 ? `${grams}g` : '');
@@ -69,6 +69,9 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
         }
       }
       const featured = Number.isInteger(product?.featured) ? product.featured : null;
+      const badge = clean(product?.badge);
+      const notice = clean(product?.notice);
+      const promoNote = /khuyến mãi|giảm giá/i.test(notice) ? notice : '';
       const bags = Number.isInteger(variant?.bags) && variant.bags > 1 ? variant.bags : null;
       lines.push({
         id,
@@ -79,6 +82,8 @@ export function compactCatalog(payload, { origin = DEFAULT_ORIGIN, now = new Dat
         line: clean(product?.line),
         pitch: clean(product?.pitch),
         ...(featured != null ? { featured } : {}),
+        ...(badge ? { badge } : {}),
+        ...(promoNote ? { promoNote } : {}),
         sku,
         weight,
         grams: Number.isFinite(grams) ? grams : null,
@@ -249,6 +254,50 @@ export function suggestCombo(items, focus) {
   return best;
 }
 
+function readPromo(value) {
+  if (!value || typeof value !== 'object') return { text: '', endsAt: '', banner: '' };
+  const endsAt = /^\d{4}-\d{2}-\d{2}$/.test(String(value.endsAt || '')) ? String(value.endsAt) : '';
+  return {
+    text: clean(value.text).slice(0, 400),
+    endsAt,
+    banner: clean(value.banner).slice(0, 240),
+  };
+}
+
+export function promoOpen(endsAt, now = new Date()) {
+  if (!endsAt) return true;
+  const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now instanceof Date ? now : new Date(now));
+  return day <= String(endsAt).slice(0, 10);
+}
+
+export function livePromoLines(items, promo, now = new Date()) {
+  const lines = [];
+  const seen = new Set();
+  const push = (line) => {
+    const text = String(line || '').trim();
+    if (!text || seen.has(text)) return;
+    seen.add(text);
+    lines.push(text);
+  };
+  if (promo?.text && promoOpen(promo.endsAt, now)) {
+    const when = promo.endsAt ? ` đến hết ${promo.endsAt.slice(8, 10)}/${promo.endsAt.slice(5, 7)}/${promo.endsAt.slice(0, 4)}` : '';
+    push(`Chương trình tháng: ${promo.text}${when}`);
+  }
+  if (promo?.banner) push(`Thông báo trên web: ${promo.banner}`);
+  for (const item of items || []) {
+    const sale = item.schedule ? resolveSale(item.schedule, now) : null;
+    const bits = [item.brand, item.name, item.weight].filter(Boolean).join(' ');
+    if (sale?.promo) {
+      const label = sale.promo.label || promoLabel(sale.promo.endsAt) || 'khuyến mãi';
+      push(`${bits}: ${label}${item.url ? ` ${item.url}` : ''}`);
+      continue;
+    }
+    if (item.badge === 'Khuyến mãi') push(`${bits}: huy hiệu Khuyến mãi${item.url ? ` ${item.url}` : ''}`);
+    if (item.promoNote) push(`${bits}: ${item.promoNote}${item.url ? ` ${item.url}` : ''}`);
+  }
+  return lines;
+}
+
 function readShipping(value) {
   const fee = Number(value?.shipFee);
   const free = Number(value?.freeShip);
@@ -277,7 +326,7 @@ function readBundle(origin) {
     const payload = JSON.parse(fs.readFileSync(BUNDLE_URL, 'utf8'));
     if (payload && Array.isArray(payload.products) && payload.products.length) {
       const shipping = readShipping(payload.shipping);
-      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle', ...(shipping ? { shipping } : {}) };
+      data = { items: compactCatalog(payload, { origin }), updated: clean(payload.updated) || 'bundle', ...(shipping ? { shipping } : {}), promo: readPromo(payload.promo) };
     }
   } catch {
     data = null;
@@ -310,7 +359,7 @@ export function createCatalogSource({
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.products)) throw new Error('catalog-shape');
     const shipping = readShipping(payload.shipping);
-    return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated), ...(shipping ? { shipping } : {}) };
+    return { items: compactCatalog(payload, { origin }), updated: clean(payload.updated), ...(shipping ? { shipping } : {}), promo: readPromo(payload.promo) };
   }
 
   async function pull() {
