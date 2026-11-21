@@ -1140,6 +1140,8 @@ export function adminPage() {
         <button class="btn btn--ghost btn--small" type="button" id="logout">Thoát</button>
       </div>
       <p class="notice" id="bank-warn" hidden>Chưa cấu hình BANK_BIN, ACCOUNT_NO, ACCOUNT_NAME. Khách đặt chuyển khoản vẫn có mã đơn và số tiền, nhưng chưa thấy QR.</p>
+      <p class="fine" id="store-status" role="status"></p>
+      <button class="btn btn--small btn--ghost" type="button" id="store-check">Kiểm tra kết nối</button>
       <section class="backup">
         <h2>Bản sao đơn</h2>
         <p class="fine" id="backup-note">Gói miễn phí không giữ file. Sau mỗi đợt đơn, và trước khi deploy, xuất JSON rồi cất trên máy. Danh sách bên dưới là 200 đơn mới. File xuất gồm mọi đơn.</p>

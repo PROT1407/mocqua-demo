@@ -73,7 +73,7 @@ test('ảnh lạ bị từ chối, ảnh PNG được nhận', async () => {
 test('giá và ảnh sống lại từ nhánh GitHub sau khi đĩa trống', async () => {
   const { setVariantPrice, setVariantFlag, setGallery, getOverrides } = await import('./db.js');
   const { saveUpload, removeMedia, mediaExists } = await import('./media.js');
-  const { persistEdits, hydrateEdits, durableConfig } = await import('./durable.js');
+  const { persistEdits, hydrateEdits, durableConfig, checkCatalogStorage, storageLogLine } = await import('./durable.js');
   assert.equal(durableConfig().enabled, true);
   setVariantPrice('MQ-DTH-080-GG', 47000);
   setVariantFlag('MQ-DTH-080-GG', { oos: true, compareAt: 69000 });
@@ -105,6 +105,50 @@ test('giá và ảnh sống lại từ nhánh GitHub sau khi đĩa trống', asy
   assert.equal(overrides.flags.get('VZ-GG-THOM-80').compareAt, 69000);
   assert.equal(overrides.galleries.get('thom-say-deo')[0].file, `upload:${saved.name}`);
   assert.equal(mediaExists(saved.name), true);
+
+  const secret = process.env.CATALOG_GITHUB_TOKEN;
+  process.env.CATALOG_GITHUB_TOKEN = `  ${secret}\n`;
+  let auth = '';
+  const rejected = await checkCatalogStorage(async (_url, options) => {
+    auth = options.headers.authorization;
+    return { ok: false, status: 401, async text() { return '{"message":"no"}'; } };
+  });
+  assert.equal(auth, `Bearer ${secret}`);
+  assert.equal(rejected.state, 'rejected');
+  assert.equal(rejected.http, 401);
+  assert.equal(rejected.mode, 'github');
+  assert.deepEqual(Object.keys(rejected).sort(), ['http', 'mode', 'state']);
+  assert.equal(JSON.stringify(rejected).includes(secret), false);
+  const forbidden = await checkCatalogStorage(async () => ({ ok: false, status: 403, async text() { return '{}'; } }));
+  assert.equal(forbidden.state, 'rejected');
+  assert.equal(forbidden.http, 403);
+  const hidden = await checkCatalogStorage(async () => ({ ok: false, status: 404, async text() { return '{}'; } }));
+  assert.equal(hidden.state, 'rejected');
+  assert.equal(hidden.http, 404);
+  const live = await checkCatalogStorage(githubMock().fetch);
+  assert.equal(live.state, 'ok');
+  assert.equal(live.mode, 'github');
+  assert.equal(live.http, 200);
+  assert.equal(JSON.stringify(live).includes(secret), false);
+  delete process.env.CATALOG_GITHUB_TOKEN;
+  const missing = await checkCatalogStorage(async () => { throw new Error('should not call'); });
+  assert.deepEqual(missing, { mode: 'ephemeral', state: 'missing', http: 0 });
+  assert.equal(storageLogLine(), 'catalog storage: ephemeral');
+  assert.equal(storageLogLine().includes(secret), false);
+  process.env.CATALOG_GITHUB_TOKEN = secret;
+});
+
+test('đọc đúng CATALOG_GITHUB_TOKEN và không ghi token ra log', async () => {
+  const { readCatalogToken, durableConfig, storageLogLine } = await import('./durable.js');
+  const secret = 'github_pat_should_not_appear';
+  assert.equal(readCatalogToken({ CATALOG_GITHUB_TOKEN: `  ${secret}\n` }), secret);
+  assert.equal(readCatalogToken({}), '');
+  assert.equal(durableConfig({ CATALOG_GITHUB_TOKEN: `  ${secret}  `, CATALOG_GITHUB_REPO: 'owner/repo' }).enabled, true);
+  assert.equal(durableConfig({ CATALOG_GITHUB_TOKEN: `  ${secret}  `, CATALOG_GITHUB_REPO: 'owner/repo' }).token, secret);
+  const line = storageLogLine({ CATALOG_GITHUB_TOKEN: secret });
+  assert.equal(line, 'catalog storage: github');
+  assert.equal(line.includes(secret), false);
+  assert.equal(storageLogLine({ CATALOG_GITHUB_TOKEN: '   ' }), 'catalog storage: ephemeral');
 });
 
 function decodePng() {

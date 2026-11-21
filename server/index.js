@@ -20,7 +20,7 @@ import { catalogData, catalogWithPrices, importCatalogPrices, listCatalogPrices,
 import { catalogBuyMap, catalogCodeForShopSku, withShopLinks } from './dm-buy.js';
 import { adminSameOrigin, securityHeaders } from './guard.js';
 import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, orderPage, productPage, shopPage, trackPage, comparePage, catalogPage, comboPage, giftIndexPage, giftBuilderPage } from './pages.js';
-import { durableConfig, hydrateEdits, persistEdits } from './durable.js';
+import { catalogStorageStatus, checkCatalogStorage, durableConfig, hydrateEdits, persistEdits, storageLogLine } from './durable.js';
 import { decodeImage, readMedia, removeMedia, saveUpload } from './media.js';
 import { indexingEnabled, robotsTxt, shopSitemap } from './seo.js';
 import { applyContentToCatalog, getProductCopy, listContentVersions, previewing, publicContent, restoreContentVersion, saveProductCopy, saveSiteCopy } from './content.js';
@@ -240,8 +240,19 @@ export function createApp() {
       return;
     }
     const bank = bankConfig();
-    res.json({ ok: true, bankReady: bank.ready, bankName: bank.bankName || '', durable: durableConfig().enabled });
+    res.json({
+      ok: true,
+      bankReady: bank.ready,
+      bankName: bank.bankName || '',
+      durable: durableConfig().enabled,
+      storage: catalogStorageStatus(),
+    });
   });
+
+  app.post('/api/admin/catalog-store/check', requireAdmin, wrap(async (_req, res) => {
+    const storage = await checkCatalogStorage();
+    res.json({ ok: true, storage });
+  }));
 
   app.post('/api/admin/telegram-test', requireAdmin, wrap(async (_req, res) => {
     res.json(await sendTestNotifications());
@@ -628,6 +639,8 @@ if (isMain) {
   if (!process.env.ADMIN_SECRET) {
     console.warn('ADMIN_SECRET đang trống, cookie quản trị ký bằng ADMIN_PASSWORD. Nên đặt ADMIN_SECRET riêng trên Render.');
   }
+  console.log(storageLogLine());
+  checkCatalogStorage().catch(() => {});
   const port = Number(process.env.PORT) || 3000;
   createApp().listen(port, '0.0.0.0', () => {
     console.log(`Mộc Quả đang chạy tại http://localhost:${port}`);

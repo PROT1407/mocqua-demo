@@ -8,8 +8,12 @@ import { getContentBundle, replaceContentBundle } from './content.js';
 
 const API = 'https://api.github.com';
 
+export function readCatalogToken(env = process.env) {
+  return String(env.CATALOG_GITHUB_TOKEN ?? '').trim();
+}
+
 export function durableConfig(env = process.env) {
-  const token = String(env.CATALOG_GITHUB_TOKEN || '').trim();
+  const token = readCatalogToken(env);
   const repo = String(env.CATALOG_GITHUB_REPO || 'PROT1407/mocqua-demo').trim();
   const branch = String(env.CATALOG_GITHUB_BRANCH || 'catalog-live').trim();
   if (token && !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
@@ -142,6 +146,46 @@ export function persistEdits(options = {}) {
     console.error('catalog store failed', error instanceof Error ? error.message : 'error');
     return { durable: false, reason: 'github' };
   });
+}
+
+function tokenMark(token) {
+  let n = 2166136261;
+  for (let i = 0; i < token.length; i += 1) n = Math.imul(n ^ token.charCodeAt(i), 16777619);
+  return n >>> 0;
+}
+
+let probe = { mark: 0, mode: 'ephemeral', state: 'missing', http: 0 };
+
+export function storageLogLine(env = process.env) {
+  return readCatalogToken(env) ? 'catalog storage: github' : 'catalog storage: ephemeral';
+}
+
+export function catalogStorageStatus(env = process.env) {
+  const cfg = durableConfig(env);
+  if (!cfg.token) return { mode: 'ephemeral', state: 'missing', http: 0 };
+  if (probe.mark !== tokenMark(cfg.token)) return { mode: 'github', state: 'unchecked', http: 0 };
+  return { mode: probe.mode, state: probe.state, http: probe.http };
+}
+
+export async function checkCatalogStorage(fetchImpl = globalThis.fetch) {
+  const cfg = durableConfig();
+  if (!cfg.token) {
+    probe = { mark: 0, mode: 'ephemeral', state: 'missing', http: 0 };
+    return catalogStorageStatus();
+  }
+  if (!cfg.enabled) {
+    probe = { mark: tokenMark(cfg.token), mode: 'github', state: 'rejected', http: 0 };
+    return catalogStorageStatus();
+  }
+  try {
+    await ensureBranch(cfg, fetchImpl);
+    probe = { mark: tokenMark(cfg.token), mode: 'github', state: 'ok', http: 200 };
+  } catch (error) {
+    const http = Number(String(error?.message || '').match(/(\d{3})$/)?.[1] || 0);
+    const rejected = http === 401 || http === 403 || http === 404;
+    probe = { mark: tokenMark(cfg.token), mode: 'github', state: rejected ? 'rejected' : 'error', http };
+  }
+  return catalogStorageStatus();
 }
 
 export async function hydrateEdits({ fetchImpl = globalThis.fetch } = {}) {
