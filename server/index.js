@@ -23,6 +23,7 @@ import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, or
 import { durableConfig, hydrateEdits, persistEdits } from './durable.js';
 import { decodeImage, readMedia, removeMedia, saveUpload } from './media.js';
 import { indexingEnabled, robotsTxt, shopSitemap } from './seo.js';
+import { applyContentToCatalog, getProductCopy, listContentVersions, previewing, publicContent, restoreContentVersion, saveProductCopy, saveSiteCopy } from './content.js';
 import { notifyNewOrder } from './telegram.js';
 import { notifySheets, sendTestNotifications } from './sheets.js';
 
@@ -323,7 +324,7 @@ export function createApp() {
     const settings = getSettings();
     res.set('Cache-Control', 'public, max-age=120');
     res.json({
-      ...withShopLinks(catalogWithPrices()),
+      ...applyContentToCatalog(withShopLinks(catalogWithPrices())),
       shipping: { shipFee: settings.shipFee, freeShip: settings.freeShip },
     });
   });
@@ -350,6 +351,44 @@ export function createApp() {
     const order = updateOrderStatus(code, status);
     if (!order) throw problem(404, 'Không thấy đơn này.');
     res.json({ order });
+  }));
+
+  app.get('/api/noi-dung', (req, res) => {
+    res.set('Cache-Control', 'public, max-age=120');
+    res.json(publicContent());
+  });
+  app.get('/api/admin/content', requireAdmin, (req, res) => {
+    res.json({
+      site: publicContent().site,
+      versions: listContentVersions(),
+      products: adminProducts().map((product) => ({
+        id: product.id,
+        name: product.catalogName || product.name,
+        pitch: product.catalogPitch || product.pitch || '',
+        badge: product.catalogBadge || '',
+        featured: product.catalogFeatured,
+        mixed: !!product.mixed,
+        copy: getProductCopy(product.id) || { name: '', pitch: '', description: '', seoTitle: '', seoDescription: '', badge: null, featured: null },
+      })),
+    });
+  });
+  app.put('/api/admin/content/site', requireAdmin, wrap(async (req, res) => {
+    const site = saveSiteCopy(req.body || {});
+    res.json({ ok: true, site, versions: listContentVersions(), ...(await persistEdits()) });
+  }));
+  app.put('/api/admin/content/products/:id', requireAdmin, wrap(async (req, res) => {
+    const id = String(req.params.id || '');
+    if (!getRawProduct(id) || getRawProduct(id).soon) throw problem(404, 'Không thấy sản phẩm.');
+    const copy = saveProductCopy(id, req.body || {});
+    res.json({ ok: true, copy, versions: listContentVersions(), ...(await persistEdits()) });
+  }));
+  app.post('/api/admin/content/restore', requireAdmin, wrap(async (req, res) => {
+    const site = restoreContentVersion(req.body?.index);
+    res.json({ ok: true, site, versions: listContentVersions(), ...(await persistEdits()) });
+  }));
+  app.post('/api/admin/content/preview', requireAdmin, wrap((req, res) => {
+    const html = previewing(req.body || {}, () => homePage(getShopCatalog()));
+    res.json({ html });
   }));
 
   app.get('/api/admin/products', requireAdmin, (req, res) => {

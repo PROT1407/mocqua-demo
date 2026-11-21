@@ -4,6 +4,7 @@
 import { listGalleryGroups, listProductOverrideRows, listVariantFlagRows, listVariantPriceRows, replaceDurableRows } from './db.js';
 import { listCatalogPrices } from './danhmuc.js';
 import { mediaExists, writeMedia } from './media.js';
+import { getContentBundle, replaceContentBundle } from './content.js';
 
 const API = 'https://api.github.com';
 
@@ -28,6 +29,7 @@ export function collectSnapshot() {
     variantFlags: listVariantFlagRows(),
     galleries: listGalleryGroups(),
     catalogPrices: listCatalogPrices(),
+    content: getContentBundle(),
   };
 }
 
@@ -151,6 +153,7 @@ export async function hydrateEdits({ fetchImpl = globalThis.fetch } = {}) {
     if (!got.ok) throw new Error(`github-store-${got.status}`);
     const snapshot = JSON.parse(decodeContent(got.data).toString('utf8'));
     replaceDurableRows(snapshot);
+    if (snapshot.content) replaceContentBundle(snapshot.content);
     for (const name of uploadNames(snapshot)) {
       if (!/^[a-z0-9-]{1,60}\.(jpg|png|webp)$/.test(name) || mediaExists(name)) continue;
       const file = await gh(cfg, fetchImpl, `/repos/${cfg.repo}/contents/${contentPath(`media/${name}`)}?ref=${encodeURIComponent(cfg.branch)}`);

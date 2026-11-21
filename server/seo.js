@@ -1,5 +1,6 @@
 import { esc, vnd } from './format.js';
 import { shopContact } from './contact.js';
+import { getProductCopy, getSiteCopy } from './content.js';
 
 const DEFAULT_ORIGIN = 'https://mocqua.onrender.com';
 const DEFAULT_IMAGE = '/assets/products/real/xoai-deo-muoi-ot.webp';
@@ -94,15 +95,34 @@ export function clip(value, max) {
   return `${(space > 40 ? cut.slice(0, space) : cut).trim()}…`;
 }
 
+function withPageCopy(key, base) {
+  const page = getSiteCopy().pages?.[key];
+  return {
+    title: page?.title || base.title,
+    description: page?.description || base.description,
+  };
+}
+
 export function homeSeo() {
-  return { title: HOME_TITLE, description: HOME_DESCRIPTION };
+  const site = getSiteCopy();
+  return {
+    title: site.homeTitle || HOME_TITLE,
+    description: site.homeDescription || HOME_DESCRIPTION,
+  };
 }
 
 export function shopSeo(catId) {
-  return SHOP_SEO[catId] || SHOP_SEO[''];
+  const key = catId || 'shop';
+  return withPageCopy(key, SHOP_SEO[catId] || SHOP_SEO['']);
+}
+
+export function pageCopy(key, base) {
+  return withPageCopy(key, base);
 }
 
 export function productTitle(product) {
+  const custom = product?.id ? getProductCopy(product.id)?.seoTitle : '';
+  if (custom) return clip(custom, 70);
   const name = seoText(product?.name) || 'Trái cây sấy';
   const lead = (product?.variants || []).find((variant) => variant.sku === product?.defaultSku) || product?.variants?.[0];
   const weight = String(lead?.w || '').split('·')[0].trim();
@@ -115,7 +135,8 @@ export function productTitle(product) {
 }
 
 export function productDescription(product) {
-  return clip(product?.short || product?.name || 'Trái cây sấy tại Mộc Quả', 155);
+  const custom = product?.id ? getProductCopy(product.id)?.seoDescription : '';
+  return clip(custom || product?.short || product?.name || 'Trái cây sấy tại Mộc Quả', 155);
 }
 
 export function indexingEnabled(env = process.env) {

@@ -1,0 +1,26 @@
+{
+  "heroKicker": "Trái cây sấy",
+  "heroTitle": "Chọn theo cách sấy, rồi mới chọn quả.",
+  "heroLead": "Cùng một loại quả, túi dẻo với túi thăng hoa ăn khác nhau hẳn. Chúng tôi xếp cửa hàng theo cách làm — dẻo, thăng hoa, giòn, khô — để bạn khỏi lạc giữa hàng chục túi.",
+  "heroCta": "Vào cửa hàng",
+  "heroSecondary": "Xem hàng trên kệ",
+  "featuredTitle": "Nổi bật & Khuyến mãi",
+  "waysTitle": "Bốn cách sấy",
+  "waysLead": "Bấm vào cách bạn muốn ăn. Trong mỗi cách có từng loại quả, rồi tới hãng và khối lượng.",
+  "offerKicker": "Ưu đãi theo đơn",
+  "offerTitle": "Đơn càng lớn, giá càng mềm",
+  "shelfTitle": "Hàng trên kệ siêu thị và sân bay",
+  "shelfLead": "Các dòng trái cây sấy Viza Food được bày tại siêu thị và cửa hàng ở sân bay. Dưới đây là ảnh kệ chúng tôi chụp. Túi gửi tới bạn là đúng loại hàng đó: chính hãng, nguyên bao bì, không san chiết.",
+  "footerTagline": "Trái cây sấy.",
+  "banner": "",
+  "homeTitle": "",
+  "homeDescription": "",
+  "sections": [
+    { "id": "hero", "hidden": false },
+    { "id": "featured", "hidden": false },
+    { "id": "ways", "hidden": false },
+    { "id": "offer", "hidden": false },
+    { "id": "shelf", "hidden": false }
+  ],
+  "pages": {}
+}

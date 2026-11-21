@@ -9,6 +9,7 @@ const panels = {
   promo: document.querySelector('#panel-promo'),
   refs: document.querySelector('#panel-refs'),
   catalog: document.querySelector('#panel-catalog'),
+  content: document.querySelector('#panel-content'),
 };
 
 function esc(s) {
@@ -119,6 +120,7 @@ async function loadPrices() {
           <img src="${esc(shot.src)}" alt="">
           <div>
             <label class="check"><input type="radio" name="hero-${esc(product.id)}" data-hero${shot.hero ? ' checked' : ''}> Ảnh chính</label>
+            <label class="field">Chữ thay ảnh <input data-alt-input value="${esc(shot.alt)}" maxlength="180"></label>
             <div class="shot__actions">
               <button class="btn btn--small btn--ghost" type="button" data-photo-up="${index}">Lên</button>
               <button class="btn btn--small btn--ghost" type="button" data-photo-down="${index}">Xuống</button>
@@ -178,13 +180,137 @@ async function loadPromo() {
   });
 }
 
+const CONTENT_FIELDS = [
+  ['heroKicker', 'Dòng nhỏ trên ảnh đầu'],
+  ['heroTitle', 'Tiêu đề trang chủ'],
+  ['heroLead', 'Đoạn giới thiệu'],
+  ['heroCta', 'Nút chính'],
+  ['heroSecondary', 'Nút phụ'],
+  ['featuredTitle', 'Tiêu đề nổi bật'],
+  ['waysTitle', 'Tiêu đề cách sấy'],
+  ['waysLead', 'Đoạn cách sấy'],
+  ['offerKicker', 'Dòng nhỏ ưu đãi'],
+  ['offerTitle', 'Tiêu đề ưu đãi'],
+  ['shelfTitle', 'Tiêu đề kệ hàng'],
+  ['shelfLead', 'Đoạn kệ hàng'],
+  ['footerTagline', 'Dòng chân trang'],
+  ['banner', 'Dòng thông báo trên cùng (để trống = tự tính phí giao)'],
+  ['homeTitle', 'Tiêu đề SEO trang chủ (để trống = tự soạn)'],
+  ['homeDescription', 'Mô tả SEO trang chủ (để trống = tự soạn)'],
+];
+const PAGE_FIELDS = [
+  ['shop', 'Cửa hàng'],
+  ['thanghoa', 'Sấy thăng hoa'],
+  ['gion', 'Mít sấy Thái / sấy giòn'],
+  ['deo', 'Sấy dẻo'],
+  ['combo', 'Combo'],
+  ['gift', 'Hộp quà'],
+];
+const SECTION_LABEL = { hero: 'Ảnh đầu', featured: 'Nổi bật', ways: 'Cách sấy', offer: 'Ưu đãi', shelf: 'Kệ hàng' };
+const BADGE_OPTIONS = ['', 'Bán chạy', 'Khuyến mãi', 'Phiên bản giới hạn', 'Combo tiết kiệm', 'Mới', 'Giới hạn'];
+
+function field(name, label, value, rows) {
+  const control = rows
+    ? `<textarea name="${name}" rows="${rows}">${esc(value || '')}</textarea>`
+    : `<input name="${name}" value="${esc(value || '')}">`;
+  return `<label class="field">${esc(label)} ${control}</label>`;
+}
+
+async function loadContent() {
+  if (!panels.content) return;
+  const data = await api('/api/admin/content');
+  const site = data.site;
+  const sections = (site.sections || []).map((section, index) => `<div class="varrow" data-section="${esc(section.id)}">
+    <b>${esc(SECTION_LABEL[section.id] || section.id)}</b>
+    <label class="check"><input type="checkbox" data-hide-section${section.hidden ? ' checked' : ''}> Ẩn mục này</label>
+    <div class="shot__actions">
+      <button class="btn btn--small btn--ghost" type="button" data-sec-up="${index}">Lên</button>
+      <button class="btn btn--small btn--ghost" type="button" data-sec-down="${index}">Xuống</button>
+    </div>
+  </div>`).join('');
+  const pages = PAGE_FIELDS.map(([key, label]) => {
+    const row = site.pages?.[key] || {};
+    return `<fieldset class="pricebox"><legend>${esc(label)}</legend>
+      ${field(`page-title-${key}`, 'Tiêu đề', row.title)}
+      ${field(`page-desc-${key}`, 'Mô tả', row.description, 2)}
+    </fieldset>`;
+  }).join('');
+  const versions = (data.versions || []).map((row) => `<option value="${row.index}">${esc(row.at)}</option>`).join('');
+  const products = data.products || [];
+  panels.content.innerHTML = `<form id="content-form" class="fields">
+    <p class="fine">Chữ thuần, không dán mã HTML. Để trống thì trang dùng câu sẵn. Ảnh và chữ thay ảnh nằm ở tab Giá và ảnh, kể cả combo.</p>
+    ${CONTENT_FIELDS.map(([key, label]) => field(key, label, site[key], key.endsWith('Lead') || key.endsWith('Description') ? 3 : 0)).join('')}
+    <h2>Thứ tự trang chủ</h2>
+    <div id="content-sections">${sections}</div>
+    <h2>Tiêu đề từng trang</h2>
+    ${pages}
+    <div class="shot__actions">
+      <button class="btn" type="submit">Lưu nội dung trang</button>
+      <button class="btn btn--ghost" type="button" id="content-preview">Xem trước</button>
+    </div>
+    <p class="fine" id="content-msg" role="status"></p>
+    <label class="field">Bản đã lưu <select id="content-version"><option value="">Chọn bản để khôi phục</option>${versions}</select></label>
+    <button class="btn btn--small btn--ghost" type="button" id="content-restore">Khôi phục</button>
+  </form>
+  <h2>Từng món và combo</h2>
+  <label class="field">Tìm <input id="content-q" placeholder="Tên món"></label>
+  <div id="content-products"></div>`;
+  const list = document.querySelector('#content-products');
+  const draw = () => {
+    const q = document.querySelector('#content-q').value.trim().toLowerCase();
+    list.innerHTML = products.filter((product) => !q || product.name.toLowerCase().includes(q) || product.id.includes(q)).map((product) => {
+      const copy = product.copy || {};
+      return `<article class="pricebox" data-copy="${esc(product.id)}">
+        <header><b>${esc(product.name)}</b><small>${product.mixed ? 'Combo · ' : ''}${esc(product.id)}</small></header>
+        ${field('name', 'Tên hiển thị', copy.name)}
+        ${field('pitch', 'Câu ngắn', copy.pitch, 2)}
+        ${field('description', 'Mô tả đầy đủ', copy.description, 4)}
+        ${field('seoTitle', 'Tiêu đề SEO', copy.seoTitle)}
+        ${field('seoDescription', 'Mô tả SEO', copy.seoDescription, 2)}
+        <label class="field">Huy hiệu <select name="badge"><option value="__default">Theo danh mục${product.badge ? ` (${esc(product.badge)})` : ''}</option>${BADGE_OPTIONS.map((badge) => `<option value="${esc(badge)}"${copy.badge === badge ? ' selected' : ''}>${badge ? esc(badge) : 'Không gắn'}</option>`).join('')}</select></label>
+        <label class="field">Nổi bật (1 đến 99, để trống = theo danh mục) <input name="featured" inputmode="numeric" value="${copy.featured === false ? '' : (copy.featured ?? '')}"></label>
+        <label class="check"><input type="checkbox" name="featuredOff"${copy.featured === false ? ' checked' : ''}> Không đưa vào nổi bật</label>
+        <button class="btn btn--small" type="button" data-save-copy-text="${esc(product.id)}">Lưu chữ món này</button>
+      </article>`;
+    }).join('') || '<p>Không thấy món nào.</p>';
+  };
+  document.querySelector('#content-q').oninput = draw;
+  draw();
+  document.querySelector('#content-form').onsubmit = async (event) => {
+    event.preventDefault();
+    const msg = document.querySelector('#content-msg');
+    try {
+      const result = await api('/api/admin/content/site', { method: 'PUT', body: JSON.stringify(readSiteForm()) });
+      msg.textContent = result.durable ? 'Đã lưu.' : 'Đã lưu trên máy.';
+    } catch (error) {
+      msg.textContent = error.message;
+    }
+  };
+}
+
+function readSiteForm() {
+  const form = document.querySelector('#content-form');
+  const body = { pages: {}, sections: [] };
+  for (const [key] of CONTENT_FIELDS) body[key] = form.elements[key].value;
+  for (const [key] of PAGE_FIELDS) {
+    body.pages[key] = {
+      title: form.elements[`page-title-${key}`].value,
+      description: form.elements[`page-desc-${key}`].value,
+    };
+  }
+  document.querySelectorAll('#content-sections [data-section]').forEach((row) => {
+    body.sections.push({ id: row.dataset.section, hidden: row.querySelector('[data-hide-section]').checked });
+  });
+  return body;
+}
+
 async function enter() {
   const me = await api('/api/admin/me');
   durableOn = !!me.durable;
   loginPanel.hidden = true;
   dash.hidden = false;
   bankWarn.hidden = me.bankReady;
-  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog()]);
+  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog(), loadContent()]);
 }
 
 const restoreForm = document.querySelector('#restore-form');
@@ -277,6 +403,62 @@ panels.orders.addEventListener('change', async (event) => {
   }
 });
 
+panels.content?.addEventListener('click', async (event) => {
+  const up = event.target.closest('[data-sec-up]');
+  const down = event.target.closest('[data-sec-down]');
+  const row = event.target.closest('[data-section]');
+  if ((up || down) && row) {
+    if (up && row.previousElementSibling) row.parentElement.insertBefore(row, row.previousElementSibling);
+    if (down && row.nextElementSibling) row.parentElement.insertBefore(row.nextElementSibling, row);
+  }
+  const preview = event.target.closest('#content-preview');
+  if (preview) {
+    try {
+      const result = await api('/api/admin/content/preview', { method: 'POST', body: JSON.stringify(readSiteForm()) });
+      const view = window.open('', '_blank');
+      if (!view) throw new Error('Trình duyệt chặn cửa sổ xem trước.');
+      view.document.open();
+      view.document.write(result.html);
+      view.document.close();
+    } catch (error) {
+      document.querySelector('#content-msg').textContent = error.message;
+    }
+  }
+  const restore = event.target.closest('#content-restore');
+  if (restore) {
+    const index = document.querySelector('#content-version').value;
+    if (index === '') return;
+    try {
+      await api('/api/admin/content/restore', { method: 'POST', body: JSON.stringify({ index: Number(index) }) });
+      await loadContent();
+    } catch (error) {
+      document.querySelector('#content-msg').textContent = error.message;
+    }
+  }
+  const saveProduct = event.target.closest('[data-save-copy-text]');
+  if (saveProduct) {
+    const box = saveProduct.closest('[data-copy]');
+    const badge = box.querySelector('[name="badge"]').value;
+    const featuredOff = box.querySelector('[name="featuredOff"]').checked;
+    const featuredRaw = box.querySelector('[name="featured"]').value.trim();
+    const body = {
+      name: box.querySelector('[name="name"]').value,
+      pitch: box.querySelector('[name="pitch"]').value,
+      description: box.querySelector('[name="description"]').value,
+      seoTitle: box.querySelector('[name="seoTitle"]').value,
+      seoDescription: box.querySelector('[name="seoDescription"]').value,
+      badge: badge === '__default' ? null : badge,
+      featured: featuredOff ? false : (featuredRaw === '' ? null : Number(featuredRaw)),
+    };
+    try {
+      await api('/api/admin/content/products/' + encodeURIComponent(saveProduct.dataset.saveCopyText), { method: 'PUT', body: JSON.stringify(body) });
+      saveProduct.textContent = 'Đã lưu';
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+});
+
 panels.prices.addEventListener('change', async (event) => {
   const input = event.target.closest('[data-photo-file]');
   if (!input?.files?.[0]) return;
@@ -347,7 +529,7 @@ panels.prices.addEventListener('click', async (event) => {
       const items = [...box.querySelectorAll('[data-shot]')].map((shot) => ({
         file: shot.dataset.shot,
         label: shot.dataset.label || '',
-        alt: shot.dataset.alt || '',
+        alt: shot.querySelector('[data-alt-input]')?.value || '',
         hero: !!shot.querySelector('[data-hero]')?.checked,
       }));
       const result = await api('/api/admin/products/' + encodeURIComponent(id) + '/gallery', {

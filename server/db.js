@@ -91,6 +91,11 @@ export function getDb() {
       compare_at INTEGER,
       updated_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS content_bundle (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      json TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS product_gallery (
       product_id TEXT NOT NULL,
       file TEXT NOT NULL,
