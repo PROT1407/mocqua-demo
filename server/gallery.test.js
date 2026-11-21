@@ -30,12 +30,13 @@ test('mọi sản phẩm, mẫu và combo: ảnh admin khớp đúng gallery tra
       assert.ok(block, `${row.id} ${variant.sku}`);
       assert.ok(block.items.length <= 48, `${row.id} ${variant.sku}`);
       assert.deepEqual(block.items.map((item) => item.src), page.map((item) => item.src), `${row.id} ${variant.sku}`);
-      assert.deepEqual(block.items.map((item) => item.label), page.map((item) => item.kind), `${row.id} ${variant.sku}`);
+      assert.deepEqual(block.items.map((item) => item.label), page.map((item) => item.kind), `${row.id} ${variant.sku} chú thích`);
+      assert.ok(block.items.every((item) => item.label && item.defaultLabel), `${row.id} ${variant.sku} thiếu chú thích`);
     }
     const lead = view.variants.find((variant) => variant.sku === view.defaultSku) || view.variants[0];
     const leadPage = productGallery(view, lead);
     assert.deepEqual(row.gallery.map((item) => item.src), leadPage.map((item) => item.src), row.id);
-    assert.deepEqual(row.gallery.map((item) => item.label), leadPage.map((item) => item.kind), row.id);
+    assert.deepEqual(row.gallery.map((item) => item.label), leadPage.map((item) => item.kind), `${row.id} chú thích`);
   }
   assert.ok(variants > 150);
   assert.ok(combos > 5);
@@ -123,7 +124,7 @@ test('lưu cả danh sách thì trang khớp admin, đổi một ảnh giữ ch�
     const before = productGallery(pack, second).map((item) => item.src);
     const leadItems = (await (await fetch(base + '/api/admin/products', { headers })).json()).products
       .find((item) => item.id === 'xoai-say-deo').variantGalleries.find((item) => item.sku === first.sku).items
-      .map((item, index) => ({ file: item.file, label: item.label, alt: index === 0 ? 'Đã sửa alt' : item.alt, hero: index === 0 }));
+      .map((item, index) => ({ file: item.file, label: index === 0 ? 'Túi mới' : item.label, alt: index === 0 ? 'Đã sửa alt' : item.alt, hero: index === 0 }));
     const savedSku = await fetch(base + '/api/admin/products/xoai-say-deo/gallery', {
       method: 'PUT',
       headers,
@@ -139,13 +140,57 @@ test('lưu cả danh sách thì trang khớp admin, đổi một ảnh giữ ch�
       return productGallery(source, variant);
     };
     assert.equal(show(pageAfter, first.sku)[0].alt, 'Đã sửa alt');
+    assert.equal(show(pageAfter, first.sku)[0].kind, 'Túi mới');
     assert.deepEqual(show(pageAfter, second.sku).map((item) => item.src), before);
+    assert.deepEqual(show(pageAfter, second.sku).map((item) => item.kind), productGallery(pack, second).map((item) => item.kind));
+    const clearedCaption = leadItems.map((item) => ({ ...item, label: '' }));
+    const blank = await fetch(base + '/api/admin/products/xoai-say-deo/gallery', {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ items: clearedCaption, skus: [first.sku] }),
+    });
+    assert.equal(blank.status, 200);
+    const blankHtml = await (await fetch(base + '/san-pham/xoai-say-deo')).text();
+    const blankPage = JSON.parse(blankHtml.split('id="product-data">')[1].split('</script>')[0]);
+    assert.equal(show(blankPage, first.sku)[0].kind, productGallery(pack, first)[0].kind);
+    assert.equal(show(blankPage, first.sku)[0].alt, 'Đã sửa alt');
     const clearedSku = await fetch(base + '/api/admin/products/xoai-say-deo/gallery', {
       method: 'PUT',
       headers,
       body: JSON.stringify({ items: [], skus: [first.sku] }),
     });
     assert.equal(clearedSku.status, 200);
+
+    const comboRow = (await (await fetch(base + '/api/admin/products', { headers })).json()).products.find((item) => item.id === 'vz-mix-cb-ymo');
+    const comboSaved = await fetch(base + '/api/admin/products/vz-mix-cb-ymo/gallery', {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        items: comboRow.gallery.map((item, index) => ({
+          file: item.file,
+          label: index === 1 ? 'Túi Yummy' : '',
+          alt: item.alt,
+          hero: index === 0,
+        })),
+      }),
+    });
+    assert.equal(comboSaved.status, 200);
+    const comboHtml = await (await fetch(base + '/san-pham/vz-mix-cb-ymo')).text();
+    const comboPage = JSON.parse(comboHtml.split('id="product-data">')[1].split('</script>')[0]);
+    const comboShown = productGallery(comboPage, comboPage.variants.find((item) => item.sku === comboPage.defaultSku));
+    assert.equal(comboShown[1].kind, 'Túi Yummy');
+    assert.deepEqual(comboShown.map((item) => item.kind), ['Bao bì', 'Túi Yummy', comboRow.gallery[2].label]);
+    const comboReset = await fetch(base + '/api/admin/products/vz-mix-cb-ymo/gallery', {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ items: [] }),
+    });
+    assert.equal(comboReset.status, 200);
+    const comboBack = JSON.parse((await (await fetch(base + '/san-pham/vz-mix-cb-ymo')).text()).split('id="product-data">')[1].split('</script>')[0]);
+    assert.deepEqual(
+      productGallery(comboBack, comboBack.variants.find((item) => item.sku === comboBack.defaultSku)).map((item) => item.kind),
+      comboRow.gallery.map((item) => item.label),
+    );
   } finally {
     server.close();
   }

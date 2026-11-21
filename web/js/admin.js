@@ -169,12 +169,12 @@ async function loadPrices() {
       </div>`).join('')}</div>
       ${galleryGroups(product).map((group, groupIndex) => `<div class="gallery-edit" data-gallery="${esc(product.id)}" data-skus="${esc(JSON.stringify(group.skus))}">
         <b>${esc(group.title)}</b>
-        <div class="shots-edit">${group.items.map((shot, index) => `<div class="shot-edit${shot.hero ? ' is-hero' : ''}" data-shot="${esc(shot.file)}" data-label="${esc(shot.label)}" data-alt="${esc(shot.alt)}">
+        <div class="shots-edit">${group.items.map((shot, index) => `<div class="shot-edit${shot.hero ? ' is-hero' : ''}" data-shot="${esc(shot.file)}" data-label="${esc(shot.defaultLabel || shot.label)}" data-alt="${esc(shot.alt)}">
           <img src="${esc(shot.src)}" alt="">
           <div>
-            <b class="shot-edit__cap">${esc(shot.label || 'Ảnh')}</b>
             <label class="check"><input type="radio" name="hero-${esc(product.id)}-${groupIndex}" data-hero${shot.hero ? ' checked' : ''}> Ảnh chính</label>
-            <label class="field">Chữ thay ảnh <input data-alt-input value="${esc(shot.alt)}" maxlength="180"></label>
+            <label class="field">Chú thích <input data-caption-input value="${esc(shot.label || '')}" placeholder="${esc(shot.defaultLabel || 'Ảnh')}" maxlength="80" aria-label="Chú thích ảnh"></label>
+            <label class="field">Chữ thay ảnh <input data-alt-input value="${esc(shot.alt)}" maxlength="180" aria-label="Chữ thay ảnh"></label>
             <div class="shot__actions">
               <button class="btn btn--small btn--ghost" type="button" data-photo-up="${index}">Lên</button>
               <button class="btn btn--small btn--ghost" type="button" data-photo-down="${index}">Xuống</button>
@@ -674,7 +674,7 @@ panels.prices.addEventListener('click', async (event) => {
       const box = saveGallery.closest('[data-gallery]');
       const items = [...box.querySelectorAll('[data-shot]')].map((shot) => ({
         file: shot.dataset.shot,
-        label: shot.dataset.label || '',
+        label: shot.querySelector('[data-caption-input]')?.value || '',
         alt: shot.querySelector('[data-alt-input]')?.value || '',
         hero: !!shot.querySelector('[data-hero]')?.checked,
       }));

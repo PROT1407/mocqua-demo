@@ -77,15 +77,40 @@ function pageSource(view, variant) {
   return view;
 }
 
+function catalogKindMap(view) {
+  const bare = { ...view, gallery: undefined, variantGalleries: undefined };
+  const map = new Map();
+  for (const variant of bare.variants || []) {
+    for (const shot of productGallery(bare, variant)) {
+      if (shot?.src && !map.has(shot.src)) map.set(shot.src, shot.kind || 'Ảnh');
+    }
+  }
+  return map;
+}
+
+function withCaption(item, defaults, name) {
+  const src = gallerySrc(item.file);
+  if (!src) return null;
+  const custom = String(item.label || '').replace(/\s+/g, ' ').trim();
+  return {
+    src,
+    kind: custom || defaults.get(src) || 'Ảnh',
+    alt: item.alt || name,
+    hero: !!item.hero,
+  };
+}
+
 // Đúng danh sách ảnh trang sản phẩm đang vẽ cho một mẫu: cùng thứ tự, cùng chú thích.
 export function variantGallery(view, variant) {
   if (!variant) return [];
+  const defaults = catalogKindMap(view);
   return productGallery(pageSource(view, variant), variant).map((shot, index) => {
     const file = srcToFile(shot.src);
     if (!file || !gallerySrc(file)) return null;
     return {
       file,
       label: shot.kind || 'Ảnh',
+      defaultLabel: defaults.get(shot.src) || shot.kind || 'Ảnh',
       alt: shot.alt || view?.name || '',
       hero: index === 0,
       src: shot.src,
@@ -375,14 +400,10 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
       .map(([img, kind, alt]) => ({ src: resolveImg(img, true), kind: kind || 'Ảnh', alt: alt || product.name }))
       .filter((x) => x.src),
   };
+  const kinds = catalogKindMap(out);
   const saved = overrides.galleries.get(product.id);
   if (saved?.length) {
-    const shots = saved.map((item) => ({
-      src: gallerySrc(item.file),
-      kind: item.label || (item.hero ? 'Ảnh chính' : 'Ảnh'),
-      alt: item.alt || product.name,
-      hero: !!item.hero,
-    })).filter((item) => item.src);
+    const shots = saved.map((item) => withCaption(item, kinds, product.name)).filter(Boolean);
     if (shots.length) {
       const hero = shots.find((item) => item.hero) || shots[0];
       out.cardImg = hero.src;
@@ -393,12 +414,7 @@ function presentProduct(mq, product, { detail = false, now = new Date() } = {}) 
   if (bySku?.size) {
     out.variantGalleries = {};
     for (const [sku, items] of bySku) {
-      const shots = items.map((item) => ({
-        src: gallerySrc(item.file),
-        kind: item.label || (item.hero ? 'Ảnh chính' : 'Ảnh'),
-        alt: item.alt || product.name,
-        hero: !!item.hero,
-      })).filter((item) => item.src);
+      const shots = items.map((item) => withCaption(item, kinds, product.name)).filter(Boolean);
       if (shots.length) out.variantGalleries[sku] = shots;
     }
   }
