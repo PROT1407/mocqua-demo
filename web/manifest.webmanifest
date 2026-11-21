@@ -1,11 +1,11 @@
 {
   "id": "/",
-  "name": "Mộc Quả — trái cây sấy",
+  "name": "Mộc Quả",
   "short_name": "Mộc Quả",
   "description": "Cửa hàng trái cây sấy. Chọn theo cách sấy, đặt hàng, chuyển khoản VietQR.",
   "lang": "vi",
   "dir": "ltr",
-  "start_url": "/",
+  "start_url": "/?src=app",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F7F1E8",
@@ -35,5 +35,10 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    { "name": "Combo", "short_name": "Combo", "url": "/combo?src=app", "description": "Combo trái cây sấy" },
+    { "name": "Danh mục", "short_name": "Danh mục", "url": "/danh-muc?src=app", "description": "Danh mục sản phẩm" },
+    { "name": "Giỏ hàng", "short_name": "Giỏ", "url": "/gio-hang?src=app", "description": "Xem giỏ hàng" }
   ]
 }

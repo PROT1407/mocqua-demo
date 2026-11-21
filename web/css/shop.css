@@ -320,6 +320,58 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .spec { width: 100%; border-collapse: collapse; }
 .spec th, .spec td { text-align: left; vertical-align: top; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--line); }
 .spec th { width: 40%; color: var(--muted); font-weight: 500; }
+.tabbar { display: none; }
+.install {
+  position: fixed; left: 12px; right: 12px; z-index: 65;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  background: var(--paper); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 16px; padding: 12px 14px; box-shadow: var(--shadow);
+  display: grid; gap: 8px;
+}
+.install p { margin: 0; }
+.install div { display: flex; gap: 8px; }
+.install button { min-height: 44px; border-radius: 999px; border: 1px solid var(--line); background: var(--cream); padding: 8px 14px; }
+.install [data-install-go] { background: var(--brown); color: var(--cream); border-color: var(--brown); }
+@media (max-width: 768px) {
+  body:not(.page-admin) { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  .page-product { padding-bottom: calc(156px + env(safe-area-inset-bottom)); }
+  .tabbar {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: var(--paper); border-top: 1px solid var(--line);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  .tabbar a {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; min-height: 44px; font-size: 11px; text-decoration: none; color: var(--muted); position: relative;
+  }
+  .tabbar a[aria-current="page"] { color: var(--brown); font-weight: 600; }
+  .tabbar__n {
+    position: absolute; top: 2px; right: calc(50% - 22px);
+    min-width: 16px; height: 16px; border-radius: 8px; background: var(--olive); color: white;
+    font-size: 10px; line-height: 16px; text-align: center; padding: 0 4px;
+  }
+  .buysticky { bottom: calc(62px + env(safe-area-inset-bottom)); }
+  .install { bottom: calc(78px + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .page-product .toast { bottom: calc(150px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  main { animation: mq-in .18s ease; }
+}
+@keyframes mq-in { from { opacity: .72; } to { opacity: 1; } }
+.edit-shortcut {
+  position: fixed; left: 12px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60;
+  background: var(--brown); color: var(--cream); text-decoration: none;
+  border-radius: 999px; padding: 10px 14px; font-weight: 600; min-height: 44px;
+  display: inline-flex; align-items: center;
+}
+.page-product .edit-shortcut { bottom: calc(84px + env(safe-area-inset-bottom)); }
+@media (max-width: 768px) {
+  .edit-shortcut { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .page-product .edit-shortcut { bottom: calc(156px + env(safe-area-inset-bottom)); }
+}
+.is-edit-target { outline: 2px solid var(--olive); outline-offset: 4px; }
 .buysticky {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 35;
   display: flex; justify-content: space-between; align-items: center; gap: 12px;

@@ -42,8 +42,10 @@ const PAGE_PATH = {
   gift: '/hop-qua',
 };
 
+const EDIT_PAGES = new Set(['home', 'shop', 'catalog', 'combo', 'gift', 'product']);
+
 function layout({ title, description, page, body, scripts = [], styles = [], seo = {} }) {
-  const tags = ['/static/js/store.js', '/static/js/pwa.js', ...scripts]
+  const tags = ['/static/js/store.js', '/static/js/pwa.js', ...(EDIT_PAGES.has(page) ? ['/static/js/edit-shortcut.js'] : []), ...scripts]
     .map((src) => `<script type="module" src="${src}"></script>`)
     .join('');
   const noindex = seo.noindex ?? NOINDEX_PAGES.has(page);
@@ -83,7 +85,8 @@ ${jsonLdTag(seo.jsonld)}
 <a class="skip" href="#main">Tới nội dung</a>
 ${header(page)}
 ${body}
-${footer()}
+${footer(page)}
+${tabBar(page)}
 ${tags}
 </body>
 </html>`;
@@ -116,7 +119,7 @@ function header(page) {
 </header>`;
 }
 
-function footer() {
+function footer(page) {
   const bank = bankConfig();
   const phones = shopContact.phones
     .map((p) => `<a href="tel:${esc(p.tel)}">${esc(p.display)}</a>`)
@@ -145,9 +148,23 @@ function footer() {
       <a href="${esc(shopContact.tiktok)}" target="_blank" rel="noopener">TikTok</a>
       ${zalos}
       <a href="/admin">Quản lý đơn</a>
+      ${page === 'admin' ? '' : '<button type="button" class="textbtn" data-install-app>Cài app Mộc Quả</button>'}
     </nav>
   </div>
 </footer>`;
+}
+
+function tabBar(page) {
+  if (page === 'admin') return '';
+  const zalo = shopContact.phones[0]?.tel || '';
+  const item = (href, label, current) => `<a href="${href}"${current ? ' aria-current="page"' : ''}>${label}</a>`;
+  return `<nav class="tabbar" aria-label="Điều hướng nhanh">
+    ${item('/', 'Trang chủ', page === 'home')}
+    ${item('/danh-muc', 'Danh mục', page === 'catalog')}
+    ${item('/combo', 'Combo', page === 'combo')}
+    <a href="/gio-hang"${page === 'cart' ? ' aria-current="page"' : ''}>Giỏ <span class="tabbar__n" data-cart-count hidden>0</span></a>
+    <a href="https://zalo.me/${esc(zalo)}" target="_blank" rel="noopener">Tư vấn</a>
+  </nav>`;
 }
 
 function jsonScript(id, data) {

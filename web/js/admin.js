@@ -205,6 +205,11 @@ const PAGE_FIELDS = [
   ['deo', 'Sấy dẻo'],
   ['combo', 'Combo'],
   ['gift', 'Hộp quà'],
+  ['catalog', 'Danh mục'],
+  ['kho', 'Sấy khô'],
+  ['omai', 'Ô mai'],
+  ['set', 'Set quà'],
+  ['hat', 'Hạt'],
 ];
 const SECTION_LABEL = { hero: 'Ảnh đầu', featured: 'Nổi bật', ways: 'Cách sấy', offer: 'Ưu đãi', shelf: 'Kệ hàng' };
 const BADGE_OPTIONS = ['', 'Bán chạy', 'Khuyến mãi', 'Phiên bản giới hạn', 'Combo tiết kiệm', 'Mới', 'Giới hạn'];
@@ -288,6 +293,50 @@ async function loadContent() {
   };
 }
 
+function focusEditTarget() {
+  const query = new URLSearchParams(location.search);
+  if (query.get('tab') === 'prices') {
+    showTab('prices');
+    const id = query.get('product');
+    const card = id ? document.querySelector(`[data-id="${CSS.escape(id)}"]`) : null;
+    card?.scrollIntoView({ block: 'start' });
+    card?.classList.add('is-edit-target');
+    return;
+  }
+  const edit = query.get('edit');
+  if (!edit) return;
+  showTab('content');
+  if (edit === 'home') {
+    document.querySelector('[name="heroTitle"]')?.closest('.field')?.classList.add('is-edit-target');
+    document.querySelector('#content-sections')?.scrollIntoView({ block: 'start' });
+    return;
+  }
+  if (edit === 'page') {
+    const box = document.querySelector(`[name="page-title-${query.get('page')}"]`)?.closest('fieldset');
+    box?.classList.add('is-edit-target');
+    box?.scrollIntoView({ block: 'center' });
+    return;
+  }
+  if (edit === 'product') {
+    const id = query.get('id') || '';
+    const input = document.querySelector('#content-q');
+    if (input) {
+      input.value = id;
+      input.dispatchEvent(new Event('input'));
+    }
+    const card = document.querySelector(`[data-copy="${CSS.escape(id)}"]`);
+    if (!card) return;
+    card.classList.add('is-edit-target');
+    const jump = document.createElement('p');
+    const link = document.createElement('a');
+    link.href = '/admin?tab=prices&product=' + encodeURIComponent(id);
+    link.textContent = 'Sửa ảnh và giá';
+    jump.append(link);
+    card.prepend(jump);
+    card.scrollIntoView({ block: 'start' });
+  }
+}
+
 function readSiteForm() {
   const form = document.querySelector('#content-form');
   const body = { pages: {}, sections: [] };
@@ -311,6 +360,7 @@ async function enter() {
   dash.hidden = false;
   bankWarn.hidden = me.bankReady;
   await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog(), loadContent()]);
+  focusEditTarget();
 }
 
 const restoreForm = document.querySelector('#restore-form');
