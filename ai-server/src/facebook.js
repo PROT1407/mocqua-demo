@@ -53,6 +53,19 @@ export function wantsHuman(text) {
   return HUMAN.some((phrase) => folded.includes(phrase));
 }
 
+function fieldAfter(text, label) {
+  const match = String(text || '').match(new RegExp(`(?:${label})\\s*[:\\-]\\s*(.+)`, 'i'));
+  if (!match) return '';
+  return match[1].split('\n')[0].trim().replace(/[.,;]+$/, '').slice(0, 200);
+}
+
+function isConfirm(text) {
+  const line = fold(text).trim();
+  if (!line) return false;
+  if (/^(ok|oke|okay|dung|dung roi|xac nhan|chot|chot don|dong y|vang|da|uh|uk|duoc)[!.… ]*$/.test(line)) return true;
+  return /(xac nhan|chot don|ok chot|dung roi)/.test(line);
+}
+
 export function extractOrder(text) {
   const source = String(text || '');
   const phone = source.match(/(?:\+84|0)\d{8,10}/);
@@ -62,6 +75,59 @@ export function extractOrder(text) {
   const lines = source.split(/\n/).map((line) => line.trim()).filter(Boolean);
   if (!address && lines.length < 3) return null;
   return { phone: phone[0], text: source.slice(0, 800) };
+}
+
+export function extractConfirmedOrder(text, catalogItems = []) {
+  const source = String(text || '');
+  const phoneMatch = source.match(/(?:\+84|0)(?:[\s.]?\d){8,10}/);
+  if (!phoneMatch) return null;
+  const name = fieldAfter(source, 'tên người nhận|người nhận|tên');
+  const address = fieldAfter(source, 'địa chỉ giao|địa chỉ|giao đến|giao tới|giao tại');
+  if (!name || !address) return null;
+  const folded = fold(source);
+  const names = [...(catalogItems || [])]
+    .filter((item) => item?.name)
+    .sort((a, b) => String(b.name).length - String(a.name).length);
+  const items = [];
+  const seen = new Set();
+  for (const item of names) {
+    const key = fold(item.name);
+    if (key.length < 6 || seen.has(key) || !folded.includes(key)) continue;
+    seen.add(key);
+    items.push(item.name);
+    if (items.length >= 8) break;
+  }
+  if (!items.length) return null;
+  return {
+    name: name.slice(0, 80),
+    phone: phoneMatch[0].replace(/[^\d+]/g, ''),
+    address,
+    items,
+  };
+}
+
+export function confirmedOrderFromThread({ turns = [], latest = '', catalogItems = [] } = {}) {
+  const userText = turns.filter((turn) => turn.role === 'user').map((turn) => turn.text).join('\n');
+  const order = extractConfirmedOrder(userText, catalogItems);
+  if (!order) return null;
+  if (isConfirm(latest) || extractConfirmedOrder(latest, catalogItems)) return order;
+  return null;
+}
+
+export function typingDelayMs(text) {
+  const length = String(text || '').length;
+  return Math.min(5000, Math.max(2000, 2000 + Math.min(3000, Math.round(length * 15))));
+}
+
+export function formatFacebookOrder({ name, phone, address, items, psid }) {
+  return [
+    '🛒 ĐƠN FACEBOOK',
+    `Khách: ${name}`,
+    `Điện thoại: ${phone}`,
+    `Địa chỉ: ${address}`,
+    ...(items || []).map((item) => `- ${item}`),
+    psid ? `PSID: ${psid}` : '',
+  ].filter(Boolean).join('\n');
 }
 
 export function createMessenger({
@@ -80,6 +146,8 @@ export function createMessenger({
   maxWaitMs,
   schedule = (fn, ms) => setTimeout(fn, ms),
   clearSchedule = (id) => clearTimeout(id),
+  pace = true,
+  typePaceMs = null,
 } = {}) {
   const history = new Map();
   const paused = new Map();
@@ -88,6 +156,8 @@ export function createMessenger({
   const bursts = new Map();
   const lanes = new Map();
   const geminiAlerts = new Map();
+  const sentOrders = new Map();
+  let catalogItems = [];
   let geminiAlertGlobalAt = 0;
   const RATE_MAX = positiveInt(rateMax ?? env.FB_RATE_MAX, DEFAULT_RATE_MAX);
   const RATE_WINDOW_MS = positiveInt(rateWindowMs ?? env.FB_RATE_WINDOW_MS, DEFAULT_RATE_WINDOW_MS);
@@ -158,13 +228,25 @@ export function createMessenger({
     return run;
   }
 
+  function wait(ms) {
+    return new Promise((resolve) => {
+      schedule(resolve, ms);
+    });
+  }
+
   async function graph(body) {
     const response = await fetchImpl(`https://graph.facebook.com/v21.0/me/messages?access_token=${encodeURIComponent(settings.pageToken)}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body),
     });
-    if (!response.ok) console.error('facebook send failed', response.status);
+    if (!response.ok) {
+      let detail = '';
+      try { detail = await response.text(); } catch { detail = ''; }
+      const token = String(settings.pageToken || '');
+      const safe = scrubSecret(detail).split(token).join('<hidden>').slice(0, 500);
+      console.error('facebook send failed', response.status, safe);
+    }
   }
 
   function showTyping(psid) {
@@ -174,27 +256,47 @@ export function createMessenger({
   }
 
   async function say(psid, text) {
+    const body = String(text).slice(0, 1900);
     await graph({ recipient: { id: psid }, sender_action: 'typing_on' });
+    const delay = pace ? (typeof typePaceMs === 'function' ? typePaceMs(body) : typingDelayMs(body)) : 0;
+    if (delay > 0) await wait(delay);
     await graph({
       recipient: { id: psid },
       messaging_type: 'RESPONSE',
-      message: { text: String(text).slice(0, 1900), metadata: 'mocqua-bot' },
+      message: { text: body, metadata: 'mocqua-bot' },
     });
+  }
+
+  async function deliverOrder(psid, text) {
+    const loose = extractOrder(text);
+    if (!loose) return;
+    const turns = remember(psid, 'user', text);
+    if (!catalogItems.length) {
+      try {
+        const loaded = await loadCatalog();
+        catalogItems = Array.isArray(loaded?.items) ? loaded.items : [];
+      } catch {
+        catalogItems = [];
+      }
+    }
+    const blob = turns.filter((turn) => turn.role === 'user').map((turn) => turn.text).join('\n');
+    const confirmed = extractConfirmedOrder(blob, catalogItems);
+    const summary = turns.map((turn) => `${turn.role === 'model' ? 'Mộc Quả' : 'Khách'}: ${turn.text}`).join('\n');
+    const signature = confirmed ? `${confirmed.phone}|${confirmed.items.join('|')}` : loose.phone;
+    if (sentOrders.get(psid) !== signature) {
+      sentOrders.set(psid, signature);
+      const note = confirmed
+        ? `${formatFacebookOrder({ ...confirmed, psid })}\n\n${summary}`
+        : `📩 KHÁCH FACEBOOK MUỐN ĐẶT\nPSID: ${psid}\nĐiện thoại: ${loose.phone}\n\n${summary}`;
+      await sendOwner(note);
+    }
+    remember(psid, 'model', ORDER_REPLY);
+    await say(psid, ORDER_REPLY);
   }
 
   async function handoff(psid, reason) {
     pause(psid);
     await sendOwner(`👤 Facebook cần người thật.\n${reason}\nPSID: ${psid}`);
-  }
-
-  async function deliverOrder(psid, text) {
-    const order = extractOrder(text);
-    if (!order) return;
-    const turns = remember(psid, 'user', text);
-    const summary = turns.map((turn) => `${turn.role === 'model' ? 'Mộc Quả' : 'Khách'}: ${turn.text}`).join('\n');
-    await sendOwner(`📩 KHÁCH FACEBOOK MUỐN ĐẶT\nPSID: ${psid}\nĐiện thoại: ${order.phone}\n\n${summary}`);
-    remember(psid, 'model', ORDER_REPLY);
-    await say(psid, ORDER_REPLY);
   }
 
   function takeGeminiAlert(psid) {
@@ -282,6 +384,7 @@ export function createMessenger({
         console.error('catalog', scrubSecret(error));
         catalog = { ok: false, items: [] };
       }
+      catalogItems = Array.isArray(catalog?.items) ? catalog.items : [];
       if (catalog?.ok === false) {
         catalogDown = true;
       } else {

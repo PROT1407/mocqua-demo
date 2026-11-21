@@ -92,11 +92,26 @@ ${tags}
 </html>`;
 }
 
+function todayICT(now = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+}
+
+export function monthlyPromoText(copy, now = new Date()) {
+  const text = String(copy?.promoText || '').trim();
+  if (!text) return '';
+  const ends = String(copy?.promoEnds || '').trim();
+  if (ends && todayICT(now) > ends) return '';
+  if (!ends) return text;
+  const [year, month, day] = ends.split('-');
+  return `${text} · đến hết ${day}/${month}/${year}`;
+}
+
 function promoBar(page) {
   if (page === 'admin') return '';
   let text;
   try {
-    text = getSiteCopy().banner || bannerText(getSettings());
+    const copy = getSiteCopy();
+    text = monthlyPromoText(copy) || copy.banner || bannerText(getSettings());
   } catch {
     text = 'Giảm 3% + miễn ship đơn từ 300k · Giảm 7% đơn từ 500k · Giảm 12% đơn từ 1 triệu';
   }

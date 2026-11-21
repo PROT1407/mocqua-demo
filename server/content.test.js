@@ -51,6 +51,16 @@ test('nội dung: lọc chữ, lưu, khôi phục, và trang dùng bản sửa',
     assert.equal(hit.pitch, 'Câu ngắn mới');
     const live = await (await fetch(base + '/api/noi-dung')).json();
     assert.equal(live.site.heroTitle, 'Tiêu đề thử A');
+    saveSiteCopy({ heroTitle: 'Tiêu đề thử A', promoText: 'Mít giảm tháng này', promoEnds: '2099-01-01' });
+    const promoHome = await (await fetch(base + '/')).text();
+    assert.match(promoHome, /Mít giảm tháng này/);
+    assert.match(promoHome, /đến hết 01\/01\/2099/);
+    const promoDm = await (await fetch(base + '/api/danh-muc')).json();
+    assert.equal(promoDm.promo.text, 'Mít giảm tháng này');
+    assert.equal(promoDm.promo.endsAt, '2099-01-01');
+    saveSiteCopy({ heroTitle: 'Tiêu đề thử A', promoText: 'Chương trình đã hết', promoEnds: '2000-01-01' });
+    const expired = await (await fetch(base + '/')).text();
+    assert.doesNotMatch(expired, /Chương trình đã hết/);
   } finally {
     server.close();
   }

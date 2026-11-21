@@ -23,7 +23,7 @@ import { adminPage, cartPage, checkoutPage, errorPage, homePage, offlinePage, or
 import { catalogStorageStatus, checkCatalogStorage, durableConfig, hydrateEdits, persistEdits, storageLogLine } from './durable.js';
 import { decodeImage, readMedia, removeMedia, saveUpload } from './media.js';
 import { indexingEnabled, robotsTxt, shopSitemap } from './seo.js';
-import { applyContentToCatalog, getProductCopy, listContentVersions, previewing, publicContent, restoreContentVersion, saveProductCopy, saveSiteCopy } from './content.js';
+import { applyContentToCatalog, getProductCopy, getSiteCopy, listContentVersions, previewing, publicContent, restoreContentVersion, saveProductCopy, saveSiteCopy } from './content.js';
 import { notifyNewOrder } from './telegram.js';
 import { notifySheets, sendTestNotifications } from './sheets.js';
 
@@ -359,9 +359,11 @@ export function createApp() {
   app.get('/api/danh-muc', (req, res) => {
     const settings = getSettings();
     res.set('Cache-Control', 'public, max-age=120');
+    const copy = getSiteCopy();
     res.json({
       ...applyContentToCatalog(withShopLinks(catalogWithPrices())),
       shipping: { shipFee: settings.shipFee, freeShip: settings.freeShip },
+      promo: { text: copy.promoText || '', endsAt: copy.promoEnds || '', banner: copy.banner || '' },
     });
   });
   app.get('/api/admin/catalog-prices.json', requireAdmin, (req, res) => {

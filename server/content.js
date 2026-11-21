@@ -24,6 +24,8 @@ const SITE_LIMITS = {
   shelfLead: 400,
   footerTagline: 120,
   banner: 240,
+  promoText: 400,
+  promoEnds: 10,
   homeTitle: 70,
   homeDescription: 160,
 };
@@ -71,6 +73,9 @@ export function normalizeSite(input = {}, options = {}) {
   };
   for (const [key, max] of Object.entries(SITE_LIMITS)) {
     site[key] = input[key] ? plain(input[key], max, 'Nội dung') : '';
+  }
+  if (site.promoEnds && !/^\d{4}-\d{2}-\d{2}$/.test(site.promoEnds)) {
+    throw problem(400, 'Ngày hết khuyến mãi chưa đúng.');
   }
   const pages = input.pages && typeof input.pages === 'object' ? input.pages : {};
   for (const key of PAGE_KEYS) {

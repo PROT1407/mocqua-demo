@@ -1,4 +1,4 @@
-import { addonPacks, fold, formatCatalog, relatedItems } from './catalog.js';
+import { fold, formatCatalog, livePromoLines, relatedItems } from './catalog.js';
 import { asksShopAddress, shopAddressReply } from './shop-info.js';
 
 const MAX_MESSAGE = 2000;
@@ -10,11 +10,15 @@ export const SLOGAN = 'Quả của đất · Quà của tình';
 
 export const CATALOG_WARM = 'Mộc Quả đã nhận tin của anh/chị. Anh/chị xem hàng tại https://mocqua.onrender.com/cua-hang, hoặc nhắn lại giúp một lát.';
 
-export const SYSTEM_PROMPT = `Bạn là người bán của Mộc Quả. Xưng “em”, gọi khách “anh/chị”. Trả lời ngắn, tự nhiên, tối đa 3 dòng. Slogan chỉ khi chào lần đầu: “${SLOGAN}”.
+export const PROMO_FALLBACK = 'Mít sấy Thái đang giảm giá đến hết 30/11, sau đó về giá gốc.';
 
-Giá và khuyến mãi lấy đúng danh mục cửa hàng vừa tải. Khuyến mãi theo ngày trong danh mục, không nhớ giá cũ.
-Không nói “chưa có thông tin”. Chưa chắc thì nói “để em kiểm tra” rồi tiếp tục giúp.
-Mít thái sấy giòn Fresh & Healthy đang khuyến mãi đến hết 30/11, giá lấy đúng dòng danh mục. Món khác lấy giá thường trong danh mục. Khi khách quan tâm thêm hoặc sắp đủ miễn phí giao hay mức giảm kế, ưu tiên hàng Viza Food bán chạy, nổi bật hoặc combo, rồi nhãn Mộc Quả; nói giảm theo đơn từ 300.000đ −3%, 500.000đ −7%, 1.000.000đ −12% và phí giao ở dòng giao hàng; chọn 2–3 túi đúng giá trong khối “Bù mốc”, không mở bằng xin lỗi.`;
+export const SYSTEM_PROMPT = `Em là nhân viên tư vấn Mộc Quả. Xưng em, gọi anh/chị, nhẹ nhàng tự nhiên, mỗi tin 1–3 câu, không dồn dập.
+1. Giá luôn lấy từ web mocqua.com (catalog live), cả món lẻ lẫn combo; chưa chắc thì nói "để em kiểm tra".
+2. Mỗi lần giới thiệu hoặc trả lời về một món, kèm link trang món đó (https://mocqua.com/...); có cả bản lẻ và combo thì gửi cả hai link.
+3. Ưu tiên Viza Food bán chạy: sầu riêng sấy thăng hoa Yummy rồi Cheers+, mít sấy Thái (ngọt thanh, không gắt), măng cụt, xoài sấy dẻo và các combo. Không chủ động giới thiệu hạt macca, hạt điều, hạt dẻ cười, hạt sen sấy, dừa sấy non dạng hộp (trừ khi khách hỏi).
+4. Khuyến mãi: đơn từ 300k vừa được miễn phí ship vừa giảm thêm 3%. Chương trình trong tháng lấy đúng danh sách khuyến mãi vừa tải, kèm ngày hết hạn và link. Đơn dưới 300k không nhắc phí ship trừ khi khách hỏi. Nhắc nhẹ khi hợp ngữ cảnh, không mỗi tin.
+5. Gợi ý mua kèm khi đơn gần 300k: cóc sấy dẻo, mãng cầu sấy dẻo (80–100g, mộc hoặc muối ớt), xoài sấy dẻo 100g (mộc hoặc muối ớt), mít sấy Thái 100g. Thỉnh thoảng thôi, không ép.
+6. Chốt đơn: hỏi lần lượt món + số lượng, tên người nhận, số điện thoại, địa chỉ giao; đọc lại đơn kèm tổng tiền (áp freeship + giảm 3% nếu từ 300k) cho khách xác nhận, rồi báo shop sẽ gọi xác nhận.`;
 
 export function readChat(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
@@ -56,10 +60,9 @@ export function buildAssistant(message, history, catalog, options = {}) {
   const related = ready ? relatedItems(catalog.items, message) : [];
   const catalogBlock = ready
     ? [
-      shippingLine(catalog.shipping),
-      addonLine(catalog.items, now),
+      promoBlock(catalog, message, history, now),
       related.length ? `Sản phẩm liên quan:\n${formatCatalog(related, now)}` : '',
-      `DANH MỤC ĐANG BÁN${catalog.stale ? ' (bản gần nhất)' : ''}${catalog.updated ? `, mốc ${catalog.updated}` : ''}. Mỗi dòng: nhãn | tên | khối lượng | giá (đồng) | link.\n${formatCatalog(catalog.items, now)}`,
+      `DANH MỤC ĐANG BÁN${catalog.stale ? ' (bản gần nhất)' : ''}${catalog.updated ? `, mốc ${catalog.updated}` : ''}. Mỗi dòng: nhãn | tên | khối lượng | giá (đồng) | link trang món. Giá và link lấy đúng dòng này, cả món lẻ lẫn combo.\n${formatCatalog(catalog.items, now)}`,
     ].filter(Boolean).join('\n\n')
     : 'Danh mục chưa tải được. Đừng nêu giá. Nói “để em kiểm tra”.';
   const prior = (history || []).map((turn) => `${turn.role === 'model' ? 'Mộc Quả' : 'Khách'}: ${turn.text}`).join('\n');
@@ -75,17 +78,24 @@ export function buildAssistant(message, history, catalog, options = {}) {
   };
 }
 
-function addonLine(items, now) {
-  const packs = addonPacks(items);
-  if (!packs.length) return '';
-  return `Bù mốc — túi trái cây sấy 80–100g còn hàng, Viza Food trước, giá tăng dần. Chọn 2–3 dòng vừa số khách còn thiếu để đủ miễn phí giao hoặc mức giảm kế:\n${formatCatalog(packs, now)}`;
+export function shouldMentionPromo(message, history) {
+  if (!history?.length) return true;
+  return /khuyen mai|giam gia|\bkm\b|gia |bao nhieu|mit|combo|sau rieng|xoai|mang cut|thang hoa/.test(fold(message));
 }
 
-function shippingLine(shipping) {
-  const fee = Number(shipping?.shipFee);
-  const free = Number(shipping?.freeShip);
-  if (!Number.isInteger(fee) || !Number.isInteger(free) || fee < 0 || free < 0) return '';
-  return `Giao hàng: phí ${fee} đồng, miễn phí từ ${free} đồng.`;
+function fallbackPromo(now) {
+  const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now instanceof Date ? now : new Date(now));
+  return day <= '2026-11-30' ? PROMO_FALLBACK : '';
+}
+
+function promoBlock(catalog, message, history, now) {
+  if (!shouldMentionPromo(message, history)) return '';
+  const lines = livePromoLines(catalog?.items, catalog?.promo, now);
+  if (lines.length) {
+    return `Khuyến mãi đang chạy trên web. Nhắc khi chào hoặc khi khách hỏi món, giá, khuyến mãi. Không nhắc mỗi tin. Kèm ngày hết hạn và link:\n${lines.join('\n')}`;
+  }
+  const fallback = fallbackPromo(now);
+  return fallback ? `Web chưa có chương trình khuyến mãi riêng. Chỉ khi khách hỏi mít hoặc khuyến mãi: ${fallback}` : '';
 }
 
 function sanitize(value, max) {

@@ -254,6 +254,8 @@ const CONTENT_FIELDS = [
   ['shelfLead', 'Đoạn kệ hàng'],
   ['footerTagline', 'Dòng chân trang'],
   ['banner', 'Dòng thông báo trên cùng (để trống = tự tính phí giao)'],
+  ['promoText', 'Chương trình khuyến mãi tháng'],
+  ['promoEnds', 'Hết ngày khuyến mãi'],
   ['homeTitle', 'Tiêu đề SEO trang chủ (để trống = tự soạn)'],
   ['homeDescription', 'Mô tả SEO trang chủ (để trống = tự soạn)'],
 ];
@@ -304,7 +306,9 @@ async function loadContent() {
   contentProducts = products;
   panels.content.innerHTML = `<form id="content-form" class="fields">
     <p class="fine">Chữ thuần, không dán mã HTML. Để trống thì trang dùng câu sẵn. Ảnh và chữ thay ảnh nằm ở tab Giá và ảnh, kể cả combo.</p>
-    ${CONTENT_FIELDS.map(([key, label]) => field(key, label, site[key], key.endsWith('Lead') || key.endsWith('Description') ? 3 : 0)).join('')}
+    ${CONTENT_FIELDS.map(([key, label]) => key === 'promoEnds'
+      ? `<label class="field">${esc(label)} <input name="promoEnds" type="date" value="${esc(site.promoEnds || '')}"></label>`
+      : field(key, label, site[key], key === 'promoText' || key.endsWith('Lead') || key.endsWith('Description') ? 3 : 0)).join('')}
     <h2>Thứ tự trang chủ</h2>
     <div id="content-sections">${sections}</div>
     <h2>Tiêu đề từng trang</h2>
