@@ -108,6 +108,31 @@ function sendBackup(res, body, filename, type) {
   res.send(body);
 }
 
+function baseGallery(product, sku) {
+  const overrides = getOverrides();
+  if (!sku) {
+    const shared = overrides.galleries.get(product.id) || [];
+    return shared.length ? shared : defaultGallery(product);
+  }
+  const own = overrides.variantGalleries.get(product.id)?.get(sku) || [];
+  if (own.length) return own;
+  const shared = overrides.galleries.get(product.id) || [];
+  if (shared.length) return shared;
+  return defaultGallery(product, sku);
+}
+
+function gallerySkus(product, input) {
+  if (!Array.isArray(input) || !input.length) return [''];
+  const known = new Set((product.variants || []).map((variant) => variant.sku).filter(Boolean));
+  const skus = [];
+  for (const value of input) {
+    const sku = String(value || '');
+    if (!known.has(sku)) throw problem(400, 'Không thấy mẫu này.');
+    if (!skus.includes(sku)) skus.push(sku);
+  }
+  return skus;
+}
+
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
@@ -456,15 +481,28 @@ export function createApp() {
     if (!product || product.soon) throw problem(404, 'Không thấy sản phẩm.');
     const decoded = decodeImage(req.body?.data);
     const saved = saveUpload(id, decoded);
-    const current = getOverrides().galleries.get(id);
-    const base = current?.length ? current : defaultGallery(product);
-    const items = [
-      ...base.map((item) => ({ ...item })),
-      { file: `upload:${saved.name}`, label: 'Ảnh mới', alt: product.name, hero: false },
-    ];
-    if (!items.some((item) => item.hero)) items[0].hero = true;
-    setGallery(id, items);
-    res.json({ ok: true, file: `upload:${saved.name}`, ...(await persistEdits({ uploads: [saved] })) });
+    const replace = String(req.body?.replace || '');
+    const skus = gallerySkus(product, req.body?.skus);
+    const uploaded = { file: `upload:${saved.name}`, label: 'Ảnh mới', alt: product.name, hero: false };
+    const plans = skus.map((sku) => {
+      const base = baseGallery(product, sku).map((item) => ({ ...item }));
+      if (replace) {
+        const index = base.findIndex((item) => item.file === replace);
+        if (index < 0) {
+          removeMedia(saved.name);
+          throw problem(400, 'Không thấy ảnh cần đổi.');
+        }
+        base[index] = { ...uploaded, label: base[index].label, alt: base[index].alt, hero: !!base[index].hero };
+      } else {
+        base.push({ ...uploaded, hero: false });
+        if (!base.some((item) => item.hero)) base[0].hero = true;
+      }
+      return { sku, base };
+    });
+    const removed = [];
+    for (const plan of plans) removed.push(...setGallery(id, plan.base, plan.sku));
+    for (const name of removed) removeMedia(name);
+    res.json({ ok: true, file: uploaded.file, ...(await persistEdits({ uploads: [saved], removals: removed })) });
   }));
 
   app.put('/api/admin/products/:id/gallery', requireAdmin, wrap(async (req, res) => {
@@ -472,7 +510,19 @@ export function createApp() {
     const product = getRawProduct(id);
     if (!product || product.soon) throw problem(404, 'Không thấy sản phẩm.');
     const items = normalizeGallery(product, req.body?.items);
-    const removed = setGallery(id, items);
+    const skus = gallerySkus(product, req.body?.skus);
+    const removed = [];
+    if (!items.length && skus.some(Boolean)) {
+      const shared = getOverrides().galleries.get(id) || [];
+      if (shared.length) {
+        const keep = (product.variants || []).map((variant) => variant.sku).filter((sku) => sku && !skus.includes(sku));
+        for (const sku of keep) {
+          if (!getOverrides().variantGalleries.get(id)?.get(sku)?.length) setGallery(id, shared, sku);
+        }
+        removed.push(...setGallery(id, [], ''));
+      }
+    }
+    for (const sku of skus) removed.push(...setGallery(id, items, sku));
     for (const name of removed) removeMedia(name);
     res.json({ ok: true, ...(await persistEdits({ removals: removed })) });
   }));

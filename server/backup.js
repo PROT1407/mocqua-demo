@@ -213,9 +213,12 @@ function readGalleries(input) {
     if (!plain(row)) fail('Một bộ ảnh trong file sao lưu không đúng dạng.');
     const id = text(row.id, 120, { required: true });
     if (!PRODUCT_RE.test(id)) fail(`Mã sản phẩm ${id} trong file chưa đúng.`);
-    if (seen.has(id)) fail(`File có bộ ảnh trùng ${id}.`);
-    seen.add(id);
-    if (!Array.isArray(row.items) || row.items.length > 24) fail(`Ảnh của ${id} chưa đúng.`);
+    const sku = row.sku ? text(row.sku, 80) : '';
+    if (sku && !SKU_RE.test(sku)) fail(`Mã mẫu ${sku} trong bộ ảnh chưa đúng.`);
+    const key = `${id}\n${sku}`;
+    if (seen.has(key)) fail(`File có bộ ảnh trùng ${id}.`);
+    seen.add(key);
+    if (!Array.isArray(row.items) || row.items.length > 48) fail(`Ảnh của ${id} chưa đúng.`);
     const items = row.items.map((item) => {
       if (!plain(item)) fail(`Ảnh của ${id} chưa đúng.`);
       const file = text(item.file, 200, { required: true });
@@ -228,7 +231,7 @@ function readGalleries(input) {
       };
     });
     if (items.length && !items.some((item) => item.hero)) items[0].hero = true;
-    return { id, items };
+    return { id, sku, items };
   });
 }
 

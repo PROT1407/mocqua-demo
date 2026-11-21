@@ -87,6 +87,36 @@ function durableLine(result) {
   return 'Đã lưu';
 }
 
+function readSkus(node) {
+  try {
+    const parsed = JSON.parse(node?.closest('[data-skus]')?.dataset.skus || node?.dataset.skus || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function galleryGroups(product) {
+  const rows = product.variantGalleries?.length
+    ? product.variantGalleries
+    : [{ sku: product.defaultSku || '', label: '', items: product.gallery || [] }];
+  const groups = [];
+  for (const row of rows) {
+    const key = (row.items || []).map((item) => `${item.src}|${item.label}`).join('\n');
+    const group = groups.find((item) => item.key === key);
+    if (group) {
+      group.skus.push(row.sku);
+      if (row.label) group.labels.push(row.label);
+    } else {
+      groups.push({ key, skus: [row.sku], labels: row.label ? [row.label] : [], items: row.items || [] });
+    }
+  }
+  for (const group of groups) {
+    group.title = groups.length > 1 && group.labels.length ? `Ảnh · ${group.labels.join(', ')}` : 'Ảnh';
+  }
+  return groups;
+}
+
 function storeMessage(storage) {
   if (!storage || storage.state === 'missing') return 'Chưa có CATALOG_GITHUB_TOKEN trên Render.';
   if (storage.state === 'rejected') {
@@ -137,25 +167,28 @@ async function loadPrices() {
         <button class="btn btn--small" type="button" data-save-price="${esc(variant.sku)}">Lưu</button>
         <button class="textbtn" type="button" data-reset-price="${esc(variant.sku)}">Về giá niêm yết</button>
       </div>`).join('')}</div>
-      <div class="gallery-edit" data-gallery="${esc(product.id)}">
-        <b>Ảnh</b>
-        <div class="shots-edit">${(product.gallery || []).map((shot, index) => `<div class="shot${shot.hero ? ' is-hero' : ''}" data-shot="${esc(shot.file)}" data-label="${esc(shot.label)}" data-alt="${esc(shot.alt)}">
+      ${galleryGroups(product).map((group, groupIndex) => `<div class="gallery-edit" data-gallery="${esc(product.id)}" data-skus="${esc(JSON.stringify(group.skus))}">
+        <b>${esc(group.title)}</b>
+        <div class="shots-edit">${group.items.map((shot, index) => `<div class="shot-edit${shot.hero ? ' is-hero' : ''}" data-shot="${esc(shot.file)}" data-label="${esc(shot.label)}" data-alt="${esc(shot.alt)}">
           <img src="${esc(shot.src)}" alt="">
           <div>
-            <label class="check"><input type="radio" name="hero-${esc(product.id)}" data-hero${shot.hero ? ' checked' : ''}> Ảnh chính</label>
+            <b class="shot-edit__cap">${esc(shot.label || 'Ảnh')}</b>
+            <label class="check"><input type="radio" name="hero-${esc(product.id)}-${groupIndex}" data-hero${shot.hero ? ' checked' : ''}> Ảnh chính</label>
             <label class="field">Chữ thay ảnh <input data-alt-input value="${esc(shot.alt)}" maxlength="180"></label>
             <div class="shot__actions">
               <button class="btn btn--small btn--ghost" type="button" data-photo-up="${index}">Lên</button>
               <button class="btn btn--small btn--ghost" type="button" data-photo-down="${index}">Xuống</button>
+              <label class="btn btn--small btn--ghost">Đổi ảnh<input data-photo-replace="${esc(shot.file)}" data-photo-for="${esc(product.id)}" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
               <button class="btn btn--small btn--ghost" type="button" data-photo-del>Xoá</button>
             </div>
           </div>
         </div>`).join('')}</div>
         <div class="shot__actions">
           <label class="btn btn--small btn--ghost">Thêm ảnh<input data-photo-file="${esc(product.id)}" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
-          <button class="btn btn--small" type="button" data-save-gallery="${esc(product.id)}">Lưu thứ tự ảnh</button>
+          <button class="btn btn--small" type="button" data-save-gallery="${esc(product.id)}">Lưu ảnh</button>
+          <button class="textbtn" type="button" data-reset-gallery="${esc(product.id)}"${product.galleryCustom ? '' : ' hidden'}>Về ảnh gốc</button>
         </div>
-      </div>
+      </div>`).join('')}
     </article>`).join('') || '<p>Không thấy món nào.</p>';
   };
   input.oninput = (event) => {
@@ -562,9 +595,10 @@ panels.content?.addEventListener('click', async (event) => {
 });
 
 panels.prices.addEventListener('change', async (event) => {
-  const input = event.target.closest('[data-photo-file]');
+  const input = event.target.closest('[data-photo-file], [data-photo-replace]');
   if (!input?.files?.[0]) return;
-  const id = input.dataset.photoFile;
+  const id = input.dataset.photoFile || input.dataset.photoFor;
+  const replace = input.dataset.photoReplace || '';
   const file = input.files[0];
   input.value = '';
   try {
@@ -576,7 +610,7 @@ panels.prices.addEventListener('change', async (event) => {
     });
     const result = await api('/api/admin/products/' + encodeURIComponent(id) + '/photos', {
       method: 'POST',
-      body: JSON.stringify({ data: dataUrl }),
+      body: JSON.stringify({ data: dataUrl, ...(replace ? { replace } : {}), skus: readSkus(input) }),
     });
     if (result.reason === 'github') alert('Ảnh đã lưu trên máy, chưa ghi được lên GitHub.');
     await loadPrices();
@@ -624,6 +658,16 @@ panels.prices.addEventListener('click', async (event) => {
         }
       }
     }
+    const resetGallery = event.target.closest('[data-reset-gallery]');
+    if (resetGallery) {
+      if (!window.confirm('Bỏ ảnh đã sửa và dùng lại ảnh gốc trên trang sản phẩm?')) return;
+      await api('/api/admin/products/' + encodeURIComponent(resetGallery.dataset.resetGallery) + '/gallery', {
+        method: 'PUT',
+        body: JSON.stringify({ items: [], skus: readSkus(resetGallery) }),
+      });
+      await loadPrices();
+      return;
+    }
     const saveGallery = event.target.closest('[data-save-gallery]');
     if (saveGallery) {
       const id = saveGallery.dataset.saveGallery;
@@ -636,7 +680,7 @@ panels.prices.addEventListener('click', async (event) => {
       }));
       const result = await api('/api/admin/products/' + encodeURIComponent(id) + '/gallery', {
         method: 'PUT',
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, skus: readSkus(saveGallery) }),
       });
       saveGallery.textContent = durableLine(result);
     }
