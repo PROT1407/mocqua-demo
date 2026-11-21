@@ -620,7 +620,12 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.match(manifestRes.headers.get('content-type') || '', /manifest\+json/);
     const manifest = await manifestRes.json();
     assert.equal(manifest.display, 'standalone');
-    assert.equal(manifest.start_url, '/');
+    assert.equal(manifest.start_url, '/?src=app');
+    assert.equal(manifest.name, 'Mộc Quả');
+    assert.equal(manifest.short_name, 'Mộc Quả');
+    assert.ok(manifest.shortcuts.some((item) => item.name === 'Combo' && item.url.startsWith('/combo')));
+    assert.ok(manifest.shortcuts.some((item) => item.name === 'Danh mục'));
+    assert.ok(manifest.shortcuts.some((item) => item.name === 'Giỏ hàng'));
     assert.equal(manifest.scope, '/');
     assert.match(manifest.name, /Mộc Quả/);
     assert.equal(manifest.theme_color, '#F7F1E8');
@@ -918,7 +923,7 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     // Ảnh trang sản phẩm: height auto để không bị thuộc tính height=1125 kéo khung cao rồi cover cắt mất cả túi trên điện thoại.
     assert.match(css, /\.pdp__stage img \{[^}]*height: auto[^}]*object-fit: contain/);
     const sw = await (await fetch(base + '/sw.js')).text();
-    assert.match(sw, /mocqua-shell-v53/);
+    assert.match(sw, /mocqua-shell-v54/);
     const pwa = await (await fetch(base + '/static/js/pwa.js')).text();
     assert.match(pwa, /mq_ai_warm_at/);
     assert.match(pwa, /ai-server-u9ob\.onrender\.com\/health/);

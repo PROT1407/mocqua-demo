@@ -4,11 +4,22 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { editHref } from '../web/js/edit-shortcut.js';
+import { INSTALL_GAP_MS, installOffer } from '../web/js/pwa.js';
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'mocqua-edit-'));
 process.env.DB_PATH = path.join(dir, 'shop.sqlite');
 process.env.ADMIN_PASSWORD = 'edit-shortcut-pass';
 process.env.ADMIN_SECRET = 'edit-shortcut-secret';
+
+test('cài app chỉ hiện trên điện thoại, và thanh dưới có đủ mục', async () => {
+  const now = Date.now();
+  assert.equal(installOffer({ standalone: true, mobile: true, dismissedAt: 0, now, ios: false, hasPrompt: true }), 'hidden');
+  assert.equal(installOffer({ standalone: false, mobile: false, dismissedAt: 0, now, ios: false, hasPrompt: true }), 'hidden');
+  assert.equal(installOffer({ standalone: false, mobile: true, dismissedAt: now - 1000, now, ios: true, hasPrompt: false }), 'hidden');
+  assert.equal(installOffer({ standalone: false, mobile: true, dismissedAt: now - INSTALL_GAP_MS - 1, now, ios: true, hasPrompt: false }), 'ios');
+  assert.equal(installOffer({ standalone: false, mobile: true, dismissedAt: 0, now, ios: false, hasPrompt: true }), 'android');
+  assert.equal(installOffer({ standalone: false, mobile: true, dismissedAt: 0, now, ios: false, hasPrompt: false }), 'hidden');
+});
 
 test('nút Sửa chỉ trỏ đúng chỗ, và không có trong HTML của khách', async () => {
   assert.equal(editHref('/'), '/admin?edit=home');
@@ -28,7 +39,12 @@ test('nút Sửa chỉ trỏ đúng chỗ, và không có trong HTML của khác
     const anon = await fetch(base + '/');
     assert.equal(anon.status, 200);
     const home = await anon.text();
+    assert.match(home, /class="tabbar"/);
+    assert.match(home, /Cài app Mộc Quả/);
+    assert.match(home, /Tư vấn/);
     assert.match(home, /\/static\/js\/edit-shortcut\.js/);
+    const admin = await (await fetch(base + '/admin')).text();
+    assert.doesNotMatch(admin, /class="tabbar"/);
     assert.doesNotMatch(home, /class="edit-shortcut"|✏️ Sửa/);
     const cart = await (await fetch(base + '/gio-hang')).text();
     assert.doesNotMatch(cart, /edit-shortcut\.js|✏️ Sửa/);

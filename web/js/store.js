@@ -75,6 +75,7 @@ export function refresh() {
   const count = read().reduce((sum, item) => sum + item.qty, 0);
   document.querySelectorAll('[data-cart-count]').forEach((el) => {
     el.textContent = String(count);
+    if (el.classList.contains('tabbar__n')) el.hidden = count === 0;
   });
 }
 
