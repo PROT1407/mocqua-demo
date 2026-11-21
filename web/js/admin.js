@@ -1,8 +1,13 @@
+import { filterCatalogItems, findCatalogItem } from './edit-shortcut.js';
+
 const loginPanel = document.querySelector('#login-panel');
 const dash = document.querySelector('#dash');
 const loginErr = document.querySelector('#login-err');
 const bankWarn = document.querySelector('#bank-warn');
 let durableOn = false;
+let storeStatus = null;
+let priceProducts = [];
+let contentProducts = [];
 const panels = {
   orders: document.querySelector('#panel-orders'),
   prices: document.querySelector('#panel-prices'),
@@ -32,10 +37,14 @@ async function api(url, options = {}) {
 }
 
 function showTab(name) {
+  let current = null;
   document.querySelectorAll('[data-tab]').forEach((button) => {
-    button.classList.toggle('is-on', button.dataset.tab === name);
+    const on = button.dataset.tab === name;
+    button.classList.toggle('is-on', on);
+    if (on) current = button;
   });
   for (const [key, panel] of Object.entries(panels)) panel.hidden = key !== name;
+  current?.scrollIntoView({ inline: 'center', block: 'nearest' });
 }
 
 async function loadOrders() {
@@ -78,22 +87,36 @@ function durableLine(result) {
   return 'Đã lưu';
 }
 
+function storeMessage(storage) {
+  if (!storage || storage.state === 'missing') return 'Chưa có CATALOG_GITHUB_TOKEN trên Render.';
+  if (storage.state === 'rejected') {
+    const code = storage.http || '401/403/404';
+    return `Token có, nhưng GitHub từ chối (${code}). 401/403/404: kiểm tra quyền repo và Contents: Read and write.`;
+  }
+  if (storage.state === 'ok') return 'OK, đang lưu lâu dài.';
+  if (storage.state === 'error') return `Đã đọc token, GitHub trả ${storage.http || 'lỗi'}. Bấm Kiểm tra kết nối.`;
+  return 'Đã đọc CATALOG_GITHUB_TOKEN. Bấm Kiểm tra kết nối.';
+}
+
+function paintStore() {
+  const line = document.querySelector('#store-status');
+  if (line) line.textContent = storeMessage(storeStatus);
+  const note = document.querySelector('#store-note');
+  if (note) note.textContent = storeMessage(storeStatus);
+}
+
 async function loadPrices() {
   const data = await api('/api/admin/products');
-  const keep = document.querySelector('#price-q')?.value || '';
-  const storeNote = durableOn
-    ? 'Giá, hết hàng và ảnh được ghi lên GitHub, còn sau khi máy chủ khởi động lại.'
-    : 'Chưa có CATALOG_GITHUB_TOKEN trên Render. Sửa có hiệu lực ngay, nhưng mất khi máy chủ khởi động lại.';
-  panels.prices.innerHTML = `<p class="fine">${storeNote}</p><label class="field">Tìm <input id="price-q" placeholder="Tên hoặc mã" value="${esc(keep)}"></label><div id="price-list"></div>`;
+  priceProducts = data.products || [];
+  const previous = document.querySelector('#price-q');
+  const keep = previous?.value || '';
+  const exact = previous?.dataset.exact || '';
+  panels.prices.innerHTML = `<p class="fine" id="store-note">${esc(storeMessage(storeStatus))}</p><label class="field">Tìm <input id="price-q" placeholder="Tên hoặc mã" value="${esc(keep)}"></label><div id="price-list"></div>`;
   const list = document.querySelector('#price-list');
   const input = document.querySelector('#price-q');
+  if (exact) input.dataset.exact = exact;
   const draw = () => {
-    const q = input.value.trim().toLowerCase();
-    const products = data.products.filter((product) => {
-      if (!q) return true;
-      const blob = (product.name + ' ' + product.variants.map((v) => v.sku).join(' ')).toLowerCase();
-      return blob.includes(q);
-    });
+    const products = filterCatalogItems(data.products, input.value, input.dataset.exact || '');
     list.innerHTML = products.map((product) => `<article class="pricebox" data-id="${esc(product.id)}">
       <header>
         <div>
@@ -135,7 +158,10 @@ async function loadPrices() {
       </div>
     </article>`).join('') || '<p>Không thấy món nào.</p>';
   };
-  input.oninput = draw;
+  input.oninput = (event) => {
+    if (event.isTrusted) input.dataset.exact = '';
+    draw();
+  };
   draw();
 }
 
@@ -242,6 +268,7 @@ async function loadContent() {
   }).join('');
   const versions = (data.versions || []).map((row) => `<option value="${row.index}">${esc(row.at)}</option>`).join('');
   const products = data.products || [];
+  contentProducts = products;
   panels.content.innerHTML = `<form id="content-form" class="fields">
     <p class="fine">Chữ thuần, không dán mã HTML. Để trống thì trang dùng câu sẵn. Ảnh và chữ thay ảnh nằm ở tab Giá và ảnh, kể cả combo.</p>
     ${CONTENT_FIELDS.map(([key, label]) => field(key, label, site[key], key.endsWith('Lead') || key.endsWith('Description') ? 3 : 0)).join('')}
@@ -262,8 +289,8 @@ async function loadContent() {
   <div id="content-products"></div>`;
   const list = document.querySelector('#content-products');
   const draw = () => {
-    const q = document.querySelector('#content-q').value.trim().toLowerCase();
-    list.innerHTML = products.filter((product) => !q || product.name.toLowerCase().includes(q) || product.id.includes(q)).map((product) => {
+    const input = document.querySelector('#content-q');
+    list.innerHTML = filterCatalogItems(products, input.value, input.dataset.exact || '').map((product) => {
       const copy = product.copy || {};
       return `<article class="pricebox" data-copy="${esc(product.id)}">
         <header><b>${esc(product.name)}</b><small>${product.mixed ? 'Combo · ' : ''}${esc(product.id)}</small></header>
@@ -279,7 +306,10 @@ async function loadContent() {
       </article>`;
     }).join('') || '<p>Không thấy món nào.</p>';
   };
-  document.querySelector('#content-q').oninput = draw;
+  document.querySelector('#content-q').oninput = (event) => {
+    if (event.isTrusted) event.target.dataset.exact = '';
+    draw();
+  };
   draw();
   document.querySelector('#content-form').onsubmit = async (event) => {
     event.preventDefault();
@@ -293,14 +323,24 @@ async function loadContent() {
   };
 }
 
+function pinSearch(input, item, fallbackId = '') {
+  if (!input) return;
+  const id = item?.id || fallbackId;
+  if (!id) return;
+  input.dataset.exact = id;
+  input.value = item?.name || id;
+  input.dispatchEvent(new Event('input'));
+}
+
 function focusEditTarget() {
   const query = new URLSearchParams(location.search);
   if (query.get('tab') === 'prices') {
     showTab('prices');
-    const id = query.get('product');
-    const card = id ? document.querySelector(`[data-id="${CSS.escape(id)}"]`) : null;
-    card?.scrollIntoView({ block: 'start' });
+    const item = findCatalogItem(priceProducts, query.get('product'));
+    pinSearch(document.querySelector('#price-q'), item, query.get('product') || '');
+    const card = item ? document.querySelector(`[data-id="${CSS.escape(item.id)}"]`) : null;
     card?.classList.add('is-edit-target');
+    card?.scrollIntoView({ block: 'start' });
     return;
   }
   const edit = query.get('edit');
@@ -318,18 +358,14 @@ function focusEditTarget() {
     return;
   }
   if (edit === 'product') {
-    const id = query.get('id') || '';
-    const input = document.querySelector('#content-q');
-    if (input) {
-      input.value = id;
-      input.dispatchEvent(new Event('input'));
-    }
-    const card = document.querySelector(`[data-copy="${CSS.escape(id)}"]`);
+    const item = findCatalogItem(contentProducts, query.get('id'));
+    pinSearch(document.querySelector('#content-q'), item, query.get('id') || '');
+    const card = item ? document.querySelector(`[data-copy="${CSS.escape(item.id)}"]`) : null;
     if (!card) return;
     card.classList.add('is-edit-target');
     const jump = document.createElement('p');
     const link = document.createElement('a');
-    link.href = '/admin?tab=prices&product=' + encodeURIComponent(id);
+    link.href = '/admin?tab=prices&product=' + encodeURIComponent(item.id);
     link.textContent = 'Sửa ảnh và giá';
     jump.append(link);
     card.prepend(jump);
@@ -356,9 +392,25 @@ function readSiteForm() {
 async function enter() {
   const me = await api('/api/admin/me');
   durableOn = !!me.durable;
+  storeStatus = me.storage || { state: me.durable ? 'unchecked' : 'missing' };
   loginPanel.hidden = true;
   dash.hidden = false;
   bankWarn.hidden = me.bankReady;
+  paintStore();
+  document.querySelector('#store-check').onclick = async () => {
+    const button = document.querySelector('#store-check');
+    button.disabled = true;
+    try {
+      const result = await api('/api/admin/catalog-store/check', { method: 'POST', body: '{}' });
+      storeStatus = result.storage;
+      paintStore();
+    } catch (error) {
+      const line = document.querySelector('#store-status');
+      if (line) line.textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
+  };
   await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog(), loadContent()]);
   focusEditTarget();
 }
