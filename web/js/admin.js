@@ -336,7 +336,7 @@ async function loadContent() {
         ${field('description', 'Mô tả đầy đủ', copy.description, 4)}
         ${field('seoTitle', 'Tiêu đề SEO', copy.seoTitle)}
         ${field('seoDescription', 'Mô tả SEO', copy.seoDescription, 2)}
-        <label class="field">Huy hiệu <select name="badge"><option value="__default">Theo danh mục${product.badge ? ` (${esc(product.badge)})` : ''}</option>${BADGE_OPTIONS.map((badge) => `<option value="${esc(badge)}"${copy.badge === badge ? ' selected' : ''}>${badge ? esc(badge) : 'Không gắn'}</option>`).join('')}</select></label>
+        <label class="field">Huy hiệu (nhãn góc ảnh) <select name="badge"><option value="__default">Theo danh mục${product.badge ? ` (${esc(product.badge)})` : ''}</option>${BADGE_OPTIONS.map((badge) => `<option value="${esc(badge)}"${copy.badge === badge ? ' selected' : ''}>${badge ? esc(badge) : 'Không gắn'}</option>`).join('')}</select></label>
         <label class="field">Nổi bật (1 đến 99, để trống = theo danh mục) <input name="featured" inputmode="numeric" value="${copy.featured === false ? '' : (copy.featured ?? '')}"></label>
         <label class="check"><input type="checkbox" name="featuredOff"${copy.featured === false ? ' checked' : ''}> Không đưa vào nổi bật</label>
         <button class="btn btn--small" type="button" data-save-copy-text="${esc(product.id)}">Lưu chữ món này</button>
