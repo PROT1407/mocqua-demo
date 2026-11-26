@@ -997,10 +997,11 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(ch3, /id="pdp-unit"><\/p>\s*<p class="fine trybag">/);
       assert.match(ch3, /"sku":"VZ-CH-CB3X-600","w":"3 × 200g","g":600,"price":239000/);
       assert.doesNotMatch(ch3, /data-single|"singles"/);
-      for (const id of ['vz-mix-cb-ymo', 'vz-mix-cb-ch-mit', 'vz-ym-cb-sr', 'vz-mix-cb-xmi', 'combo-xoai-say-deo-100g']) {
+      for (const id of ['vz-ym-cb-sr', 'combo-xoai-say-deo-100g', 'vz-mix-cb-ymmcmo']) {
         const html = await (await fetch(base + '/san-pham/' + id)).text();
-        assert.doesNotMatch(html, /trybag|Muốn thử 1 túi/, id);
+        assert.doesNotMatch(html, /trybag|Muốn thử 1 túi|Bạn muốn thử từng vị/, id);
       }
+      assert.doesNotMatch(ch3, /Bạn muốn thử từng vị/);
       const bumped = retail.price + 1000;
       const login = await fetch(base + '/api/admin/login', {
         method: 'POST',
@@ -1028,6 +1029,82 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
           method: 'PATCH', headers: auth, body: JSON.stringify({ price: null, oos: null }),
         });
         assert.equal(back.status, 200);
+      }
+    }
+    // Combo trộn: "Bạn muốn thử từng vị?" rồi link từng túi, giá lấy từ trang lẻ. Đổi khối lượng xoài thì đổi đúng túi.
+    {
+      const pageOf = async (id) => (await fetch(base + '/san-pham/' + id)).text();
+      const dataOf = (html) => JSON.parse(html.split('id="product-data">')[1].split('</script>')[0]);
+      const priceOf = async (id, sku) => dataOf(await pageOf(id)).variants.find((v) => v.sku === sku).price;
+      const xms = await pageOf('combo-xoai-mangcut-saurieng');
+      const xmsData = dataOf(xms);
+      const xoai = await priceOf('xoai-say-deo', 'MQ-DXO-200-FHV');
+      const mc = await priceOf('mang-cut-say-thang-hoa-goodgood', 'MQ-THMC-100-GG');
+      const sr = await priceOf('sau-rieng-say-thang-hoa-fh', 'MQ-THSR-080-FH');
+      const money = (n) => n.toLocaleString('vi-VN') + 'đ';
+      const bit = (href, label, price) => `<a href="${href}">${label} · ${money(price)}</a>`;
+      const line = 'Bạn muốn thử từng vị? '
+        + bit('/san-pham/xoai-say-deo?sku=MQ-DXO-200-FHV', 'Xoài dẻo 200g', xoai) + ' · '
+        + bit('/san-pham/mang-cut-say-thang-hoa-goodgood?sku=MQ-THMC-100-GG', 'Măng cụt 100g', mc) + ' · '
+        + bit('/san-pham/sau-rieng-say-thang-hoa-fh?sku=MQ-THSR-080-FH', 'Sầu riêng 80g', sr);
+      assert.match(xms, /id="pdp-unit"><\/p>\s*<p class="fine trybag" id="pdp-try">/);
+      assert.ok(xms.includes(line), line);
+      assert.doesNotMatch(xms, /Muốn thử 1 túi|Muốn thử từng vị trước/);
+      assert.equal(xmsData.variants.find((v) => v.sku === 'MQ-CB3-XMS-200-V').price, 399000);
+      assert.deepEqual(xmsData.tries['MQ-CB3-XMS-200-V'].map((item) => [item.sku, item.label, item.price]), [
+        ['MQ-DXO-200-FHV', 'Xoài dẻo 200g', xoai],
+        ['MQ-THMC-100-GG', 'Măng cụt 100g', mc],
+        ['MQ-THSR-080-FH', 'Sầu riêng 80g', sr],
+      ]);
+      assert.equal(xmsData.tries['MQ-CB3-XMS-100'][0].sku, 'MQ-DXO-100-FHV');
+      assert.equal(xmsData.tries['MQ-CB3-XMS-100'][0].label, 'Xoài dẻo 100g');
+      assert.equal(xmsData.tries['MQ-CB3-XMS-100'][0].price, await priceOf('xoai-say-deo', 'MQ-DXO-100-FHV'));
+      assert.equal(xmsData.tries['MQ-CB3-XMS-300-T'][0].sku, 'MQ-DXO-300-FHT');
+      const expectLinks = async (id, pairs) => {
+        const html = await pageOf(id);
+        assert.match(html, /Bạn muốn thử từng vị\?/);
+        assert.doesNotMatch(html, /Muốn thử 1 túi/);
+        const tries = dataOf(html).tries;
+        const items = Object.values(tries)[0];
+        assert.deepEqual(items.map((item) => item.sku), pairs.map((p) => p[0]));
+        for (const [sku, productId] of pairs) {
+          assert.equal(items.find((item) => item.sku === sku).price, await priceOf(productId, sku));
+        }
+      };
+      await expectLinks('vz-mix-cb-xmi', [['MQ-GMI-300-FH', 'mit-say-gion'], ['MQ-DXO-200-FHV', 'xoai-say-deo']]);
+      await expectLinks('vz-mix-cb-ymo', [['MQ-THSR-105-YM', 'sau-rieng-say-thang-hoa-yummy'], ['MQ-DXM-200-GG', 'xoai-say-deo-muoi-ot-goodgood']]);
+      await expectLinks('vz-mix-cb-ch-mit', [['MQ-THSR-110-CH', 'sau-rieng-say-thang-hoa-cheers'], ['MQ-GMI-300-FH', 'mit-say-gion']]);
+      await expectLinks('vz-mix-cb-mcmo', [['MQ-THMC-100-GG', 'mang-cut-say-thang-hoa-goodgood'], ['MQ-DXM-200-GG', 'xoai-say-deo-muoi-ot-goodgood']]);
+      const login = await fetch(base + '/api/admin/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: 'test-pass' }),
+      });
+      assert.equal(login.status, 200);
+      const auth = { cookie: cookieOf(login), 'content-type': 'application/json' };
+      const patch = (sku, body) => fetch(base + '/api/admin/variants/' + encodeURIComponent(sku), {
+        method: 'PATCH', headers: auth, body: JSON.stringify(body),
+      });
+      try {
+        assert.equal((await patch('MQ-THMC-100-GG', { price: mc + 1000 })).status, 200);
+        const priced = await pageOf('combo-xoai-mangcut-saurieng');
+        assert.ok(priced.includes(bit('/san-pham/mang-cut-say-thang-hoa-goodgood?sku=MQ-THMC-100-GG', 'Măng cụt 100g', mc + 1000)));
+        assert.equal(dataOf(priced).variants.find((v) => v.sku === 'MQ-CB3-XMS-200-V').price, 399000);
+        assert.equal((await patch('MQ-THSR-080-FH', { oos: true })).status, 200);
+        const oneGone = await pageOf('combo-xoai-mangcut-saurieng');
+        assert.match(oneGone, /Bạn muốn thử từng vị\?/);
+        assert.doesNotMatch(oneGone, /sku=MQ-THSR-080-FH/);
+        assert.match(oneGone, /sku=MQ-DXO-200-FHV/);
+        assert.equal((await patch('MQ-DXO-200-FHV', { oos: true })).status, 200);
+        assert.equal((await patch('MQ-THMC-100-GG', { oos: true })).status, 200);
+        const none = await pageOf('combo-xoai-mangcut-saurieng');
+        assert.doesNotMatch(none, /Bạn muốn thử từng vị/);
+        assert.match(none, /id="pdp-try" hidden/);
+        assert.equal(dataOf(none).variants.find((v) => v.sku === 'MQ-CB3-XMS-200-V').price, 399000);
+      } finally {
+        assert.equal((await patch('MQ-THMC-100-GG', { price: null, oos: null })).status, 200);
+        assert.equal((await patch('MQ-THSR-080-FH', { oos: null })).status, 200);
+        assert.equal((await patch('MQ-DXO-200-FHV', { oos: null })).status, 200);
       }
     }
     const x6 = await (await fetch(base + '/san-pham/combo-xoai-say-deo-100g')).text();

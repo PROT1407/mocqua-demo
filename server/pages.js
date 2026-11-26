@@ -677,6 +677,7 @@ export function productPage(product, catalog) {
   const kem = crossSell(product, catalog);
   const dealMap = dealBySku(catalog);
   const deals = Object.fromEntries(product.variants.map((v) => [v.sku, dealMap.get(v.sku)]).filter(([, d]) => d).map(([sku, d]) => [sku, { sum: d.sum, save: d.save }]));
+  const tries = mixedTries(product, catalog);
   const client = {
     deals,
     id: product.id,
@@ -701,6 +702,7 @@ export function productPage(product, catalog) {
       ...(v.promo ? { promo: { label: v.promo.label, endsAt: v.promo.endsAt, price: v.promo.price, originalPrice: v.promo.originalPrice } } : {}),
       pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),
     })),
+    ...(tries ? { tries } : {}),
   };
   const body = `<main id="main" class="wrap">
     ${crumbs}
@@ -725,6 +727,7 @@ export function productPage(product, catalog) {
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
         ${singleBagLink(product, catalog)}
+        ${mixedTryHtml(tries, product.defaultSku)}
         <fieldset class="choiceset">
           <legend>Khối lượng</legend>
           <div class="choices" id="pdp-weights"></div>
@@ -785,10 +788,42 @@ const COMBO_ITEMS = { 'combo-xoai-say-deo-100g': Array(6).fill('MQ-DXO-100-GG') 
 // Dòng chữ nhỏ dưới giá: "Muốn thử 1 túi trước?". Chỉ combo cùng một món trong
 // danh sách này; thêm một dòng id combo → mã túi lẻ khi muốn bật thêm. Giá lấy
 // từ SKU đó trong danh mục lúc render. Hết hàng hoặc không có giá thì ẩn link.
-// Combo trộn không đưa vào đây. Mít sấy Thái và sầu riêng Yummy / Cheers+ chưa
-// có combo lặp một mã túi (chỉ nằm trong combo trộn), nên chưa có dòng nào.
+// Combo trộn không đưa vào đây — xem MIXED_TRY.
 const SINGLE_BAG = {
   'vz-ch-cb3x': 'MQ-DXC-200-CHA',
+};
+// Combo trộn: một dòng "Bạn muốn thử từng vị?" và link từng túi lẻ.
+// Thêm id combo → các túi [mã, tên ngắn]. Nếu từng mã combo khác túi (đổi khối lượng),
+// ghi theo mã combo. Giá lấy lúc render; túi hết hàng thì bỏ link đó.
+const XMS = (xoai, xoaiLabel) => [
+  [xoai, xoaiLabel],
+  ['MQ-THMC-100-GG', 'Măng cụt 100g'],
+  ['MQ-THSR-080-FH', 'Sầu riêng 80g'],
+];
+const MIXED_TRY = {
+  'combo-xoai-mangcut-saurieng': {
+    'MQ-CB3-XMS-100': XMS('MQ-DXO-100-FHV', 'Xoài dẻo 100g'),
+    'MQ-CB3-XMS-200-T': XMS('MQ-DXO-200-FHT', 'Xoài dẻo 200g'),
+    'MQ-CB3-XMS-200-V': XMS('MQ-DXO-200-FHV', 'Xoài dẻo 200g'),
+    'MQ-CB3-XMS-300-T': XMS('MQ-DXO-300-FHT', 'Xoài dẻo 300g'),
+    'MQ-CB3-XMS-300-V': XMS('MQ-DXO-300-FHV', 'Xoài dẻo 300g'),
+  },
+  'vz-mix-cb-xmi': [
+    ['MQ-GMI-300-FH', 'Mít thái 300g'],
+    ['MQ-DXO-200-FHV', 'Xoài dẻo 200g'],
+  ],
+  'vz-mix-cb-ymo': [
+    ['MQ-THSR-105-YM', 'Sầu riêng Yummy 105g'],
+    ['MQ-DXM-200-GG', 'Xoài muối ớt 200g'],
+  ],
+  'vz-mix-cb-ch-mit': [
+    ['MQ-THSR-110-CH', 'Sầu riêng Cheers+ 105g'],
+    ['MQ-GMI-300-FH', 'Mít thái 300g'],
+  ],
+  'vz-mix-cb-mcmo': [
+    ['MQ-THMC-100-GG', 'Măng cụt 100g'],
+    ['MQ-DXM-200-GG', 'Xoài muối ớt 200g'],
+  ],
 };
 
 function singleBagLink(product, catalog) {
@@ -799,6 +834,40 @@ function singleBagLink(product, catalog) {
   if (!v?.price || v.oos || hit.p?.oos) return '';
   const href = `/san-pham/${encodeURIComponent(hit.p.id)}?sku=${encodeURIComponent(v.sku)}`;
   return `<p class="fine trybag"><a href="${href}">Muốn thử 1 túi trước? Xem gói lẻ ${esc(vnd(v.price))} →</a></p>`;
+}
+
+function tryItem(sku, label, catalog) {
+  const hit = shopSkuIndex(catalog).get(sku);
+  const v = hit?.v;
+  if (!v?.price || v.oos || hit.p?.oos) return null;
+  return {
+    sku: v.sku,
+    label,
+    price: v.price,
+    href: `/san-pham/${encodeURIComponent(hit.p.id)}?sku=${encodeURIComponent(v.sku)}`,
+  };
+}
+
+function mixedTries(product, catalog) {
+  const spec = MIXED_TRY[product.id];
+  if (!spec) return null;
+  const byVariant = Array.isArray(spec)
+    ? Object.fromEntries((product.variants || []).map((v) => [v.sku, spec]))
+    : spec;
+  const tries = {};
+  for (const [sku, rows] of Object.entries(byVariant)) {
+    const items = rows.map(([id, label]) => tryItem(id, label, catalog)).filter(Boolean);
+    if (items.length) tries[sku] = items;
+  }
+  return Object.keys(tries).length ? tries : null;
+}
+
+function mixedTryHtml(tries, sku) {
+  if (!tries) return '';
+  const items = tries[sku] || [];
+  if (!items.length) return `<p class="fine trybag" id="pdp-try" hidden></p>`;
+  const links = items.map((item) => `<a href="${esc(item.href)}">${esc(item.label)} · ${esc(vnd(item.price))}</a>`).join(' · ');
+  return `<p class="fine trybag" id="pdp-try">Bạn muốn thử từng vị? ${links}</p>`;
 }
 // Ảnh riêng cho trang /combo khi ảnh sản phẩm có chữ khuyến mãi hoặc món không thuộc combo (ảnh ghép từ ảnh túi lẻ).
 const COMBO_IMG = {

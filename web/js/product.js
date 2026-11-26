@@ -20,6 +20,7 @@ const stickyPrice = document.querySelector('#pdp-sticky-price');
 const stickyLabel = document.querySelector('#pdp-sticky-label');
 const oosNote = document.querySelector('#pdp-oos');
 const alts = document.querySelector('#pdp-alts');
+const tryLine = document.querySelector('#pdp-try');
 
 function text(value) {
   return String(value ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -118,6 +119,16 @@ function render() {
       <div><a href="${text(item.href)}">${text(item.name)}</a>${item.pitch ? `<small>${text(item.pitch)}</small>` : ''}<b>${money(item.price)}</b></div>
       <button type="button" class="btn btn--small" data-alt-add="${text(item.sku)}">Đặt ngay</button>
     </article>`).join('')}</div>` : '';
+  }
+  if (tryLine && data.tries) {
+    const items = data.tries[current.sku] || [];
+    if (!items.length) {
+      tryLine.hidden = true;
+      tryLine.textContent = '';
+    } else {
+      tryLine.hidden = false;
+      tryLine.innerHTML = `Bạn muốn thử từng vị? ${items.map((item) => `<a href="${text(item.href)}">${text(item.label)} · ${money(item.price)}</a>`).join(' · ')}`;
+    }
   }
   const url = new URL(location.href);
   url.searchParams.set('sku', current.sku);
