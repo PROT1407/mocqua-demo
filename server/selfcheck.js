@@ -902,10 +902,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal((await fetch(base + '/san-pham/mqz-xxx')).status, 404);
     const grids = (shop.match(/<div class="grid(?: grid--row)?">/g) || []).length;
     assert.ok(grids <= 7, 'mỗi cách sấy một lưới, có ' + grids);
-    // Kiểu tạp chí: Nổi bật dạng bento có 1 ô lớn, nhóm đủ món có băng tiêu đề + "Xem tất cả" áp bộ lọc.
-    // Kiểu 1 (mặc định): lưới đều, không bento/băng. Kiểu 2 (?kieu=2): bento, băng tiêu đề, "Xem tất cả" giữ kiểu.
+    // Tạp chí vẫn là ?kieu=2 (bento, băng tiêu đề). Lưới đều vẫn là trang không query.
+    // Nút trái ghi "Kiểu 1 · Tạp chí" nhưng vẫn trỏ ?kieu=2, để link đã lưu không đổi bố cục.
     assert.doesNotMatch(shop, /class="gband|bento|rowmore/);
+    assert.match(shop, /<a href="\/cua-hang\?kieu=2">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang" aria-current="true">Kiểu 2 · Lưới đều<\/a>/);
     const shop2 = await (await fetch(base + '/cua-hang?kieu=2')).text();
+    assert.match(shop2, /<a href="\/cua-hang\?kieu=2" aria-current="true">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang">Kiểu 2 · Lưới đều<\/a>/);
     assert.match(shop2, /class="grid grid--feat bento"/);
     assert.equal((shop2.match(/class="card card--hero"/g) || []).length, 1);
     assert.ok((shop2.match(/class="gband /g) || []).length >= 5);

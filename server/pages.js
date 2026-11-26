@@ -476,7 +476,8 @@ function chip(href, label, on, count) {
 export function shopPage(catalog, query) {
   attachDeals(catalog);
   const q = String(query.q || '').trim().slice(0, 80);
-  // Hai kiểu bố cục để chủ shop so sánh: 1 = lưới đều (mặc định), 2 = kiểu tạp chí (?kieu=2). Bộ lọc giữ nguyên kiểu đang xem.
+  // ?kieu=2 vẫn là tạp chí; không có query vẫn là lưới đều. Nhãn nút thì ngược lại:
+  // trái "Kiểu 1 · Tạp chí", phải "Kiểu 2 · Lưới đều". Không đổi giá trị đã lưu.
   const kieu = String(query.kieu || '') === '2' ? '2' : '1';
   const link = (o) => shopHref({ ...o, kieu });
   const nq = q ? q.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd') : '';
@@ -619,7 +620,7 @@ export function shopPage(catalog, query) {
   const body = `<main id="main" class="wrap shop">
     <header class="pagehead">
       <h1>${esc(title)}</h1>
-      <nav class="kieu" aria-label="Kiểu bố cục"><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q }))}"${kieu === '1' ? ' aria-current="true"' : ''}>Kiểu 1 · Lưới đều</a><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q, kieu: '2' }))}"${kieu === '2' ? ' aria-current="true"' : ''}>Kiểu 2 · Tạp chí</a></nav>
+      <nav class="kieu" aria-label="Kiểu bố cục"><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q, kieu: '2' }))}"${kieu === '2' ? ' aria-current="true"' : ''}>Kiểu 1 · Tạp chí</a><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q }))}"${kieu === '1' ? ' aria-current="true"' : ''}>Kiểu 2 · Lưới đều</a></nav>
       <p>${esc(sub)}</p>
       ${tierBox}
       <p class="tiers__note">Tự trừ trong giỏ. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.</p>
