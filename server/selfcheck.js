@@ -987,6 +987,49 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     const ch3 = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
     assert.match(ch3, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/vz-ch-cb3x-3tui\.webp"/);
     assert.doesNotMatch(ch3, /vz-ch-cb3x\.webp/);
+    // Combo cùng một món trong danh sách: một dòng chữ dưới giá, giá túi lẻ lấy từ trang lẻ. Không thêm chip.
+    {
+      const retailPage = await (await fetch(base + '/san-pham/xoai-chin-cay')).text();
+      const retail = JSON.parse(retailPage.split('id="product-data">')[1].split('</script>')[0]).variants.find((v) => v.sku === 'MQ-DXC-200-CHA');
+      const linkOf = (price) => `class="fine trybag"><a href="/san-pham/xoai-chin-cay?sku=MQ-DXC-200-CHA">Muốn thử 1 túi trước? Xem gói lẻ ${price.toLocaleString('vi-VN')}đ →</a>`;
+      const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      assert.match(ch3, new RegExp(escRe(linkOf(retail.price))));
+      assert.match(ch3, /id="pdp-unit"><\/p>\s*<p class="fine trybag">/);
+      assert.match(ch3, /"sku":"VZ-CH-CB3X-600","w":"3 × 200g","g":600,"price":239000/);
+      assert.doesNotMatch(ch3, /data-single|"singles"/);
+      for (const id of ['vz-mix-cb-ymo', 'vz-mix-cb-ch-mit', 'vz-ym-cb-sr', 'vz-mix-cb-xmi', 'combo-xoai-say-deo-100g']) {
+        const html = await (await fetch(base + '/san-pham/' + id)).text();
+        assert.doesNotMatch(html, /trybag|Muốn thử 1 túi/, id);
+      }
+      const bumped = retail.price + 1000;
+      const login = await fetch(base + '/api/admin/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: 'test-pass' }),
+      });
+      assert.equal(login.status, 200);
+      const auth = { cookie: cookieOf(login), 'content-type': 'application/json' };
+      try {
+        const up = await fetch(base + '/api/admin/variants/' + encodeURIComponent('MQ-DXC-200-CHA'), {
+          method: 'PATCH', headers: auth, body: JSON.stringify({ price: bumped }),
+        });
+        assert.equal(up.status, 200);
+        const priced = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
+        assert.match(priced, new RegExp(escRe(linkOf(bumped))));
+        assert.match(priced, /"sku":"VZ-CH-CB3X-600","w":"3 × 200g","g":600,"price":239000/);
+        const sold = await fetch(base + '/api/admin/variants/' + encodeURIComponent('MQ-DXC-200-CHA'), {
+          method: 'PATCH', headers: auth, body: JSON.stringify({ oos: true }),
+        });
+        assert.equal(sold.status, 200);
+        const hidden = await (await fetch(base + '/san-pham/vz-ch-cb3x')).text();
+        assert.doesNotMatch(hidden, /trybag|Muốn thử 1 túi/);
+      } finally {
+        const back = await fetch(base + '/api/admin/variants/' + encodeURIComponent('MQ-DXC-200-CHA'), {
+          method: 'PATCH', headers: auth, body: JSON.stringify({ price: null, oos: null }),
+        });
+        assert.equal(back.status, 200);
+      }
+    }
     const x6 = await (await fetch(base + '/san-pham/combo-xoai-say-deo-100g')).text();
     assert.match(x6, /<img id="pdp-main" class="is-45" src="\/assets\/products\/vz\/combo-xoai-6tui\.webp"/);
     for (const f of ['combo-xoai-6tui-xanh-anh', 'combo-xoai-6tui-xanh', 'combo-xoai-6tui-tron']) assert.match(x6, new RegExp('"fit45":\\[[^\\]]*/assets/products/vz/' + f + '\\.webp'));
