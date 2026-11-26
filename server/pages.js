@@ -328,6 +328,8 @@ function altCards(items) {
 }
 
 function statusBadge(product, lead, soldOut) {
+  // Chủ shop chọn Huy hiệu trong admin thì nhãn góc ảnh theo chủ shop, kể cả khi hết hàng (nút mua vẫn báo hết).
+  if (product.badgeOverride && product.badge) return `<span class="badge badge--tag">${esc(product.badge)}</span>`;
   if (soldOut && lead?.limited) return '<span class="badge badge--tag">Phiên bản giới hạn</span><span class="badge badge--oos">Hết hàng</span>';
   if (soldOut) return '<span class="badge badge--oos">Hết hàng</span>';
   if (product.badgeOverride) return product.badge ? `<span class="badge badge--tag">${esc(product.badge)}</span>` : '';
