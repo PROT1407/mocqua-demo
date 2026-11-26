@@ -10,7 +10,7 @@ MQ.TEL2=MQ.PHONES[1].tel; MQ.HOTLINE2=MQ.PHONES[1].show;
 MQ.EMAIL='fruitwood.official@gmail.com';
 MQ.ADDRESS='376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM';
 MQ.MAPS='https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh';
-MQ.FACEBOOK='https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr';
+MQ.FACEBOOK='https://www.facebook.com/profile.php?id=61596725663522';
 MQ.TIKTOK='https://www.tiktok.com/@mocqua79';
 MQ.BANK={name:'Techcombank',bin:'970407',accountNo:'19029781376018',accountName:'Nguyen Ngoc Huy',accountNameQr:'NGUYEN NGOC HUY'};
 MQ.vietqrUrl=(amount,info)=>{const p=new URLSearchParams();p.set('amount',String(Math.max(0,Math.round(Number(amount)||0))));p.set('addInfo',String(info||'Moc Qua'));p.set('accountName',MQ.BANK.accountNameQr);return `https://img.vietqr.io/image/${MQ.BANK.bin}-${MQ.BANK.accountNo}-compact2.png?${p}`};

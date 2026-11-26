@@ -7,7 +7,7 @@ export const shopContact = {
   email: 'fruitwood.official@gmail.com',
   address: '376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM',
   maps: 'https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh',
-  facebook: 'https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr',
+  facebook: 'https://www.facebook.com/profile.php?id=61596725663522',
   tiktok: 'https://www.tiktok.com/@mocqua79',
   hours: '8:00 – 21:00, tất cả các ngày',
 };
