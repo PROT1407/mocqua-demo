@@ -902,12 +902,12 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.equal((await fetch(base + '/san-pham/mqz-xxx')).status, 404);
     const grids = (shop.match(/<div class="grid(?: grid--row)?">/g) || []).length;
     assert.ok(grids <= 7, 'mỗi cách sấy một lưới, có ' + grids);
-    // Tạp chí vẫn là ?kieu=2 (bento, băng tiêu đề). Lưới đều vẫn là trang không query.
-    // Nút trái ghi "Kiểu 1 · Tạp chí" nhưng vẫn trỏ ?kieu=2, để link đã lưu không đổi bố cục.
-    assert.doesNotMatch(shop, /class="gband|bento|rowmore/);
-    assert.match(shop, /<a href="\/cua-hang\?kieu=2">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang" aria-current="true">Kiểu 2 · Lưới đều<\/a>/);
+    // Không có query và ?kieu=2 đều là tạp chí, nút trái đang chọn. ?kieu=1 là lưới đều.
+    assert.match(shop, /class="grid grid--feat bento"/);
+    assert.match(shop, /<a href="\/cua-hang" aria-current="true">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang\?kieu=1">Kiểu 2 · Lưới đều<\/a>/);
+    assert.doesNotMatch(shop, /name="kieu"/);
     const shop2 = await (await fetch(base + '/cua-hang?kieu=2')).text();
-    assert.match(shop2, /<a href="\/cua-hang\?kieu=2" aria-current="true">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang">Kiểu 2 · Lưới đều<\/a>/);
+    assert.match(shop2, /<a href="\/cua-hang" aria-current="true">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang\?kieu=1">Kiểu 2 · Lưới đều<\/a>/);
     assert.match(shop2, /class="grid grid--feat bento"/);
     assert.equal((shop2.match(/class="card card--hero"/g) || []).length, 1);
     assert.ok((shop2.match(/class="gband /g) || []).length >= 5);
@@ -916,9 +916,23 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
     assert.match(shop2, /name="kieu" value="2"/);
     const filtered2 = await (await fetch(base + '/cua-hang?cat=deo&kieu=2')).text();
     assert.doesNotMatch(filtered2, /class="gband|grid--row|rowmore|class="feat"/);
+    assert.match(filtered2, /aria-current="true">Kiểu 1 · Tạp chí/);
+    assert.match(filtered2, /href="\/cua-hang\?cat=thanghoa&kieu=2"/);
+    const shop1 = await (await fetch(base + '/cua-hang?kieu=1')).text();
+    assert.doesNotMatch(shop1, /class="gband|bento|rowmore/);
+    assert.match(shop1, /<a href="\/cua-hang">Kiểu 1 · Tạp chí<\/a><a href="\/cua-hang\?kieu=1" aria-current="true">Kiểu 2 · Lưới đều<\/a>/);
+    const filtered1 = await (await fetch(base + '/cua-hang?cat=deo&kieu=1')).text();
+    assert.match(filtered1, /name="kieu" value="1"/);
+    assert.match(filtered1, /aria-current="true">Kiểu 2 · Lưới đều/);
+    assert.match(filtered1, /href="\/cua-hang\?cat=thanghoa&kieu=1"/);
+    assert.doesNotMatch(filtered1, /class="gband|bento/);
     const filteredShop = await (await fetch(base + '/cua-hang?cat=deo')).text();
     assert.doesNotMatch(filteredShop, /class="feat"/);
     assert.doesNotMatch(filteredShop, /class="gband|grid--row|rowmore/);
+    assert.match(filteredShop, /aria-current="true">Kiểu 1 · Tạp chí/);
+    assert.match(filteredShop, /href="\/cua-hang\?cat=deo&amp;kieu=1">Kiểu 2 · Lưới đều/);
+    assert.match(filteredShop, /href="\/cua-hang\?cat=thanghoa">/);
+    assert.doesNotMatch(filteredShop, /cat=thanghoa&(?:amp;)?kieu=/);
     assert.match(shop, /class="card__img"[^>]*>\s*<img [^>]*loading="lazy"[^>]*width="480" height="600"/);
     const css = await (await fetch(base + '/static/css/shop.css')).text();
     assert.match(css, /\.card__img \{[^}]*aspect-ratio: 4 \/ 5/);
