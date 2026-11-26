@@ -724,6 +724,7 @@ export function productPage(product, catalog) {
         ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
+        ${singleBagLink(product, catalog)}
         <fieldset class="choiceset">
           <legend>Khối lượng</legend>
           <div class="choices" id="pdp-weights"></div>
@@ -781,6 +782,24 @@ const COMBO_PAGE = {
 };
 // Combo không ghi comboOf (6 túi cùng loại): món lẻ để tính "Tiết kiệm".
 const COMBO_ITEMS = { 'combo-xoai-say-deo-100g': Array(6).fill('MQ-DXO-100-GG') };
+// Dòng chữ nhỏ dưới giá: "Muốn thử 1 túi trước?". Chỉ combo cùng một món trong
+// danh sách này; thêm một dòng id combo → mã túi lẻ khi muốn bật thêm. Giá lấy
+// từ SKU đó trong danh mục lúc render. Hết hàng hoặc không có giá thì ẩn link.
+// Combo trộn không đưa vào đây. Mít sấy Thái và sầu riêng Yummy / Cheers+ chưa
+// có combo lặp một mã túi (chỉ nằm trong combo trộn), nên chưa có dòng nào.
+const SINGLE_BAG = {
+  'vz-ch-cb3x': 'MQ-DXC-200-CHA',
+};
+
+function singleBagLink(product, catalog) {
+  const sku = SINGLE_BAG[product.id];
+  if (!sku) return '';
+  const hit = shopSkuIndex(catalog).get(sku);
+  const v = hit?.v;
+  if (!v?.price || v.oos || hit.p?.oos) return '';
+  const href = `/san-pham/${encodeURIComponent(hit.p.id)}?sku=${encodeURIComponent(v.sku)}`;
+  return `<p class="fine trybag"><a href="${href}">Muốn thử 1 túi trước? Xem gói lẻ ${esc(vnd(v.price))} →</a></p>`;
+}
 // Ảnh riêng cho trang /combo khi ảnh sản phẩm có chữ khuyến mãi hoặc món không thuộc combo (ảnh ghép từ ảnh túi lẻ).
 const COMBO_IMG = {
   'vz-ch-cb3x': '/assets/products/vz/vz-ch-cb3x-3tui.webp',
