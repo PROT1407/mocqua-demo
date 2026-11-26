@@ -464,7 +464,7 @@ function shopHref({ cat = '', fruit = '', line = '', q = '', kieu = '' }) {
   if (fruit) u.set('fruit', fruit);
   if (line) u.set('line', line);
   if (q) u.set('q', q);
-  if (kieu === '2') u.set('kieu', '2');
+  if (kieu === '1' || kieu === '2') u.set('kieu', kieu);
   const s = u.toString();
   return '/cua-hang' + (s ? '?' + s : '');
 }
@@ -476,9 +476,11 @@ function chip(href, label, on, count) {
 export function shopPage(catalog, query) {
   attachDeals(catalog);
   const q = String(query.q || '').trim().slice(0, 80);
-  // Hai kiểu bố cục để chủ shop so sánh: 1 = lưới đều (mặc định), 2 = kiểu tạp chí (?kieu=2). Bộ lọc giữ nguyên kiểu đang xem.
-  const kieu = String(query.kieu || '') === '2' ? '2' : '1';
-  const link = (o) => shopHref({ ...o, kieu });
+  // Không có query, hoặc ?kieu=2: tạp chí. ?kieu=1: lưới đều. Link lọc/tìm giữ đúng param đang có.
+  const asked = String(query.kieu || '');
+  const kieuParam = asked === '1' || asked === '2' ? asked : '';
+  const kieu = kieuParam === '1' ? '1' : '2';
+  const link = (o) => shopHref({ ...o, kieu: kieuParam });
   const nq = q ? q.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd') : '';
   // Combo trộn vị (mixed) chỉ hiện ở dải "Combo gợi ý" và trang /combo; lưới cửa hàng giữ nguyên.
   let pool = catalog.products.filter((p) => !p.mixed);
@@ -619,7 +621,7 @@ export function shopPage(catalog, query) {
   const body = `<main id="main" class="wrap shop">
     <header class="pagehead">
       <h1>${esc(title)}</h1>
-      <nav class="kieu" aria-label="Kiểu bố cục"><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q }))}"${kieu === '1' ? ' aria-current="true"' : ''}>Kiểu 1 · Lưới đều</a><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q, kieu: '2' }))}"${kieu === '2' ? ' aria-current="true"' : ''}>Kiểu 2 · Tạp chí</a></nav>
+      <nav class="kieu" aria-label="Kiểu bố cục"><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q }))}"${kieu === '2' ? ' aria-current="true"' : ''}>Kiểu 1 · Tạp chí</a><a href="${esc(shopHref({ cat: wantedCat, fruit: wantedFruit, line: wantedLine, q, kieu: '1' }))}"${kieu === '1' ? ' aria-current="true"' : ''}>Kiểu 2 · Lưới đều</a></nav>
       <p>${esc(sub)}</p>
       ${tierBox}
       <p class="tiers__note">Tự trừ trong giỏ. Combo cũng được giảm theo đơn và vẫn tính vào mức đơn.</p>
@@ -627,7 +629,7 @@ export function shopPage(catalog, query) {
     <div class="filters">
       <form class="find find--bar" action="/cua-hang" method="get">
         ${wantedCat ? `<input type="hidden" name="cat" value="${esc(wantedCat)}">` : ''}
-        ${kieu === '2' ? '<input type="hidden" name="kieu" value="2">' : ''}
+        ${kieuParam ? `<input type="hidden" name="kieu" value="${esc(kieuParam)}">` : ''}
         <label class="sr" for="sq">Tìm trong cửa hàng</label>
         <input id="sq" name="q" value="${esc(q)}" placeholder="Tìm trong cửa hàng" autocomplete="off">
         <button class="btn btn--small" type="submit">Tìm</button>
