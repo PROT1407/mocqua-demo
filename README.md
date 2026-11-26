@@ -61,7 +61,7 @@ Nội dung chuyển khoản là mã đơn, ví dụ `MQ261024-K7MQ2X`.
 4. Đặt hàng, điền tên, điện thoại, địa chỉ. Chọn chuyển khoản để sang trang có QR. Trả khi nhận hàng là lựa chọn phụ.
 5. Vào `/admin`, đăng nhập, thấy đơn mới, đổi trạng thái: Chờ CK → Đã nhận → Đang giao → Xong. Sửa một giá ở tab Giá bán rồi tải lại trang món.
 
-Liên hệ shop: hotline và Zalo `0931 330 248`, `0919 997 283`, email `huydaigia1407@gmail.com`, địa chỉ 376/15 Nguyễn Đình Chiểu, Quận 3, TP. Hồ Chí Minh. Facebook và TikTok ghi trong chân trang và trang Liên hệ. Số `0909000000` chỉ dùng cho đơn mẫu `MQ-DEMO-2026` trên trang tra cứu tĩnh, không phải số shop.
+Liên hệ shop: hotline và Zalo `0931 330 248`, `0919 997 283`, email `fruitwood.official@gmail.com`, địa chỉ 376/15 Nguyễn Đình Chiểu, Quận 3, TP. Hồ Chí Minh. Facebook và TikTok ghi trong chân trang và trang Liên hệ. Số `0909000000` chỉ dùng cho đơn mẫu `MQ-DEMO-2026` trên trang tra cứu tĩnh, không phải số shop.
 
 ## Danh mục tra cứu
 
