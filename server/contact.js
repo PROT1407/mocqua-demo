@@ -4,7 +4,7 @@ export const shopContact = {
     { tel: '0919997283', display: '0919 997 283' },
     { tel: '0931330248', display: '0931 330 248' },
   ],
-  email: 'huydaigia1407@gmail.com',
+  email: 'fruitwood.official@gmail.com',
   address: '376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM',
   maps: 'https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh',
   facebook: 'https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr',

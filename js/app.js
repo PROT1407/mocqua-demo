@@ -7,7 +7,7 @@ MQ.fmt=n=>Math.round(n).toLocaleString('vi-VN')+'đ';
 MQ.PHONES=[{tel:'0919997283',show:'0919 997 283'},{tel:'0931330248',show:'0931 330 248'}];
 MQ.TEL=MQ.PHONES[0].tel; MQ.HOTLINE=MQ.PHONES[0].show;
 MQ.TEL2=MQ.PHONES[1].tel; MQ.HOTLINE2=MQ.PHONES[1].show;
-MQ.EMAIL='huydaigia1407@gmail.com';
+MQ.EMAIL='fruitwood.official@gmail.com';
 MQ.ADDRESS='376/15 Nguyễn Đình Chiểu, P. Bàn Cờ, TP.HCM';
 MQ.MAPS='https://www.google.com/maps/search/?api=1&query=376%2F15+Nguyen+Dinh+Chieu+Quan+3+Ho+Chi+Minh';
 MQ.FACEBOOK='https://www.facebook.com/share/19WBGeTezN/?mibextid=wwXIfr';

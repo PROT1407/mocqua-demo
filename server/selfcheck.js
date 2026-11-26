@@ -59,7 +59,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     assert.equal((await fetch(base + '/static/js/product.js')).status, 200);
     assert.match(home, /0931330248/);
     assert.match(home, /0919997283/);
-    assert.match(home, /huydaigia1407@gmail.com/);
+    assert.match(home, /fruitwood.official@gmail.com/);
     assert.match(home, /Nguyễn Đình Chiểu/);
     assert.match(home, /Bốn cách sấy/);
     assert.match(home, /Nổi bật &amp; Khuyến mãi/);
@@ -228,7 +228,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
     const contactPage = await (await fetch(base + '/lien-he.html')).text();
     assert.match(contactPage, /0931330248/);
     assert.match(contactPage, /0919997283/);
-    assert.match(contactPage, /huydaigia1407@gmail.com/);
+    assert.match(contactPage, /fruitwood.official@gmail.com/);
     assert.match(contactPage, /19029781376018/);
     assert.match(contactPage, /Techcombank/);
     assert.match(contactPage, /@mocqua79/);
@@ -241,7 +241,7 @@ test('khách xem hàng, giỏ tính chiết khấu theo đơn, VietQR, admin s�
 
     const story = await (await fetch(base + '/cau-chuyen.html')).text();
     assert.match(story, /0931330248/);
-    assert.match(story, /huydaigia1407@gmail.com/);
+    assert.match(story, /fruitwood.official@gmail.com/);
     assert.match(story, /Nguyễn Đình Chiểu/);
 
     const receipt = await (await fetch(base + '/don/' + order.code)).text();
