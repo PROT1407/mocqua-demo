@@ -1644,6 +1644,66 @@ test('trang tĩnh không còn số và email mẫu của shop', async () => {
   assert.doesNotMatch(sampleOnly, /hello@mocqua\.com/);
 });
 
+test('câu chữ xem trước: khách không thấy, chủ shop thấy, bật thì hiện cho khách', async () => {
+  const { createApp } = await import('./index.js');
+  const app = createApp();
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const text = async (path, cookie) => (await fetch(base + path, cookie ? { headers: { cookie } } : {})).text();
+  try {
+    const pub = await text('/san-pham/vz-ch-cb3x');
+    assert.match(pub, /Muốn thử 1 túi trước/);
+    assert.doesNotMatch(pub, /Chưa cần cả ba túi|xem trước|Nếu bạn muốn thêm một vị|Món này Shop tạm hết/);
+    const pubCart = await text('/gio-hang');
+    assert.doesNotMatch(pubCart, /Shop thấy ghép combo|Giỏ còn trống|Thêm túi này là đơn được miễn ship/);
+    const pubGift = await text('/hop-qua');
+    assert.doesNotMatch(pubGift, /Chưa chắc người nhận|Mua một hộp biếu|xem trước/);
+    const login = await fetch(base + '/api/admin/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ password: 'test-pass' }),
+    });
+    const cookie = cookieOf(login);
+    const owner = await text('/san-pham/vz-ch-cb3x', cookie);
+    assert.match(owner, /Chưa cần cả ba túi\? Thử một túi xoài Cheers\+ của Shop trước nhé/);
+    assert.match(owner, /xem trước/);
+    assert.doesNotMatch(owner, /Muốn thử 1 túi trước/);
+    const side = await text('/san-pham/thanh-long-say-deo', cookie);
+    assert.match(side, /Nếu bạn muốn thêm một vị, Shop gói sẵn combo, nhẹ hơn mua lẻ\./);
+    assert.match(side, /xem trước/);
+    const cart = await text('/gio-hang', cookie);
+    assert.match(cart, /Shop thấy ghép combo thì vừa túi, lại nhẹ hơn/);
+    assert.match(cart, /Giỏ còn trống\. Bạn thử một túi yêu thích/);
+    const gift = await text('/hop-qua', cookie);
+    assert.match(gift, /Chưa chắc người nhận thích vị nào\?/);
+    assert.match(gift, /Mua một hộp biếu, hay cần Shop tính giá sỉ cho cả nhóm\?/);
+    const on = await fetch(base + '/api/admin/copy-preview', {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ cheers3: true, incombo: true }),
+    });
+    assert.equal(on.status, 200);
+    const live = await text('/san-pham/vz-ch-cb3x');
+    assert.match(live, /Chưa cần cả ba túi\? Thử một túi xoài Cheers\+ của Shop trước nhé/);
+    assert.doesNotMatch(live, /xem trước/);
+    assert.doesNotMatch(live, /Muốn thử 1 túi trước/);
+    const liveSide = await text('/san-pham/thanh-long-say-deo');
+    assert.match(liveSide, /Nếu bạn muốn thêm một vị/);
+    assert.doesNotMatch(liveSide, /xem trước/);
+    const off = await fetch(base + '/api/admin/copy-preview', {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ cheers3: false, incombo: false }),
+    });
+    assert.equal(off.status, 200);
+    const again = await text('/san-pham/vz-ch-cb3x');
+    assert.doesNotMatch(again, /Chưa cần cả ba túi/);
+    assert.match(again, /Muốn thử 1 túi trước/);
+  } finally {
+    await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+  }
+});
+
 test('máy chủ không khởi động khi mật khẩu admin yếu', async () => {
   const { spawnSync } = await import('node:child_process');
   const { adminPasswordIssue } = await import('./auth.js');

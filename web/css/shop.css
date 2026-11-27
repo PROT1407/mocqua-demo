@@ -290,6 +290,8 @@ h3 { font-size: 18px; line-height: 1.35; font-weight: 600; }
 .price { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; }
 .unit { color: var(--muted); }
 .trybag a { white-space: nowrap; }
+.previewline { box-shadow: inset 0 -1px 0 var(--line); }
+.previewtag { margin-left: 6px; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 .trybag--ask a { white-space: normal; }
 .choiceset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
 .choiceset[hidden] { display: none; }
