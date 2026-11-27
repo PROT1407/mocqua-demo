@@ -1699,6 +1699,41 @@ test('câu chữ xem trước: khách không thấy, chủ shop thấy, bật th
     const again = await text('/san-pham/vz-ch-cb3x');
     assert.doesNotMatch(again, /Chưa cần cả ba túi/);
     assert.match(again, /Muốn thử 1 túi trước/);
+    const kitaPub = await text('/san-pham/vz-mix-cb4-kita-fh');
+    assert.doesNotMatch(kitaPub, /Bạn chưa sẵn sàng/);
+    const xmiData = JSON.parse((await text('/san-pham/vz-mix-cb-xmi')).split('id="product-data">')[1].split('</script>')[0]);
+    const xmiPrice = xmiData.variants.find((v) => v.sku === 'VZ-MIX-CB2XMI-500').price;
+    const kitaOwner = await text('/san-pham/vz-mix-cb4-kita-fh', cookie);
+    assert.ok(kitaOwner.includes(`<a href="/san-pham/vz-mix-cb-xmi?sku=VZ-MIX-CB2XMI-500">Bạn chưa sẵn sàng? Vậy hãy thử ủng hộ Shop một combo xoài mít nhé · ${xmiPrice.toLocaleString('vi-VN')}đ</a>`));
+    assert.match(kitaOwner, /id="pdp-try"[^]*xem trước/);
+    assert.doesNotMatch(await text('/san-pham/vz-mix-cb-xmi', cookie), /Bạn chưa sẵn sàng/);
+    const kitaOn = await fetch(base + '/api/admin/copy-preview', {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kitaxmi: true }),
+    });
+    assert.equal(kitaOn.status, 200);
+    const kitaLive = await text('/san-pham/vz-mix-cb4-kita-fh');
+    assert.match(kitaLive, /Bạn chưa sẵn sàng\? Vậy hãy thử ủng hộ Shop một combo xoài mít nhé/);
+    assert.doesNotMatch(kitaLive, /xem trước/);
+    const sold = await fetch(base + '/api/admin/variants/' + encodeURIComponent('VZ-MIX-CB2XMI-500'), {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ oos: true }),
+    });
+    assert.equal(sold.status, 200);
+    assert.doesNotMatch(await text('/san-pham/vz-mix-cb4-kita-fh', cookie), /Bạn chưa sẵn sàng|id="pdp-try"/);
+    await fetch(base + '/api/admin/variants/' + encodeURIComponent('VZ-MIX-CB2XMI-500'), {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ oos: null }),
+    });
+    await fetch(base + '/api/admin/copy-preview', {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kitaxmi: false }),
+    });
+    assert.doesNotMatch(await text('/san-pham/vz-mix-cb4-kita-fh'), /Bạn chưa sẵn sàng/);
   } finally {
     await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
   }

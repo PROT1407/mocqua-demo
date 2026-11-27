@@ -674,6 +674,15 @@ function cheersPreviewLine(catalog, mode) {
   return copyLine(mode, `<a href="${href}">Chưa cần cả ba túi? Thử một túi xoài Cheers+ của Shop trước nhé · ${esc(vnd(variant.price))}</a>`);
 }
 
+function kitaXmiLine(catalog, mode) {
+  if (!mode) return '';
+  const target = (catalog.products || []).find((item) => item.id === 'vz-mix-cb-xmi');
+  const variant = target?.variants.find((item) => item.sku === target.defaultSku) || target?.variants[0];
+  if (!target || !variant?.price || variant.oos || target.oos) return '';
+  const href = `/san-pham/${encodeURIComponent(target.id)}?sku=${encodeURIComponent(variant.sku)}`;
+  return `<p class="fine trybag trybag--ask${mode === 'preview' ? ' previewline' : ''}" id="pdp-try"><a href="${href}">Bạn chưa sẵn sàng? Vậy hãy thử ủng hộ Shop một combo xoài mít nhé · ${esc(vnd(variant.price))}</a>${previewTag(mode)}</p>`;
+}
+
 function sayHand(text, on) {
   return on ? String(text || '').replaceAll('chúng tôi viết tay', 'Shop viết tay') : text;
 }
@@ -759,6 +768,7 @@ export function productPage(product, catalog, { owner = false } = {}) {
         <p class="unit" id="pdp-unit"></p>
         ${cheersMode ? cheersPreviewLine(catalog, cheersMode) : singleBagLink(product, catalog)}
         ${mixedTryHtml(tries, product.defaultSku, MIXED_TRY_LEAD[product.id])}
+        ${product.id === 'vz-mix-cb4-kita-fh' ? kitaXmiLine(catalog, showCopy(settings, 'kitaxmi', owner)) : ''}
         <fieldset class="choiceset">
           <legend>Khối lượng</legend>
           <div class="choices" id="pdp-weights"></div>
