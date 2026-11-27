@@ -1013,9 +1013,37 @@ test('danh mục có nút thêm vào giỏ đúng mã cửa hàng; cửa hàng d
       assert.match(ch3, /id="pdp-unit"><\/p>\s*<p class="fine trybag">/);
       assert.match(ch3, /"sku":"VZ-CH-CB3X-600","w":"3 × 200g","g":600,"price":239000/);
       assert.doesNotMatch(ch3, /data-single|"singles"/);
-      for (const id of ['vz-ym-cb-sr', 'combo-xoai-say-deo-100g', 'vz-mix-cb-ymmcmo']) {
+      for (const id of ['combo-xoai-say-deo-100g', 'vz-mix-cb-ymmcmo']) {
         const html = await (await fetch(base + '/san-pham/' + id)).text();
         assert.doesNotMatch(html, /trybag|Muốn thử 1 túi|Bạn muốn thử từng vị/, id);
+      }
+      const yummyPage = await (await fetch(base + '/san-pham/sau-rieng-say-thang-hoa-yummy')).text();
+      const yummy = JSON.parse(yummyPage.split('id="product-data">')[1].split('</script>')[0]).variants.find((v) => v.sku === 'MQ-THSR-105-YM');
+      const duo = await (await fetch(base + '/san-pham/vz-ym-cb-sr')).text();
+      const ask = `Bạn đã sẵn sàng chưa? Hay thử ủng hộ Shop gói lẻ nhé · ${yummy.price.toLocaleString('vi-VN')}đ`;
+      assert.ok(duo.includes(`<a href="/san-pham/sau-rieng-say-thang-hoa-yummy?sku=MQ-THSR-105-YM">${ask}</a>`), ask);
+      assert.doesNotMatch(duo, /Bạn muốn thử từng vị/);
+      assert.doesNotMatch(duo.split('id="pdp-try"')[1].split('</p>')[0], /VZ-YM-MT|Monthong/);
+      assert.equal(JSON.parse(duo.split('id="product-data">')[1].split('</script>')[0]).variants.find((v) => v.sku === 'VZ-YM-CB2SR-200').price, 374000);
+      const yLogin = await fetch(base + '/api/admin/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: 'test-pass' }),
+      });
+      assert.equal(yLogin.status, 200);
+      const yAuth = { cookie: cookieOf(yLogin), 'content-type': 'application/json' };
+      try {
+        const sold = await fetch(base + '/api/admin/variants/' + encodeURIComponent('MQ-THSR-105-YM'), {
+          method: 'PATCH', headers: yAuth, body: JSON.stringify({ oos: true }),
+        });
+        assert.equal(sold.status, 200);
+        const hidden = await (await fetch(base + '/san-pham/vz-ym-cb-sr')).text();
+        assert.doesNotMatch(hidden, /Bạn đã sẵn sàng chưa|id="pdp-try"/);
+      } finally {
+        const back = await fetch(base + '/api/admin/variants/' + encodeURIComponent('MQ-THSR-105-YM'), {
+          method: 'PATCH', headers: yAuth, body: JSON.stringify({ oos: null }),
+        });
+        assert.equal(back.status, 200);
       }
       assert.doesNotMatch(ch3, /Bạn muốn thử từng vị/);
       const bumped = retail.price + 1000;

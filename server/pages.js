@@ -704,7 +704,7 @@ export function productPage(product, catalog) {
       ...(v.promo ? { promo: { label: v.promo.label, endsAt: v.promo.endsAt, price: v.promo.price, originalPrice: v.promo.originalPrice } } : {}),
       pack: v.pack, label: v.label, group: v.group, img: v.img, back: v.back, ...(v.backKind ? { backKind: v.backKind } : {}),
     })),
-    ...(tries ? { tries } : {}),
+    ...(tries ? { tries, ...(MIXED_TRY_LEAD[product.id] ? { tryLead: MIXED_TRY_LEAD[product.id] } : {}) } : {}),
   };
   const body = `<main id="main" class="wrap">
     ${crumbs}
@@ -729,7 +729,7 @@ export function productPage(product, catalog) {
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
         ${singleBagLink(product, catalog)}
-        ${mixedTryHtml(tries, product.defaultSku)}
+        ${mixedTryHtml(tries, product.defaultSku, MIXED_TRY_LEAD[product.id])}
         <fieldset class="choiceset">
           <legend>Khối lượng</legend>
           <div class="choices" id="pdp-weights"></div>
@@ -826,6 +826,13 @@ const MIXED_TRY = {
     ['MQ-THMC-100-GG', 'Măng cụt 100g'],
     ['MQ-DXM-200-GG', 'Xoài muối ớt 200g'],
   ],
+  'vz-ym-cb-sr': [
+    ['MQ-THSR-105-YM', 'Sầu riêng Yummy 105g'],
+  ],
+};
+// Câu dẫn riêng. Combo không có trong đây vẫn dùng "Bạn muốn thử từng vị?".
+const MIXED_TRY_LEAD = {
+  'vz-ym-cb-sr': 'Bạn đã sẵn sàng chưa? Hay thử ủng hộ Shop gói lẻ nhé',
 };
 
 function singleBagLink(product, catalog) {
@@ -864,10 +871,14 @@ function mixedTries(product, catalog) {
   return Object.keys(tries).length ? tries : null;
 }
 
-function mixedTryHtml(tries, sku) {
+function mixedTryHtml(tries, sku, lead) {
   if (!tries) return '';
   const items = tries[sku] || [];
   if (!items.length) return `<p class="fine trybag" id="pdp-try" hidden></p>`;
+  if (lead && items.length === 1) {
+    const item = items[0];
+    return `<p class="fine trybag trybag--ask" id="pdp-try"><a href="${esc(item.href)}">${esc(lead)} · ${esc(vnd(item.price))}</a></p>`;
+  }
   const links = items.map((item) => `<a href="${esc(item.href)}">${esc(item.label)} · ${esc(vnd(item.price))}</a>`).join(' · ');
   return `<p class="fine trybag" id="pdp-try">Bạn muốn thử từng vị? ${links}</p>`;
 }

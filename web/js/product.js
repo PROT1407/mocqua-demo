@@ -127,7 +127,9 @@ function render() {
       tryLine.textContent = '';
     } else {
       tryLine.hidden = false;
-      tryLine.innerHTML = `Bạn muốn thử từng vị? ${items.map((item) => `<a href="${text(item.href)}">${text(item.label)} · ${money(item.price)}</a>`).join(' · ')}`;
+      tryLine.innerHTML = data.tryLead && items.length === 1
+        ? `<a href="${text(items[0].href)}">${text(data.tryLead)} · ${money(items[0].price)}</a>`
+        : `Bạn muốn thử từng vị? ${items.map((item) => `<a href="${text(item.href)}">${text(item.label)} · ${money(item.price)}</a>`).join(' · ')}`;
     }
   }
   const url = new URL(location.href);
