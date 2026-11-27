@@ -114,7 +114,8 @@ function render() {
   if (oosNote) oosNote.hidden = !(data.oos || current.oos);
   if (alts) {
     alts.hidden = !swaps.length;
-    alts.innerHTML = swaps.length ? `<h2>Gợi ý thay thế</h2><div class="alts__row">${swaps.map((item) => `<article class="alt">
+    const altLead = data.altsLead ? `<p class="fine${data.altsPreview ? ' previewline' : ''}">${text(data.altsLead)}${data.altsPreview ? ' <span class="previewtag">xem trước</span>' : ''}</p>` : '';
+    alts.innerHTML = swaps.length ? `<h2>Gợi ý thay thế</h2>${altLead}<div class="alts__row">${swaps.map((item) => `<article class="alt">
           <a href="${text(item.href)}"><img src="${text(item.img)}" alt="${text(item.name)}" width="64" height="80" loading="lazy"></a>
       <div><a href="${text(item.href)}">${text(item.name)}</a>${item.pitch ? `<small>${text(item.pitch)}</small>` : ''}<b>${money(item.price)}</b></div>
       <button type="button" class="btn btn--small" data-alt-add="${text(item.sku)}">Đặt ngay</button>

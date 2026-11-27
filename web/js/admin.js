@@ -198,6 +198,29 @@ async function loadPrices() {
   draw();
 }
 
+async function loadCopyPreview() {
+  const box = document.querySelector('#copy-preview');
+  if (!box) return;
+  const data = await api('/api/admin/copy-preview');
+  const flags = data.copyPreview || {};
+  box.innerHTML = `<h2>Câu chữ xem trước</h2>
+    <p class="fine">Tắt: chỉ bạn thấy, có dấu “xem trước”. Bật: khách cũng thấy. Bấm là lưu ngay.</p>
+    ${Object.entries(data.labels || {}).map(([key, label]) => `<label class="check"><input type="checkbox" data-copy="${key}"${flags[key] ? ' checked' : ''}> ${label}</label>`).join('')}
+    <p class="fine" id="copy-msg" role="status"></p>`;
+  box.addEventListener('change', async (event) => {
+    const input = event.target.closest('[data-copy]');
+    if (!input) return;
+    const msg = document.querySelector('#copy-msg');
+    try {
+      const result = await api('/api/admin/copy-preview', { method: 'PATCH', body: JSON.stringify({ [input.dataset.copy]: input.checked }) });
+      msg.textContent = result.durable === false ? 'Đã lưu trên máy này. Chưa ghi được lên GitHub.' : 'Đã lưu.';
+    } catch (error) {
+      input.checked = !input.checked;
+      msg.textContent = error.message;
+    }
+  });
+}
+
 async function loadPromo() {
   const data = await api('/api/admin/settings');
   const s = data.settings;
@@ -448,7 +471,7 @@ async function enter() {
       button.disabled = false;
     }
   };
-  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog(), loadContent()]);
+  await Promise.all([loadOrders(), loadPrices(), loadPromo(), loadRefs(), loadCatalog(), loadContent(), loadCopyPreview()]);
   focusEditTarget();
 }
 

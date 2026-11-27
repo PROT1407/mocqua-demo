@@ -11,6 +11,7 @@ import { bankConfig } from './vietqr.js';
 import { aiHealthUrl } from './warmup.js';
 import { PAGE_SEO, faqBlock, headTags, homeJsonLd, homeSeo, jsonLdTag, pageCopy, productDescription, productFaqs, productJsonLd, productTitle, shopSeo } from './seo.js';
 import { getSiteCopy } from './content.js';
+import { dressAlts, premiumTruth, previewTag, showCopy } from './copy-preview.js';
 
 const PROC = ['deo', 'thanghoa', 'gion', 'kho'];
 // Câu mở đầu cho băng tiêu đề từng nhóm ở /cua-hang (chỉ trang Cửa hàng dùng).
@@ -318,9 +319,9 @@ export function productCard(product, { eager = false, cls = '', giftTune = false
   </article>`;
 }
 
-function altCards(items) {
+function altCards(items, lead) {
   if (!items?.length) return '';
-  return `<h2>Gợi ý thay thế</h2><div class="alts__row">${items.map((item) => `<article class="alt">
+  return `<h2>Gợi ý thay thế</h2>${lead || ''}<div class="alts__row">${items.map((item) => `<article class="alt">
       <a href="${esc(item.href)}"><img src="${esc(item.img)}" alt="${esc(item.name)}" width="64" height="80" loading="lazy"></a>
       <div><a href="${esc(item.href)}">${esc(item.name)}</a>${item.pitch ? `<small>${esc(item.pitch)}</small>` : ''}<b>${esc(vnd(item.price))}</b></div>
       <button type="button" class="btn btn--small" data-alt-add="${esc(item.sku)}">Đặt ngay</button>
@@ -660,7 +661,24 @@ function specTable(rows) {
   return `<table class="spec"><tbody>${rows.map((r) => `<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table>`;
 }
 
-export function productPage(product, catalog) {
+function copyLine(mode, inner) {
+  if (!mode) return '';
+  return `<p class="fine${mode === 'preview' ? ' previewline' : ''}">${inner}${previewTag(mode)}</p>`;
+}
+
+function cheersPreviewLine(catalog, mode) {
+  const hit = shopSkuIndex(catalog).get('MQ-DXC-200-CHA');
+  const variant = hit?.v;
+  if (!variant?.price || variant.oos || hit.p?.oos) return '';
+  const href = `/san-pham/${encodeURIComponent(hit.p.id)}?sku=${encodeURIComponent(variant.sku)}`;
+  return copyLine(mode, `<a href="${href}">Chưa cần cả ba túi? Thử một túi xoài Cheers+ của Shop trước nhé · ${esc(vnd(variant.price))}</a>`);
+}
+
+function sayHand(text, on) {
+  return on ? String(text || '').replaceAll('chúng tôi viết tay', 'Shop viết tay') : text;
+}
+
+export function productPage(product, catalog, { owner = false } = {}) {
   const imageAlt = `${productTitle(product).replace(/ \| Mộc Quả$/, '')} – bao bì`;
   const crumbs = `<nav class="crumbs" aria-label="Đường dẫn"><a href="/cua-hang">Cửa hàng</a> <a href="/cua-hang?cat=${esc(product.cat)}">${esc(product.catShort)}</a>${product.fruit ? ` <a href="/cua-hang?cat=${esc(product.cat)}&fruit=${esc(product.fruit)}">${esc(product.fruitName)}</a>` : ''}</nav>`;
   const trust = [
@@ -671,15 +689,25 @@ export function productPage(product, catalog) {
       ? `Combo cũng được giảm theo đơn: ${promoTiers(catalog.settings).map((t) => `${t.pct ? `−${t.pct}%${t.ship ? ' + miễn ship' : ''}` : 'Miễn ship'} từ ${vnd(t.min)}`).join(' · ')} (tự trừ trong giỏ)`
       : `${promoTiers(catalog.settings).map((t) => `${t.pct ? `−${t.pct}%${t.ship ? ' + miễn ship' : ''}` : 'Miễn ship'} từ ${vnd(t.min)}`).join(' · ')} (tự trừ trong giỏ)`,
   ];
+  const settings = catalog.settings;
+  const oosMode = showCopy(settings, 'oos', owner);
+  const giftMode = showCopy(settings, 'giftbox', owner);
+  const hand = (text) => (giftMode && product.cat === 'set' ? sayHand(text, true) : (oosMode ? premiumTruth(text, product, catalog) : text));
   const sections = [
-    product.intro ? `<section><h2>Người bán nói</h2><p>${esc(product.intro)}</p></section>` : '',
-    ...(product.sections || []).map((s) => `<section><h2>${esc(s.h)}</h2>${(s.p || []).map((p) => `<p>${esc(p)}</p>`).join('')}${s.li ? `<ul>${s.li.map((li) => `<li>${esc(li)}</li>`).join('')}</ul>` : ''}${specTable(s.spec)}</section>`),
-    !product.intro && product.long ? `<section><h2>Mô tả</h2><p>${esc(product.long)}</p></section>` : '',
+    product.intro ? `<section><h2>Người bán nói</h2><p>${esc(hand(product.intro))}</p></section>` : '',
+    ...(product.sections || []).map((s) => `<section><h2>${esc(s.h)}</h2>${(s.p || []).map((p) => `<p>${esc(hand(p))}</p>`).join('')}${s.li ? `<ul>${s.li.map((li) => `<li>${esc(hand(li))}</li>`).join('')}</ul>` : ''}${specTable(s.spec)}</section>`),
+    !product.intro && product.long ? `<section><h2>Mô tả</h2><p>${esc(hand(product.long))}</p></section>` : '',
   ].join('');
-  const kem = crossSell(product, catalog);
+  const shown = oosMode ? { ...product, short: hand(product.short), relatedNote: hand(product.relatedNote) } : product;
+  const kem = crossSell(shown, catalog);
   const dealMap = dealBySku(catalog);
   const deals = Object.fromEntries(product.variants.map((v) => [v.sku, dealMap.get(v.sku)]).filter(([, d]) => d).map(([sku, d]) => [sku, { sum: d.sum, save: d.save }]));
   const tries = mixedTries(product, catalog);
+  const cheersMode = product.id === 'vz-ch-cb3x' ? showCopy(settings, 'cheers3', owner) : '';
+  const altsMode = showCopy(settings, 'alts', owner);
+  const durianAlts = altsMode && product.fruit === 'saurieng' && product.cat === 'thanghoa';
+  const dress = (list) => (durianAlts ? dressAlts(list) : list);
+  const altsLead = durianAlts ? 'Cùng là sầu riêng thăng hoa, Shop còn những túi này.' : '';
   const client = {
     deals,
     id: product.id,
@@ -694,7 +722,8 @@ export function productPage(product, catalog) {
     ...(product.gallery?.length ? { gallery: product.gallery } : {}),
     ...(product.variantGalleries && Object.keys(product.variantGalleries).length ? { variantGalleries: product.variantGalleries } : {}),
     fit45: product.fit45 || [],
-    swaps: Object.fromEntries(product.variants.filter((v) => v.oos || product.oos).map((v) => [v.sku, replacementsFor(v.sku, catalog)])),
+    swaps: Object.fromEntries(product.variants.filter((v) => v.oos || product.oos).map((v) => [v.sku, dress(replacementsFor(v.sku, catalog))])),
+    ...(altsLead ? { altsLead, altsPreview: altsMode === 'preview' } : {}),
     variants: product.variants.map((v) => ({
       sku: v.sku, w: v.w, g: v.g, price: v.price,
       ...(v.bags ? { bags: v.bags } : {}),
@@ -722,13 +751,13 @@ export function productPage(product, catalog) {
         <h1>${esc(product.name)}</h1>
         ${product.badgeOverride && product.badge ? `<p><span class="badge badge--tag">${esc(product.badge)}</span></p>` : ''}
         <p class="brandline">${esc(product.brandName)}${product.makerName && product.makerName !== product.brandName ? ' · ' + esc(product.makerName) : ''}</p>
-        <p class="lead lead--left">${esc(product.short)}</p>
-        ${product.cat === 'set' && giftBox(product.id) ? `<p class="setlink"><a href="/hop-qua/${esc(product.id)}">Đổi vị trong hộp</a> — chọn từng ngăn, giá cập nhật ngay.</p>` : ''}
+        <p class="lead lead--left">${esc(shown.short)}</p>
+        ${product.cat === 'set' && giftBox(product.id) ? `<p class="setlink"><a href="/hop-qua/${esc(product.id)}">Đổi vị trong hộp</a> — chọn từng ngăn, giá cập nhật ngay.</p>${copyLine(giftMode, 'Chưa chắc người nhận thích vị nào? Chạm từng ngăn, Shop đổi giúp trong hộp.')}` : ''}
         ${product.combo ? `<p class="fine"><a href="/san-pham/${encodeURIComponent(product.combo.id)}">${esc(product.combo.label || 'Xem combo')}</a></p>` : ''}
         ${product.notice ? `<p class="pdp__notice" role="note">${esc(product.notice)}</p>` : ''}
         <p class="price" id="pdp-price"></p>
         <p class="unit" id="pdp-unit"></p>
-        ${singleBagLink(product, catalog)}
+        ${cheersMode ? cheersPreviewLine(catalog, cheersMode) : singleBagLink(product, catalog)}
         ${mixedTryHtml(tries, product.defaultSku, MIXED_TRY_LEAD[product.id])}
         <fieldset class="choiceset">
           <legend>Khối lượng</legend>
@@ -743,8 +772,9 @@ export function productPage(product, catalog) {
           <label class="qty"><span class="sr">Số lượng</span><input id="pdp-qty" type="number" min="1" max="99" value="1" inputmode="numeric"></label>
           <button class="btn" type="button" id="pdp-add" data-add>${product.oos ? 'Hết hàng đợt này' : (product.variants.find((v) => v.sku === product.defaultSku)?.oos ? 'Hết hàng' : 'Cho vào giỏ')}</button>
         </div>
-        <p class="oosnote" id="pdp-oos"${product.oos || product.variants.find((v) => v.sku === product.defaultSku)?.oos ? '' : ' hidden'}>Hết hàng. Xóa bỏ lựa chọn này và chọn lại.</p>
-        <div class="alts" id="pdp-alts"${client.swaps[product.defaultSku]?.length ? '' : ' hidden'}>${altCards(client.swaps[product.defaultSku])}</div>
+        <p class="oosnote${oosMode === 'preview' ? ' previewline' : ''}" id="pdp-oos"${product.oos || product.variants.find((v) => v.sku === product.defaultSku)?.oos ? '' : ' hidden'}>${oosMode ? 'Món này Shop tạm hết. Bạn xem những túi đang còn bên dưới nhé.' : 'Hết hàng. Xóa bỏ lựa chọn này và chọn lại.'}${previewTag(oosMode)}</p>
+        <div class="alts" id="pdp-alts"${client.swaps[product.defaultSku]?.length ? '' : ' hidden'}>${altCards(client.swaps[product.defaultSku], altsLead ? copyLine(altsMode, altsLead) : '')}</div>
+        ${copyLine(inComboCards(product, catalog) ? showCopy(settings, 'incombo', owner) : '', 'Nếu bạn muốn thêm một vị, Shop gói sẵn combo, nhẹ hơn mua lẻ.')}
         ${inComboCards(product, catalog)}
         <ul class="trust">${trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       </div>
@@ -1040,10 +1070,19 @@ export function comboPage(catalog) {
   });
 }
 
-export function cartPage() {
+export function cartPage({ owner = false } = {}) {
+  const settings = getSettings();
+  const copy = {};
+  const swap = showCopy(settings, 'cartswap', owner);
+  const ship = showCopy(settings, 'freeship', owner);
+  const empty = showCopy(settings, 'emptycart', owner);
+  if (swap) copy.nudge = { text: 'Shop thấy ghép combo thì vừa túi, lại nhẹ hơn {save}.', preview: swap === 'preview' };
+  if (ship) copy.ship = { text: 'Thêm túi này là đơn được miễn ship, bạn tham khảo nhé.', preview: ship === 'preview' };
+  if (empty) copy.empty = { text: 'Giỏ còn trống. Bạn thử một túi yêu thích, hoặc xem combo tiết kiệm của Shop nhé.', preview: empty === 'preview' };
   const body = `<main id="main" class="wrap narrow">
     <h1>Giỏ hàng</h1>
     <div id="cart-body"><p>Đang mở giỏ…</p></div>
+    ${jsonScript('cart-copy', copy)}
   </main>`;
   return layout({
     title: 'Giỏ hàng | Mộc Quả',
@@ -1144,7 +1183,7 @@ function contentsNote(item) {
   return `<small class="contents">${esc(item.contents.map((row) => `${row.name} ${row.grams}g`).join(' · '))}${si}</small>`;
 }
 
-export function orderPage(order, qr) {
+export function orderPage(order, qr, { owner = false } = {}) {
   const lines = order.items.map((item) => `<li><span><b>${esc(item.name)}</b><small>${esc(item.w)} · × ${item.qty}</small>${contentsNote(item)}</span><b>${vnd(item.line)}</b></li>`).join('');
   const gifts = (order.gifts || []).map((g) => `<li class="giftline"><span><b>${esc(g.name)}</b><small>${esc(g.w)} · × ${g.qty}${g.retail ? ' · giá bán ' + vnd(g.retail) : ''}</small></span><b>0đ</b></li>`).join('');
   const due = `<p class="due"><span>Cần trả</span><b data-amount="${order.summary.total}">${vnd(order.summary.total)}</b></p>`;
@@ -1195,6 +1234,7 @@ export function orderPage(order, qr) {
     <p class="status status--${esc(order.status)}">${esc(customerStatus(order))}</p>
     <h1>Đơn ${esc(order.code)}</h1>
     <p class="lead lead--left">Cảm ơn ${esc(order.customer.name)}.</p>
+    ${copyLine(showCopy(getSettings(), 'thanks', owner), `Shop đã nhận đơn. Cần đổi ngày giao hoặc thêm lời chúc trên hộp, bạn nhắn Shop qua <a href="https://zalo.me/${esc(shopContact.phones[0]?.tel || '')}" target="_blank" rel="noopener">Zalo</a> nhé.`)}
     ${order.payMethod === 'cod' ? due : ''}
     ${pay}
     <section>
@@ -1261,6 +1301,7 @@ export function adminPage() {
       <p class="notice" id="bank-warn" hidden>Chưa cấu hình BANK_BIN, ACCOUNT_NO, ACCOUNT_NAME. Khách đặt chuyển khoản vẫn có mã đơn và số tiền, nhưng chưa thấy QR.</p>
       <p class="fine" id="store-status" role="status"></p>
       <button class="btn btn--small btn--ghost" type="button" id="store-check">Kiểm tra kết nối</button>
+      <section id="copy-preview" class="backup"></section>
       <section class="backup">
         <h2>Bản sao đơn</h2>
         <p class="fine" id="backup-note">Gói miễn phí không giữ file. Sau mỗi đợt đơn, và trước khi deploy, xuất JSON rồi cất trên máy. Danh sách bên dưới là 200 đơn mới. File xuất gồm mọi đơn.</p>
@@ -1462,7 +1503,7 @@ function giftPayload(box, options) {
   };
 }
 
-export function giftIndexPage() {
+export function giftIndexPage({ owner = false } = {}) {
   const boxes = listGiftBoxes();
   const cards = boxes.map((box) => `<article class="card">
     <a class="card__img" href="/hop-qua/${esc(box.id)}"><img src="${esc(box.img)}" alt="${esc(box.name)}" width="480" height="600"></a>
@@ -1477,10 +1518,12 @@ export function giftIndexPage() {
     <header class="pagehead">
       <p class="kicker">Set quà</p>
       <h1>Đổi vị trong hộp</h1>
+      ${copyLine(showCopy(getSettings(), 'giftbox', owner), 'Chưa chắc người nhận thích vị nào? Chạm từng ngăn, Shop đổi giúp trong hộp.')}
       <p>Chạm một ngăn để đổi túi cùng loại. Ảnh hộp giữ nguyên. Giá lấy từ danh mục đang bán. Từ 20 hộp tính giá sỉ −12%, từ 50 hộp −15% — mỗi mức chỉ một lần, không cộng thêm giảm theo đơn.</p>
     </header>
     <div class="grid">${cards}</div>
     <p class="fine">Đơn công ty, in logo hoặc xuất VAT: xem <a href="/chinh-sach.html#khuyen-mai">giá sỉ trong chính sách</a>.</p>
+    ${copyLine(showCopy(getSettings(), 'wholesale', owner), 'Mua một hộp biếu, hay cần Shop tính giá sỉ cho cả nhóm? Từ 20 hộp đã có giá sỉ, xem trong <a href="/chinh-sach.html#khuyen-mai">chính sách</a>.')}
   </main>`;
   return layout({
     title: pageCopy('gift', PAGE_SEO.gift).title,
@@ -1490,7 +1533,7 @@ export function giftIndexPage() {
   });
 }
 
-export function giftBuilderPage(id) {
+export function giftBuilderPage(id, { owner = false } = {}) {
   const pool = swapPool();
   const box = giftBox(id, pool);
   if (!box) return null;
@@ -1513,6 +1556,7 @@ export function giftBuilderPage(id) {
       <div class="giftbox__buy">
         <p class="kicker">Hộp quà</p>
         <h1>${esc(box.name)}</h1>
+        ${copyLine(showCopy(getSettings(), 'giftbox', owner), 'Chưa chắc người nhận thích vị nào? Chạm từng ngăn, Shop đổi giúp trong hộp.')}
         <p class="giftbox__lead">${esc(box.w)}. Ảnh hộp không đổi khi đổi vị.</p>
         <ul class="gslots">${slots}</ul>
         <div class="qtyrow">
@@ -1534,6 +1578,7 @@ export function giftBuilderPage(id) {
         <p class="giftnote" id="gift-note">${esc(view.note)}</p>
         <button class="btn" type="button" id="gift-add">Cho hộp này vào giỏ</button>
         <p class="fine">Đơn công ty, in logo hoặc xuất VAT: xem <a href="/chinh-sach.html#khuyen-mai">giá sỉ trong chính sách</a>.</p>
+        ${copyLine(showCopy(getSettings(), 'wholesale', owner), 'Mua một hộp biếu, hay cần Shop tính giá sỉ cho cả nhóm? Từ 20 hộp đã có giá sỉ, xem trong <a href="/chinh-sach.html#khuyen-mai">chính sách</a>.')}
       </div>
     </div>
     <dialog class="chooser" id="gift-chooser" aria-labelledby="gift-chooser-title">

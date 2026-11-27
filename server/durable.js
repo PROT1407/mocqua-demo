@@ -1,7 +1,8 @@
 // Giá, hết hàng và ảnh do chủ shop sửa không nằm trên đĩa Render (đĩa đó bị xoá mỗi lần ngủ hoặc deploy).
 // Một nhánh GitHub riêng (mặc định catalog-live) giữ store.json và file ảnh. Nhánh này không phải nhánh deploy,
 // nên mỗi lần lưu không kéo một lần deploy mới. Máy chủ kéo bản này khi khởi động, rồi phục vụ web và bot từ bộ nhớ.
-import { listGalleryGroups, listProductOverrideRows, listVariantFlagRows, listVariantPriceRows, replaceDurableRows } from './db.js';
+import { listGalleryGroups, listProductOverrideRows, listVariantFlagRows, listVariantPriceRows, replaceDurableRows, saveSettings } from './db.js';
+import { normalizeCopyPreview, readCopyPreview } from './copy-preview.js';
 import { listCatalogPrices } from './danhmuc.js';
 import { mediaExists, writeMedia } from './media.js';
 import { getContentBundle, replaceContentBundle } from './content.js';
@@ -34,6 +35,7 @@ export function collectSnapshot() {
     galleries: listGalleryGroups(),
     catalogPrices: listCatalogPrices(),
     content: getContentBundle(),
+    copyPreview: readCopyPreview(),
   };
 }
 
@@ -198,6 +200,7 @@ export async function hydrateEdits({ fetchImpl = globalThis.fetch } = {}) {
     const snapshot = JSON.parse(decodeContent(got.data).toString('utf8'));
     replaceDurableRows(snapshot);
     if (snapshot.content) replaceContentBundle(snapshot.content);
+    if (snapshot.copyPreview) saveSettings({ copyPreview: normalizeCopyPreview(snapshot.copyPreview) });
     for (const name of uploadNames(snapshot)) {
       if (!/^[a-z0-9-]{1,60}\.(jpg|png|webp)$/.test(name) || mediaExists(name)) continue;
       const file = await gh(cfg, fetchImpl, `/repos/${cfg.repo}/contents/${contentPath(`media/${name}`)}?ref=${encodeURIComponent(cfg.branch)}`);

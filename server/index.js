@@ -15,6 +15,7 @@ import { applyBackup, getOrder, getOverrides, getSettings, isStatus, listAllOrde
 import { BACKUP_VERSION, backupStamp, ordersToCsv, parseBackup } from './backup.js';
 import { bankConfig, vietqrFor } from './vietqr.js';
 import { adminPasswordIssue, checkPassword, clearLoginFailures, isAdmin, loginBlocked, loginCookie, logoutCookie, passwordConfigured, recordLoginFailure, requireAdmin } from './auth.js';
+import { COPY_KEYS, COPY_LABELS, normalizeCopyPreview, readCopyPreview } from './copy-preview.js';
 import { createPriceRef, deletePriceRef, importPriceRefs, listPriceRefs, parseCsv, priceRefsToCsv, updatePriceRef } from './pricerefs.js';
 import { catalogData, catalogWithPrices, importCatalogPrices, listCatalogPrices, setCatalogPrice } from './danhmuc.js';
 import { catalogBuyMap, catalogCodeForShopSku, withShopLinks } from './dm-buy.js';
@@ -62,7 +63,7 @@ function limiter(max, windowMs) {
 const wrap = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 function html(res, status, body) {
-  res.status(status).set('Cache-Control', 'no-store').type('html').send(body);
+  res.status(status).set('Cache-Control', 'no-store').set('Vary', 'Cookie').type('html').send(body);
 }
 
 function intField(value, { min, max, label }) {
@@ -553,6 +554,20 @@ export function createApp() {
     res.json({ settings: saveSettings(next) });
   }));
 
+  app.get('/api/admin/copy-preview', requireAdmin, (req, res) => {
+    res.json({ copyPreview: readCopyPreview(), labels: COPY_LABELS });
+  });
+
+  app.patch('/api/admin/copy-preview', requireAdmin, wrap(async (req, res) => {
+    const next = { ...readCopyPreview() };
+    const body = req.body || {};
+    for (const key of COPY_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(body, key)) next[key] = body[key] === true;
+    }
+    saveSettings({ copyPreview: normalizeCopyPreview(next) });
+    res.json({ copyPreview: readCopyPreview(), ...(await persistEdits()) });
+  }));
+
   app.get('/', (req, res) => {
     html(res, 200, homePage(getShopCatalog()));
   });
@@ -560,10 +575,10 @@ export function createApp() {
     html(res, 200, shopPage(getShopCatalog(), req.query));
   });
   app.get('/hop-qua', (req, res) => {
-    html(res, 200, giftIndexPage());
+    html(res, 200, giftIndexPage({ owner: isAdmin(req) }));
   });
   app.get('/hop-qua/:id', (req, res) => {
-    const page = giftBuilderPage(String(req.params.id || ''));
+    const page = giftBuilderPage(String(req.params.id || ''), { owner: isAdmin(req) });
     if (!page) {
       html(res, 404, errorPage('Hộp này không đổi vị được.'));
       return;
@@ -598,10 +613,10 @@ export function createApp() {
       html(res, 404, errorPage('Không thấy sản phẩm này.'));
       return;
     }
-    html(res, 200, productPage(found.product, getShopCatalog()));
+    html(res, 200, productPage(found.product, getShopCatalog(), { owner: isAdmin(req) }));
   });
   app.get(['/gio-hang', '/gio-hang.html'], (req, res) => {
-    html(res, 200, cartPage());
+    html(res, 200, cartPage({ owner: isAdmin(req) }));
   });
   app.get(['/thanh-toan', '/thanh-toan.html'], (req, res) => {
     html(res, 200, checkoutPage(getShopCatalog()));
@@ -613,7 +628,7 @@ export function createApp() {
       html(res, 404, errorPage('Không thấy đơn này. Kiểm tra lại mã đơn.'));
       return;
     }
-    html(res, 200, orderPage(order, vietqrFor(order.summary.total, order.code)));
+    html(res, 200, orderPage(order, vietqrFor(order.summary.total, order.code), { owner: isAdmin(req) }));
   });
   app.get('/tra-cuu', (req, res) => {
     const code = String(req.query.code || '').trim().toUpperCase();

@@ -2,6 +2,8 @@ import { money, read, write, add, setQty, clearCart, refresh, toast, lineKey } f
 import { applyNudge, kShort } from './cart-core.js';
 
 let nudges = [];
+const copyNode = document.querySelector('#cart-copy');
+const copy = copyNode ? JSON.parse(copyNode.textContent) : {};
 
 const root = document.querySelector('#cart-body');
 
@@ -10,9 +12,13 @@ function esc(s) {
 }
 
 // Gợi ý combo: một dòng gọn, chỉ hiện khi đổi/thêm thật sự rẻ hơn (server tính cả % giảm theo đơn và phí giao).
+function mark(preview) {
+  return preview ? ' <span class="previewtag">xem trước</span>' : '';
+}
+
 function nudgeLine(n, i) {
   const msg = n.kind === 'swap'
-    ? `Đổi sang combo, tiết kiệm ${kShort(n.save)}`
+    ? (copy.nudge ? `${copy.nudge.text.replace('{save}', kShort(n.save))}${mark(copy.nudge.preview)}` : `Đổi sang combo, tiết kiệm ${kShort(n.save)}`)
     : `Thêm 1 túi ${esc(n.addName)} thành combo, rẻ hơn ${kShort(n.save)}`;
   return `<div class="nudge">
     <a class="nudge__img" href="${esc(n.href)}"><img src="${esc(n.img)}" alt="" width="56" height="56" loading="lazy"></a>
@@ -29,7 +35,7 @@ function shipLine(bar) {
   return `<div class="shipbar">
     <p><span>Còn <b>${kShort(bar.need)}</b> nữa được ${perk}</span><small>từ ${kShort(bar.freeShip)}</small></p>
     <div class="shipbar__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${bar.pct}" aria-label="Tiến tới miễn ship"><i style="width:${bar.pct}%"></i></div>
-    ${s ? `<div class="shipbar__pick"><img src="${esc(s.img)}" alt="" width="40" height="40" loading="lazy"><span>Vừa đủ: <a href="${esc(s.href)}">${esc(s.name)}</a> · ${money(s.price)}${s.save ? ` <em>tiết kiệm ${kShort(s.save)}</em>` : ''}</span><button type="button" class="textbtn" data-ship-add="${esc(s.sku)}">+ Thêm</button></div>` : ''}
+    ${s ? `<div class="shipbar__pick"><img src="${esc(s.img)}" alt="" width="40" height="40" loading="lazy"><span>${copy.ship ? `${esc(copy.ship.text)}${mark(copy.ship.preview)} ` : 'Vừa đủ: '}<a href="${esc(s.href)}">${esc(s.name)}</a> · ${money(s.price)}${s.save ? ` <em>tiết kiệm ${kShort(s.save)}</em>` : ''}</span><button type="button" class="textbtn" data-ship-add="${esc(s.sku)}">+ Thêm</button></div>` : ''}
   </div>`;
 }
 
@@ -62,7 +68,9 @@ function line(item, gift) {
 async function draw() {
   const items = read();
   if (!items.length) {
-    root.innerHTML = `<div class="empty"><h2>Giỏ đang trống.</h2><p>Bạn chọn cách sấy, rồi cho túi vào giỏ.</p><a class="btn" href="/cua-hang">Vào cửa hàng</a></div>`;
+    root.innerHTML = copy.empty
+      ? `<div class="empty${copy.empty.preview ? ' previewline' : ''}"><h2>Giỏ đang trống.</h2><p>${esc(copy.empty.text)}${mark(copy.empty.preview)}</p><a class="btn" href="/cua-hang">Vào cửa hàng</a> <a class="btn btn--ghost" href="/combo">Combo</a></div>`
+      : `<div class="empty"><h2>Giỏ đang trống.</h2><p>Bạn chọn cách sấy, rồi cho túi vào giỏ.</p><a class="btn" href="/cua-hang">Vào cửa hàng</a></div>`;
     return;
   }
   let res;
