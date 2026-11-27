@@ -2,7 +2,7 @@
 import { getSettings } from './db.js';
 
 export const COPY_KEYS = [
-  'cheers3', 'incombo', 'oos', 'alts', 'cartswap', 'freeship', 'emptycart', 'giftbox', 'wholesale', 'thanks',
+  'cheers3', 'incombo', 'oos', 'alts', 'cartswap', 'freeship', 'emptycart', 'giftbox', 'wholesale', 'thanks', 'kitaxmi',
 ];
 
 export const COPY_LABELS = {
@@ -16,6 +16,7 @@ export const COPY_LABELS = {
   giftbox: 'Hộp quà: đổi vị và thiệp',
   wholesale: 'Hộp quà: dòng giá sỉ',
   thanks: 'Trang đặt xong: nhắn Zalo',
+  kitaxmi: 'Combo 4 túi KITA: gợi ý combo xoài mít',
 };
 
 export function readCopyPreview(settings = getSettings()) {
